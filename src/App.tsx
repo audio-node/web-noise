@@ -1,22 +1,20 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
+        <p>[in] --- [ web noise] --- [out]</p>
         <a
           className="App-link"
-          href="https://reactjs.org"
+          href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_APIhttps://reactjs.org"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
+          Web Audio Api
         </a>
       </header>
     </div>
