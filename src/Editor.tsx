@@ -4,6 +4,11 @@ import ReactFlow, {
   MiniMap,
   Controls,
 } from "react-flow-renderer";
+import MultiHandlesNode from "./MultiHandlesNode";
+
+const nodeTypes = {
+  multiHandlesNode: MultiHandlesNode,
+};
 
 const elements = [
   {
@@ -25,13 +30,20 @@ const elements = [
     data: { label: "Output Node" },
     position: { x: 250, y: 250 },
   },
+  {
+    id: "4",
+    type: "multiHandlesNode",
+    data: { label: "Multi Handles Node" },
+    position: { x: 550, y: 125 },
+    className: "react-flow__node-default",
+  },
   // animated edge
   { id: "e1-2", source: "1", target: "2", animated: true },
   { id: "e2-3", source: "2", target: "3" },
 ];
 
 export const Editor = () => (
-  <ReactFlow elements={elements}>
+  <ReactFlow elements={elements} nodeTypes={nodeTypes}>
     <Background variant={BackgroundVariant.Dots} gap={12} />
     <MiniMap />
     <Controls />
