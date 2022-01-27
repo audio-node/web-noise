@@ -1,14 +1,17 @@
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 
-export default ({ sourcePosition }: NodeProps) => {
+const Destination = ({ sourcePosition, data }: NodeProps) => {
   return (
     <>
-      <div>outputting</div>
+      <div>destinating</div>
       <Handle
         type="source"
         position={sourcePosition || Position.Left}
         id="destination-in"
+        onConnect={(params) => console.log("handle onConnect", params)}
       />
     </>
   );
 };
+
+export default Destination;

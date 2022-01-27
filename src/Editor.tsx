@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, createContext } from "react";
 import ReactFlow, {
   Background,
   BackgroundVariant,
   MiniMap,
   Controls,
-  isEdge,
   removeElements,
   addEdge,
   Elements,
@@ -13,11 +12,17 @@ import ReactFlow, {
 import MultiHandlesNode from "./MultiHandlesNode";
 import Oscillator from "./components/Oscillator";
 import Destination from "./components/Destination";
+import Wire from "./components/Wire";
+import { EditorContext, contextValue } from "./components/EditorContext";
 
 const nodeTypes = {
   multiHandlesNode: MultiHandlesNode,
   oscillator: Oscillator,
   destination: Destination,
+};
+
+const edgeTypes = {
+  wire: Wire,
 };
 
 const initialElements: Elements = [
@@ -37,7 +42,12 @@ const initialElements: Elements = [
     sourcePosition: Position.Top,
     className: "react-flow__node-default",
   },
-  { id: "e-osc-dest", source: "destination", target: "oscillator" },
+  {
+    id: "e-osc-dest",
+    source: "destination",
+    target: "oscillator",
+    type: "wire",
+  },
 ];
 
 const onNodeDragStop = (_event: any, node: any) =>
@@ -77,6 +87,7 @@ export const Editor = () => {
 
   const onLoad = useCallback(
     (rfi) => {
+      console.log(rfi);
       if (!reactflowInstance) {
         setReactflowInstance(rfi);
         console.log("flow loaded:", rfi);
@@ -85,22 +96,25 @@ export const Editor = () => {
     [reactflowInstance]
   );
   return (
-    <ReactFlow
-      elements={elements}
-      onElementClick={onElementClick}
-      onElementsRemove={onElementsRemove}
-      onConnect={onConnect}
-      onNodeDragStop={onNodeDragStop}
-      onLoad={onLoad}
-      nodeTypes={nodeTypes}
-      snapToGrid={true}
-      snapGrid={snapGrid}
-      defaultZoom={1.5}
-    >
-      <Background variant={BackgroundVariant.Dots} gap={12} />
-      <MiniMap />
-      <Controls />
-    </ReactFlow>
+    <EditorContext.Provider value={contextValue}>
+      <ReactFlow
+        elements={elements}
+        onElementClick={onElementClick}
+        onElementsRemove={onElementsRemove}
+        onConnect={onConnect}
+        onNodeDragStop={onNodeDragStop}
+        onLoad={onLoad}
+        nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
+        snapToGrid={true}
+        snapGrid={snapGrid}
+        defaultZoom={1.5}
+      >
+        <Background variant={BackgroundVariant.Dots} gap={12} />
+        <MiniMap />
+        <Controls />
+      </ReactFlow>
+    </EditorContext.Provider>
   );
 };
 

@@ -1,6 +1,9 @@
 import { Handle, Position, NodeProps } from "react-flow-renderer";
+import { useEditorContext } from "./EditorContext";
 
-export default ({ targetPosition }: NodeProps) => {
+const Oscillator = ({ targetPosition }: NodeProps) => {
+  const context = useEditorContext();
+  debugger;
   return (
     <>
       <div>oscillating</div>
@@ -12,3 +15,5 @@ export default ({ targetPosition }: NodeProps) => {
     </>
   );
 };
+
+export default Oscillator;

@@ -1,6 +1,6 @@
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 
-export default ({ data, isConnectable }: NodeProps) => {
+const MultiHandleNode = ({ data, isConnectable }: NodeProps) => {
   return (
     <>
       <Handle
@@ -42,3 +42,5 @@ export default ({ data, isConnectable }: NodeProps) => {
     </>
   );
 };
+
+export default MultiHandleNode;
