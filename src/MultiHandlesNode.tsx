@@ -1,5 +1,4 @@
 import { memo } from "react";
-
 import { Handle, Position } from "react-flow-renderer";
 
 export default memo(({ data, isConnectable }: Record<string, any>) => {
