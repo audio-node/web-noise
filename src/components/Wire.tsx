@@ -43,7 +43,6 @@ const Wire = ({
     targetX,
     targetY,
   });
-  console.log(_edgeCenterX, _edgeCenterY);
 
   return (
     <>
