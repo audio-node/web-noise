@@ -5,6 +5,7 @@ import {
   getMarkerEnd,
   EdgeProps,
 } from "react-flow-renderer";
+import { useEditorContext } from "./EditorContext";
 
 const Wire = ({
   id,
@@ -22,8 +23,10 @@ const Wire = ({
   target,
   ...rest
 }: EdgeProps) => {
+  const { device } = useEditorContext();
   useEffect(() => {
     console.log(`connected ${source} to ${target}`);
+    device.connect(target, source);
   }, [source, target]);
   const edgePath = getBezierPath({
     sourceX,

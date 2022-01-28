@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, createContext } from "react";
+import { useState, useEffect, useCallback } from "react";
 import ReactFlow, {
   Background,
   BackgroundVariant,
@@ -87,7 +87,6 @@ export const Editor = () => {
 
   const onLoad = useCallback(
     (rfi) => {
-      console.log(rfi);
       if (!reactflowInstance) {
         setReactflowInstance(rfi);
         console.log("flow loaded:", rfi);
