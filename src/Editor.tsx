@@ -80,9 +80,7 @@ export const Editor = () => {
   );
   const onConnect = useCallback((params) => {
     // @ts-ignore
-    setElements((els) =>
-      addEdge({ ...params, animated: true, style: { stroke: "#fff" } }, els)
-    );
+    setElements((els) => addEdge({ ...params, type: "wire" }, els));
   }, []);
 
   const onLoad = useCallback(
