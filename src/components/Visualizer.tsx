@@ -4,11 +4,6 @@ import useAnimationFrame from "use-animation-frame";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useEditorContext } from "./EditorContext";
 
-export enum DataType {
-  Frequency = "Frequency",
-  TimeDomain = "Time Domain",
-}
-
 const Visualizer = ({ sourcePosition, data, id }: NodeProps) => {
   const { device, audioContext } = useEditorContext();
   const analyser = useMemo(() => {
@@ -21,8 +16,6 @@ const Visualizer = ({ sourcePosition, data, id }: NodeProps) => {
   const bufferLength = analyser.frequencyBinCount;
 
   const dataArray = new Uint8Array(bufferLength);
-
-  const type = DataType.TimeDomain;
 
   useEffect(() => {
     console.log("visualiser rendered", id);
@@ -47,10 +40,10 @@ const Visualizer = ({ sourcePosition, data, id }: NodeProps) => {
 
     canvasCtx.beginPath();
 
-    var sliceWidth = (canvas.width * 1.0) / bufferLength;
-    var x = 0;
+    const sliceWidth = (canvas.width * 1.0) / bufferLength;
+    let x = 0;
 
-    for (var i = 0; i < bufferLength; i++) {
+    for (let i = 0; i < bufferLength; i++) {
       const v = dataArray[i] / 128.0;
       const y = (v * canvas.height) / 2;
 
@@ -65,7 +58,7 @@ const Visualizer = ({ sourcePosition, data, id }: NodeProps) => {
 
     canvasCtx.lineTo(canvas.width, canvas.height / 2);
     canvasCtx.stroke();
-  }, [type, canvas]);
+  }, [canvas]);
 
   const tick = useCallback(draw, [draw]);
 
