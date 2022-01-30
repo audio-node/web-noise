@@ -30,14 +30,14 @@ const edgeTypes = {
   wire: Wire,
 };
 
-const nodeWidth = 120;
+const spaceWidth = 230;
 
 const initialElements: Elements = [
   {
     id: "oscillator",
     type: "oscillator",
     data: { label: "Oscillator" },
-    position: { x: 25, y: 25 },
+    position: { x: 0, y: 25 },
     className: "react-flow__node-default",
   },
   {
@@ -45,21 +45,21 @@ const initialElements: Elements = [
     type: "gain",
     dragHandle: ".dragHandle",
     data: { label: "Gain" },
-    position: { x: nodeWidth * 2, y: 25 },
+    position: { x: spaceWidth, y: 25 },
     className: "react-flow__node-default",
   },
   {
     id: "visualiser",
     type: "visualiser",
     data: { label: "Visualiser" },
-    position: { x: nodeWidth * 4, y: 25 },
+    position: { x: spaceWidth * 2, y: 25 },
     className: "react-flow__node-default",
   },
   {
     id: "destination",
     type: "destination",
     data: { label: "Oscillator" },
-    position: { x: nodeWidth * 6, y: 25 },
+    position: { x: spaceWidth * 3, y: 25 },
     className: "react-flow__node-default",
   },
   {
