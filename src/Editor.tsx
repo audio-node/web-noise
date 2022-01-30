@@ -33,7 +33,7 @@ const initialElements: Elements = [
     type: "oscillator",
     data: { label: "Oscillator" },
     position: { x: 25, y: 25 },
-    targetPosition: Position.Right,
+    sourcePosition: Position.Right,
     className: "react-flow__node-default",
   },
   {
@@ -41,8 +41,8 @@ const initialElements: Elements = [
     type: "visualiser",
     data: { label: "Visualiser" },
     position: { x: 250, y: 25 },
-    sourcePosition: Position.Left,
-    targetPosition: Position.Right,
+    targetPosition: Position.Left,
+    sourcePosition: Position.Right,
     className: "react-flow__node-default",
   },
   {
@@ -54,15 +54,15 @@ const initialElements: Elements = [
     className: "react-flow__node-default",
   },
   {
-    id: "e-osc-visual",
-    source: "visualiser",
-    target: "oscillator",
+    id: "osc-to-vis",
+    source: "oscillator",
+    target: "visualiser",
     type: "wire",
   },
   {
-    id: "e-visual-dest",
-    source: "destination",
-    target: "visualiser",
+    id: "vis-to-dest",
+    source: "visualiser",
+    target: "destination",
     type: "wire",
   },
 ];
@@ -96,7 +96,7 @@ export const Editor = () => {
     []
   );
   const onConnect = useCallback((params) => {
-    setElements((els) => addEdge({ ...params, type: "wire" }, els));
+    setElements((els) => addEdge({ ...params }, els));
   }, []);
 
   const onLoad = useCallback(

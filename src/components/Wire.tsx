@@ -29,19 +29,19 @@ const Wire = ({
     device.connect(target, source);
   }, [source, target]);
   const edgePath = getBezierPath({
-    sourceX,
-    sourceY,
-    sourcePosition,
     targetX,
     targetY,
     targetPosition,
+    sourceX,
+    sourceY,
+    sourcePosition,
   });
   const markerEnd = getMarkerEnd(arrowHeadType, markerEndId);
   const [_edgeCenterX, _edgeCenterY] = getEdgeCenter({
-    sourceX,
-    sourceY,
     targetX,
     targetY,
+    sourceX,
+    sourceY,
   });
 
   return (
