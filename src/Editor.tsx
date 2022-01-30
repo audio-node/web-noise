@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
 import ReactFlow, {
-  ReactFlowProvider,
   Background,
   BackgroundVariant,
   MiniMap,
@@ -8,7 +7,6 @@ import ReactFlow, {
   removeElements,
   addEdge,
   Elements,
-  Position,
 } from "react-flow-renderer";
 import MultiHandlesNode from "./MultiHandlesNode";
 import Oscillator from "./components/Oscillator";
@@ -125,25 +123,23 @@ export const Editor = () => {
   );
   return (
     <EditorContext.Provider value={contextValue}>
-      <ReactFlowProvider>
-        <ReactFlow
-          elements={elements}
-          onElementClick={onElementClick}
-          onElementsRemove={onElementsRemove}
-          onConnect={onConnect}
-          onNodeDragStop={onNodeDragStop}
-          onLoad={onLoad}
-          nodeTypes={nodeTypes}
-          edgeTypes={edgeTypes}
-          snapToGrid={true}
-          snapGrid={snapGrid}
-          defaultZoom={1.5}
-        >
-          <Background variant={BackgroundVariant.Dots} gap={12} />
-          <MiniMap />
-          <Controls />
-        </ReactFlow>
-      </ReactFlowProvider>
+      <ReactFlow
+        elements={elements}
+        onElementClick={onElementClick}
+        onElementsRemove={onElementsRemove}
+        onConnect={onConnect}
+        onNodeDragStop={onNodeDragStop}
+        onLoad={onLoad}
+        nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
+        snapToGrid={true}
+        snapGrid={snapGrid}
+        defaultZoom={1.5}
+      >
+        <Background variant={BackgroundVariant.Dots} gap={12} />
+        <MiniMap />
+        <Controls />
+      </ReactFlow>
     </EditorContext.Provider>
   );
 };
