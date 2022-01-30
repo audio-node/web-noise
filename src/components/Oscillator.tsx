@@ -1,8 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
+import { BaseAudioNode } from "../node";
 import { useEditorContext } from "./EditorContext";
 
 const DEFAULT_FREQUENCY = 440;
+
+class OscillatorNode extends BaseAudioNode {
+  constructor() {
+    super();
+  }
+}
 
 const Oscillator = ({ sourcePosition, id }: NodeProps) => {
   const { device, audioContext } = useEditorContext();

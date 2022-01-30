@@ -1,8 +1,10 @@
 import { createContext, useContext } from "react";
+import { BaseAudioNode } from "../node";
 
 type DeviceID = string;
 type AudioNode = any;
-class EditorDevice {
+
+class Rack extends BaseAudioNode {
   private nodes = new Map<DeviceID, AudioNode>();
   addNode(id: DeviceID, node: AudioNode) {
     return this.nodes.set(id, node);
@@ -20,9 +22,11 @@ class EditorDevice {
   }
 }
 
+const audioContext = new AudioContext();
+
 export const contextValue = {
-  audioContext: new AudioContext(),
-  device: new EditorDevice(),
+  audioContext,
+  device: new Rack(),
 };
 
 //@ts-ignore
