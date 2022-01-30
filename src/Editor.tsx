@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import ReactFlow, {
   Background,
   BackgroundVariant,
@@ -14,7 +14,11 @@ import Oscillator from "./components/Oscillator";
 import Destination from "./components/Destination";
 import Wire from "./components/Wire";
 import Visualizer from "./components/Visualizer";
-import { EditorContext, contextValue } from "./components/EditorContext";
+import {
+  EditorContext,
+  contextValue,
+  useEditorContext,
+} from "./components/EditorContext";
 
 const nodeTypes = {
   multiHandlesNode: MultiHandlesNode,
@@ -75,8 +79,10 @@ const onElementClick = (_event: any, element: any) =>
 const snapGrid: [number, number] = [20, 20];
 
 export const Editor = () => {
+  const { audioContext } = useEditorContext();
   const [reactflowInstance, setReactflowInstance] = useState(null);
   const [elements, setElements] = useState(initialElements);
+  const resumeBtn = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     setElements(elements);
@@ -108,8 +114,17 @@ export const Editor = () => {
     },
     [reactflowInstance]
   );
+
+  const onResumeAudioContext = useCallback(() => {
+    audioContext.resume();
+    resumeBtn?.current?.remove();
+  }, [audioContext]);
+
   return (
     <EditorContext.Provider value={contextValue}>
+      <button ref={resumeBtn} onClick={onResumeAudioContext}>
+        resume audio context
+      </button>
       <ReactFlow
         elements={elements}
         onElementClick={onElementClick}
