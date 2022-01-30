@@ -1,7 +1,6 @@
-import { memo } from "react";
-import { Handle, Position } from "react-flow-renderer";
+import { Handle, Position, NodeProps } from "react-flow-renderer";
 
-export default memo(({ data, isConnectable }: Record<string, any>) => {
+const MultiHandleNode = ({ data, isConnectable }: NodeProps) => {
   return (
     <>
       <Handle
@@ -42,4 +41,6 @@ export default memo(({ data, isConnectable }: Record<string, any>) => {
       />
     </>
   );
-});
+};
+
+export default MultiHandleNode;

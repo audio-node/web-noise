@@ -1,62 +1,69 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import ReactFlow, {
   Background,
   BackgroundVariant,
   MiniMap,
   Controls,
-  isEdge,
   removeElements,
   addEdge,
   Elements,
   Position,
 } from "react-flow-renderer";
 import MultiHandlesNode from "./MultiHandlesNode";
+import Oscillator from "./components/Oscillator";
+import Destination from "./components/Destination";
+import Wire from "./components/Wire";
+import Visualizer from "./components/Visualizer";
+import { EditorContext, contextValue } from "./components/EditorContext";
 
 const nodeTypes = {
   multiHandlesNode: MultiHandlesNode,
+  oscillator: Oscillator,
+  destination: Destination,
+  visualiser: Visualizer,
+};
+
+const edgeTypes = {
+  wire: Wire,
 };
 
 const initialElements: Elements = [
   {
-    id: "1",
-    type: "output", // output node
-    data: { label: "Output Node" },
-    position: { x: 250, y: 25 },
-    targetPosition: Position.Bottom,
-  },
-  // default node
-  {
-    id: "2",
-    // you can also pass a React component as a label
-    data: { label: <div>Pass Through Node</div> },
-    position: { x: 100, y: 125 },
-    targetPosition: Position.Bottom,
-    sourcePosition: Position.Top,
-  },
-  {
-    id: "3",
-    type: "input", // input node
-    data: { label: "Input Node" },
-    position: { x: 250, y: 250 },
-    sourcePosition: Position.Top,
-  },
-  {
-    id: "4",
-    type: "multiHandlesNode",
-    data: { label: "Multi Handles Node" },
-    position: { x: 550, y: 125 },
+    id: "oscillator",
+    type: "oscillator",
+    data: { label: "Oscillator" },
+    position: { x: 25, y: 25 },
+    targetPosition: Position.Right,
     className: "react-flow__node-default",
   },
-  // animated edge
-  { id: "e1-2", source: "2", target: "1", animated: true },
-  { id: "e2-3", source: "3", target: "2" },
   {
-    id: "e1-4a",
-    source: "4",
-    target: "1",
-    sourceHandle: "a",
-    // animated: true,
-    // style: { stroke: "#fff" },
+    id: "visualiser",
+    type: "visualiser",
+    data: { label: "Visualiser" },
+    position: { x: 250, y: 25 },
+    sourcePosition: Position.Left,
+    targetPosition: Position.Right,
+    className: "react-flow__node-default",
+  },
+  {
+    id: "destination",
+    type: "destination",
+    data: { label: "Oscillator" },
+    position: { x: 450, y: 25 },
+    sourcePosition: Position.Left,
+    className: "react-flow__node-default",
+  },
+  {
+    id: "e-osc-visual",
+    source: "visualiser",
+    target: "oscillator",
+    type: "wire",
+  },
+  {
+    id: "e-visual-dest",
+    source: "destination",
+    target: "visualiser",
+    type: "wire",
   },
 ];
 
@@ -89,10 +96,7 @@ export const Editor = () => {
     []
   );
   const onConnect = useCallback((params) => {
-    // @ts-ignore
-    setElements((els) =>
-      addEdge({ ...params, animated: true, style: { stroke: "#fff" } }, els)
-    );
+    setElements((els) => addEdge({ ...params, type: "wire" }, els));
   }, []);
 
   const onLoad = useCallback(
@@ -105,22 +109,25 @@ export const Editor = () => {
     [reactflowInstance]
   );
   return (
-    <ReactFlow
-      elements={elements}
-      onElementClick={onElementClick}
-      onElementsRemove={onElementsRemove}
-      onConnect={onConnect}
-      onNodeDragStop={onNodeDragStop}
-      onLoad={onLoad}
-      nodeTypes={nodeTypes}
-      snapToGrid={true}
-      snapGrid={snapGrid}
-      defaultZoom={1.5}
-    >
-      <Background variant={BackgroundVariant.Dots} gap={12} />
-      <MiniMap />
-      <Controls />
-    </ReactFlow>
+    <EditorContext.Provider value={contextValue}>
+      <ReactFlow
+        elements={elements}
+        onElementClick={onElementClick}
+        onElementsRemove={onElementsRemove}
+        onConnect={onConnect}
+        onNodeDragStop={onNodeDragStop}
+        onLoad={onLoad}
+        nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
+        snapToGrid={true}
+        snapGrid={snapGrid}
+        defaultZoom={1.5}
+      >
+        <Background variant={BackgroundVariant.Dots} gap={12} />
+        <MiniMap />
+        <Controls />
+      </ReactFlow>
+    </EditorContext.Provider>
   );
 };
 
