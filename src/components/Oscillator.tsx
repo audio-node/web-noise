@@ -33,15 +33,14 @@ const useOscillatorNode = () => {
 };
 
 const Oscillator = (props: NodeProps) => {
-  const { sourcePosition, id } = props;
+  const { id } = props;
   const { device } = useEditorContext();
 
   const oscillatorNode = useOscillatorNode();
-  const oscillator = oscillatorNode.oscillator;
 
   useEffect(() => {
     oscillatorNode.start();
-    device.addNode(id, oscillator);
+    device.addNode(id, oscillatorNode.oscillator);
   }, []);
 
   const { maxValue, minValue } = oscillatorNode.getFrequency();
@@ -53,11 +52,7 @@ const Oscillator = (props: NodeProps) => {
 
   const radioName = `radio-${+new Date()}`;
   return (
-    <EditorNode
-      sourcePosition={sourcePosition}
-      node={oscillatorNode}
-      {...props}
-    >
+    <EditorNode node={oscillatorNode} {...props}>
       <div>oscillator</div>
       <div>
         <label>

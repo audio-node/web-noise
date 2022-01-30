@@ -20,7 +20,7 @@ const EditorNode: FC<EditorNodeProps> = ({
           <Handle
             key={index}
             type="target"
-            position={sourcePosition || Position.Right}
+            position={targetPosition || Position.Left}
             id={name}
           />
         ))}
@@ -28,7 +28,7 @@ const EditorNode: FC<EditorNodeProps> = ({
           <Handle
             key={index}
             type="source"
-            position={targetPosition || Position.Right}
+            position={sourcePosition || Position.Right}
             id={name}
           />
         ))}

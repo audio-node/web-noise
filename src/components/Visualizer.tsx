@@ -1,30 +1,39 @@
 import { useEffect, useMemo, useRef, useCallback } from "react";
 //@ts-ignore
 import useAnimationFrame from "use-animation-frame";
-import { Handle, Position, NodeProps } from "react-flow-renderer";
+import { NodeProps } from "react-flow-renderer";
+import { BaseAudioNode } from "../node";
+import EditorNode from "./EditorNode";
 import { useEditorContext } from "./EditorContext";
 
-const Visualizer = ({
-  targetPosition,
-  sourcePosition,
-  data,
-  id,
-}: NodeProps) => {
-  const { device, audioContext } = useEditorContext();
-  const analyser = useMemo(() => {
+class AnalyserNode extends BaseAudioNode {
+  readonly analyser = this.context.createAnalyser();
+  inputs = [{ name: "analyser-input", node: this.analyser }];
+  outputs = [{ name: "analyser-output", node: this.analyser }];
+
+  bufferLength = this.analyser.frequencyBinCount;
+  dataArray = new Uint8Array(this.bufferLength);
+
+  getData() {
+    this.analyser.getByteTimeDomainData(this.dataArray);
+    return this.dataArray;
+  }
+}
+
+const Visualizer = (props: NodeProps) => {
+  const { id } = props;
+  const { device } = useEditorContext();
+  const analyserNode = useMemo(() => {
     console.log("create analyzer");
-    return audioContext.createAnalyser();
+    return new AnalyserNode();
   }, []);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvas = canvasRef.current;
-  const bufferLength = analyser.frequencyBinCount;
-
-  const dataArray = new Uint8Array(bufferLength);
 
   useEffect(() => {
     console.log("visualiser rendered", id);
-    device.addNode(id, analyser);
+    device.addNode(id, analyserNode.analyser);
   }, []);
 
   const canvasCtx = useMemo(() => {
@@ -35,8 +44,6 @@ const Visualizer = ({
     if (!canvas || !canvasCtx) {
       return;
     }
-    analyser.getByteTimeDomainData(dataArray);
-
     canvasCtx.fillStyle = "rgb(200, 200, 200)";
     canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -45,10 +52,12 @@ const Visualizer = ({
 
     canvasCtx.beginPath();
 
-    const sliceWidth = (canvas.width * 1.0) / bufferLength;
+    const dataArray = analyserNode.getData();
+
+    const sliceWidth = (canvas.width * 1.0) / analyserNode.bufferLength;
     let x = 0;
 
-    for (let i = 0; i < bufferLength; i++) {
+    for (let i = 0; i < analyserNode.bufferLength; i++) {
       const v = dataArray[i] / 128.0;
       const y = (v * canvas.height) / 2;
 
@@ -69,14 +78,10 @@ const Visualizer = ({
 
   useAnimationFrame(tick);
   return (
-    <>
+    <EditorNode node={analyserNode} {...props}>
       <div>visualiser</div>
-      <div>
-        <Handle type="target" position={targetPosition || Position.Left} />
-      </div>
       <canvas ref={canvasRef} style={{ display: "block", width: "100%" }} />
-      <Handle type="source" position={sourcePosition || Position.Right} />
-    </>
+    </EditorNode>
   );
 };
 
