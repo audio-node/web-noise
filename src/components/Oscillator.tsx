@@ -1,46 +1,70 @@
 import { useEffect, useMemo, useState } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { BaseAudioNode } from "../node";
+import EditorNode from "./EditorNode";
 import { useEditorContext } from "./EditorContext";
 
 const DEFAULT_FREQUENCY = 440;
 
 class OscillatorNode extends BaseAudioNode {
-  constructor() {
-    super();
+  readonly oscillator = this.context.createOscillator();
+  outputs = [{ name: "oscillator-output", node: this.oscillator }];
+  getFrequency() {
+    return this.oscillator.frequency;
+  }
+  setFrequencyValue(frequency: number) {
+    this.oscillator.frequency.setValueAtTime(
+      frequency,
+      this.context.currentTime
+    );
+  }
+  setType(type: OscillatorType) {
+    this.oscillator.type = type;
+  }
+  start() {
+    this.oscillator.start();
   }
 }
 
-const Oscillator = ({ sourcePosition, id }: NodeProps) => {
-  const { device, audioContext } = useEditorContext();
-
-  const oscillator = useMemo(() => {
-    return audioContext.createOscillator();
+const useOscillatorNode = () => {
+  return useMemo(() => {
+    return new OscillatorNode();
   }, []);
+};
+
+const Oscillator = (props: NodeProps) => {
+  const { sourcePosition, id } = props;
+  const { device } = useEditorContext();
+
+  const oscillatorNode = useOscillatorNode();
+  const oscillator = oscillatorNode.oscillator;
 
   useEffect(() => {
-    oscillator.start();
+    oscillatorNode.start();
     device.addNode(id, oscillator);
   }, []);
 
-  const { maxValue, minValue } = oscillator.frequency;
+  const { maxValue, minValue } = oscillatorNode.getFrequency();
   const [frequency, setFrequency] = useState<number>(DEFAULT_FREQUENCY);
 
   useEffect(() => {
-    oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+    oscillatorNode.setFrequencyValue(frequency);
   }, [frequency]);
 
   const radioName = `radio-${+new Date()}`;
   return (
-    <>
+    <EditorNode
+      sourcePosition={sourcePosition}
+      node={oscillatorNode}
+      {...props}
+    >
       <div>oscillator</div>
-      <Handle type="source" position={sourcePosition || Position.Right} />
       <div>
         <label>
           <input
             name={radioName}
             type="radio"
-            onChange={() => (oscillator.type = "sine")}
+            onChange={() => oscillatorNode.setType("sine")}
           />
           ∿
         </label>
@@ -48,7 +72,7 @@ const Oscillator = ({ sourcePosition, id }: NodeProps) => {
           <input
             name={radioName}
             type="radio"
-            onChange={() => (oscillator.type = "square")}
+            onChange={() => oscillatorNode.setType("square")}
           />
           ⎍
         </label>
@@ -56,7 +80,7 @@ const Oscillator = ({ sourcePosition, id }: NodeProps) => {
           <input
             name={radioName}
             type="radio"
-            onChange={() => (oscillator.type = "triangle")}
+            onChange={() => oscillatorNode.setType("triangle")}
           />
           ⋀
         </label>
@@ -64,7 +88,7 @@ const Oscillator = ({ sourcePosition, id }: NodeProps) => {
           <input
             name={radioName}
             type="radio"
-            onChange={() => (oscillator.type = "sawtooth")}
+            onChange={() => oscillatorNode.setType("sawtooth")}
           />
           ⊿
         </label>
@@ -81,7 +105,7 @@ const Oscillator = ({ sourcePosition, id }: NodeProps) => {
           />
         }
       </div>
-    </>
+    </EditorNode>
   );
 };
 

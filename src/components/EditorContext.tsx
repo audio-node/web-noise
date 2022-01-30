@@ -1,8 +1,7 @@
 import { createContext, useContext } from "react";
-import { BaseAudioNode } from "../node";
+import { BaseAudioNode, context } from "../node";
 
 type DeviceID = string;
-type AudioNode = any;
 
 class Rack extends BaseAudioNode {
   private nodes = new Map<DeviceID, AudioNode>();
@@ -18,14 +17,18 @@ class Rack extends BaseAudioNode {
   connect(outputId: DeviceID, inputId: DeviceID) {
     const input = this.getNode(inputId);
     const output = this.getNode(outputId);
+    if (input === undefined) {
+      throw new Error("input is undefined");
+    }
+    if (output === undefined) {
+      throw new Error("output is undefined");
+    }
     input.connect(output);
   }
 }
 
-const audioContext = new AudioContext();
-
 export const contextValue = {
-  audioContext,
+  audioContext: context,
   device: new Rack(),
 };
 
