@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useEditorContext } from "./EditorContext";
 
-const Destination = ({ sourcePosition, data, id }: NodeProps) => {
+const Destination = ({ targetPosition, data, id }: NodeProps) => {
   const { device, audioContext } = useEditorContext();
   useEffect(() => {
     console.log("destination rendered", id);
@@ -10,10 +10,10 @@ const Destination = ({ sourcePosition, data, id }: NodeProps) => {
   }, []);
   return (
     <>
-      <div>destinating</div>
+      <div>destination</div>
       <Handle
-        type="source"
-        position={sourcePosition || Position.Left}
+        type="target"
+        position={targetPosition || Position.Left}
         id="destination-in"
         onConnect={(params) => console.log("handle onConnect", params)}
       />

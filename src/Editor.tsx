@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import ReactFlow, {
+  ReactFlowProvider,
   Background,
   BackgroundVariant,
   MiniMap,
@@ -12,6 +13,7 @@ import ReactFlow, {
 import MultiHandlesNode from "./MultiHandlesNode";
 import Oscillator from "./components/Oscillator";
 import Destination from "./components/Destination";
+import Gain from "./components/Gain";
 import Wire from "./components/Wire";
 import Visualizer from "./components/Visualizer";
 import { EditorContext, contextValue } from "./components/EditorContext";
@@ -19,13 +21,16 @@ import { EditorContext, contextValue } from "./components/EditorContext";
 const nodeTypes = {
   multiHandlesNode: MultiHandlesNode,
   oscillator: Oscillator,
-  destination: Destination,
+  gain: Gain,
   visualiser: Visualizer,
+  destination: Destination,
 };
 
 const edgeTypes = {
   wire: Wire,
 };
+
+const nodeWidth = 120;
 
 const initialElements: Elements = [
   {
@@ -33,29 +38,39 @@ const initialElements: Elements = [
     type: "oscillator",
     data: { label: "Oscillator" },
     position: { x: 25, y: 25 },
-    sourcePosition: Position.Right,
+    className: "react-flow__node-default",
+  },
+  {
+    id: "gain",
+    type: "gain",
+    dragHandle: ".dragHandle",
+    data: { label: "Gain" },
+    position: { x: nodeWidth * 2, y: 25 },
     className: "react-flow__node-default",
   },
   {
     id: "visualiser",
     type: "visualiser",
     data: { label: "Visualiser" },
-    position: { x: 250, y: 25 },
-    targetPosition: Position.Left,
-    sourcePosition: Position.Right,
+    position: { x: nodeWidth * 4, y: 25 },
     className: "react-flow__node-default",
   },
   {
     id: "destination",
     type: "destination",
     data: { label: "Oscillator" },
-    position: { x: 450, y: 25 },
-    sourcePosition: Position.Left,
+    position: { x: nodeWidth * 6, y: 25 },
     className: "react-flow__node-default",
   },
   {
-    id: "osc-to-vis",
+    id: "osc-vis",
     source: "oscillator",
+    target: "gain",
+    type: "wire",
+  },
+  {
+    id: "gain-to-vis",
+    source: "gain",
     target: "visualiser",
     type: "wire",
   },
@@ -110,23 +125,25 @@ export const Editor = () => {
   );
   return (
     <EditorContext.Provider value={contextValue}>
-      <ReactFlow
-        elements={elements}
-        onElementClick={onElementClick}
-        onElementsRemove={onElementsRemove}
-        onConnect={onConnect}
-        onNodeDragStop={onNodeDragStop}
-        onLoad={onLoad}
-        nodeTypes={nodeTypes}
-        edgeTypes={edgeTypes}
-        snapToGrid={true}
-        snapGrid={snapGrid}
-        defaultZoom={1.5}
-      >
-        <Background variant={BackgroundVariant.Dots} gap={12} />
-        <MiniMap />
-        <Controls />
-      </ReactFlow>
+      <ReactFlowProvider>
+        <ReactFlow
+          elements={elements}
+          onElementClick={onElementClick}
+          onElementsRemove={onElementsRemove}
+          onConnect={onConnect}
+          onNodeDragStop={onNodeDragStop}
+          onLoad={onLoad}
+          nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
+          snapToGrid={true}
+          snapGrid={snapGrid}
+          defaultZoom={1.5}
+        >
+          <Background variant={BackgroundVariant.Dots} gap={12} />
+          <MiniMap />
+          <Controls />
+        </ReactFlow>
+      </ReactFlowProvider>
     </EditorContext.Provider>
   );
 };

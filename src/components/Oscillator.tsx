@@ -26,12 +26,8 @@ const Oscillator = ({ sourcePosition, id }: NodeProps) => {
   const radioName = `radio-${+new Date()}`;
   return (
     <>
-      <div>oscillating</div>
-      <Handle
-        type="source"
-        position={sourcePosition || Position.Right}
-        id="oscillator-out"
-      />
+      <div>oscillator</div>
+      <Handle type="source" position={sourcePosition || Position.Right} />
       <div>
         <label>
           <input

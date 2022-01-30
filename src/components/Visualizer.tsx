@@ -70,20 +70,12 @@ const Visualizer = ({
   useAnimationFrame(tick);
   return (
     <>
-      <div>visualising</div>
+      <div>visualiser</div>
       <div>
-        <Handle
-          type="target"
-          position={targetPosition || Position.Left}
-          id="visualiser-in"
-        />
-        <Handle
-          type="source"
-          position={sourcePosition || Position.Right}
-          id="visualiser-out"
-        />
+        <Handle type="target" position={targetPosition || Position.Left} />
       </div>
       <canvas ref={canvasRef} style={{ display: "block", width: "100%" }} />
+      <Handle type="source" position={sourcePosition || Position.Right} />
     </>
   );
 };
