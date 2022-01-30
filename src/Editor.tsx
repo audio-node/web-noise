@@ -13,12 +13,14 @@ import MultiHandlesNode from "./MultiHandlesNode";
 import Oscillator from "./components/Oscillator";
 import Destination from "./components/Destination";
 import Wire from "./components/Wire";
+import Visualizer from "./components/Visualizer";
 import { EditorContext, contextValue } from "./components/EditorContext";
 
 const nodeTypes = {
   multiHandlesNode: MultiHandlesNode,
   oscillator: Oscillator,
   destination: Destination,
+  visualiser: Visualizer,
 };
 
 const edgeTypes = {
@@ -30,22 +32,37 @@ const initialElements: Elements = [
     id: "oscillator",
     type: "oscillator",
     data: { label: "Oscillator" },
-    position: { x: 450, y: 25 },
-    targetPosition: Position.Bottom,
+    position: { x: 25, y: 25 },
+    targetPosition: Position.Right,
+    className: "react-flow__node-default",
+  },
+  {
+    id: "visualiser",
+    type: "visualiser",
+    data: { label: "Visualiser" },
+    position: { x: 250, y: 25 },
+    sourcePosition: Position.Left,
+    targetPosition: Position.Right,
     className: "react-flow__node-default",
   },
   {
     id: "destination",
     type: "destination",
     data: { label: "Oscillator" },
-    position: { x: 450, y: 250 },
-    sourcePosition: Position.Top,
+    position: { x: 450, y: 25 },
+    sourcePosition: Position.Left,
     className: "react-flow__node-default",
   },
   {
-    id: "e-osc-dest",
-    source: "destination",
+    id: "e-osc-visual",
+    source: "visualiser",
     target: "oscillator",
+    type: "wire",
+  },
+  {
+    id: "e-visual-dest",
+    source: "destination",
+    target: "visualiser",
     type: "wire",
   },
 ];
@@ -79,7 +96,6 @@ export const Editor = () => {
     []
   );
   const onConnect = useCallback((params) => {
-    // @ts-ignore
     setElements((els) => addEdge({ ...params, type: "wire" }, els));
   }, []);
 
