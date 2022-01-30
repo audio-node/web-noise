@@ -1,19 +1,28 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useEditorContext } from "./EditorContext";
 
+const DEFAULT_FREQUENCY = 440;
+
 const Oscillator = ({ targetPosition, id }: NodeProps) => {
   const { device, audioContext } = useEditorContext();
+
   const oscillator = useMemo(() => {
-    console.log("create oscillator");
     return audioContext.createOscillator();
   }, []);
-  useEffect(() => {
-    console.log("oscillator rendered", id);
 
+  useEffect(() => {
     oscillator.start();
     device.addNode(id, oscillator);
   }, []);
+
+  const { maxValue, minValue } = oscillator.frequency;
+  const [frequency, setFrequency] = useState<number>(DEFAULT_FREQUENCY);
+
+  useEffect(() => {
+    oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+  }, [frequency]);
+
   const radioName = `radio-${+new Date()}`;
   return (
     <>
@@ -56,6 +65,18 @@ const Oscillator = ({ targetPosition, id }: NodeProps) => {
           />
           ⊿
         </label>
+      </div>
+      <div>
+        frequency:
+        {
+          <input
+            type="number"
+            min={minValue}
+            max={maxValue}
+            value={frequency}
+            onChange={({ target: { value } }) => setFrequency(+value)}
+          />
+        }
       </div>
     </>
   );

@@ -4,7 +4,12 @@ import useAnimationFrame from "use-animation-frame";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useEditorContext } from "./EditorContext";
 
-const Visualizer = ({ sourcePosition, data, id }: NodeProps) => {
+const Visualizer = ({
+  sourcePosition,
+  targetPosition,
+  data,
+  id,
+}: NodeProps) => {
   const { device, audioContext } = useEditorContext();
   const analyser = useMemo(() => {
     console.log("create analyzer");
@@ -74,7 +79,7 @@ const Visualizer = ({ sourcePosition, data, id }: NodeProps) => {
         />
         <Handle
           type="target"
-          position={sourcePosition || Position.Right}
+          position={targetPosition || Position.Right}
           id="visualiser-out"
         />
       </div>
