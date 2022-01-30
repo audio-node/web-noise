@@ -96,7 +96,7 @@ export const Editor = () => {
     []
   );
   const onConnect = useCallback((params) => {
-    setElements((els) => addEdge({ ...params }, els));
+    setElements((els) => addEdge({ ...params, type: "wire" }, els));
   }, []);
 
   const onLoad = useCallback(
