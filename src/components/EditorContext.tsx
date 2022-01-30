@@ -13,7 +13,7 @@ class EditorDevice {
   getNode(id: DeviceID) {
     return this.nodes.get(id);
   }
-  connect(inputId: DeviceID, outputId: DeviceID) {
+  connect(outputId: DeviceID, inputId: DeviceID) {
     const input = this.getNode(inputId);
     const output = this.getNode(outputId);
     input.connect(output);

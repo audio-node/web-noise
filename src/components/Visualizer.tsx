@@ -5,8 +5,8 @@ import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useEditorContext } from "./EditorContext";
 
 const Visualizer = ({
-  sourcePosition,
   targetPosition,
+  sourcePosition,
   data,
   id,
 }: NodeProps) => {
@@ -73,13 +73,13 @@ const Visualizer = ({
       <div>visualising</div>
       <div>
         <Handle
-          type="source"
-          position={sourcePosition || Position.Left}
+          type="target"
+          position={targetPosition || Position.Left}
           id="visualiser-in"
         />
         <Handle
-          type="target"
-          position={targetPosition || Position.Right}
+          type="source"
+          position={sourcePosition || Position.Right}
           id="visualiser-out"
         />
       </div>

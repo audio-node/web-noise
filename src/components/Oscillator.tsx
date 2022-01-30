@@ -4,7 +4,7 @@ import { useEditorContext } from "./EditorContext";
 
 const DEFAULT_FREQUENCY = 440;
 
-const Oscillator = ({ targetPosition, id }: NodeProps) => {
+const Oscillator = ({ sourcePosition, id }: NodeProps) => {
   const { device, audioContext } = useEditorContext();
 
   const oscillator = useMemo(() => {
@@ -28,8 +28,8 @@ const Oscillator = ({ targetPosition, id }: NodeProps) => {
     <>
       <div>oscillating</div>
       <Handle
-        type="target"
-        position={targetPosition || Position.Right}
+        type="source"
+        position={sourcePosition || Position.Right}
         id="oscillator-out"
       />
       <div>
