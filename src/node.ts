@@ -1,5 +1,9 @@
 export const context = new AudioContext();
 
+//@ts-ignore
+//@TODO: remove when context resuming is ready
+window.actx = context;
+
 interface NodePort {
   name: string;
   node: AudioNode;

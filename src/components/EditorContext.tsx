@@ -44,12 +44,8 @@ class Rack extends BaseAudioNode {
 }
 
 export const contextValue = {
-  audioContext: context,
-  device: new Rack(),
+  rack: new Rack(),
 };
-
-//@ts-ignore
-window.contextValue = contextValue;
 
 export const EditorContext = createContext(contextValue);
 

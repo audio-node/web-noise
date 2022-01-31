@@ -34,13 +34,13 @@ const useOscillatorNode = () => {
 
 const Oscillator = (props: NodeProps) => {
   const { id } = props;
-  const { device } = useEditorContext();
+  const { rack } = useEditorContext();
 
   const oscillatorNode = useOscillatorNode();
 
   useEffect(() => {
     oscillatorNode.start();
-    device.addNode(id, oscillatorNode);
+    rack.addNode(id, oscillatorNode);
   }, []);
 
   const { maxValue, minValue } = oscillatorNode.getFrequency();

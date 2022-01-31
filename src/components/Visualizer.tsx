@@ -22,7 +22,7 @@ class AnalyserNode extends BaseAudioNode {
 
 const Visualizer = (props: NodeProps) => {
   const { id } = props;
-  const { device } = useEditorContext();
+  const { rack } = useEditorContext();
   const analyserNode = useMemo(() => {
     console.log("create analyzer");
     return new AnalyserNode();
@@ -33,7 +33,7 @@ const Visualizer = (props: NodeProps) => {
 
   useEffect(() => {
     console.log("visualiser rendered", id);
-    device.addNode(id, analyserNode);
+    rack.addNode(id, analyserNode);
   }, []);
 
   const canvasCtx = useMemo(() => {

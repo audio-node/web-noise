@@ -11,13 +11,13 @@ class DestinationNode extends BaseAudioNode {
 
 const Destination = (props: NodeProps) => {
   const { id } = props;
-  const { device } = useEditorContext();
+  const { rack } = useEditorContext();
   const destinationNode = useMemo(() => {
     return new DestinationNode();
   }, []);
   useEffect(() => {
     console.log("destination rendered", id);
-    device.addNode(id, destinationNode);
+    rack.addNode(id, destinationNode);
   }, []);
   return (
     <EditorNode node={destinationNode} {...props}>
