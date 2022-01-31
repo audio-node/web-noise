@@ -20,13 +20,21 @@ const Wire = ({
   arrowHeadType,
   markerEndId,
   source,
+  sourceHandleId,
   target,
+  targetHandleId,
   ...rest
 }: EdgeProps) => {
   const { device } = useEditorContext();
   useEffect(() => {
     console.log(`connected ${source} to ${target}`);
-    device.connect(target, source);
+    // debugger;
+    device.connect(
+      //@ts-expect-error prototyping so far
+      { id: source, port: +sourceHandleId },
+      //@ts-expect-error prototyping so far
+      { id: target, port: +targetHandleId }
+    );
   }, [source, target]);
   const edgePath = getBezierPath({
     targetX,

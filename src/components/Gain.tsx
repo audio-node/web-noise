@@ -1,13 +1,26 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useEditorContext } from "./EditorContext";
+import { BaseAudioNode } from "../node";
+import EditorNode from "./EditorNode";
 
-const Gain = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
-  const { device, audioContext } = useEditorContext();
+class GainNode extends BaseAudioNode {
+  readonly gain = this.context.createGain();
+  inputs = [{ name: "gain-input", node: this.gain }];
+  outputs = [{ name: "gain-output", node: this.gain }];
+
+  setValue(value: number) {
+    this.gain.gain.setValueAtTime(value, this.context.currentTime);
+  }
+}
+
+const Gain = (props: NodeProps) => {
+  const { id } = props;
+  const { device } = useEditorContext();
   const inputRange = useRef<HTMLInputElement>(null);
 
   const gainNode = useMemo(() => {
-    return audioContext.createGain();
+    return new GainNode();
   }, []);
 
   const [gain, setGain] = useState(1);
@@ -18,17 +31,11 @@ const Gain = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
   }, []);
 
   useEffect(() => {
-    gainNode.gain.setValueAtTime(gain, audioContext.currentTime);
+    gainNode.setValue(gain);
   }, [gain]);
 
   return (
-    <>
-      <Handle
-        type="target"
-        position={targetPosition || Position.Left}
-        id="gain-node-in"
-      />
-      <div className="dragHandle">gain</div>
+    <EditorNode node={gainNode} {...props}>
       <input
         type="range"
         value={gain}
@@ -38,12 +45,7 @@ const Gain = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
         step={0.001}
         onChange={({ target: { value } }) => setGain(+value)}
       />
-      <Handle
-        type="source"
-        id="gain-node-out"
-        position={sourcePosition || Position.Right}
-      />
-    </>
+    </EditorNode>
   );
 };
 

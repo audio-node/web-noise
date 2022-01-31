@@ -63,19 +63,25 @@ const initialElements: Elements = [
   {
     id: "osc-vis",
     source: "oscillator",
+    sourceHandle: "0",
     target: "gain",
+    targetHandle: "0",
     type: "wire",
   },
   {
     id: "gain-to-vis",
     source: "gain",
+    sourceHandle: "0",
     target: "visualiser",
+    targetHandle: "0",
     type: "wire",
   },
   {
     id: "vis-to-dest",
     source: "visualiser",
+    sourceHandle: "0",
     target: "destination",
+    targetHandle: "0",
     type: "wire",
   },
 ];

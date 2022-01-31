@@ -17,7 +17,7 @@ const Destination = (props: NodeProps) => {
   }, []);
   useEffect(() => {
     console.log("destination rendered", id);
-    device.addNode(id, destinationNode.destination);
+    device.addNode(id, destinationNode);
   }, []);
   return (
     <EditorNode node={destinationNode} {...props}>

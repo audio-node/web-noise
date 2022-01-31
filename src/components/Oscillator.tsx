@@ -40,7 +40,7 @@ const Oscillator = (props: NodeProps) => {
 
   useEffect(() => {
     oscillatorNode.start();
-    device.addNode(id, oscillatorNode.oscillator);
+    device.addNode(id, oscillatorNode);
   }, []);
 
   const { maxValue, minValue } = oscillatorNode.getFrequency();

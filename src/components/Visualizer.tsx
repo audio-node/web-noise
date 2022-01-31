@@ -33,7 +33,7 @@ const Visualizer = (props: NodeProps) => {
 
   useEffect(() => {
     console.log("visualiser rendered", id);
-    device.addNode(id, analyserNode.analyser);
+    device.addNode(id, analyserNode);
   }, []);
 
   const canvasCtx = useMemo(() => {

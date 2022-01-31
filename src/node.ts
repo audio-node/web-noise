@@ -8,8 +8,8 @@ interface NodePort {
 export class BaseAudioNode {
   context = context;
 
-  inputs?: Array<NodePort>;
-  outputs?: Array<NodePort>;
+  inputs: Array<NodePort> = [];
+  outputs: Array<NodePort> = [];
 
   constructor(readonly config?: Record<string, unknown | never>) {}
 }
