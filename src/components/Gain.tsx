@@ -39,7 +39,7 @@ const Gain = (props: NodeProps) => {
 
   return (
     <EditorNode node={gainNode} {...props}>
-      <div>gain</div>
+      <div className="dragHandle">gain</div>
       <input
         type="range"
         value={gain}
