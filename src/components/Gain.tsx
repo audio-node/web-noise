@@ -19,7 +19,7 @@ class GainNode extends BaseAudioNode {
 
 const Gain = (props: NodeProps) => {
   const { id } = props;
-  const { rack } = useEditorContext();
+  const { module } = useEditorContext();
   const inputRange = useRef<HTMLInputElement>(null);
 
   const gainNode = useMemo(() => {
@@ -30,7 +30,7 @@ const Gain = (props: NodeProps) => {
 
   useEffect(() => {
     console.log("gain rendered", id);
-    rack.addNode(id, gainNode);
+    module.addNode(id, gainNode);
   }, []);
 
   useEffect(() => {

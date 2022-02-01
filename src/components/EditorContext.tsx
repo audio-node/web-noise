@@ -7,7 +7,7 @@ interface ConnectParam {
   port: number;
 }
 
-class Rack extends BaseAudioNode {
+class AudioModule extends BaseAudioNode {
   private nodes = new Map<NodeID, BaseAudioNode>();
   addNode(id: NodeID, node: BaseAudioNode) {
     return this.nodes.set(id, node);
@@ -44,7 +44,7 @@ class Rack extends BaseAudioNode {
 }
 
 export const contextValue = {
-  rack: new Rack(),
+  module: new AudioModule(),
 };
 
 export const EditorContext = createContext(contextValue);

@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from "react";
-import { Handle, Position, NodeProps } from "react-flow-renderer";
+import { NodeProps } from "react-flow-renderer";
 import EditorNode from "./EditorNode";
 import { useEditorContext } from "./EditorContext";
 import { BaseAudioNode } from "../node";
@@ -11,13 +11,13 @@ class DestinationNode extends BaseAudioNode {
 
 const Destination = (props: NodeProps) => {
   const { id } = props;
-  const { rack } = useEditorContext();
+  const { module } = useEditorContext();
   const destinationNode = useMemo(() => {
     return new DestinationNode();
   }, []);
   useEffect(() => {
     console.log("destination rendered", id);
-    rack.addNode(id, destinationNode);
+    module.addNode(id, destinationNode);
   }, []);
   return (
     <EditorNode node={destinationNode} {...props}>

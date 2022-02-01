@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Handle, Position, NodeProps } from "react-flow-renderer";
+import { NodeProps } from "react-flow-renderer";
 import { BaseAudioNode } from "../node";
 import EditorNode from "./EditorNode";
 import { useEditorContext } from "./EditorContext";
@@ -34,13 +34,13 @@ const useOscillatorNode = () => {
 
 const Oscillator = (props: NodeProps) => {
   const { id } = props;
-  const { rack } = useEditorContext();
+  const { module } = useEditorContext();
 
   const oscillatorNode = useOscillatorNode();
 
   useEffect(() => {
     oscillatorNode.start();
-    rack.addNode(id, oscillatorNode);
+    module.addNode(id, oscillatorNode);
   }, []);
 
   const { maxValue, minValue } = oscillatorNode.getFrequency();

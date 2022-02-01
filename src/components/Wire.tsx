@@ -25,11 +25,11 @@ const Wire = ({
   targetHandleId,
   ...rest
 }: EdgeProps) => {
-  const { rack } = useEditorContext();
+  const { module } = useEditorContext();
   useEffect(() => {
     console.log(`connected ${source} to ${target}`);
     // debugger;
-    rack.connect(
+    module.connect(
       //@ts-expect-error prototyping so far
       { id: source, port: +sourceHandleId },
       //@ts-expect-error prototyping so far
