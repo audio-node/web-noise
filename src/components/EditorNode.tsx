@@ -11,6 +11,7 @@ const EditorNode: FC<EditorNodeProps> = ({
   sourcePosition,
   targetPosition,
   node,
+  id,
   children,
 }: EditorNodeProps) => {
   return (
@@ -20,16 +21,18 @@ const EditorNode: FC<EditorNodeProps> = ({
           <Handle
             key={index}
             type="target"
+            style={{ top: index * 20 + 10 }}
             position={targetPosition || Position.Left}
-            id={name}
+            id={"" + index}
           />
         ))}
         {node.outputs?.map(({ name }, index) => (
           <Handle
             key={index}
             type="source"
+            style={{ top: index * 20 + 10 }}
             position={sourcePosition || Position.Right}
-            id={name}
+            id={"" + index}
           />
         ))}
       </div>

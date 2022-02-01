@@ -4,15 +4,15 @@ export const context = new AudioContext();
 //@TODO: remove when context resuming is ready
 window.actx = context;
 
-interface NodePort {
+interface NodePort<TNode = AudioNode> {
   name: string;
-  node: AudioNode;
+  node: TNode;
 }
 
 export class BaseAudioNode {
   context = context;
 
-  inputs: Array<NodePort> = [];
+  inputs: Array<NodePort<AudioNode | AudioParam>> = [];
   outputs: Array<NodePort> = [];
 
   constructor(readonly config?: Record<string, unknown | never>) {}
