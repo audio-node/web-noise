@@ -4,7 +4,7 @@ import { BaseAudioNode } from "../node";
 type NodeID = string;
 interface ConnectParam {
   id: NodeID;
-  port: number;
+  port: string;
 }
 
 class AudioModule extends BaseAudioNode {
@@ -25,13 +25,16 @@ class AudioModule extends BaseAudioNode {
     const outputNode = this.getNode(outputId);
     const inputNode = this.getNode(inputId);
 
-    const outputSource = outputNode?.outputs[outputPort].node;
-    const inputSource = inputNode?.inputs[inputPort].node;
-    if (typeof outputSource === undefined) {
-      throw new Error("outputSource is undefined");
+    const outputSource = outputNode?.outputs[outputPort]?.node;
+    const inputSource = inputNode?.inputs[inputPort]?.node;
+
+    if (typeof outputSource === "undefined") {
+      console.error("outputSource is undefined");
+      return;
     }
-    if (typeof inputSource === undefined) {
-      throw new Error("inputSource is undefined");
+    if (typeof inputSource === "undefined") {
+      console.error("inputSource is undefined");
+      return;
     }
 
     /*
@@ -39,7 +42,7 @@ class AudioModule extends BaseAudioNode {
      * despite the check above, casting force defined
      * */
     //@ts-ignore
-    outputSource!.connect(inputSource!); //in web audio we connect out to in :(
+    outputSource!.connect(inputSource!);
   }
 }
 

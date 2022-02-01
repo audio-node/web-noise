@@ -17,22 +17,22 @@ const EditorNode: FC<EditorNodeProps> = ({
   return (
     <>
       <div>
-        {node.inputs?.map(({ name }, index) => (
+        {Object.keys(node.inputs).map((name, index) => (
           <Handle
             key={index}
             type="target"
             style={{ top: index * 20 + 10 }}
             position={targetPosition || Position.Left}
-            id={"" + index}
+            id={name}
           />
         ))}
-        {node.outputs?.map(({ name }, index) => (
+        {Object.keys(node.outputs).map((name, index) => (
           <Handle
             key={index}
             type="source"
             style={{ top: index * 20 + 10 }}
             position={sourcePosition || Position.Right}
-            id={"" + index}
+            id={name}
           />
         ))}
       </div>

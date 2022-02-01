@@ -6,7 +6,7 @@ import { BaseAudioNode } from "../node";
 
 class DestinationNode extends BaseAudioNode {
   readonly destination = this.context.destination;
-  inputs = [{ name: "destination-input", node: this.destination }];
+  inputs = { "destination-input": { node: this.destination } };
 }
 
 const Destination = (props: NodeProps) => {

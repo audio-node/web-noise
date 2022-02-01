@@ -8,7 +8,7 @@ const DEFAULT_FREQUENCY = 440;
 
 class OscillatorNode extends BaseAudioNode {
   readonly oscillator = this.context.createOscillator();
-  outputs = [{ name: "oscillator-output", node: this.oscillator }];
+  outputs = { "oscillator-output": { node: this.oscillator } };
   getFrequency() {
     return this.oscillator.frequency;
   }

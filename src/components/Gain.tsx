@@ -6,11 +6,11 @@ import EditorNode from "./EditorNode";
 
 class GainNode extends BaseAudioNode {
   readonly gain = this.context.createGain();
-  inputs = [
-    { name: "gain-input", node: this.gain },
-    { name: "gain-gain", node: this.gain.gain },
-  ];
-  outputs = [{ name: "gain-output", node: this.gain }];
+  inputs = {
+    "gain-input": { node: this.gain },
+    "gain-gain": { node: this.gain.gain },
+  };
+  outputs = { "gain-output": { node: this.gain } };
 
   setValue(value: number) {
     this.gain.gain.setValueAtTime(value, this.context.currentTime);

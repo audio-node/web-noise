@@ -29,12 +29,14 @@ const Wire = ({
   useEffect(() => {
     console.log(`connected ${source} to ${target}`);
     // debugger;
-    module.connect(
-      //@ts-expect-error prototyping so far
-      { id: source, port: +sourceHandleId },
-      //@ts-expect-error prototyping so far
-      { id: target, port: +targetHandleId }
-    );
+    if (sourceHandleId && targetHandleId) {
+      module.connect(
+        { id: source, port: sourceHandleId },
+        { id: target, port: targetHandleId }
+      );
+    } else {
+      throw new Error("source or target handle is undefined");
+    }
   }, [source, target]);
   const edgePath = getBezierPath({
     targetX,

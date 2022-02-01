@@ -8,8 +8,16 @@ import { useEditorContext } from "./EditorContext";
 
 class AnalyserNode extends BaseAudioNode {
   readonly analyser = this.context.createAnalyser();
-  inputs = [{ name: "analyser-input", node: this.analyser }];
-  outputs = [{ name: "analyser-output", node: this.analyser }];
+  inputs = {
+    "analyser-input": {
+      node: this.analyser,
+    },
+  };
+  outputs = {
+    "analyser-output": {
+      node: this.analyser,
+    },
+  };
 
   bufferLength = this.analyser.frequencyBinCount;
   dataArray = new Uint8Array(this.bufferLength);
