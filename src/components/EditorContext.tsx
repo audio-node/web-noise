@@ -1,6 +1,5 @@
 import { createContext, useContext } from "react";
-import { createInputFiles } from "typescript";
-import { BaseAudioNode, context } from "../node";
+import { BaseAudioNode } from "../node";
 
 type NodeID = string;
 interface ConnectParam {
@@ -39,6 +38,7 @@ class Rack extends BaseAudioNode {
      * ts thinks inputSource and outputSource can be undefined
      * despite the check above, casting force defined
      * */
+    //@ts-ignore
     outputSource!.connect(inputSource!); //in web audio we connect out to in :(
   }
 }
