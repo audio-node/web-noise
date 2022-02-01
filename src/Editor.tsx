@@ -14,6 +14,7 @@ import Destination from "./components/Destination";
 import Gain from "./components/Gain";
 import Wire from "./components/Wire";
 import Visualizer from "./components/Visualizer";
+import KnobNode from "./components/Knob";
 import { EditorContext, contextValue } from "./components/EditorContext";
 
 const nodeTypes = {
@@ -22,6 +23,7 @@ const nodeTypes = {
   gain: Gain,
   visualiser: Visualizer,
   destination: Destination,
+  knob: KnobNode,
 };
 
 const edgeTypes = {
@@ -32,17 +34,24 @@ const spaceWidth = 230;
 
 const initialElements: Elements = [
   {
+    id: "knob",
+    type: "knob",
+    data: { label: "knob" },
+    position: { x: 0, y: 5 },
+    className: "react-flow__node-default",
+  },
+  {
     id: "oscillator",
     type: "oscillator",
     data: { label: "Oscillator" },
-    position: { x: 0, y: 25 },
+    position: { x: 0, y: 65 },
     className: "react-flow__node-default",
   },
   {
     id: "oscillator2",
     type: "oscillator",
     data: { label: "Oscillator" },
-    position: { x: 0, y: 125 },
+    position: { x: 0, y: 165 },
     className: "react-flow__node-default",
   },
   {
@@ -50,25 +59,33 @@ const initialElements: Elements = [
     type: "gain",
     dragHandle: ".dragHandle",
     data: { label: "Gain" },
-    position: { x: spaceWidth, y: 25 },
+    position: { x: spaceWidth, y: 65 },
     className: "react-flow__node-default",
   },
   {
     id: "visualiser",
     type: "visualiser",
     data: { label: "Visualiser" },
-    position: { x: spaceWidth * 2, y: 25 },
+    position: { x: spaceWidth * 2, y: 65 },
     className: "react-flow__node-default",
   },
   {
     id: "destination",
     type: "destination",
     data: { label: "Oscillator" },
-    position: { x: spaceWidth * 3, y: 25 },
+    position: { x: spaceWidth * 3, y: 65 },
     className: "react-flow__node-default",
   },
   {
-    id: "osc-vis",
+    id: "knob-gain",
+    source: "knob",
+    sourceHandle: "knob-output",
+    target: "gain",
+    targetHandle: "gain-gain",
+    type: "wire",
+  },
+  {
+    id: "osc-gain",
     source: "oscillator",
     sourceHandle: "oscillator-output",
     target: "gain",

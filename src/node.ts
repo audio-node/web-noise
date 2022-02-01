@@ -4,12 +4,18 @@ export const context = new AudioContext();
 //@TODO: remove when context resuming is ready
 window.actx = context;
 
-// interface NodePort<TNode = AudioNode> {
-// name: string;
-// node: TNode;
-// }
-
-export class NumericPort {}
+export class NumericPort {
+  context = context;
+  target: AudioParam | null = null;
+  connect(target: AudioParam) {
+    this.target = target;
+  }
+  setValue(value: number) {
+    if (this.target) {
+      this.target.setValueAtTime(value, context.currentTime);
+    }
+  }
+}
 
 interface NodeInputPort {
   node: AudioNode | AudioParam;
