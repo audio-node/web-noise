@@ -39,6 +39,13 @@ const initialElements: Elements = [
     className: "react-flow__node-default",
   },
   {
+    id: "oscillator2",
+    type: "oscillator",
+    data: { label: "Oscillator" },
+    position: { x: 0, y: 125 },
+    className: "react-flow__node-default",
+  },
+  {
     id: "gain",
     type: "gain",
     dragHandle: ".dragHandle",

@@ -1,12 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Handle, Position, NodeProps } from "react-flow-renderer";
+import { NodeProps } from "react-flow-renderer";
 import { useEditorContext } from "./EditorContext";
 import { BaseAudioNode } from "../node";
 import EditorNode from "./EditorNode";
 
 class GainNode extends BaseAudioNode {
   readonly gain = this.context.createGain();
-  inputs = [{ name: "gain-input", node: this.gain }];
+  inputs = [
+    { name: "gain-input", node: this.gain },
+    { name: "gain-gain", node: this.gain.gain },
+  ];
   outputs = [{ name: "gain-output", node: this.gain }];
 
   setValue(value: number) {
@@ -36,6 +39,7 @@ const Gain = (props: NodeProps) => {
 
   return (
     <EditorNode node={gainNode} {...props}>
+      <div>gain</div>
       <input
         type="range"
         value={gain}
