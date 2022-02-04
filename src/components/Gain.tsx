@@ -42,7 +42,7 @@ const Gain = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
       <Handle
         type="target"
         position={targetPosition || Position.Left}
-        id="gain-node-in"
+        id="in"
       />
       <div className="dragHandle">gain</div>
       <input
@@ -56,7 +56,7 @@ const Gain = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
       />
       <Handle
         type="source"
-        id="gain-node-out"
+        id="out"
         position={sourcePosition || Position.Right}
       />
     </>

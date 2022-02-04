@@ -66,18 +66,24 @@ const initialElements: Elements = [
     source: "oscillator",
     target: "gain",
     type: "wire",
+    targetHandle: "in",
+    sourceHandle: "out",
   },
   {
     id: "gain-to-vis",
     source: "gain",
     target: "visualiser",
     type: "wire",
+    targetHandle: "in",
+    sourceHandle: "out",
   },
   {
     id: "vis-to-dest",
     source: "visualiser",
     target: "destination",
     type: "wire",
+    targetHandle: "in",
+    sourceHandle: "out",
   },
 ];
 

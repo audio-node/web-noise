@@ -39,7 +39,6 @@ const Oscillator = ({ sourcePosition, id }: NodeProps) => {
   return (
     <>
       <div>oscillator</div>
-      <Handle type="source" position={sourcePosition || Position.Right} />
       <div>
         <label>
           <input
@@ -86,6 +85,11 @@ const Oscillator = ({ sourcePosition, id }: NodeProps) => {
           />
         }
       </div>
+      <Handle
+        type="source"
+        position={sourcePosition || Position.Right}
+        id="out"
+      />
     </>
   );
 };

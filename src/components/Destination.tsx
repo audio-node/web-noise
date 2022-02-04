@@ -28,7 +28,7 @@ const Destination = ({ targetPosition, data, id }: NodeProps) => {
       <Handle
         type="target"
         position={targetPosition || Position.Left}
-        id="destination-in"
+        id="in"
         onConnect={(params) => console.log("handle onConnect", params)}
       />
     </>

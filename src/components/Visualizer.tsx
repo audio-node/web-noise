@@ -88,10 +88,18 @@ const Visualizer = ({
     <>
       <div>visualiser</div>
       <div>
-        <Handle type="target" position={targetPosition || Position.Left} />
+        <Handle
+          id="in"
+          type="target"
+          position={targetPosition || Position.Left}
+        />
       </div>
       <canvas ref={canvasRef} style={{ display: "block", width: "100%" }} />
-      <Handle type="source" position={sourcePosition || Position.Right} />
+      <Handle
+        id="out"
+        type="source"
+        position={sourcePosition || Position.Right}
+      />
     </>
   );
 };
