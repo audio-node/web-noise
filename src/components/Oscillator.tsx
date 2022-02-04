@@ -4,16 +4,19 @@ import { useEditorContext } from "./EditorContext";
 
 const DEFAULT_FREQUENCY = 440;
 
-const Oscillator = ({ sourcePosition, id }: NodeProps) => {
-  const { device, audioContext } = useEditorContext();
-
-  const oscillator = useMemo(() => {
+const useOscillator = (audioContext: AudioContext) =>
+  useMemo(() => {
     return audioContext.createOscillator();
   }, []);
 
+const Oscillator = ({ sourcePosition, id }: NodeProps) => {
+  const { audioContext, module } = useEditorContext();
+
+  const oscillator = useOscillator(audioContext);
+
   useEffect(() => {
     oscillator.start();
-    device.addNode(id, oscillator);
+    module[id] = oscillator;
   }, []);
 
   const { maxValue, minValue } = oscillator.frequency;

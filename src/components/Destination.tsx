@@ -3,10 +3,10 @@ import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useEditorContext } from "./EditorContext";
 
 const Destination = ({ targetPosition, data, id }: NodeProps) => {
-  const { device, audioContext } = useEditorContext();
+  const { audioContext, module } = useEditorContext();
   useEffect(() => {
     console.log("destination rendered", id);
-    device.addNode(id, audioContext.destination);
+    module[id] = audioContext.destination;
   }, []);
   return (
     <>

@@ -1,28 +1,10 @@
 import { createContext, useContext } from "react";
 
-type DeviceID = string;
-type AudioNode = any;
-class EditorDevice {
-  private nodes = new Map<DeviceID, AudioNode>();
-  addNode(id: DeviceID, node: AudioNode) {
-    return this.nodes.set(id, node);
-  }
-  removeNode(id: DeviceID) {
-    return this.nodes.delete(id);
-  }
-  getNode(id: DeviceID) {
-    return this.nodes.get(id);
-  }
-  connect(outputId: DeviceID, inputId: DeviceID) {
-    const input = this.getNode(inputId);
-    const output = this.getNode(outputId);
-    input.connect(output);
-  }
-}
+const module: Record<string, AudioNode | never> = {};
 
 export const contextValue = {
   audioContext: new AudioContext(),
-  device: new EditorDevice(),
+  module,
 };
 
 //@ts-ignore

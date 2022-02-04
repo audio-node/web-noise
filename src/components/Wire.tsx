@@ -23,10 +23,12 @@ const Wire = ({
   target,
   ...rest
 }: EdgeProps) => {
-  const { device } = useEditorContext();
+  const { module } = useEditorContext();
   useEffect(() => {
     console.log(`connected ${source} to ${target}`);
-    device.connect(target, source);
+    const sourceNode = module[source];
+    const targetNode = module[target];
+    sourceNode.connect(targetNode);
   }, [source, target]);
   const edgePath = getBezierPath({
     targetX,

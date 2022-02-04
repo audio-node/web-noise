@@ -4,17 +4,19 @@ import useAnimationFrame from "use-animation-frame";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useEditorContext } from "./EditorContext";
 
+const useAnalyser = (audioContext: AudioContext) =>
+  useMemo(() => {
+    return audioContext.createAnalyser();
+  }, []);
+
 const Visualizer = ({
   targetPosition,
   sourcePosition,
   data,
   id,
 }: NodeProps) => {
-  const { device, audioContext } = useEditorContext();
-  const analyser = useMemo(() => {
-    console.log("create analyzer");
-    return audioContext.createAnalyser();
-  }, []);
+  const { audioContext, module } = useEditorContext();
+  const analyser = useAnalyser(audioContext);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvas = canvasRef.current;
@@ -24,7 +26,7 @@ const Visualizer = ({
 
   useEffect(() => {
     console.log("visualiser rendered", id);
-    device.addNode(id, analyser);
+    module[id] = analyser;
   }, []);
 
   const canvasCtx = useMemo(() => {

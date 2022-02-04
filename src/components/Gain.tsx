@@ -2,19 +2,22 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useEditorContext } from "./EditorContext";
 
-const Gain = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
-  const { device, audioContext } = useEditorContext();
-  const inputRange = useRef<HTMLInputElement>(null);
-
-  const gainNode = useMemo(() => {
+const useGain = (audioContext: AudioContext) =>
+  useMemo(() => {
     return audioContext.createGain();
   }, []);
+
+const Gain = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
+  const { audioContext, module } = useEditorContext();
+  const inputRange = useRef<HTMLInputElement>(null);
+
+  const gainNode = useGain(audioContext);
 
   const [gain, setGain] = useState(1);
 
   useEffect(() => {
     console.log("gain rendered", id);
-    device.addNode(id, gainNode);
+    module[id] = gainNode;
   }, []);
 
   useEffect(() => {
