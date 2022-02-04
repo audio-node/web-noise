@@ -1,6 +1,18 @@
 import { createContext, useContext } from "react";
 
-const module: Record<string, AudioNode | never> = {};
+interface InputPort {
+  port: AudioNode | any /* any other type of port */;
+}
+
+interface OutputPort {
+  port: AudioNode;
+}
+
+interface Node extends Record<string, any> {
+  inputs?: Record<string, InputPort | never>;
+  outputs?: Record<string, OutputPort | never>;
+}
+const module: Record<string, Node | never> = {};
 
 export const contextValue = {
   audioContext: new AudioContext(),

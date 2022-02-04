@@ -6,17 +6,26 @@ const DEFAULT_FREQUENCY = 440;
 
 const useOscillator = (audioContext: AudioContext) =>
   useMemo(() => {
-    return audioContext.createOscillator();
+    const oscillator = audioContext.createOscillator();
+    return {
+      outputs: {
+        out: {
+          port: oscillator,
+        },
+      },
+      oscillator,
+    };
   }, []);
 
 const Oscillator = ({ sourcePosition, id }: NodeProps) => {
   const { audioContext, module } = useEditorContext();
 
-  const oscillator = useOscillator(audioContext);
+  const oscillatorNode = useOscillator(audioContext);
+  const { oscillator } = oscillatorNode;
 
   useEffect(() => {
     oscillator.start();
-    module[id] = oscillator;
+    module[id] = oscillatorNode;
   }, []);
 
   const { maxValue, minValue } = oscillator.frequency;

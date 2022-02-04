@@ -6,7 +6,20 @@ import { useEditorContext } from "./EditorContext";
 
 const useAnalyser = (audioContext: AudioContext) =>
   useMemo(() => {
-    return audioContext.createAnalyser();
+    const analyser = audioContext.createAnalyser();
+    return {
+      inputs: {
+        in: {
+          port: analyser,
+        },
+      },
+      outputs: {
+        out: {
+          port: analyser,
+        },
+      },
+      analyser,
+    };
   }, []);
 
 const Visualizer = ({
@@ -16,7 +29,8 @@ const Visualizer = ({
   id,
 }: NodeProps) => {
   const { audioContext, module } = useEditorContext();
-  const analyser = useAnalyser(audioContext);
+  const analyserNode = useAnalyser(audioContext);
+  const { analyser } = analyserNode;
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvas = canvasRef.current;
@@ -26,7 +40,7 @@ const Visualizer = ({
 
   useEffect(() => {
     console.log("visualiser rendered", id);
-    module[id] = analyser;
+    module[id] = analyserNode;
   }, []);
 
   const canvasCtx = useMemo(() => {

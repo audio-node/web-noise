@@ -4,7 +4,20 @@ import { useEditorContext } from "./EditorContext";
 
 const useGain = (audioContext: AudioContext) =>
   useMemo(() => {
-    return audioContext.createGain();
+    const gain = audioContext.createGain();
+    return {
+      inputs: {
+        in: {
+          port: gain,
+        },
+      },
+      outputs: {
+        out: {
+          port: gain,
+        },
+      },
+      gain,
+    };
   }, []);
 
 const Gain = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
@@ -21,7 +34,7 @@ const Gain = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
   }, []);
 
   useEffect(() => {
-    gainNode.gain.setValueAtTime(gain, audioContext.currentTime);
+    gainNode.gain.gain.setValueAtTime(gain, audioContext.currentTime);
   }, [gain]);
 
   return (
