@@ -15,6 +15,7 @@ import Gain from "./components/Gain";
 import Wire from "./components/Wire";
 import Visualizer from "./components/Visualizer";
 import { EditorContext, contextValue } from "./components/EditorContext";
+import ResumeContext from "./components/ResumeContext";
 
 const nodeTypes = {
   multiHandlesNode: MultiHandlesNode,
@@ -121,6 +122,7 @@ export const Editor = () => {
     },
     [reactflowInstance]
   );
+
   return (
     <EditorContext.Provider value={contextValue}>
       <ReactFlow
@@ -138,7 +140,9 @@ export const Editor = () => {
       >
         <Background variant={BackgroundVariant.Dots} gap={12} />
         <MiniMap />
-        <Controls />
+        <Controls>
+          <ResumeContext />
+        </Controls>
       </ReactFlow>
     </EditorContext.Provider>
   );
