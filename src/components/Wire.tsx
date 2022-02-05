@@ -37,6 +37,9 @@ const Wire = ({
       return;
     }
     outputNode.connect(inputNode);
+    return () => {
+      outputNode.disconnect(inputNode);
+    };
   }, [source, target]);
   const edgePath = getBezierPath({
     targetX,
