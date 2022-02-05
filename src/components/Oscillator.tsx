@@ -17,7 +17,7 @@ const useOscillator = (audioContext: AudioContext) =>
     };
   }, []);
 
-const Oscillator = ({ sourcePosition, id }: NodeProps) => {
+const Oscillator = ({ sourcePosition, id, data }: NodeProps) => {
   const { audioContext, module } = useEditorContext();
 
   const oscillatorNode = useOscillator(audioContext);
@@ -38,7 +38,7 @@ const Oscillator = ({ sourcePosition, id }: NodeProps) => {
   const radioName = `radio-${+new Date()}`;
   return (
     <>
-      <div>oscillator</div>
+      <div>{data.label || "oscillator"}</div>
       <div>
         <label>
           <input

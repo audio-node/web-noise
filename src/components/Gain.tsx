@@ -10,6 +10,9 @@ const useGain = (audioContext: AudioContext) =>
         in: {
           port: gain,
         },
+        gain: {
+          port: gain.gain,
+        },
       },
       outputs: {
         out: {
@@ -42,7 +45,13 @@ const Gain = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
       <Handle
         type="target"
         position={targetPosition || Position.Left}
+        style={{ top: 10 }}
         id="in"
+      />
+      <Handle
+        type="target"
+        position={targetPosition || Position.Left}
+        id="gain"
       />
       <div className="dragHandle">gain</div>
       <input
