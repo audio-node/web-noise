@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 
 import { useEditorContext } from "../EditorContext";
@@ -17,37 +17,36 @@ export const loadModule = async (audioContext: AudioContext) => {
 
 const useWhiteNoise = (audioContext: AudioContext) => {
   const [node, setNode] = useState<any>();
-  const [nodePromise, setNodePromise] = useState<any>();
   const [ready, setReady] = useState(false);
 
-  const getNode = async () => {
-    await loadModule(audioContext);
-    const whiteNoise = new AudioWorkletNode(
-      audioContext,
-      "white-noise-processor"
-    );
-
-    return {
-      outputs: {
-        out: {
-          port: whiteNoise,
-        },
-      },
-      whiteNoise,
-    };
-  };
+  const [innerPort, port] = useMemo(() => {
+    const innerPort = audioContext.createMediaStreamDestination();
+    const port = audioContext.createMediaStreamSource(innerPort.stream);
+    return [innerPort, port];
+  }, [audioContext]);
 
   useEffect(() => {
     (async () => {
-      const nodePromise = getNode();
-      setNodePromise(nodePromise);
-      const whiteNoiseNode = await nodePromise;
-      setNode(whiteNoiseNode);
+      await loadModule(audioContext);
+      const whiteNoise = new AudioWorkletNode(
+        audioContext,
+        "white-noise-processor"
+      );
+      whiteNoise.connect(innerPort);
+      setNode(whiteNoise);
       setReady(true);
     })();
-  }, []);
+  }, [audioContext]);
 
-  return { ready, node, nodePromise };
+  return {
+    outputs: {
+      out: {
+        port,
+      },
+    },
+    whiteNoise: node,
+    ready,
+  };
 };
 
 const WhiteNoise = ({
@@ -58,15 +57,12 @@ const WhiteNoise = ({
 }: NodeProps) => {
   const { audioContext, module } = useEditorContext();
 
-  const { ready, node, nodePromise } = useWhiteNoise(audioContext);
+  const whiteNoiseNode = useWhiteNoise(audioContext);
+  const { ready } = whiteNoiseNode;
 
   useEffect(() => {
-    module[id] = nodePromise;
-  }, [id, module, nodePromise]);
-
-  // if (!whiteNoiseNode) {
-  // return "loading";
-  // }
+    module[id] = whiteNoiseNode;
+  }, []);
 
   return (
     <>
