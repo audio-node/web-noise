@@ -1,11 +1,13 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 
-import { useEditorContext } from "./EditorContext";
+import { useEditorContext } from "../EditorContext";
+//@ts-ignore
+import whiteNoiseWorklet from "worklet-loader!./worklet.js"; // eslint-disable-line
 
 export const loadModule = async (audioContext: AudioContext) => {
   try {
-    await audioContext.audioWorklet.addModule("worklets/whiteNoise.js");
+    await audioContext.audioWorklet.addModule(whiteNoiseWorklet);
     return true;
   } catch (e) {
     console.log(e);
