@@ -14,6 +14,7 @@ import Destination from "./components/Destination";
 import Gain from "./components/Gain";
 import Wire from "./components/Wire";
 import Visualizer from "./components/Visualizer";
+import WhiteNoise, { loadModule } from "./components/WhiteNoise";
 import { EditorContext, contextValue } from "./components/EditorContext";
 import ResumeContext from "./components/ResumeContext";
 
@@ -23,6 +24,7 @@ const nodeTypes = {
   gain: Gain,
   visualiser: Visualizer,
   destination: Destination,
+  whiteNoise: WhiteNoise,
 };
 
 const edgeTypes = {
@@ -69,6 +71,13 @@ const initialElements: Elements = [
     className: "react-flow__node-default",
   },
   {
+    id: "whiteNoise",
+    type: "whiteNoise",
+    data: { label: "White Noise" },
+    position: { x: spaceWidth, y: -30 },
+    className: "react-flow__node-default",
+  },
+  {
     id: "osc-gain",
     source: "oscillator",
     target: "gain",
@@ -84,9 +93,17 @@ const initialElements: Elements = [
     targetHandle: "gain",
     sourceHandle: "out",
   },
+  // {
+  // id: "gain-to-vis",
+  // source: "gain",
+  // target: "visualiser",
+  // type: "wire",
+  // targetHandle: "in",
+  // sourceHandle: "out",
+  // },
   {
-    id: "gain-to-vis",
-    source: "gain",
+    id: "wn-to-vis",
+    source: "whiteNoise",
     target: "visualiser",
     type: "wire",
     targetHandle: "in",
@@ -144,6 +161,23 @@ export const Editor = () => {
     [reactflowInstance]
   );
 
+  // const [audioReady, setAudioReady] = useState(false);
+
+  // useEffect(() => {
+  // const loadAudioWorklets = async () => {
+  // await Promise.all([loadModule(contextValue.audioContext)]);
+  // setAudioReady(true);
+  // };
+  // loadAudioWorklets();
+  // });
+
+  // if (!audioReady) {
+  // return (
+  // <>
+  // <b>loading audio worklets</b>
+  // </>
+  // );
+  // }
   return (
     <EditorContext.Provider value={contextValue}>
       <ReactFlow

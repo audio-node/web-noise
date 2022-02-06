@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   getBezierPath,
   getEdgeCenter,
@@ -26,21 +26,40 @@ const Wire = ({
   ...rest
 }: EdgeProps) => {
   const { module } = useEditorContext();
+  const [input, setInput] = useState<any>();
+  const [output, setOutput] = useState<any>();
+  const [ready, setReady] = useState(false);
+
   useEffect(() => {
-    console.log(`connected ${source} to ${target}`);
-    if (!sourceHandleId || !targetHandleId) {
-      return;
-    }
-    const outputNode = module[source]?.outputs?.[sourceHandleId]?.port;
-    const inputNode = module[target]?.inputs?.[targetHandleId]?.port;
+    const outputNode = module[source];
+    const inputNode = module[target];
     if (!outputNode || !inputNode) {
       return;
     }
+    (async () => {
+      setOutput(await outputNode);
+      setInput(await inputNode);
+      setReady(true);
+    })();
+  }, [source, target, module]);
+
+  useEffect(() => {
+    if (!sourceHandleId || !targetHandleId) {
+      return;
+    }
+    const outputNode = output?.outputs?.[sourceHandleId]?.port;
+    const inputNode = input?.inputs?.[targetHandleId]?.port;
+    if (!inputNode || !outputNode) {
+      return;
+    }
     outputNode.connect(inputNode);
+    console.log(`connected ${source} to ${target}`);
     return () => {
       outputNode.disconnect(inputNode);
+      console.log(`disconnected ${source} from ${target}`);
     };
-  }, [source, target]);
+  }, [input, output, source, target, sourceHandleId, targetHandleId]);
+
   const edgePath = getBezierPath({
     targetX,
     targetY,
