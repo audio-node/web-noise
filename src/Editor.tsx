@@ -36,7 +36,14 @@ const initialElements: Elements = [
     id: "oscillator",
     type: "oscillator",
     data: { label: "Oscillator" },
-    position: { x: 0, y: 25 },
+    position: { x: 0, y: -50 },
+    className: "react-flow__node-default",
+  },
+  {
+    id: "lfo",
+    type: "oscillator",
+    data: { label: "LFO" },
+    position: { x: 0, y: 50 },
     className: "react-flow__node-default",
   },
   {
@@ -62,22 +69,36 @@ const initialElements: Elements = [
     className: "react-flow__node-default",
   },
   {
-    id: "osc-vis",
+    id: "osc-gain",
     source: "oscillator",
     target: "gain",
     type: "wire",
+    targetHandle: "in",
+    sourceHandle: "out",
+  },
+  {
+    id: "lfo-gain",
+    source: "lfo",
+    target: "gain",
+    type: "wire",
+    targetHandle: "gain",
+    sourceHandle: "out",
   },
   {
     id: "gain-to-vis",
     source: "gain",
     target: "visualiser",
     type: "wire",
+    targetHandle: "in",
+    sourceHandle: "out",
   },
   {
     id: "vis-to-dest",
     source: "visualiser",
     target: "destination",
     type: "wire",
+    targetHandle: "in",
+    sourceHandle: "out",
   },
 ];
 

@@ -4,17 +4,33 @@ import useAnimationFrame from "use-animation-frame";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useEditorContext } from "./EditorContext";
 
+const useAnalyser = (audioContext: AudioContext) =>
+  useMemo(() => {
+    const analyser = audioContext.createAnalyser();
+    return {
+      inputs: {
+        in: {
+          port: analyser,
+        },
+      },
+      outputs: {
+        out: {
+          port: analyser,
+        },
+      },
+      analyser,
+    };
+  }, []);
+
 const Visualizer = ({
   targetPosition,
   sourcePosition,
   data,
   id,
 }: NodeProps) => {
-  const { device, audioContext } = useEditorContext();
-  const analyser = useMemo(() => {
-    console.log("create analyzer");
-    return audioContext.createAnalyser();
-  }, []);
+  const { audioContext, module } = useEditorContext();
+  const analyserNode = useAnalyser(audioContext);
+  const { analyser } = analyserNode;
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvas = canvasRef.current;
@@ -24,7 +40,7 @@ const Visualizer = ({
 
   useEffect(() => {
     console.log("visualiser rendered", id);
-    device.addNode(id, analyser);
+    module[id] = analyserNode;
   }, []);
 
   const canvasCtx = useMemo(() => {
@@ -72,10 +88,18 @@ const Visualizer = ({
     <>
       <div>visualiser</div>
       <div>
-        <Handle type="target" position={targetPosition || Position.Left} />
+        <Handle
+          id="in"
+          type="target"
+          position={targetPosition || Position.Left}
+        />
       </div>
       <canvas ref={canvasRef} style={{ display: "block", width: "100%" }} />
-      <Handle type="source" position={sourcePosition || Position.Right} />
+      <Handle
+        id="out"
+        type="source"
+        position={sourcePosition || Position.Right}
+      />
     </>
   );
 };

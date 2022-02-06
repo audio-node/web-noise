@@ -4,16 +4,28 @@ import { useEditorContext } from "./EditorContext";
 
 const DEFAULT_FREQUENCY = 440;
 
-const Oscillator = ({ sourcePosition, id }: NodeProps) => {
-  const { device, audioContext } = useEditorContext();
-
-  const oscillator = useMemo(() => {
-    return audioContext.createOscillator();
+const useOscillator = (audioContext: AudioContext) =>
+  useMemo(() => {
+    const oscillator = audioContext.createOscillator();
+    return {
+      outputs: {
+        out: {
+          port: oscillator,
+        },
+      },
+      oscillator,
+    };
   }, []);
+
+const Oscillator = ({ sourcePosition, id, data }: NodeProps) => {
+  const { audioContext, module } = useEditorContext();
+
+  const oscillatorNode = useOscillator(audioContext);
+  const { oscillator } = oscillatorNode;
 
   useEffect(() => {
     oscillator.start();
-    device.addNode(id, oscillator);
+    module[id] = oscillatorNode;
   }, []);
 
   const { maxValue, minValue } = oscillator.frequency;
@@ -26,8 +38,7 @@ const Oscillator = ({ sourcePosition, id }: NodeProps) => {
   const radioName = `radio-${+new Date()}`;
   return (
     <>
-      <div>oscillator</div>
-      <Handle type="source" position={sourcePosition || Position.Right} />
+      <div>{data.label || "oscillator"}</div>
       <div>
         <label>
           <input
@@ -74,6 +85,11 @@ const Oscillator = ({ sourcePosition, id }: NodeProps) => {
           />
         }
       </div>
+      <Handle
+        type="source"
+        position={sourcePosition || Position.Right}
+        id="out"
+      />
     </>
   );
 };

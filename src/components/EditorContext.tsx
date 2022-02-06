@@ -1,28 +1,22 @@
 import { createContext, useContext } from "react";
 
-type DeviceID = string;
-type AudioNode = any;
-class EditorDevice {
-  private nodes = new Map<DeviceID, AudioNode>();
-  addNode(id: DeviceID, node: AudioNode) {
-    return this.nodes.set(id, node);
-  }
-  removeNode(id: DeviceID) {
-    return this.nodes.delete(id);
-  }
-  getNode(id: DeviceID) {
-    return this.nodes.get(id);
-  }
-  connect(outputId: DeviceID, inputId: DeviceID) {
-    const input = this.getNode(inputId);
-    const output = this.getNode(outputId);
-    input.connect(output);
-  }
+interface InputPort {
+  port: AudioNode | any /* any other type of port */;
 }
+
+interface OutputPort {
+  port: AudioNode;
+}
+
+interface Node extends Record<string, any> {
+  inputs?: Record<string, InputPort | never>;
+  outputs?: Record<string, OutputPort | never>;
+}
+const module: Record<string, Node | never> = {};
 
 export const contextValue = {
   audioContext: new AudioContext(),
-  device: new EditorDevice(),
+  module,
 };
 
 //@ts-ignore

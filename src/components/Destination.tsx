@@ -1,12 +1,26 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useEditorContext } from "./EditorContext";
 
+const useDestination = (audioContext: AudioContext) =>
+  useMemo(() => {
+    const destination = audioContext.destination;
+    return {
+      inputs: {
+        in: {
+          port: destination,
+        },
+      },
+      destination,
+    };
+  }, []);
+
 const Destination = ({ targetPosition, data, id }: NodeProps) => {
-  const { device, audioContext } = useEditorContext();
+  const { audioContext, module } = useEditorContext();
+  const destinationNode = useDestination(audioContext);
   useEffect(() => {
     console.log("destination rendered", id);
-    device.addNode(id, audioContext.destination);
+    module[id] = destinationNode;
   }, []);
   return (
     <>
@@ -14,7 +28,7 @@ const Destination = ({ targetPosition, data, id }: NodeProps) => {
       <Handle
         type="target"
         position={targetPosition || Position.Left}
-        id="destination-in"
+        id="in"
         onConnect={(params) => console.log("handle onConnect", params)}
       />
     </>

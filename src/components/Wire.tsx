@@ -21,12 +21,25 @@ const Wire = ({
   markerEndId,
   source,
   target,
+  sourceHandleId,
+  targetHandleId,
   ...rest
 }: EdgeProps) => {
-  const { device } = useEditorContext();
+  const { module } = useEditorContext();
   useEffect(() => {
     console.log(`connected ${source} to ${target}`);
-    device.connect(target, source);
+    if (!sourceHandleId || !targetHandleId) {
+      return;
+    }
+    const outputNode = module[source]?.outputs?.[sourceHandleId]?.port;
+    const inputNode = module[target]?.inputs?.[targetHandleId]?.port;
+    if (!outputNode || !inputNode) {
+      return;
+    }
+    outputNode.connect(inputNode);
+    return () => {
+      outputNode.disconnect(inputNode);
+    };
   }, [source, target]);
   const edgePath = getBezierPath({
     targetX,
