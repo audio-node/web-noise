@@ -36,12 +36,7 @@ const Wire = ({
     if (!outputNode || !inputNode) {
       return;
     }
-    try {
-      outputNode.connect(inputNode);
-    } catch (e) {
-      console.log(e);
-      debugger;
-    }
+    outputNode.connect(inputNode);
     return () => {
       outputNode.disconnect(inputNode);
     };
