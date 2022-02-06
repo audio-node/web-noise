@@ -1,7 +1,7 @@
-class WhiteNoiseProcessor extends AudioWorkletProcessor {
-  process(inputs, outputs, parameters) {
+export class WhiteNoiseProcessor extends AudioWorkletProcessor {
+  process(inputs: any, outputs: any, parameters: any) {
     const output = outputs[0];
-    output.forEach((channel) => {
+    output.forEach((channel: any) => {
       for (let i = 0; i < channel.length; i++) {
         channel[i] = Math.random() * 2 - 1;
       }
@@ -10,4 +10,5 @@ class WhiteNoiseProcessor extends AudioWorkletProcessor {
   }
 }
 
+//@ts-ignore
 registerProcessor("white-noise-processor", WhiteNoiseProcessor);

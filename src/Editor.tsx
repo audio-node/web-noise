@@ -14,7 +14,7 @@ import Destination from "./components/Destination";
 import Gain from "./components/Gain";
 import Wire from "./components/Wire";
 import Visualizer from "./components/Visualizer";
-import WhiteNoise, { loadModule } from "./components/WhiteNoise";
+import WhiteNoise from "./components/WhiteNoise";
 import { EditorContext, contextValue } from "./components/EditorContext";
 import ResumeContext from "./components/ResumeContext";
 
@@ -161,23 +161,6 @@ export const Editor = () => {
     [reactflowInstance]
   );
 
-  // const [audioReady, setAudioReady] = useState(false);
-
-  // useEffect(() => {
-  // const loadAudioWorklets = async () => {
-  // await Promise.all([loadModule(contextValue.audioContext)]);
-  // setAudioReady(true);
-  // };
-  // loadAudioWorklets();
-  // });
-
-  // if (!audioReady) {
-  // return (
-  // <>
-  // <b>loading audio worklets</b>
-  // </>
-  // );
-  // }
   return (
     <EditorContext.Provider value={contextValue}>
       <ReactFlow

@@ -3,7 +3,7 @@ import { Handle, Position, NodeProps } from "react-flow-renderer";
 
 import { useEditorContext } from "../EditorContext";
 //@ts-ignore
-import whiteNoiseWorklet from "worklet-loader!./worklet.js"; // eslint-disable-line
+import whiteNoiseWorklet from "worklet-loader!./worklet.ts"; // eslint-disable-line
 
 export const loadModule = async (audioContext: AudioContext) => {
   try {
