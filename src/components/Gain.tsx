@@ -29,6 +29,8 @@ const Gain = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
 
   const gainNode = useGain(audioContext);
 
+  const [min, setMin] = useState(0);
+  const [max, setMax] = useState(1);
   const [gain, setGain] = useState(1);
 
   useEffect(() => {
@@ -58,11 +60,34 @@ const Gain = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
         type="range"
         value={gain}
         ref={inputRange}
-        min={0}
-        max={2}
+        min={min}
+        max={max}
         step={0.001}
         onChange={({ target: { value } }) => setGain(+value)}
       />
+
+      <div style={{ display: `flex` }}>
+        <label style={{ padding: `0.5em` }}>
+          min:
+          <input
+            style={{ width: `90%` }}
+            type="number"
+            value={min}
+            onChange={({ target: { value } }) => setMin(+value)}
+          />
+        </label>
+
+        <label style={{ padding: `0.5em` }}>
+          max:
+          <input
+            style={{ width: `90%` }}
+            type="number"
+            value={max}
+            onChange={({ target: { value } }) => setMax(+value)}
+          />
+        </label>
+      </div>
+
       <Handle
         type="source"
         id="out"
