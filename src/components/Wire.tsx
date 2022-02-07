@@ -38,6 +38,7 @@ const Wire = ({
     }
     outputNode.connect(inputNode);
     return () => {
+      console.log(`disconnected ${source} to ${target}`);
       outputNode.disconnect(inputNode);
     };
   }, [source, target]);
