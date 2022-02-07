@@ -20,7 +20,7 @@ const useAnalyser = (audioContext: AudioContext) =>
       },
       analyser,
     };
-  }, []);
+  }, [audioContext]);
 
 const Visualizer = ({
   targetPosition,
@@ -86,7 +86,7 @@ const Visualizer = ({
   useAnimationFrame(tick);
   return (
     <>
-      <div>visualiser</div>
+      <div>{data.label || "visualiser"}</div>
       <div>
         <Handle
           id="in"

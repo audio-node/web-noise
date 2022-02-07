@@ -14,6 +14,7 @@ import Destination from "./components/Destination";
 import Gain from "./components/Gain";
 import Wire from "./components/Wire";
 import Visualizer from "./components/Visualizer";
+import WhiteNoise from "./components/WhiteNoise";
 import { EditorContext, contextValue } from "./components/EditorContext";
 import ResumeContext from "./components/ResumeContext";
 
@@ -23,6 +24,7 @@ const nodeTypes = {
   gain: Gain,
   visualiser: Visualizer,
   destination: Destination,
+  whiteNoise: WhiteNoise,
 };
 
 const edgeTypes = {
@@ -58,7 +60,14 @@ const initialElements: Elements = [
     id: "visualiser",
     type: "visualiser",
     data: { label: "Visualiser" },
-    position: { x: spaceWidth * 2, y: 25 },
+    position: { x: spaceWidth * 2, y: 100 },
+    className: "react-flow__node-default",
+  },
+  {
+    id: "visualiser2",
+    type: "visualiser",
+    data: { label: "Visualiser 2" },
+    position: { x: spaceWidth * 2, y: -30 },
     className: "react-flow__node-default",
   },
   {
@@ -66,6 +75,13 @@ const initialElements: Elements = [
     type: "destination",
     data: { label: "Oscillator" },
     position: { x: spaceWidth * 3, y: 25 },
+    className: "react-flow__node-default",
+  },
+  {
+    id: "whiteNoise",
+    type: "whiteNoise",
+    data: { label: "White Noise" },
+    position: { x: spaceWidth, y: -30 },
     className: "react-flow__node-default",
   },
   {
@@ -88,6 +104,14 @@ const initialElements: Elements = [
     id: "gain-to-vis",
     source: "gain",
     target: "visualiser",
+    type: "wire",
+    targetHandle: "in",
+    sourceHandle: "out",
+  },
+  {
+    id: "wn-to-vis",
+    source: "whiteNoise",
+    target: "visualiser2",
     type: "wire",
     targetHandle: "in",
     sourceHandle: "out",

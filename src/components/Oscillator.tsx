@@ -8,6 +8,14 @@ const useOscillator = (audioContext: AudioContext) =>
   useMemo(() => {
     const oscillator = audioContext.createOscillator();
     return {
+      inputs: {
+        frequency: {
+          port: oscillator.frequency,
+        },
+        detune: {
+          port: oscillator.detune,
+        },
+      },
       outputs: {
         out: {
           port: oscillator,
@@ -15,9 +23,14 @@ const useOscillator = (audioContext: AudioContext) =>
       },
       oscillator,
     };
-  }, []);
+  }, [audioContext]);
 
-const Oscillator = ({ sourcePosition, id, data }: NodeProps) => {
+const Oscillator = ({
+  sourcePosition,
+  targetPosition,
+  id,
+  data,
+}: NodeProps) => {
   const { audioContext, module } = useEditorContext();
 
   const oscillatorNode = useOscillator(audioContext);
@@ -38,6 +51,17 @@ const Oscillator = ({ sourcePosition, id, data }: NodeProps) => {
   const radioName = `radio-${+new Date()}`;
   return (
     <>
+      <Handle
+        type="target"
+        position={targetPosition || Position.Left}
+        style={{ top: 10 }}
+        id="frequency"
+      />
+      <Handle
+        type="target"
+        position={targetPosition || Position.Left}
+        id="detune"
+      />
       <div>{data.label || "oscillator"}</div>
       <div>
         <label>
