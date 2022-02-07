@@ -21,7 +21,7 @@ const useGain = (audioContext: AudioContext) =>
       },
       gain,
     };
-  }, []);
+  }, [audioContext]);
 
 const Gain = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
   const { audioContext, module } = useEditorContext();

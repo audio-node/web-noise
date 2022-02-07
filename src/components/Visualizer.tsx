@@ -20,7 +20,7 @@ const useAnalyser = (audioContext: AudioContext) =>
       },
       analyser,
     };
-  }, []);
+  }, [audioContext]);
 
 const Visualizer = ({
   targetPosition,

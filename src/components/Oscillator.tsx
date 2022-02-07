@@ -15,7 +15,7 @@ const useOscillator = (audioContext: AudioContext) =>
       },
       oscillator,
     };
-  }, []);
+  }, [audioContext]);
 
 const Oscillator = ({ sourcePosition, id, data }: NodeProps) => {
   const { audioContext, module } = useEditorContext();
