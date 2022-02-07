@@ -62,7 +62,18 @@ const Wire = ({
       <path
         id={id}
         style={style}
-        className="react-flow__edge-path"
+        className="react-flow__edge-path Wire"
+        d={edgePath}
+        markerEnd={markerEnd}
+      />
+      <path
+        style={{
+          ...style,
+          strokeWidth: 8,
+          color: "transparent",
+          opacity: 0,
+          cursor: "pointer",
+        }}
         d={edgePath}
         markerEnd={markerEnd}
       />
