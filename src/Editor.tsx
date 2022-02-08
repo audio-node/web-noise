@@ -14,6 +14,7 @@ import Destination from "./components/Destination";
 import Gain from "./components/Gain";
 import Wire from "./components/Wire";
 import Visualizer from "./components/Visualizer";
+import Spectroscope from "./components/Spectroscope";
 import WhiteNoise from "./components/WhiteNoise";
 import { EditorContext, contextValue } from "./components/EditorContext";
 import ResumeContext from "./components/ResumeContext";
@@ -25,6 +26,7 @@ const nodeTypes = {
   visualiser: Visualizer,
   destination: Destination,
   whiteNoise: WhiteNoise,
+  spectroscope: Spectroscope,
 };
 
 const edgeTypes = {
@@ -57,9 +59,9 @@ const initialElements: Elements = [
     className: "react-flow__node-default",
   },
   {
-    id: "visualiser",
-    type: "visualiser",
-    data: { label: "Visualiser" },
+    id: "spectroscope",
+    type: "spectroscope",
+    data: { label: "Spectroscope" },
     position: { x: spaceWidth * 2, y: 100 },
     className: "react-flow__node-default",
   },
@@ -103,7 +105,7 @@ const initialElements: Elements = [
   {
     id: "gain-to-vis",
     source: "gain",
-    target: "visualiser",
+    target: "spectroscope",
     type: "wire",
     targetHandle: "in",
     sourceHandle: "out",
@@ -118,7 +120,7 @@ const initialElements: Elements = [
   },
   {
     id: "vis-to-dest",
-    source: "visualiser",
+    source: "spectroscope",
     target: "destination",
     type: "wire",
     targetHandle: "in",

@@ -3,26 +3,9 @@ import { useEffect, useMemo, useRef, useCallback } from "react";
 import useAnimationFrame from "use-animation-frame";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useEditorContext } from "./EditorContext";
+import { useAnalyser } from "./Visualizer";
 
-export const useAnalyser = (audioContext: AudioContext) =>
-  useMemo(() => {
-    const analyser = audioContext.createAnalyser();
-    return {
-      inputs: {
-        in: {
-          port: analyser,
-        },
-      },
-      outputs: {
-        out: {
-          port: analyser,
-        },
-      },
-      analyser,
-    };
-  }, [audioContext]);
-
-const Visualizer = ({
+const Spectroscope = ({
   targetPosition,
   sourcePosition,
   data,
@@ -51,34 +34,24 @@ const Visualizer = ({
     if (!canvas || !canvasCtx) {
       return;
     }
-    analyser.getByteTimeDomainData(dataArray);
+
+    analyser.getByteFrequencyData(dataArray);
 
     canvasCtx.fillStyle = "rgb(200, 200, 200)";
     canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
 
-    canvasCtx.lineWidth = 2;
-    canvasCtx.strokeStyle = "rgb(0, 0, 0)";
+    console.log(canvas.width, canvas.height);
 
-    canvasCtx.beginPath();
+    const barWidth = (canvas.width / bufferLength) * 2.5;
+    let barHeight;
+    var x = 0;
 
-    const sliceWidth = (canvas.width * 1.0) / bufferLength;
-    let x = 0;
-
-    for (let i = 0; i < bufferLength; i++) {
-      const v = dataArray[i] / 128.0;
-      const y = (v * canvas.height) / 2;
-
-      if (i === 0) {
-        canvasCtx.moveTo(x, y);
-      } else {
-        canvasCtx.lineTo(x, y);
-      }
-
-      x += sliceWidth;
+    for (var i = 0; i < bufferLength; i++) {
+      barHeight = dataArray[i] / 2;
+      canvasCtx.fillStyle = "rgb(0,0,0)";
+      canvasCtx.fillRect(x, canvas.height - barHeight / 2, barWidth, barHeight);
+      x += barWidth + 1;
     }
-
-    canvasCtx.lineTo(canvas.width, canvas.height / 2);
-    canvasCtx.stroke();
   }, [canvas]);
 
   const tick = useCallback(draw, [draw]);
@@ -86,7 +59,7 @@ const Visualizer = ({
   useAnimationFrame(tick);
   return (
     <>
-      <div>{data.label || "visualiser"}</div>
+      <div>{data.label || "Spectroscope"}</div>
       <div>
         <Handle
           id="in"
@@ -104,4 +77,4 @@ const Visualizer = ({
   );
 };
 
-export default Visualizer;
+export default Spectroscope;
