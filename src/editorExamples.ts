@@ -2,8 +2,8 @@ import { Elements } from "react-flow-renderer";
 
 const spaceWidth = 230;
 
-// automatically setup wires for a chain
-const setWires = (arr: Elements) => {
+// automatically setup wires for a set of Elements
+const setWires = (arr: Elements): Elements => {
   const wires: Elements = [];
 
   arr.forEach((el, index) => {
