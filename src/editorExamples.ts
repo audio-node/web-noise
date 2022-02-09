@@ -14,8 +14,10 @@ const setWires = (arr: Elements): Elements => {
         source: el.id,
         target: nextEl.id,
         type: "wire",
-        targetHandle: "in",
-        sourceHandle: "out",
+        // @ts-ignore
+        targetHandle: nextEl.targetHandle,
+        // @ts-ignore
+        sourceHandle: el.sourceHandle,
       });
     }
   });
@@ -123,6 +125,8 @@ export const filterExample: Elements = setWires([
     data: { label: "Oscillator" },
     position: { x: 0, y: 0 },
     className: "react-flow__node-default",
+    targetHandle: "in",
+    sourceHandle: "out",
   },
   {
     id: "filter",
@@ -131,6 +135,8 @@ export const filterExample: Elements = setWires([
     dragHandle: ".dragHandle",
     position: { x: spaceWidth, y: 0 },
     className: "react-flow__node-default",
+    targetHandle: "in",
+    sourceHandle: "out",
   },
   {
     id: "gain",
@@ -139,6 +145,8 @@ export const filterExample: Elements = setWires([
     data: { label: "Gain" },
     position: { x: spaceWidth * 2, y: 0 },
     className: "react-flow__node-default",
+    targetHandle: "in",
+    sourceHandle: "out",
   },
   {
     id: "visualiser2",
@@ -146,6 +154,8 @@ export const filterExample: Elements = setWires([
     data: { label: "Visualiser 2" },
     position: { x: spaceWidth * 3, y: 0 },
     className: "react-flow__node-default",
+    targetHandle: "in",
+    sourceHandle: "out",
   },
   {
     id: "destination",
@@ -153,6 +163,7 @@ export const filterExample: Elements = setWires([
     data: { label: "Oscillator" },
     position: { x: spaceWidth * 4, y: 0 },
     className: "react-flow__node-default",
+    targetHandle: "in",
   },
 ]);
 
