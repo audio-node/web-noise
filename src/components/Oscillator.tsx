@@ -41,8 +41,10 @@ const Oscillator = ({
     module[id] = oscillatorNode;
   }, []);
 
-  const { maxValue, minValue } = oscillator.frequency;
-  const [frequency, setFrequency] = useState<number>(DEFAULT_FREQUENCY);
+  const { maxValue, minValue, value } = oscillator.frequency;
+  const [frequency, setFrequency] = useState<number>(
+    value || DEFAULT_FREQUENCY
+  );
 
   useEffect(() => {
     oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);

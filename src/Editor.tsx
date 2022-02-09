@@ -16,12 +16,13 @@ import Wire from "./components/Wire";
 import Visualizer from "./components/Visualizer";
 import WhiteNoise from "./components/WhiteNoise";
 import Filter from "./components/Filter";
+import Parameter from "./components/Parameter";
 import { EditorContext, contextValue } from "./components/EditorContext";
 import ResumeContext from "./components/ResumeContext";
 
-import { filterExample } from "./editorExamples";
+import { filterExample, parameterExample } from "./editorExamples";
 
-const initialElements: Elements = filterExample;
+const initialElements: Elements = parameterExample;
 
 const nodeTypes = {
   multiHandlesNode: MultiHandlesNode,
@@ -31,6 +32,7 @@ const nodeTypes = {
   destination: Destination,
   whiteNoise: WhiteNoise,
   filter: Filter,
+  parameter: Parameter,
 };
 
 const edgeTypes = {
