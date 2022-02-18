@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useEditorContext } from "./EditorContext";
+import { useControls, folder, button, monitor, Leva } from "leva";
 
 const DEFAULT_FREQUENCY = 440;
 
@@ -34,6 +35,19 @@ const Oscillator = ({
   const { audioContext, module } = useEditorContext();
 
   const oscillatorNode = useOscillator(audioContext);
+  const { myValue } = useControls({ myValue: 10 });
+
+  const values = useControls({
+    string: { value: "hello", label: "My string" },
+    color: { value: "#f00", label: "label" },
+    opacity: { value: 0.5, label: "label" },
+    size: { value: { width: 200, height: 300 }, label: "label" },
+  });
+
+  useEffect(() => {
+    console.log(values.color);
+  }, [values.color]);
+
   const { oscillator } = oscillatorNode;
 
   useEffect(() => {
@@ -64,13 +78,16 @@ const Oscillator = ({
         position={targetPosition || Position.Left}
         id="detune"
       />
+      <Leva titleBar={{ drag: false, title: "Mario" }} fill />
       <div>{data.label || "oscillator"}</div>
+      <div>{myValue}</div>
       <div>
         <label>
           <input
             name={radioName}
             type="radio"
             onChange={() => (oscillator.type = "sine")}
+            defaultChecked
           />
           ∿
         </label>
