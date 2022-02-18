@@ -35,18 +35,23 @@ const Oscillator = ({
   const { audioContext, module } = useEditorContext();
 
   const oscillatorNode = useOscillator(audioContext);
-  const { myValue } = useControls({ myValue: 10 });
 
   const values = useControls({
-    string: { value: "hello", label: "My string" },
-    color: { value: "#f00", label: "label" },
-    opacity: { value: 0.5, label: "label" },
-    size: { value: { width: 200, height: 300 }, label: "label" },
+    frequency: {
+      value: DEFAULT_FREQUENCY,
+      max: 10000,
+      min: 0,
+      label: "frequency",
+    },
+    type: {
+      options: {
+        sine: "sine",
+        sawtooth: "sawtooth",
+        triangle: "triangle",
+        square: "square",
+      },
+    },
   });
-
-  useEffect(() => {
-    console.log(values.color);
-  }, [values.color]);
 
   const { oscillator } = oscillatorNode;
 
@@ -55,16 +60,19 @@ const Oscillator = ({
     module[id] = oscillatorNode;
   }, []);
 
-  const { maxValue, minValue, value } = oscillator.frequency;
-  const [frequency, setFrequency] = useState<number>(
-    value || DEFAULT_FREQUENCY
-  );
+  useEffect(() => {
+    oscillator.frequency.setValueAtTime(
+      values.frequency,
+      audioContext.currentTime
+    );
+  }, [values.frequency]);
 
   useEffect(() => {
-    oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
-  }, [frequency]);
+    //@ts-ignore
+    oscillator.type = values.type;
+    console.log(values.type);
+  }, [values.type]);
 
-  const radioName = `radio-${+new Date()}`;
   return (
     <>
       <Handle
@@ -78,56 +86,7 @@ const Oscillator = ({
         position={targetPosition || Position.Left}
         id="detune"
       />
-      <Leva titleBar={{ drag: false, title: "Mario" }} fill />
-      <div>{data.label || "oscillator"}</div>
-      <div>{myValue}</div>
-      <div>
-        <label>
-          <input
-            name={radioName}
-            type="radio"
-            onChange={() => (oscillator.type = "sine")}
-            defaultChecked
-          />
-          ∿
-        </label>
-        <label>
-          <input
-            name={radioName}
-            type="radio"
-            onChange={() => (oscillator.type = "square")}
-          />
-          ⎍
-        </label>
-        <label>
-          <input
-            name={radioName}
-            type="radio"
-            onChange={() => (oscillator.type = "triangle")}
-          />
-          ⋀
-        </label>
-        <label>
-          <input
-            name={radioName}
-            type="radio"
-            onChange={() => (oscillator.type = "sawtooth")}
-          />
-          ⊿
-        </label>
-      </div>
-      <div>
-        frequency:
-        {
-          <input
-            type="number"
-            min={minValue}
-            max={maxValue}
-            value={frequency}
-            onChange={({ target: { value } }) => setFrequency(+value)}
-          />
-        }
-      </div>
+      <Leva titleBar={{ drag: false, title: data.label }} fill />
       <Handle
         type="source"
         position={sourcePosition || Position.Right}
