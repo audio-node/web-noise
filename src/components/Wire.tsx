@@ -5,9 +5,37 @@ import {
   getMarkerEnd,
   EdgeProps,
 } from "react-flow-renderer";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { useEditorContext } from "./EditorContext";
-import { registerModule } from "../Editor";
+import {
+  useRecoilState,
+  useRecoilValue,
+  selector,
+  selectorFamily,
+} from "recoil";
+import { moduleAtom } from "../Editor";
+
+const getNodes = selectorFamily<
+  [any, any],
+  [[string, string | null | undefined], [string, string | null | undefined]]
+>({
+  key: "getNodes",
+  get:
+    ([source, target]) =>
+    ({ get }) => {
+      const [sourceId, sourceHandleId] = source;
+      if (!sourceHandleId) {
+        throw new Error("no source port specified");
+      }
+      const [targetId, targetHandleId] = target;
+      if (!targetHandleId) {
+        throw new Error("no target port specified");
+      }
+      const sourceNode =
+        get(moduleAtom)[sourceId].outputs?.[sourceHandleId]?.port;
+      const targetNode =
+        get(moduleAtom)[targetId].inputs?.[targetHandleId]?.port;
+      return [sourceNode || null, targetNode || null];
+    },
+});
 
 const Wire = ({
   id,
@@ -27,28 +55,23 @@ const Wire = ({
   targetHandleId,
   ...rest
 }: EdgeProps) => {
-  const outputN: any = useRecoilValue(registerModule(source));
-  const inputN: any = useRecoilValue(registerModule(target));
+  const [outputNode, inputNode] = useRecoilValue(
+    getNodes([
+      [source, sourceHandleId],
+      [target, targetHandleId],
+    ])
+  );
   useEffect(() => {
-    console.log(`connected ${source} to ${target}`);
-    if (!sourceHandleId || !targetHandleId) {
-      return;
-    }
-    if (!outputN || !inputN) {
-      console.log("no input or output node");
-      return;
-    }
-    const outputNode = outputN.outputs?.[sourceHandleId]?.port;
-    const inputNode = inputN.inputs?.[targetHandleId]?.port;
     if (!outputNode || !inputNode) {
       return;
     }
     outputNode.connect(inputNode);
+    console.log(`connected ${source} to ${target}`);
     return () => {
-      console.log(`disconnected ${source} to ${target}`);
       outputNode.disconnect(inputNode);
+      console.log(`disconnected ${source} to ${target}`);
     };
-  }, [source, target, outputN, inputN]);
+  }, [outputNode, inputNode]);
   const edgePath = getBezierPath({
     targetX,
     targetY,

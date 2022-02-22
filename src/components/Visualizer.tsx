@@ -4,7 +4,7 @@ import useAnimationFrame from "use-animation-frame";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useRecoilState } from "recoil";
 import { useEditorContext } from "./EditorContext";
-import { registerModule } from "../Editor";
+import { registerNode } from "../Editor";
 
 const useAnalyser = (audioContext: AudioContext) =>
   useMemo(() => {
@@ -34,7 +34,7 @@ const Visualizer = ({
   const analyserNode = useAnalyser(audioContext);
   const { analyser } = analyserNode;
 
-  const [vis, setVis] = useRecoilState(registerModule(id));
+  const [vis, setVis] = useRecoilState(registerNode(id));
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvas = canvasRef.current;

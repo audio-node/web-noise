@@ -55,8 +55,8 @@ export const moduleAtom = atom<Record<string, any>>({
   default: {},
 });
 
-export const registerModule = selectorFamily({
-  key: "registerModule",
+export const registerNode = selectorFamily({
+  key: "registerNode",
   get:
     (field: string) =>
     ({ get }) => {

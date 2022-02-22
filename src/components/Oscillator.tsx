@@ -4,7 +4,7 @@ import {
   moduleAtom,
   audioContextAtom,
   audioContextSelector,
-  registerModule,
+  registerNode,
 } from "../Editor";
 import { useEditorContext } from "./EditorContext";
 import {
@@ -68,7 +68,7 @@ const Oscillator = ({
 
   // const [oscState, setOscState] = useRecoilState(oscillatorAtom(id));
 
-  const [osc, setOsc] = useRecoilState(registerModule(id));
+  const [osc, setOsc] = useRecoilState(registerNode(id));
 
   const oscillatorNode = useOscillator(audioContext);
   const { oscillator } = oscillatorNode;

@@ -2,7 +2,7 @@ import { useEffect, useMemo } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { useEditorContext } from "./EditorContext";
-import { registerModule } from "../Editor";
+import { registerNode } from "../Editor";
 
 const useDestination = (audioContext: AudioContext) =>
   useMemo(() => {
@@ -21,7 +21,7 @@ const Destination = ({ targetPosition, data, id }: NodeProps) => {
   const { audioContext, module } = useEditorContext();
   const destinationNode = useDestination(audioContext);
 
-  const setDestinationNode = useSetRecoilState(registerModule(id));
+  const setDestinationNode = useSetRecoilState(registerNode(id));
 
   useEffect(() => {
     setDestinationNode(destinationNode);
