@@ -7,7 +7,17 @@ import ReactFlow, {
   removeElements,
   addEdge,
   Elements,
+  ReactFlowProvider,
 } from "react-flow-renderer";
+import {
+  RecoilRoot,
+  atom,
+  constSelector,
+  useRecoilState,
+  useRecoilValue,
+  selector,
+  selectorFamily,
+} from "recoil";
 import MultiHandlesNode from "./MultiHandlesNode";
 import Oscillator from "./components/Oscillator";
 import Destination from "./components/Destination";
@@ -20,9 +30,45 @@ import Parameter from "./components/Parameter";
 import { EditorContext, contextValue } from "./components/EditorContext";
 import ResumeContext from "./components/ResumeContext";
 
-import { filterExample, parameterExample } from "./editorExamples";
+import {
+  filterExample,
+  parameterExample,
+  simpleExample,
+} from "./editorExamples";
 
-const initialElements: Elements = parameterExample;
+const initialElements: Elements = simpleExample;
+
+export const audioContextAtom = atom({
+  key: "audioContext",
+  default: contextValue.audioContext,
+});
+
+export const audioContextSelector = selector({
+  key: "audioContext",
+  get: ({ get }) => {
+    get(audioContextAtom);
+  },
+});
+
+export const moduleAtom = atom<Record<string, any>>({
+  key: "moduleState",
+  default: {},
+});
+
+export const registerModule = selectorFamily({
+  key: "registerModule",
+  get:
+    (field: string) =>
+    ({ get }) => {
+      return get(moduleAtom)[field];
+    },
+  set:
+    (field: string) =>
+    ({ set }, node) => {
+      set(moduleAtom, (prevState) => ({ ...prevState, [field]: node }));
+      console.log(`registered #${field}`);
+    },
+});
 
 const nodeTypes = {
   multiHandlesNode: MultiHandlesNode,
@@ -49,6 +95,9 @@ const snapGrid: [number, number] = [20, 20];
 export const Editor = () => {
   const [reactflowInstance, setReactflowInstance] = useState(null);
   const [elements, setElements] = useState(initialElements);
+
+  const state = useRecoilValue(moduleAtom);
+  console.log(555, state);
 
   useEffect(() => {
     setElements(elements);
@@ -83,25 +132,27 @@ export const Editor = () => {
 
   return (
     <EditorContext.Provider value={contextValue}>
-      <ReactFlow
-        elements={elements}
-        onElementClick={onElementClick}
-        onElementsRemove={onElementsRemove}
-        onConnect={onConnect}
-        onNodeDragStop={onNodeDragStop}
-        onLoad={onLoad}
-        nodeTypes={nodeTypes}
-        edgeTypes={edgeTypes}
-        snapToGrid={true}
-        snapGrid={snapGrid}
-        defaultZoom={1.5}
-      >
-        <Background variant={BackgroundVariant.Dots} gap={12} />
-        <MiniMap />
-        <Controls>
-          <ResumeContext />
-        </Controls>
-      </ReactFlow>
+      <ReactFlowProvider>
+        <ReactFlow
+          elements={elements}
+          onElementClick={onElementClick}
+          onElementsRemove={onElementsRemove}
+          onConnect={onConnect}
+          onNodeDragStop={onNodeDragStop}
+          onLoad={onLoad}
+          nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
+          snapToGrid={true}
+          snapGrid={snapGrid}
+          defaultZoom={1.5}
+        >
+          <Background variant={BackgroundVariant.Dots} gap={12} />
+          <MiniMap />
+          <Controls>
+            <ResumeContext />
+          </Controls>
+        </ReactFlow>
+      </ReactFlowProvider>
     </EditorContext.Provider>
   );
 };

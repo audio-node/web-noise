@@ -1,11 +1,43 @@
 import { useEffect, useMemo, useState } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
+import {
+  moduleAtom,
+  audioContextAtom,
+  audioContextSelector,
+  registerModule,
+} from "../Editor";
 import { useEditorContext } from "./EditorContext";
+import {
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+  atomFamily,
+  selectorFamily,
+} from "recoil";
+
+const oscillatorAtom = atomFamily({
+  key: "oscillator",
+  default: (field) => {
+    console.log(678678678, field);
+    return { foo: "bar" };
+  },
+});
+
+// const oscillatorState = selector({
+// key: "registerNode",
+// get: ({ get }) => {
+// return +new Date();
+// },
+// set: ({ set }) => {},
+// });
 
 const DEFAULT_FREQUENCY = 440;
 
-const useOscillator = (audioContext: AudioContext) =>
-  useMemo(() => {
+const useOscillator = (audioContext: AudioContext) => {
+  // const osc = useRecoilValue(oscillatorState);
+  // console.log(111, osc);
+  return useMemo(() => {
     const oscillator = audioContext.createOscillator();
     return {
       inputs: {
@@ -24,6 +56,7 @@ const useOscillator = (audioContext: AudioContext) =>
       oscillator,
     };
   }, [audioContext]);
+};
 
 const Oscillator = ({
   sourcePosition,
@@ -33,10 +66,15 @@ const Oscillator = ({
 }: NodeProps) => {
   const { audioContext, module } = useEditorContext();
 
+  // const [oscState, setOscState] = useRecoilState(oscillatorAtom(id));
+
+  const [osc, setOsc] = useRecoilState(registerModule(id));
+
   const oscillatorNode = useOscillator(audioContext);
   const { oscillator } = oscillatorNode;
 
   useEffect(() => {
+    setOsc(oscillatorNode);
     oscillator.start();
     module[id] = oscillatorNode;
   }, []);

@@ -2,7 +2,9 @@ import { useEffect, useMemo, useRef, useCallback } from "react";
 //@ts-ignore
 import useAnimationFrame from "use-animation-frame";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
+import { useRecoilState } from "recoil";
 import { useEditorContext } from "./EditorContext";
+import { registerModule } from "../Editor";
 
 const useAnalyser = (audioContext: AudioContext) =>
   useMemo(() => {
@@ -32,6 +34,8 @@ const Visualizer = ({
   const analyserNode = useAnalyser(audioContext);
   const { analyser } = analyserNode;
 
+  const [vis, setVis] = useRecoilState(registerModule(id));
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvas = canvasRef.current;
   const bufferLength = analyser.frequencyBinCount;
@@ -40,6 +44,7 @@ const Visualizer = ({
 
   useEffect(() => {
     console.log("visualiser rendered", id);
+    setVis(analyserNode);
     module[id] = analyserNode;
   }, []);
 

@@ -267,4 +267,44 @@ export const parameterExample: Elements = [
   },
 ];
 
+export const simpleExample: Elements = [
+  {
+    id: "oscillator",
+    type: "oscillator",
+    data: { label: "Oscillator" },
+    position: { x: 0, y: -50 },
+    className: "react-flow__node-default",
+  },
+  {
+    id: "visualiser",
+    type: "visualiser",
+    data: { label: "Visualiser" },
+    position: { x: spaceWidth * 2, y: 100 },
+    className: "react-flow__node-default",
+  },
+  {
+    id: "destination",
+    type: "destination",
+    data: { label: "Oscillator" },
+    position: { x: spaceWidth * 3, y: 25 },
+    className: "react-flow__node-default",
+  },
+  {
+    id: "osc-vis",
+    source: "oscillator",
+    target: "visualiser",
+    type: "wire",
+    targetHandle: "in",
+    sourceHandle: "out",
+  },
+  {
+    id: "vis-to-dest",
+    source: "visualiser",
+    target: "destination",
+    type: "wire",
+    targetHandle: "in",
+    sourceHandle: "out",
+  },
+];
+
 export default defaultExample;

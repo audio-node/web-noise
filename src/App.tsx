@@ -1,11 +1,14 @@
 import Editor from "./Editor";
 import "./App.css";
+import { RecoilRoot } from "recoil";
 
 function App() {
   return (
     <div className="App">
       <main className="Editor">
-        <Editor />
+        <RecoilRoot>
+          <Editor />
+        </RecoilRoot>
       </main>
     </div>
   );

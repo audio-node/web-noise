@@ -5,7 +5,9 @@ import {
   getMarkerEnd,
   EdgeProps,
 } from "react-flow-renderer";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { useEditorContext } from "./EditorContext";
+import { registerModule } from "../Editor";
 
 const Wire = ({
   id,
@@ -25,14 +27,19 @@ const Wire = ({
   targetHandleId,
   ...rest
 }: EdgeProps) => {
-  const { module } = useEditorContext();
+  const outputN: any = useRecoilValue(registerModule(source));
+  const inputN: any = useRecoilValue(registerModule(target));
   useEffect(() => {
     console.log(`connected ${source} to ${target}`);
     if (!sourceHandleId || !targetHandleId) {
       return;
     }
-    const outputNode = module[source]?.outputs?.[sourceHandleId]?.port;
-    const inputNode = module[target]?.inputs?.[targetHandleId]?.port;
+    if (!outputN || !inputN) {
+      console.log("no input or output node");
+      return;
+    }
+    const outputNode = outputN.outputs?.[sourceHandleId]?.port;
+    const inputNode = inputN.inputs?.[targetHandleId]?.port;
     if (!outputNode || !inputNode) {
       return;
     }
@@ -41,7 +48,7 @@ const Wire = ({
       console.log(`disconnected ${source} to ${target}`);
       outputNode.disconnect(inputNode);
     };
-  }, [source, target]);
+  }, [source, target, outputN, inputN]);
   const edgePath = getBezierPath({
     targetX,
     targetY,
