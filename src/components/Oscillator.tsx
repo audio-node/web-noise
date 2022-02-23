@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
+import { useSetRecoilState } from "recoil";
 import { registerNode } from "../Editor";
 import { useEditorContext } from "./EditorContext";
-import { useSetRecoilState } from "recoil";
 
 const DEFAULT_FREQUENCY = 440;
 

@@ -10,6 +10,7 @@ import {
   useRecoilValue,
   selector,
   selectorFamily,
+  waitForAll,
 } from "recoil";
 import { moduleAtom } from "../Editor";
 
@@ -20,7 +21,7 @@ const getNodes = selectorFamily<
   key: "getNodes",
   get:
     ([source, target]) =>
-    ({ get }) => {
+    async ({ get }) => {
       const [sourceId, sourceHandleId] = source;
       if (!sourceHandleId) {
         throw new Error("no source port specified");
@@ -29,11 +30,13 @@ const getNodes = selectorFamily<
       if (!targetHandleId) {
         throw new Error("no target port specified");
       }
-      const sourceNode =
-        get(moduleAtom)[sourceId].outputs?.[sourceHandleId]?.port;
-      const targetNode =
-        get(moduleAtom)[targetId].inputs?.[targetHandleId]?.port;
-      return [sourceNode || null, targetNode || null];
+
+      const sourceNode = await get(moduleAtom)[sourceId];
+      const targetNode = await get(moduleAtom)[targetId];
+
+      const sourceNodePort = sourceNode.outputs?.[sourceHandleId]?.port;
+      const targetNodePort = targetNode.inputs?.[targetHandleId]?.port;
+      return [sourceNodePort || null, targetNodePort || null];
     },
 });
 
@@ -69,7 +72,7 @@ const Wire = ({
     console.log(`connected ${source} to ${target}`);
     return () => {
       outputNode.disconnect(inputNode);
-      console.log(`disconnected ${source} to ${target}`);
+      console.log(`disconnected ${source} from ${target}`);
     };
   }, [outputNode, inputNode]);
   const edgePath = getBezierPath({

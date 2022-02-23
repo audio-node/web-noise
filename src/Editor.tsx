@@ -38,17 +38,17 @@ import {
 
 const initialElements: Elements = simpleExample;
 
-export const audioContextAtom = atom({
-  key: "audioContext",
-  default: contextValue.audioContext,
-});
+// export const audioContextAtom = atom({
+// key: "audioContext",
+// default: contextValue.audioContext,
+// });
 
-export const audioContextSelector = selector({
-  key: "audioContext",
-  get: ({ get }) => {
-    get(audioContextAtom);
-  },
-});
+// export const audioContextSelector = selector({
+// key: "audioContext",
+// get: ({ get }) => {
+// get(audioContextAtom);
+// },
+// });
 
 export const moduleAtom = atom<Record<string, any>>({
   key: "moduleState",

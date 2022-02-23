@@ -276,6 +276,13 @@ export const simpleExample: Elements = [
     className: "react-flow__node-default",
   },
   {
+    id: "whiteNoise",
+    type: "whiteNoise",
+    data: { label: "White Noise" },
+    position: { x: 0, y: 100 },
+    className: "react-flow__node-default",
+  },
+  {
     id: "visualiser",
     type: "visualiser",
     data: { label: "Visualiser" },

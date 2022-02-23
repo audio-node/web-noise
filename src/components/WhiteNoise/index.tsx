@@ -1,7 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
+import { useSetRecoilState } from "recoil";
 
 import { useEditorContext } from "../EditorContext";
+import { registerNode } from "../../Editor";
+
 //@ts-ignore
 import whiteNoiseWorklet from "worklet-loader!./worklet.ts"; // eslint-disable-line
 
@@ -15,37 +18,20 @@ export const loadModule = async (audioContext: AudioContext) => {
   }
 };
 
-const useWhiteNoise = (audioContext: AudioContext) => {
-  const [node, setNode] = useState<any>();
-  const [ready, setReady] = useState(false);
-
-  const [innerPort, port] = useMemo(() => {
-    const innerPort = audioContext.createMediaStreamDestination();
-    const port = audioContext.createMediaStreamSource(innerPort.stream);
-    return [innerPort, port];
-  }, [audioContext]);
-
-  useEffect(() => {
-    (async () => {
-      await loadModule(audioContext);
-      const whiteNoise = new AudioWorkletNode(
-        audioContext,
-        "white-noise-processor"
-      );
-      whiteNoise.connect(innerPort);
-      setNode(whiteNoise);
-      setReady(true);
-    })();
-  }, [audioContext]);
+const createWhiteNoise = async (audioContext: AudioContext) => {
+  await loadModule(audioContext);
+  const whiteNoise = new AudioWorkletNode(
+    audioContext,
+    "white-noise-processor"
+  );
 
   return {
     outputs: {
       out: {
-        port,
+        port: whiteNoise,
       },
     },
-    whiteNoise: node,
-    ready,
+    whiteNoise,
   };
 };
 
@@ -55,13 +41,20 @@ const WhiteNoise = ({
   data,
   id,
 }: NodeProps) => {
-  const { audioContext, module } = useEditorContext();
+  const { audioContext } = useEditorContext();
 
-  const whiteNoiseNode = useWhiteNoise(audioContext);
-  const { ready } = whiteNoiseNode;
+  const registerWhiteNoise = useSetRecoilState(registerNode(id));
+
+  const [ready, setReady] = useState(false);
+
+  const whiteNoiseNode = useMemo(
+    () => createWhiteNoise(audioContext),
+    [audioContext, id]
+  );
 
   useEffect(() => {
-    module[id] = whiteNoiseNode;
+    registerWhiteNoise(whiteNoiseNode);
+    whiteNoiseNode.then(() => setReady(true));
   }, []);
 
   return (
