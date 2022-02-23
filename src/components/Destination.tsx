@@ -21,10 +21,10 @@ const Destination = ({ targetPosition, data, id }: NodeProps) => {
   const { audioContext, module } = useEditorContext();
   const destinationNode = useDestination(audioContext);
 
-  const setDestinationNode = useSetRecoilState(registerNode(id));
+  const registerDestination = useSetRecoilState(registerNode(id));
 
   useEffect(() => {
-    setDestinationNode(destinationNode);
+    registerDestination(destinationNode);
   }, []);
 
   return (

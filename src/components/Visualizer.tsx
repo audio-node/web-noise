@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useCallback } from "react";
 //@ts-ignore
 import useAnimationFrame from "use-animation-frame";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
-import { useRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { useEditorContext } from "./EditorContext";
 import { registerNode } from "../Editor";
 
@@ -30,11 +30,11 @@ const Visualizer = ({
   data,
   id,
 }: NodeProps) => {
-  const { audioContext, module } = useEditorContext();
+  const { audioContext } = useEditorContext();
   const analyserNode = useAnalyser(audioContext);
   const { analyser } = analyserNode;
 
-  const [vis, setVis] = useRecoilState(registerNode(id));
+  const registerAnalyser = useSetRecoilState(registerNode(id));
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvas = canvasRef.current;
@@ -43,9 +43,7 @@ const Visualizer = ({
   const dataArray = new Uint8Array(bufferLength);
 
   useEffect(() => {
-    console.log("visualiser rendered", id);
-    setVis(analyserNode);
-    module[id] = analyserNode;
+    registerAnalyser(analyserNode);
   }, []);
 
   const canvasCtx = useMemo(() => {
