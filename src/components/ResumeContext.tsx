@@ -3,10 +3,12 @@ import type { FC } from "react";
 import { useState } from "react";
 import { ControlButton } from "react-flow-renderer";
 
-import { useEditorContext } from "./EditorContext";
+import { useRecoilValue } from "recoil";
+import { audioContextAtom } from "../Editor";
 
 const ResumeContext: FC = () => {
-  const { audioContext } = useEditorContext();
+  const audioContext = useRecoilValue(audioContextAtom);
+
   const [isContextResumed, setIsContextResumed] = useState<boolean>(
     audioContext.state === "running"
   );

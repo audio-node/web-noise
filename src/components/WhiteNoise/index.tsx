@@ -1,9 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
-import { useSetRecoilState } from "recoil";
+import { useSetRecoilState, useRecoilValue } from "recoil";
 
-import { useEditorContext } from "../EditorContext";
-import { registerNode } from "../../Editor";
+import { registerNode, audioContextAtom } from "../../Editor";
 
 //@ts-ignore
 import whiteNoiseWorklet from "worklet-loader!./worklet.ts"; // eslint-disable-line
@@ -41,7 +40,7 @@ const WhiteNoise = ({
   data,
   id,
 }: NodeProps) => {
-  const { audioContext } = useEditorContext();
+  const audioContext = useRecoilValue(audioContextAtom);
 
   const registerWhiteNoise = useSetRecoilState(registerNode(id));
 

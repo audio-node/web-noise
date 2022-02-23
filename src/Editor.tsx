@@ -9,15 +9,7 @@ import ReactFlow, {
   Elements,
   ReactFlowProvider,
 } from "react-flow-renderer";
-import {
-  RecoilRoot,
-  atom,
-  constSelector,
-  useRecoilState,
-  useRecoilValue,
-  selector,
-  selectorFamily,
-} from "recoil";
+import { atom, useRecoilValue, selectorFamily } from "recoil";
 import MultiHandlesNode from "./MultiHandlesNode";
 import Oscillator from "./components/Oscillator";
 import Destination from "./components/Destination";
@@ -38,17 +30,10 @@ import {
 
 const initialElements: Elements = simpleExample;
 
-// export const audioContextAtom = atom({
-// key: "audioContext",
-// default: contextValue.audioContext,
-// });
-
-// export const audioContextSelector = selector({
-// key: "audioContext",
-// get: ({ get }) => {
-// get(audioContextAtom);
-// },
-// });
+export const audioContextAtom = atom({
+  key: "audioContext",
+  default: new AudioContext(),
+});
 
 export const moduleAtom = atom<Record<string, any>>({
   key: "moduleState",

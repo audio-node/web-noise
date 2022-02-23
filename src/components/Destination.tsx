@@ -1,8 +1,7 @@
 import { useEffect, useMemo } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { useEditorContext } from "./EditorContext";
-import { registerNode } from "../Editor";
+import { useSetRecoilState, useRecoilValue } from "recoil";
+import { registerNode, audioContextAtom } from "../Editor";
 
 const createDestination = (audioContext: AudioContext) => {
   const destination = audioContext.destination;
@@ -17,7 +16,7 @@ const createDestination = (audioContext: AudioContext) => {
 };
 
 const Destination = ({ targetPosition, data, id }: NodeProps) => {
-  const { audioContext } = useEditorContext();
+  const audioContext = useRecoilValue(audioContextAtom);
 
   const destinationNode = useMemo(
     () => createDestination(audioContext),

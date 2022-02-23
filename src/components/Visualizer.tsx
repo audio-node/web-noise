@@ -2,9 +2,8 @@ import { useEffect, useMemo, useRef, useCallback } from "react";
 //@ts-ignore
 import useAnimationFrame from "use-animation-frame";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
-import { useSetRecoilState } from "recoil";
-import { useEditorContext } from "./EditorContext";
-import { registerNode } from "../Editor";
+import { useSetRecoilState, useRecoilValue } from "recoil";
+import { registerNode, audioContextAtom } from "../Editor";
 
 const createAnalyser = (audioContext: AudioContext) => {
   const analyser = audioContext.createAnalyser();
@@ -29,7 +28,7 @@ const Visualizer = ({
   data,
   id,
 }: NodeProps) => {
-  const { audioContext } = useEditorContext();
+  const audioContext = useRecoilValue(audioContextAtom);
 
   const analyserNode = useMemo(
     () => createAnalyser(audioContext),

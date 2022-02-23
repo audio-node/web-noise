@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
-import { useSetRecoilState } from "recoil";
-import { registerNode } from "../Editor";
-import { useEditorContext } from "./EditorContext";
+import { useSetRecoilState, useRecoilValue } from "recoil";
+import { registerNode, audioContextAtom } from "../Editor";
 
 const DEFAULT_FREQUENCY = 440;
 
@@ -32,7 +31,7 @@ const Oscillator = ({
   id,
   data,
 }: NodeProps) => {
-  const { audioContext } = useEditorContext();
+  const audioContext = useRecoilValue(audioContextAtom);
 
   const registerOscillator = useSetRecoilState(registerNode(id));
 
