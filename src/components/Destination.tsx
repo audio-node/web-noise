@@ -4,22 +4,25 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { useEditorContext } from "./EditorContext";
 import { registerNode } from "../Editor";
 
-const useDestination = (audioContext: AudioContext) =>
-  useMemo(() => {
-    const destination = audioContext.destination;
-    return {
-      inputs: {
-        in: {
-          port: destination,
-        },
+const createDestination = (audioContext: AudioContext) => {
+  const destination = audioContext.destination;
+  return {
+    inputs: {
+      in: {
+        port: destination,
       },
-      destination,
-    };
-  }, []);
+    },
+    destination,
+  };
+};
 
 const Destination = ({ targetPosition, data, id }: NodeProps) => {
-  const { audioContext, module } = useEditorContext();
-  const destinationNode = useDestination(audioContext);
+  const { audioContext } = useEditorContext();
+
+  const destinationNode = useMemo(
+    () => createDestination(audioContext),
+    [audioContext, id]
+  );
 
   const registerDestination = useSetRecoilState(registerNode(id));
 

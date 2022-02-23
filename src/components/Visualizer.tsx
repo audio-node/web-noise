@@ -6,23 +6,22 @@ import { useSetRecoilState } from "recoil";
 import { useEditorContext } from "./EditorContext";
 import { registerNode } from "../Editor";
 
-const useAnalyser = (audioContext: AudioContext) =>
-  useMemo(() => {
-    const analyser = audioContext.createAnalyser();
-    return {
-      inputs: {
-        in: {
-          port: analyser,
-        },
+const createAnalyser = (audioContext: AudioContext) => {
+  const analyser = audioContext.createAnalyser();
+  return {
+    inputs: {
+      in: {
+        port: analyser,
       },
-      outputs: {
-        out: {
-          port: analyser,
-        },
+    },
+    outputs: {
+      out: {
+        port: analyser,
       },
-      analyser,
-    };
-  }, [audioContext]);
+    },
+    analyser,
+  };
+};
 
 const Visualizer = ({
   targetPosition,
@@ -31,7 +30,12 @@ const Visualizer = ({
   id,
 }: NodeProps) => {
   const { audioContext } = useEditorContext();
-  const analyserNode = useAnalyser(audioContext);
+
+  const analyserNode = useMemo(
+    () => createAnalyser(audioContext),
+    [audioContext, id]
+  );
+
   const { analyser } = analyserNode;
 
   const registerAnalyser = useSetRecoilState(registerNode(id));
