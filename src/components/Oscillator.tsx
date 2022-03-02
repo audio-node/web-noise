@@ -1,7 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useEditorContext } from "./EditorContext";
-import { useControls, folder, button, monitor, Leva } from "leva";
+import {
+  useControls,
+  folder,
+  button,
+  monitor,
+  Leva,
+  useCreateStore,
+  LevaPanel,
+} from "leva";
 
 const DEFAULT_FREQUENCY = 440;
 
@@ -35,23 +43,27 @@ const Oscillator = ({
   const { audioContext, module } = useEditorContext();
 
   const oscillatorNode = useOscillator(audioContext);
+  const store = useCreateStore();
 
-  const values = useControls({
-    frequency: {
-      value: DEFAULT_FREQUENCY,
-      max: 800,
-      min: 0,
-      label: "frequency",
-    },
-    type: {
-      options: {
-        sine: "sine",
-        sawtooth: "sawtooth",
-        triangle: "triangle",
-        square: "square",
+  const values = useControls(
+    {
+      frequency: {
+        value: DEFAULT_FREQUENCY,
+        max: 800,
+        min: 0,
+        label: "frequency",
+      },
+      type: {
+        options: {
+          sine: "sine",
+          sawtooth: "sawtooth",
+          triangle: "triangle",
+          square: "square",
+        },
       },
     },
-  });
+    { store }
+  );
 
   const { oscillator } = oscillatorNode;
 
@@ -86,7 +98,12 @@ const Oscillator = ({
         position={targetPosition || Position.Left}
         id="detune"
       />
-      <Leva titleBar={{ drag: false, title: data.label }} fill />
+      <LevaPanel
+        store={store}
+        fill
+        flat
+        titleBar={{ drag: false, title: data.label }}
+      />
       <Handle
         type="source"
         position={sourcePosition || Position.Right}

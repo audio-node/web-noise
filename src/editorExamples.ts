@@ -129,7 +129,7 @@ export const filterExample: Elements = setWires([
     id: "filter",
     type: "filter",
     data: { label: "Filter" },
-    dragHandle: ".dragHandle",
+    dragHandle: ".leva-c-hwBXYF",
     position: { x: spaceWidth, y: 0 },
     className: "react-flow__node-default",
   },
