@@ -1,6 +1,15 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useEditorContext } from "./EditorContext";
+import {
+  useControls,
+  folder,
+  button,
+  monitor,
+  Leva,
+  useCreateStore,
+  LevaPanel,
+} from "leva";
 
 const DEFAULT_FREQUENCY = 440;
 
@@ -34,6 +43,28 @@ const Oscillator = ({
   const { audioContext, module } = useEditorContext();
 
   const oscillatorNode = useOscillator(audioContext);
+  const store = useCreateStore();
+
+  const values = useControls(
+    {
+      frequency: {
+        value: DEFAULT_FREQUENCY,
+        max: 800,
+        min: 0,
+        label: "freq",
+      },
+      type: {
+        options: {
+          sine: "sine",
+          sawtooth: "sawtooth",
+          triangle: "triangle",
+          square: "square",
+        },
+      },
+    },
+    { store }
+  );
+
   const { oscillator } = oscillatorNode;
 
   useEffect(() => {
@@ -41,16 +72,19 @@ const Oscillator = ({
     module[id] = oscillatorNode;
   }, []);
 
-  const { maxValue, minValue, value } = oscillator.frequency;
-  const [frequency, setFrequency] = useState<number>(
-    value || DEFAULT_FREQUENCY
-  );
+  useEffect(() => {
+    oscillator.frequency.setValueAtTime(
+      values.frequency,
+      audioContext.currentTime
+    );
+  }, [values.frequency]);
 
   useEffect(() => {
-    oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
-  }, [frequency]);
+    //@ts-ignore
+    oscillator.type = values.type;
+    console.log(values.type);
+  }, [values.type]);
 
-  const radioName = `radio-${+new Date()}`;
   return (
     <>
       <Handle
@@ -64,53 +98,12 @@ const Oscillator = ({
         position={targetPosition || Position.Left}
         id="detune"
       />
-      <div>{data.label || "oscillator"}</div>
-      <div>
-        <label>
-          <input
-            name={radioName}
-            type="radio"
-            onChange={() => (oscillator.type = "sine")}
-          />
-          ∿
-        </label>
-        <label>
-          <input
-            name={radioName}
-            type="radio"
-            onChange={() => (oscillator.type = "square")}
-          />
-          ⎍
-        </label>
-        <label>
-          <input
-            name={radioName}
-            type="radio"
-            onChange={() => (oscillator.type = "triangle")}
-          />
-          ⋀
-        </label>
-        <label>
-          <input
-            name={radioName}
-            type="radio"
-            onChange={() => (oscillator.type = "sawtooth")}
-          />
-          ⊿
-        </label>
-      </div>
-      <div>
-        frequency:
-        {
-          <input
-            type="number"
-            min={minValue}
-            max={maxValue}
-            value={frequency}
-            onChange={({ target: { value } }) => setFrequency(+value)}
-          />
-        }
-      </div>
+      <LevaPanel
+        store={store}
+        fill
+        flat
+        titleBar={{ drag: false, title: data.label }}
+      />
       <Handle
         type="source"
         position={sourcePosition || Position.Right}

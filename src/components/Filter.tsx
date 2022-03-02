@@ -1,17 +1,18 @@
 import { useEffect, useMemo, useState } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useEditorContext } from "./EditorContext";
+import { useControls, useCreateStore, LevaPanel } from "leva";
 
-const FILTER_TYPES: BiquadFilterType[] = [
-  "allpass",
-  "bandpass",
-  "highpass",
-  "highshelf",
-  "lowpass",
-  "lowshelf",
-  "notch",
-  "peaking",
-];
+const FilterTypes: Record<BiquadFilterType, BiquadFilterType> = {
+  lowpass: "lowpass",
+  allpass: "allpass",
+  bandpass: "bandpass",
+  highpass: "highpass",
+  highshelf: "highshelf",
+  lowshelf: "lowshelf",
+  notch: "notch",
+  peaking: "peaking",
+};
 
 const DEFAULT_FILTER_TYPE: BiquadFilterType = "lowpass";
 
@@ -37,25 +38,46 @@ const Filter = ({ sourcePosition, targetPosition, data, id }: NodeProps) => {
   const { audioContext, module } = useEditorContext();
   const filterNode = useFilter(audioContext);
   const { filter } = filterNode;
+  const store = useCreateStore();
 
   const { minValue: frequencyMinValue, maxValue: frequencyMaxValue } =
     filter.frequency;
 
-  const [frequency, setFrequency] = useState<number>(frequencyMaxValue / 2);
-  const [q, setQ] = useState<number>(0);
-  const [type, setType] = useState<BiquadFilterType>(DEFAULT_FILTER_TYPE);
+  const controls = useControls(
+    {
+      frequency: {
+        value: frequencyMaxValue / 2,
+        max: frequencyMaxValue,
+        min: frequencyMinValue,
+        label: "freq",
+      },
+      q: {
+        value: 0,
+        max: 20,
+        min: 0,
+        label: "q",
+      },
+      type: {
+        options: FilterTypes,
+      },
+    },
+    { store }
+  );
 
   useEffect(() => {
-    filter.frequency.setValueAtTime(frequency, audioContext.currentTime);
-  }, [frequency]);
+    filter.frequency.setValueAtTime(
+      controls.frequency,
+      audioContext.currentTime
+    );
+  }, [controls.frequency]);
 
   useEffect(() => {
-    filter.Q.setValueAtTime(q, audioContext.currentTime);
-  }, [q]);
+    filter.Q.setValueAtTime(controls.q, audioContext.currentTime);
+  }, [controls.q]);
 
   useEffect(() => {
-    filter.type = type;
-  }, [type]);
+    filter.type = controls.type;
+  }, [controls.type]);
 
   useEffect(() => {
     console.log("filter rendered", id);
@@ -64,52 +86,18 @@ const Filter = ({ sourcePosition, targetPosition, data, id }: NodeProps) => {
   }, []);
   return (
     <>
-      <div className="dragHandle">Filter</div>
+      <LevaPanel
+        store={store}
+        fill
+        flat
+        titleBar={{ drag: false, title: data.label }}
+      />
       <Handle
         type="target"
         position={targetPosition || Position.Left}
         id="in"
         onConnect={(params) => console.log("handle onConnect", params)}
       />
-
-      <select
-        defaultValue={type}
-        onChange={({ target: { value } }) => setType(value as BiquadFilterType)}
-      >
-        {FILTER_TYPES.map((filterType) => (
-          <option key={filterType} value={filterType}>
-            {filterType}
-          </option>
-        ))}
-      </select>
-
-      <div>
-        freq:
-        {
-          <input
-            type="range"
-            min={frequencyMinValue}
-            max={frequencyMaxValue}
-            step="0.01"
-            value={frequency}
-            onChange={({ target: { value } }) => setFrequency(+value)}
-          />
-        }
-      </div>
-
-      <div>
-        resonance (q)
-        {
-          <input
-            type="range"
-            min={0}
-            max={20}
-            step="0.01"
-            value={q}
-            onChange={({ target: { value } }) => setQ(+value)}
-          />
-        }
-      </div>
 
       <Handle
         type="source"

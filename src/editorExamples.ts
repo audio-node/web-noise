@@ -1,6 +1,6 @@
 import { Elements } from "react-flow-renderer";
 
-const spaceWidth = 230;
+const spaceWidth = 280;
 
 // automatically setup wires for a set of Elements
 const setWires = (arr: Elements): Elements => {
@@ -123,19 +123,20 @@ export const filterExample: Elements = setWires([
     data: { label: "Oscillator" },
     position: { x: 0, y: 0 },
     className: "react-flow__node-default",
+    dragHandle: ".leva-c-hwBXYF",
   },
   {
     id: "filter",
     type: "filter",
     data: { label: "Filter" },
-    dragHandle: ".dragHandle",
+    dragHandle: ".leva-c-hwBXYF",
     position: { x: spaceWidth, y: 0 },
     className: "react-flow__node-default",
   },
   {
     id: "gain",
     type: "gain",
-    dragHandle: ".dragHandle",
+    dragHandle: ".leva-c-hwBXYF",
     data: { label: "Gain" },
     position: { x: spaceWidth * 2, y: 0 },
     className: "react-flow__node-default",
@@ -144,6 +145,7 @@ export const filterExample: Elements = setWires([
     id: "visualiser2",
     type: "visualiser",
     data: { label: "Visualiser 2" },
+    dragHandle: ".leva-c-hwBXYF",
     position: { x: spaceWidth * 3, y: 0 },
     className: "react-flow__node-default",
   },

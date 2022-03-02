@@ -3,6 +3,9 @@ import { useEffect, useMemo, useRef, useCallback } from "react";
 import useAnimationFrame from "use-animation-frame";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useEditorContext } from "./EditorContext";
+import { Leva, useCreateStore, useControls, LevaPanel } from "leva";
+
+import { LEVA_COLOR_ACCENT2_BLUE } from "../styles/consts";
 
 const useAnalyser = (audioContext: AudioContext) =>
   useMemo(() => {
@@ -38,6 +41,15 @@ const Visualizer = ({
 
   const dataArray = new Uint8Array(bufferLength);
 
+  const levaStore = useCreateStore();
+
+  const controls = useControls(
+    { color: { value: LEVA_COLOR_ACCENT2_BLUE } },
+    { store: levaStore }
+  );
+
+  console.log(controls.color);
+
   useEffect(() => {
     console.log("visualiser rendered", id);
     module[id] = analyserNode;
@@ -53,11 +65,12 @@ const Visualizer = ({
     }
     analyser.getByteTimeDomainData(dataArray);
 
-    canvasCtx.fillStyle = "rgb(200, 200, 200)";
+    canvasCtx.fillStyle = "#292d39";
+
     canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
 
     canvasCtx.lineWidth = 2;
-    canvasCtx.strokeStyle = "rgb(0, 0, 0)";
+    canvasCtx.strokeStyle = controls.color;
 
     canvasCtx.beginPath();
 
@@ -79,14 +92,18 @@ const Visualizer = ({
 
     canvasCtx.lineTo(canvas.width, canvas.height / 2);
     canvasCtx.stroke();
-  }, [canvas]);
+  }, [canvas, controls.color]);
 
   const tick = useCallback(draw, [draw]);
 
   useAnimationFrame(tick);
   return (
     <>
-      <div>{data.label || "visualiser"}</div>
+      <LevaPanel
+        store={levaStore}
+        titleBar={{ drag: false, title: data.label }}
+        fill
+      />
       <div>
         <Handle
           id="in"
