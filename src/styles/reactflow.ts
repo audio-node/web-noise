@@ -1,14 +1,17 @@
 import { injectGlobal } from "@emotion/css";
-
-const LEVA_COLOR_ACCENT2 = "#007bff";
+import { LEVA_COLOR_ACCENT2_BLUE } from "./consts";
 
 injectGlobal`
  .react-flow__pane {
   /* background: rgb(106 106 106); */
-  background: "white";
+  /* background: "white"; */
+  // background: #292d39
   }
 
-  .react-flow__node-default {}
+  .react-flow__node-default {
+    background: #292d39;
+    color: white;
+  }
 
   .react-flow__node {
     padding: 0;
@@ -25,12 +28,12 @@ injectGlobal`
   }
 
   .react-flow__node.selected {
-    border-color: ${LEVA_COLOR_ACCENT2};
-    box-shadow: 0 0 0 0.5px #${LEVA_COLOR_ACCENT2};
+    border-color: ${LEVA_COLOR_ACCENT2_BLUE};
+    box-shadow: 0 0 0 0.5px #${LEVA_COLOR_ACCENT2_BLUE};
   }
 
   .react-flow__node-default.selected, .react-flow__node-default.selected:hover {
-    box-shadow: 0 0 0 0.5px #${LEVA_COLOR_ACCENT2};
+    box-shadow: 0 0 0 0.5px #${LEVA_COLOR_ACCENT2_BLUE};
   }
 
 `;
