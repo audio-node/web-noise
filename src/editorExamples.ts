@@ -269,4 +269,46 @@ export const parameterExample: Elements = [
   },
 ];
 
+export const reverbExample: Elements = setWires([
+  {
+    id: "oscillator",
+    type: "oscillator",
+    data: { label: "Oscillator" },
+    position: { x: 0, y: 0 },
+    className: "react-flow__node-default",
+    dragHandle: ".leva-c-hwBXYF",
+  },
+  {
+    id: "reverb",
+    type: "reverb",
+    data: { label: "Reverb" },
+    dragHandle: ".leva-c-hwBXYF",
+    position: { x: spaceWidth, y: 0 },
+    className: "react-flow__node-default",
+  },
+  {
+    id: "gain",
+    type: "gain",
+    dragHandle: ".leva-c-hwBXYF",
+    data: { label: "Gain" },
+    position: { x: spaceWidth * 2, y: 0 },
+    className: "react-flow__node-default",
+  },
+  {
+    id: "visualiser2",
+    type: "visualiser",
+    data: { label: "Visualiser 2" },
+    dragHandle: ".leva-c-hwBXYF",
+    position: { x: spaceWidth * 3, y: 0 },
+    className: "react-flow__node-default",
+  },
+  {
+    id: "destination",
+    type: "destination",
+    data: { label: "Oscillator" },
+    position: { x: spaceWidth * 4, y: 0 },
+    className: "react-flow__node-default",
+  },
+]);
+
 export default defaultExample;

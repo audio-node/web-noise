@@ -18,12 +18,13 @@ import Visualizer from "./components/Visualizer";
 import WhiteNoise from "./components/WhiteNoise";
 import Filter from "./components/Filter";
 import Parameter from "./components/Parameter";
+import Reverb from "./components/Reverb";
 import { EditorContext, contextValue } from "./components/EditorContext";
 import ResumeContext from "./components/ResumeContext";
-import { filterExample } from "./editorExamples";
+import { reverbExample as example } from "./editorExamples";
 import "./styles/reactflow.ts";
 
-const initialElements: Elements = filterExample;
+const initialElements: Elements = example;
 
 const nodeTypes = {
   multiHandlesNode: MultiHandlesNode,
@@ -34,6 +35,7 @@ const nodeTypes = {
   whiteNoise: WhiteNoise,
   filter: Filter,
   parameter: Parameter,
+  reverb: Reverb,
 };
 
 const edgeTypes = {
