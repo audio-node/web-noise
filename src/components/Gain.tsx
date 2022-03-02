@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useEditorContext } from "./EditorContext";
+import { useControls, useCreateStore, LevaPanel, levaStore } from "leva";
 
 const useGain = (audioContext: AudioContext) =>
   useMemo(() => {
@@ -28,9 +29,20 @@ const Gain = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
   const inputRange = useRef<HTMLInputElement>(null);
 
   const gainNode = useGain(audioContext);
+  const levaStore = useCreateStore();
 
-  const [min, setMin] = useState(0);
-  const [max, setMax] = useState(1);
+  const controls = useControls(
+    {
+      gain: {
+        value: 1,
+        min: 0,
+        max: 1,
+        label: "lev",
+      },
+    },
+    { store: levaStore }
+  );
+
   const [gain, setGain] = useState(1);
 
   useEffect(() => {
@@ -39,11 +51,17 @@ const Gain = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
   }, []);
 
   useEffect(() => {
-    gainNode.gain.gain.setValueAtTime(gain, audioContext.currentTime);
-  }, [gain]);
+    gainNode.gain.gain.setValueAtTime(controls.gain, audioContext.currentTime);
+  }, [controls.gain]);
 
   return (
     <>
+      <LevaPanel
+        store={levaStore}
+        fill
+        flat
+        titleBar={{ drag: false, title: data.label }}
+      />
       <Handle
         type="target"
         position={targetPosition || Position.Left}
@@ -55,38 +73,6 @@ const Gain = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
         position={targetPosition || Position.Left}
         id="gain"
       />
-      <div className="dragHandle">gain</div>
-      <input
-        type="range"
-        value={gain}
-        ref={inputRange}
-        min={min}
-        max={max}
-        step={0.001}
-        onChange={({ target: { value } }) => setGain(+value)}
-      />
-
-      <div style={{ display: `flex` }}>
-        <label style={{ padding: `0.5em` }}>
-          min:
-          <input
-            style={{ width: `90%` }}
-            type="number"
-            value={min}
-            onChange={({ target: { value } }) => setMin(+value)}
-          />
-        </label>
-
-        <label style={{ padding: `0.5em` }}>
-          max:
-          <input
-            style={{ width: `90%` }}
-            type="number"
-            value={max}
-            onChange={({ target: { value } }) => setMax(+value)}
-          />
-        </label>
-      </div>
 
       <Handle
         type="source"

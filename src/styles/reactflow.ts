@@ -1,5 +1,5 @@
 import { injectGlobal } from "@emotion/css";
-import { LEVA_COLOR_ACCENT2_BLUE } from "./consts";
+import { LEVA_COLORS } from "./consts";
 
 injectGlobal`
  .react-flow__pane {
@@ -28,12 +28,12 @@ injectGlobal`
   }
 
   .react-flow__node.selected {
-    border-color: ${LEVA_COLOR_ACCENT2_BLUE};
-    box-shadow: 0 0 0 0.5px #${LEVA_COLOR_ACCENT2_BLUE};
+    border-color: ${LEVA_COLORS.accent2};
+    box-shadow: 0 0 0 0.5px #${LEVA_COLORS.accent2};
   }
 
   .react-flow__node-default.selected, .react-flow__node-default.selected:hover {
-    box-shadow: 0 0 0 0.5px #${LEVA_COLOR_ACCENT2_BLUE};
+    box-shadow: 0 0 0 0.5px #${LEVA_COLORS.accent2};
   }
 
 `;
