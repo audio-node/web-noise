@@ -21,10 +21,10 @@ import Filter from "./components/Filter";
 import Parameter from "./components/Parameter";
 import { EditorContext, contextValue } from "./components/EditorContext";
 import ResumeContext from "./components/ResumeContext";
+import { filterExample } from "./editorExamples";
+import "./styles/reactflow.ts";
 
-import { filterExample, parameterExample } from "./editorExamples";
-
-const initialElements: Elements = parameterExample;
+const initialElements: Elements = filterExample;
 
 const nodeTypes = {
   multiHandlesNode: MultiHandlesNode,

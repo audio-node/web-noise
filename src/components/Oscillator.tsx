@@ -39,7 +39,7 @@ const Oscillator = ({
   const values = useControls({
     frequency: {
       value: DEFAULT_FREQUENCY,
-      max: 10000,
+      max: 800,
       min: 0,
       label: "frequency",
     },

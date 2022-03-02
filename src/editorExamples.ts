@@ -123,6 +123,7 @@ export const filterExample: Elements = setWires([
     data: { label: "Oscillator" },
     position: { x: 0, y: 0 },
     className: "react-flow__node-default",
+    dragHandle: ".leva-c-hwBXYF",
   },
   {
     id: "filter",
