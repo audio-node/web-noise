@@ -9,6 +9,7 @@ const setWires = (arr: Elements): Elements => {
   arr.forEach((el, index) => {
     const nextEl = arr[index + 1];
     if (nextEl) {
+      console.log(`${el.id}-${nextEl.id}`);
       wires.push({
         id: `${el.id}-${nextEl.id}`,
         source: el.id,
@@ -121,7 +122,7 @@ export const filterExample: Elements = setWires([
     id: "oscillator",
     type: "oscillator",
     data: { label: "Oscillator" },
-    position: { x: 0, y: 0 },
+    position: { x: spaceWidth, y: 0 },
     className: "react-flow__node-default",
     dragHandle: ".leva-c-hwBXYF",
   },
@@ -130,7 +131,7 @@ export const filterExample: Elements = setWires([
     type: "filter",
     data: { label: "Filter" },
     dragHandle: ".leva-c-hwBXYF",
-    position: { x: spaceWidth, y: 0 },
+    position: { x: spaceWidth * 2, y: 0 },
     className: "react-flow__node-default",
   },
   {
@@ -138,7 +139,7 @@ export const filterExample: Elements = setWires([
     type: "gain",
     dragHandle: ".leva-c-hwBXYF",
     data: { label: "Gain" },
-    position: { x: spaceWidth * 2, y: 0 },
+    position: { x: spaceWidth * 3, y: 0 },
     className: "react-flow__node-default",
   },
   {
@@ -167,19 +168,14 @@ export const parameterExample: Elements = [
     className: "react-flow__node-default",
     dragHandle: ".leva-c-hwBXYF",
   },
+
   {
-    id: "oscillatorFrequency",
-    type: "parameter",
-    dragHandle: ".leva-c-hwBXYF",
-    data: {
-      label: "Oscillator Frequency",
-      min: 0,
-      max: 500,
-      step: 1,
-      value: 440,
-    },
+    id: "monoSeq",
+    type: "monoSequencer",
+    data: { label: "Sequencer" },
     position: { x: 0, y: 0 },
     className: "react-flow__node-default",
+    dragHandle: ".leva-c-hwBXYF",
   },
   {
     id: "oscillatorDetune",
@@ -223,7 +219,7 @@ export const parameterExample: Elements = [
   //wires
   {
     id: "osc-freq-to-osc",
-    source: "oscillatorFrequency",
+    source: "monoSeq",
     target: "oscillator",
     type: "wire",
     sourceHandle: "out",

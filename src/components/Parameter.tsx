@@ -4,7 +4,7 @@ import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useControls, useCreateStore, LevaPanel } from "leva";
 import { useEditorContext } from "./EditorContext";
 
-const useParameter = (audioContext: AudioContext) =>
+export const useParameter = (audioContext: AudioContext) =>
   useMemo(() => {
     const constantSource = audioContext.createConstantSource();
     return {

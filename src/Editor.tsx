@@ -19,6 +19,7 @@ import WhiteNoise from "./components/WhiteNoise";
 import Filter from "./components/Filter";
 import Parameter from "./components/Parameter";
 import Reverb from "./components/Reverb";
+import MonoSequencer from "./components/MonoSequencer";
 import { EditorContext, contextValue } from "./components/EditorContext";
 import ResumeContext from "./components/ResumeContext";
 import "./styles/reactflow.ts";
@@ -33,6 +34,7 @@ const nodeTypes = {
   filter: Filter,
   parameter: Parameter,
   reverb: Reverb,
+  monoSequencer: MonoSequencer,
 };
 
 const edgeTypes = {
