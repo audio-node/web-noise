@@ -51,7 +51,7 @@ const Oscillator = ({
         value: DEFAULT_FREQUENCY,
         max: 800,
         min: 0,
-        label: "frequency",
+        label: "freq",
       },
       type: {
         options: {

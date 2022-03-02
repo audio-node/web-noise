@@ -12,7 +12,7 @@ injectGlobal`
 
   .react-flow__node {
     padding: 0;
-    width: 200px;
+    width: 230px;
   }
 
   .react-flow__edge-path {
