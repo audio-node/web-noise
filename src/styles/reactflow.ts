@@ -5,7 +5,13 @@ injectGlobal`
  .react-flow__pane {
   /* background: rgb(106 106 106); */
   /* background: "white"; */
-  // background: #292d39
+  // background: #292d39;
+  /* background: black */
+  }
+
+  .react-flow__background {
+    background: #efefef;
+    /* stroke: #4a4a4a; */
   }
 
   .react-flow__node-default {
@@ -19,7 +25,7 @@ injectGlobal`
   }
 
   .react-flow__edge-path {
-    stroke: black;
+    stroke:  ${LEVA_COLORS.accent2};
   }
 
   .react-flow__node-oscillator {
