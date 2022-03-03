@@ -48,8 +48,6 @@ const Visualizer = ({
     { store: levaStore }
   );
 
-  console.log(controls.color);
-
   useEffect(() => {
     console.log("visualiser rendered", id);
     module[id] = analyserNode;

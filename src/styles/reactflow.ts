@@ -10,13 +10,15 @@ injectGlobal`
   }
 
   .react-flow__background {
-    background: #efefef;
-    /* stroke: #4a4a4a; */
+    /* background: #efefef; */
+    stroke: white;
   }
 
   .react-flow__node-default {
     background: #292d39;
     color: white;
+    border: none;
+    /* background: transparent; */
   }
 
   .react-flow__node {
@@ -28,13 +30,8 @@ injectGlobal`
     stroke:  ${LEVA_COLORS.accent2};
   }
 
-  .react-flow__node-oscillator {
-    border: none;
-    border-color: transparent;
-  }
-
   .react-flow__node.selected {
-    border-color: ${LEVA_COLORS.accent2};
+    border: 1px solid ${LEVA_COLORS.accent2};
     box-shadow: 0 0 0 0.5px #${LEVA_COLORS.accent2};
   }
 
