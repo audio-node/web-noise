@@ -5,6 +5,7 @@ import {
   filterExample,
   defaultExample,
   parameterExample,
+  reverbExample,
 } from "../../src/editorExamples";
 import Editor from "../Editor";
 
@@ -32,5 +33,11 @@ export const FilterExample = () => (
 export const ParameterExample = () => (
   <div style={{ height: "100vh" }}>
     <Editor elements={parameterExample} />
+  </div>
+);
+
+export const ReverbExample = () => (
+  <div style={{ height: "100vh" }}>
+    <Editor elements={reverbExample} />
   </div>
 );
