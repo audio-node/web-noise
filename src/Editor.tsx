@@ -22,7 +22,10 @@ import Reverb from "./components/Reverb";
 import MonoSequencer from "./components/MonoSequencer";
 import { EditorContext, contextValue } from "./components/EditorContext";
 import ResumeContext from "./components/ResumeContext";
+import { sequencerExample } from "./editorExamples";
 import "./styles/reactflow.ts";
+
+const initialElements: Elements = sequencerExample;
 
 const nodeTypes = {
   multiHandlesNode: MultiHandlesNode,

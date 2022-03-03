@@ -159,6 +159,97 @@ export const filterExample: Elements = setWires([
   },
 ]);
 
+export const sequencerExample: Elements = [
+  {
+    id: "oscillator",
+    type: "oscillator",
+    data: { label: "Oscillator" },
+    position: { x: spaceWidth, y: 50 },
+    className: "react-flow__node-default",
+    dragHandle: ".leva-c-hwBXYF",
+  },
+  {
+    id: "monoSeq",
+    type: "monoSequencer",
+    data: { label: "Sequencer" },
+    position: { x: 0, y: 0 },
+    className: "react-flow__node-default",
+    dragHandle: ".leva-c-hwBXYF",
+  },
+  {
+    id: "gain",
+    type: "gain",
+    dragHandle: ".leva-c-hwBXYF",
+    data: { label: "Gain" },
+    position: { x: spaceWidth * 2, y: 100 },
+    className: "react-flow__node-default",
+  },
+  {
+    id: "visualiser",
+    type: "visualiser",
+    data: { label: "Visualiser" },
+    position: { x: spaceWidth * 3, y: 100 },
+    className: "react-flow__node-default",
+    dragHandle: ".leva-c-hwBXYF",
+  },
+  {
+    id: "destination",
+    type: "destination",
+    data: { label: "Destination" },
+    position: { x: spaceWidth * 4, y: 100 },
+    className: "react-flow__node-default",
+  },
+  //wires
+  {
+    id: "osc-freq-to-osc",
+    source: "monoSeq",
+    target: "oscillator",
+    type: "wire",
+    sourceHandle: "out",
+    targetHandle: "frequency",
+  },
+  {
+    id: "osc-detune-to-osc",
+    source: "oscillatorDetune",
+    target: "oscillator",
+    type: "wire",
+    sourceHandle: "out",
+    targetHandle: "detune",
+  },
+  {
+    id: "osc-gain",
+    source: "oscillator",
+    target: "gain",
+    type: "wire",
+    targetHandle: "in",
+    sourceHandle: "out",
+  },
+  {
+    id: "gain-param-to-gain-gain",
+    source: "gainGain",
+    target: "gain",
+    type: "wire",
+    sourceHandle: "out",
+    targetHandle: "gain",
+  },
+  {
+    id: "gain-to-vis",
+    source: "gain",
+    target: "visualiser",
+    type: "wire",
+    targetHandle: "in",
+    sourceHandle: "out",
+  },
+  {
+    id: "vis-to-dest",
+    source: "visualiser",
+    target: "destination",
+    type: "wire",
+    targetHandle: "in",
+    sourceHandle: "out",
+  },
+];
+
 export const parameterExample: Elements = [
   {
     id: "oscillator",
