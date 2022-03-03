@@ -1,9 +1,7 @@
 // Button.stories.js|jsx
 
-import React, { FC } from "react";
+import React from "react";
 import Editor from "../Editor";
-
-const Button: FC = () => <div>yo</div>;
 
 export default {
   /* 👇 The title prop is optional.
