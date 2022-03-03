@@ -6,7 +6,7 @@ injectGlobal`
   /* background: rgb(106 106 106); */
   /* background: "white"; */
   // background: #292d39;
-  /* background: black */
+    background: ${LEVA_COLORS.elevation3};
   }
 
   .react-flow__background {

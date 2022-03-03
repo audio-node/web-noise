@@ -165,11 +165,12 @@ export const parameterExample: Elements = [
     data: { label: "Oscillator" },
     position: { x: spaceWidth, y: 50 },
     className: "react-flow__node-default",
+    dragHandle: ".leva-c-hwBXYF",
   },
   {
     id: "oscillatorFrequency",
     type: "parameter",
-    dragHandle: ".dragHandle",
+    dragHandle: ".leva-c-hwBXYF",
     data: {
       label: "Oscillator Frequency",
       min: 0,
@@ -183,7 +184,7 @@ export const parameterExample: Elements = [
   {
     id: "oscillatorDetune",
     type: "parameter",
-    dragHandle: ".dragHandle",
+    dragHandle: ".leva-c-hwBXYF",
     data: { label: "Oscillator Detune", min: 0, max: 200, step: 1, value: 0 },
     position: { x: 0, y: 180 },
     className: "react-flow__node-default",
@@ -191,7 +192,7 @@ export const parameterExample: Elements = [
   {
     id: "gain",
     type: "gain",
-    dragHandle: ".dragHandle",
+    dragHandle: ".leva-c-hwBXYF",
     data: { label: "Gain" },
     position: { x: spaceWidth * 2, y: 100 },
     className: "react-flow__node-default",
@@ -199,7 +200,7 @@ export const parameterExample: Elements = [
   {
     id: "gainGain",
     type: "parameter",
-    dragHandle: ".dragHandle",
+    dragHandle: ".leva-c-hwBXYF",
     data: { label: "Gain gain", min: 0, max: 1, step: 0.001 },
     position: { x: spaceWidth, y: 240 },
     className: "react-flow__node-default",
@@ -210,6 +211,7 @@ export const parameterExample: Elements = [
     data: { label: "Visualiser" },
     position: { x: spaceWidth * 3, y: 100 },
     className: "react-flow__node-default",
+    dragHandle: ".leva-c-hwBXYF",
   },
   {
     id: "destination",
