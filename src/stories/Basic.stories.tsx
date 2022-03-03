@@ -1,6 +1,11 @@
 // Button.stories.js|jsx
 
 import React from "react";
+import {
+  filterExample,
+  defaultExample,
+  parameterExample,
+} from "../../src/editorExamples";
 import Editor from "../Editor";
 
 export default {
@@ -14,6 +19,18 @@ export default {
 
 export const DefaultExample = () => (
   <div style={{ height: "100vh" }}>
-    <Editor />
+    <Editor elements={defaultExample} />
+  </div>
+);
+
+export const FilterExample = () => (
+  <div style={{ height: "100vh" }}>
+    <Editor elements={filterExample} />
+  </div>
+);
+
+export const ParameterExample = () => (
+  <div style={{ height: "100vh" }}>
+    <Editor elements={parameterExample} />
   </div>
 );
