@@ -279,11 +279,19 @@ export const reverbExample: Elements = setWires([
     dragHandle: ".leva-c-hwBXYF",
   },
   {
+    id: "filter",
+    type: "filter",
+    data: { label: "Filter" },
+    dragHandle: ".leva-c-hwBXYF",
+    position: { x: spaceWidth, y: 0 },
+    className: "react-flow__node-default",
+  },
+  {
     id: "reverb",
     type: "reverb",
     data: { label: "Reverb" },
     dragHandle: ".leva-c-hwBXYF",
-    position: { x: spaceWidth, y: 0 },
+    position: { x: spaceWidth * 2, y: 0 },
     className: "react-flow__node-default",
   },
   {
@@ -291,7 +299,7 @@ export const reverbExample: Elements = setWires([
     type: "gain",
     dragHandle: ".leva-c-hwBXYF",
     data: { label: "Gain" },
-    position: { x: spaceWidth * 2, y: 0 },
+    position: { x: spaceWidth * 3, y: 0 },
     className: "react-flow__node-default",
   },
   {
@@ -299,14 +307,14 @@ export const reverbExample: Elements = setWires([
     type: "visualiser",
     data: { label: "Visualiser 2" },
     dragHandle: ".leva-c-hwBXYF",
-    position: { x: spaceWidth * 3, y: 0 },
+    position: { x: spaceWidth * 4, y: 0 },
     className: "react-flow__node-default",
   },
   {
     id: "destination",
     type: "destination",
     data: { label: "Oscillator" },
-    position: { x: spaceWidth * 4, y: 0 },
+    position: { x: spaceWidth * 5, y: 0 },
     className: "react-flow__node-default",
   },
 ]);
