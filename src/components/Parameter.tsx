@@ -1,15 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { Handle, Position, NodeProps } from "react-flow-renderer";
-import {
-  useControls,
-  folder,
-  button,
-  monitor,
-  Leva,
-  useCreateStore,
-  LevaPanel,
-} from "leva";
+import { useControls, useCreateStore, LevaPanel } from "leva";
 import { useEditorContext } from "./EditorContext";
 
 const useParameter = (audioContext: AudioContext) =>
@@ -28,7 +20,6 @@ const useParameter = (audioContext: AudioContext) =>
 const Parameter = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
   const store = useCreateStore();
   const { audioContext, module } = useEditorContext();
-  const inputRange = useRef<HTMLInputElement>(null);
 
   const values = useControls(
     {
@@ -44,11 +35,6 @@ const Parameter = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
   );
 
   const parameterNode = useParameter(audioContext);
-
-  const [min, setMin] = useState(data.min || 0);
-  const [max, setMax] = useState(data.max || 1);
-  const [step, setStep] = useState(data.step || 1);
-  const [value, setValue] = useState(data.value || 1);
 
   useEffect(() => {
     parameterNode.constantSource.start();

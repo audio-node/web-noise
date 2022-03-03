@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
+import { useControls, useCreateStore, LevaPanel } from "leva";
 import { useEditorContext } from "./EditorContext";
 
 const useDestination = (audioContext: AudioContext) =>
@@ -16,15 +17,35 @@ const useDestination = (audioContext: AudioContext) =>
   }, []);
 
 const Destination = ({ targetPosition, data, id }: NodeProps) => {
+  const store = useCreateStore();
+
+  useControls(
+    {
+      destination: {
+        value: "",
+        editable: false,
+      },
+    },
+    { store }
+  );
   const { audioContext, module } = useEditorContext();
   const destinationNode = useDestination(audioContext);
+
   useEffect(() => {
-    console.log("destination rendered", id);
     module[id] = destinationNode;
   }, []);
+
   return (
     <>
-      <div>destination</div>
+      <LevaPanel
+        oneLineLabels
+        hideCopyButton
+        collapsed
+        store={store}
+        fill
+        flat
+        titleBar={{ drag: false, title: data.label }}
+      />
       <Handle
         type="target"
         position={targetPosition || Position.Left}
