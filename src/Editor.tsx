@@ -47,20 +47,20 @@ const onElementClick = (_event: any, element: any) =>
 
 const snapGrid: [number, number] = [20, 20];
 
-export const Editor = () => {
+export const Editor = ({ elements }: { elements?: Elements }) => {
   const [reactflowInstance, setReactflowInstance] = useState(null);
-  const [elements, setElements] = useState(initialElements);
+  const [initialElements, setElements] = useState(elements || []);
 
   useEffect(() => {
-    setElements(elements);
-  }, [elements]);
+    setElements(initialElements);
+  }, [initialElements]);
 
   useEffect(() => {
-    if (reactflowInstance && elements.length > 0) {
+    if (reactflowInstance && initialElements.length > 0) {
       // @ts-ignore
       reactflowInstance.fitView();
     }
-  }, [reactflowInstance, elements.length]);
+  }, [reactflowInstance, initialElements.length]);
 
   const onElementsRemove = useCallback(
     (elementsToRemove) =>
@@ -85,7 +85,7 @@ export const Editor = () => {
   return (
     <EditorContext.Provider value={contextValue}>
       <ReactFlow
-        elements={elements}
+        elements={initialElements}
         onElementClick={onElementClick}
         onElementsRemove={onElementsRemove}
         onConnect={onConnect}

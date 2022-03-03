@@ -35,7 +35,7 @@ export const defaultExample: Elements = [
     id: "lfo",
     type: "oscillator",
     data: { label: "LFO" },
-    position: { x: 0, y: 50 },
+    position: { x: 0, y: 100 },
     className: "react-flow__node-default",
   },
   {
@@ -50,7 +50,7 @@ export const defaultExample: Elements = [
     id: "visualiser",
     type: "visualiser",
     data: { label: "Visualiser" },
-    position: { x: spaceWidth * 2, y: 100 },
+    position: { x: spaceWidth * 2, y: 250 },
     className: "react-flow__node-default",
   },
   {
@@ -201,7 +201,7 @@ export const parameterExample: Elements = [
     type: "parameter",
     dragHandle: ".dragHandle",
     data: { label: "Gain gain", min: 0, max: 1, step: 0.001 },
-    position: { x: spaceWidth, y: 140 },
+    position: { x: spaceWidth, y: 240 },
     className: "react-flow__node-default",
   },
   {
