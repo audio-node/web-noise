@@ -1,6 +1,6 @@
 import { Elements } from "react-flow-renderer";
 
-const spaceWidth = 280;
+export const spaceWidth = 280;
 
 // automatically setup wires for a set of Elements
 const setWires = (arr: Elements): Elements => {

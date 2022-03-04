@@ -27,8 +27,9 @@ import ResumeContext from "./components/ResumeContext";
 import { demoExample } from "./editorExamples";
 import "./styles/reactflow.ts";
 import Reverb from "./components/Reverb";
+import { hackdaysDemo } from "./hackdays2022Demo";
 
-const initialElements: Elements = demoExample;
+const initialElements: Elements = hackdaysDemo;
 
 const nodeTypes = {
   multiHandlesNode: MultiHandlesNode,
