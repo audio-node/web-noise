@@ -26,6 +26,7 @@ import { EditorContext, contextValue } from "./components/EditorContext";
 import ResumeContext from "./components/ResumeContext";
 import { demoExample } from "./editorExamples";
 import "./styles/reactflow.ts";
+import Reverb from "./components/Reverb";
 
 const initialElements: Elements = demoExample;
 
@@ -42,6 +43,7 @@ const nodeTypes = {
   reverb: Reverb,
   monoSequencer: MonoSequencer,
   envelope: Envelope,
+  reverb: Reverb,
 };
 
 const edgeTypes = {

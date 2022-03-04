@@ -1,9 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useEditorContext } from "./EditorContext";
-import { useControls, useCreateStore, LevaPanel, levaStore } from "leva";
+import {
+  useControls,
+  useCreateStore,
+  LevaPanel,
+  levaStore,
+  folder,
+} from "leva";
 import { useRecoilValue } from "recoil";
 import { GlobalClockCounterState } from "./MonoSequencer";
+import { LEVA_COLOR_ACCENT2_BLUE } from "../styles/consts";
 
 const useGain = (audioContext: AudioContext) =>
   useMemo(() => {
@@ -40,36 +47,42 @@ const Gain = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
         value: 0,
         min: 0,
         max: 1,
-        label: "+",
+        label: "lvl",
       },
-      attack: {
-        value: 0.0,
-        min: 0,
-        max: 0.4,
-        step: 0.001,
-        label: "A",
-      },
-      decay: {
-        value: 0.07,
-        max: 0.5,
-        min: 0,
-        step: 0.001,
-        label: "D",
-      },
-      sustain: {
-        value: 0.38,
-        min: 0,
-        max: 10,
-        step: 0.001,
-        label: "S",
-      },
-      // release: {
-      //   value: 0,
-      //   min: 0,
-      //   max: 10,
-      //   step: 0.001,
-      //   label: "R",
-      // },
+      env: folder(
+        {
+          t: false,
+          attack: {
+            value: 0.0,
+            min: 0,
+            max: 0.4,
+            step: 0.001,
+            label: "A",
+          },
+          decay: {
+            value: 0.07,
+            max: 0.5,
+            min: 0,
+            step: 0.001,
+            label: "D",
+          },
+          sustain: {
+            value: 0.38,
+            min: 0,
+            max: 10,
+            step: 0.001,
+            label: "S",
+          },
+          // release: {
+          //   value: 0,
+          //   min: 0,
+          //   max: 10,
+          //   step: 0.001,
+          //   label: "R",
+          // },
+        },
+        { collapsed: true, color: LEVA_COLOR_ACCENT2_BLUE }
+      ),
     },
     { store: levaStore }
   );
@@ -94,17 +107,19 @@ const Gain = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
   // }, [clock]);
 
   useEffect(() => {
-    gainNode.gain.gain.cancelScheduledValues(audioContext.currentTime);
-    gainNode.gain.gain.setValueAtTime(0, audioContext.currentTime);
+    if (controls.t) {
+      gainNode.gain.gain.cancelScheduledValues(audioContext.currentTime);
+      gainNode.gain.gain.setValueAtTime(0, audioContext.currentTime);
 
-    gainNode.gain.gain.linearRampToValueAtTime(
-      1,
-      audioContext.currentTime + controls.attack
-    );
-    gainNode.gain.gain.linearRampToValueAtTime(
-      0,
-      audioContext.currentTime + controls.decay + controls.sustain
-    );
+      gainNode.gain.gain.linearRampToValueAtTime(
+        1,
+        audioContext.currentTime + controls.attack
+      );
+      gainNode.gain.gain.linearRampToValueAtTime(
+        0,
+        audioContext.currentTime + controls.decay + controls.sustain
+      );
+    }
   }, [clock]);
 
   useEffect(() => {

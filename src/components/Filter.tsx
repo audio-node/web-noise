@@ -47,7 +47,7 @@ const Filter = ({ sourcePosition, targetPosition, data, id }: NodeProps) => {
     {
       frequency: {
         value: frequencyMaxValue / 2,
-        max: 1,
+        max: frequencyMaxValue,
         min: frequencyMinValue,
         label: "freq",
         step: 0.000001,

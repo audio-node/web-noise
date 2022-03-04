@@ -177,12 +177,11 @@ export const demoExample: Elements = [
     dragHandle: ".leva-c-hwBXYF",
   },
   {
-    id: "oscillator3",
-    type: "oscillator",
-    data: { label: "Oscillator 3" },
+    id: "whiteNoise",
+    type: "whiteNoise",
+    data: { label: "White Noise" },
     position: { x: spaceWidth, y: 300 },
     className: "react-flow__node-default",
-    dragHandle: ".leva-c-hwBXYF",
   },
   {
     id: "monoSeq",
@@ -192,13 +191,20 @@ export const demoExample: Elements = [
     className: "react-flow__node-default",
     dragHandle: ".leva-c-hwBXYF",
   },
-
   {
     id: "gain",
     type: "gain",
     dragHandle: ".leva-c-hwBXYF",
     data: { label: "Gain" },
     position: { x: spaceWidth * 2, y: 100 },
+    className: "react-flow__node-default",
+  },
+  {
+    id: "gain2",
+    type: "gain",
+    dragHandle: ".leva-c-hwBXYF",
+    data: { label: "Gain 2" },
+    position: { x: spaceWidth * 2, y: 300 },
     className: "react-flow__node-default",
   },
   {
