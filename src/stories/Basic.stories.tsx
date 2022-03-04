@@ -10,7 +10,6 @@ import {
   demoExample,
   hackdaysDemo,
 } from "../editorExamples";
-// import * as foo from "../hackdays2022Demo";
 import Editor from "../Editor";
 
 export default {
