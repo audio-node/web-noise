@@ -6,7 +6,9 @@ import {
   defaultExample,
   parameterExample,
   reverbExample,
+  demoExample,
 } from "../../src/editorExamples";
+import { hackdaysDemo } from "../../src/hackdays2022Demo";
 import Editor from "../Editor";
 
 export default {
@@ -39,5 +41,17 @@ export const ParameterExample = () => (
 export const ReverbExample = () => (
   <div style={{ height: "100vh" }}>
     <Editor elements={reverbExample} />
+  </div>
+);
+
+export const DemoExample = () => (
+  <div style={{ height: "100vh" }}>
+    <Editor elements={demoExample} />
+  </div>
+);
+
+export const HackdaysDemo = () => (
+  <div style={{ height: "100vh" }}>
+    <Editor elements={hackdaysDemo} />
   </div>
 );

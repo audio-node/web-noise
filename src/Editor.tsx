@@ -9,6 +9,7 @@ import ReactFlow, {
   addEdge,
   Elements,
 } from "react-flow-renderer";
+import "./styles/reactflow.ts";
 import MultiHandlesNode from "./MultiHandlesNode";
 import Oscillator from "./components/Oscillator";
 import Destination from "./components/Destination";
@@ -19,17 +20,12 @@ import Spectroscope from "./components/Spectroscope";
 import WhiteNoise from "./components/WhiteNoise";
 import Filter from "./components/Filter";
 import Parameter from "./components/Parameter";
-import Reverb from "./components/Reverb";
 import MonoSequencer from "./components/MonoSequencer";
 import Envelope from "./components/Envelope";
 import { EditorContext, contextValue } from "./components/EditorContext";
 import ResumeContext from "./components/ResumeContext";
-import { demoExample } from "./editorExamples";
-import "./styles/reactflow.ts";
 import Reverb from "./components/Reverb";
-import { hackdaysDemo } from "./hackdays2022Demo";
-
-const initialElements: Elements = hackdaysDemo;
+import { defaultExample } from "./editorExamples";
 
 const nodeTypes = {
   multiHandlesNode: MultiHandlesNode,
@@ -44,7 +40,6 @@ const nodeTypes = {
   reverb: Reverb,
   monoSequencer: MonoSequencer,
   envelope: Envelope,
-  reverb: Reverb,
 };
 
 const edgeTypes = {
@@ -60,7 +55,7 @@ const snapGrid: [number, number] = [20, 20];
 
 export const Editor = ({ elements }: { elements?: Elements }) => {
   const [reactflowInstance, setReactflowInstance] = useState(null);
-  const [initialElements, setElements] = useState(elements || []);
+  const [initialElements, setElements] = useState(elements || defaultExample);
 
   useEffect(() => {
     setElements(initialElements);
