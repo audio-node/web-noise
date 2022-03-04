@@ -41,20 +41,13 @@ export const hackdaysDemo: Elements = [
     position: { x: spaceWidth * 2, y: 100 },
     className: "react-flow__node-default",
   },
-  {
-    id: "gain2",
-    type: "gain",
-    dragHandle: ".leva-c-hwBXYF",
-    data: { label: "Gain 2" },
-    position: { x: spaceWidth * 2, y: 300 },
-    className: "react-flow__node-default",
-  },
+
   {
     id: "filter",
     type: "filter",
     data: { label: "Filter" },
     dragHandle: ".leva-c-hwBXYF",
-    position: { x: spaceWidth * 2, y: 450 },
+    position: { x: spaceWidth * 2, y: 300 },
     className: "react-flow__node-default",
   },
   {
@@ -68,7 +61,7 @@ export const hackdaysDemo: Elements = [
   {
     id: "visualiser",
     type: "visualiser",
-    data: { label: "Visualiser" },
+    data: { label: "Oscilloscope" },
     position: { x: spaceWidth * 3, y: 100 },
     className: "react-flow__node-default",
     dragHandle: ".leva-c-hwBXYF",
@@ -118,6 +111,14 @@ export const hackdaysDemo: Elements = [
     id: "gain-to-vis",
     source: "gain",
     target: "visualiser",
+    type: "wire",
+    targetHandle: "in",
+    sourceHandle: "out",
+  },
+  {
+    id: "gain-to-spectroscope",
+    source: "gain",
+    target: "spectroscope",
     type: "wire",
     targetHandle: "in",
     sourceHandle: "out",
