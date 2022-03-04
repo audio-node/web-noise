@@ -63,7 +63,7 @@ export const defaultExample: Elements = [
   {
     id: "destination",
     type: "destination",
-    data: { label: "Oscillator" },
+    data: { label: "Destination" },
     position: { x: spaceWidth * 3, y: 25 },
     className: "react-flow__node-default",
   },
@@ -152,7 +152,7 @@ export const filterExample: Elements = setWires([
   {
     id: "destination",
     type: "destination",
-    data: { label: "Oscillator" },
+    data: { label: "Destination" },
     position: { x: spaceWidth * 4, y: 0 },
     className: "react-flow__node-default",
   },
@@ -315,7 +315,7 @@ export const reverbExample: Elements = setWires([
   {
     id: "destination",
     type: "destination",
-    data: { label: "Oscillator" },
+    data: { label: "Destination" },
     position: { x: spaceWidth * 5, y: 0 },
     className: "react-flow__node-default",
   },
