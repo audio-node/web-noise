@@ -29,7 +29,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
-    "build-storybook": "build-storybook -s public",
+    "build-storybook": "build-storybook -s public -o docs",
     "chromatic": "npx chromatic --project-token=a0aab93f1f80"
   },
   "eslintConfig": {
