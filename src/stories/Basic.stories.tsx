@@ -1,12 +1,16 @@
 // Button.stories.js|jsx
 
-import React from "react";
+import { FC } from "react";
+import { RecoilRoot } from "recoil";
 import {
   filterExample,
   defaultExample,
   parameterExample,
   reverbExample,
-} from "../../src/editorExamples";
+  demoExample,
+  hackdaysDemo,
+} from "../editorExamples";
+// import * as foo from "../hackdays2022Demo";
 import Editor from "../Editor";
 
 export default {
@@ -16,19 +20,20 @@ export default {
    */
   title: "Basic",
   component: Editor,
+  decorators: [
+    (Story: FC) => (
+      <RecoilRoot>
+        <div style={{ height: "100vh" }}>
+          <Story />
+        </div>
+      </RecoilRoot>
+    ),
+  ],
 };
 
-export const DefaultExample = () => (
-  <div style={{ height: "100vh" }}>
-    <Editor elements={defaultExample} />
-  </div>
-);
+export const DefaultExample = () => <Editor elements={defaultExample} />;
 
-export const FilterExample = () => (
-  <div style={{ height: "100vh" }}>
-    <Editor elements={filterExample} />
-  </div>
-);
+export const FilterExample = () => <Editor elements={filterExample} />;
 
 export const ParameterExample = () => (
   <div style={{ height: "100vh" }}>
@@ -36,8 +41,8 @@ export const ParameterExample = () => (
   </div>
 );
 
-export const ReverbExample = () => (
-  <div style={{ height: "100vh" }}>
-    <Editor elements={reverbExample} />
-  </div>
-);
+export const ReverbExample = () => <Editor elements={reverbExample} />;
+
+export const DemoExample = () => <Editor elements={demoExample} />;
+
+export const HackdaysDemo = () => <Editor elements={hackdaysDemo} />;

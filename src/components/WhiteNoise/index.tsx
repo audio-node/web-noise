@@ -4,6 +4,7 @@ import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useEditorContext } from "../EditorContext";
 //@ts-ignore
 import whiteNoiseWorklet from "worklet-loader!./worklet.ts"; // eslint-disable-line
+import { LevaPanel, useControls, useCreateStore } from "leva";
 
 export const loadModule = async (audioContext: AudioContext) => {
   try {
@@ -60,14 +61,34 @@ const WhiteNoise = ({
   const whiteNoiseNode = useWhiteNoise(audioContext);
   const { ready } = whiteNoiseNode;
 
+  const store = useCreateStore();
+
+  useControls(
+    {
+      whiteNoise: {
+        value: "",
+        editable: false,
+      },
+    },
+    { store }
+  );
+
   useEffect(() => {
     module[id] = whiteNoiseNode;
   }, []);
 
   return (
     <>
+      <LevaPanel
+        oneLineLabels
+        hideCopyButton
+        collapsed
+        store={store}
+        fill
+        flat
+        titleBar={{ drag: false, title: data.label }}
+      />
       {!ready ? <div>loading</div> : null}
-      <div>{data.label || "white noise"}</div>
       <Handle
         type="source"
         id="out"

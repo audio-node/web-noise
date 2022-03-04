@@ -10,13 +10,15 @@ injectGlobal`
   }
 
   .react-flow__background {
-    background: #efefef;
-    /* stroke: #4a4a4a; */
+    /* background: #efefef; */
+    stroke: white;
   }
 
   .react-flow__node-default {
     background: #292d39;
     color: white;
+    border: none;
+    /* background: transparent; */
   }
 
   .react-flow__node {
@@ -28,18 +30,29 @@ injectGlobal`
     stroke:  ${LEVA_COLORS.accent2};
   }
 
-  .react-flow__node-oscillator {
-    border: none;
-    border-color: transparent;
-  }
-
   .react-flow__node.selected {
-    border-color: ${LEVA_COLORS.accent2};
+    border: 1px solid ${LEVA_COLORS.accent2};
     box-shadow: 0 0 0 0.5px #${LEVA_COLORS.accent2};
   }
 
   .react-flow__node-default.selected, .react-flow__node-default.selected:hover {
     box-shadow: 0 0 0 0.5px #${LEVA_COLORS.accent2};
   }
+
+  .react-flow__edge-path {
+    stroke: #898989
+  }
+
+  .react-flow__edge.selected .react-flow__edge-path {
+    stroke: #007bff;
+  }
+
+  /* .react-flow__minimap-mask {
+    fill: ${LEVA_COLORS.elevation1}
+  }
+
+  .react-flow__minimap-node {
+    fill:${LEVA_COLORS.accent2}
+  } */
 
 `;

@@ -1,15 +1,7 @@
 import { useEffect, useMemo } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useEditorContext } from "./EditorContext";
-import {
-  useControls,
-  folder,
-  button,
-  monitor,
-  Leva,
-  useCreateStore,
-  LevaPanel,
-} from "leva";
+import { useControls, useCreateStore, LevaPanel } from "leva";
 
 const DEFAULT_FREQUENCY = 440;
 
