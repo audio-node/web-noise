@@ -15,29 +15,33 @@ import Destination from "./components/Destination";
 import Gain from "./components/Gain";
 import Wire from "./components/Wire";
 import Visualizer from "./components/Visualizer";
+import Spectroscope from "./components/Spectroscope";
 import WhiteNoise from "./components/WhiteNoise";
 import Filter from "./components/Filter";
 import Parameter from "./components/Parameter";
 import Reverb from "./components/Reverb";
 import MonoSequencer from "./components/MonoSequencer";
+import Envelope from "./components/Envelope";
 import { EditorContext, contextValue } from "./components/EditorContext";
 import ResumeContext from "./components/ResumeContext";
-import { sequencerExample } from "./editorExamples";
+import { demoExample } from "./editorExamples";
 import "./styles/reactflow.ts";
 
-const initialElements: Elements = sequencerExample;
+const initialElements: Elements = demoExample;
 
 const nodeTypes = {
   multiHandlesNode: MultiHandlesNode,
   oscillator: Oscillator,
   gain: Gain,
   visualiser: Visualizer,
+  spectroscope: Spectroscope,
   destination: Destination,
   whiteNoise: WhiteNoise,
   filter: Filter,
   parameter: Parameter,
   reverb: Reverb,
   monoSequencer: MonoSequencer,
+  envelope: Envelope,
 };
 
 const edgeTypes = {

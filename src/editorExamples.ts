@@ -159,23 +159,40 @@ export const filterExample: Elements = setWires([
   },
 ]);
 
-export const sequencerExample: Elements = [
+export const demoExample: Elements = [
   {
     id: "oscillator",
     type: "oscillator",
     data: { label: "Oscillator" },
-    position: { x: spaceWidth, y: 50 },
+    position: { x: spaceWidth, y: 0 },
+    className: "react-flow__node-default",
+    dragHandle: ".leva-c-hwBXYF",
+  },
+  {
+    id: "oscillator2",
+    type: "oscillator",
+    data: { label: "Oscillator 2" },
+    position: { x: spaceWidth, y: 150 },
+    className: "react-flow__node-default",
+    dragHandle: ".leva-c-hwBXYF",
+  },
+  {
+    id: "oscillator3",
+    type: "oscillator",
+    data: { label: "Oscillator 3" },
+    position: { x: spaceWidth, y: 300 },
     className: "react-flow__node-default",
     dragHandle: ".leva-c-hwBXYF",
   },
   {
     id: "monoSeq",
     type: "monoSequencer",
-    data: { label: "Sequencer" },
+    data: { label: "Random Seq" },
     position: { x: 0, y: 0 },
     className: "react-flow__node-default",
     dragHandle: ".leva-c-hwBXYF",
   },
+
   {
     id: "gain",
     type: "gain",
@@ -185,10 +202,26 @@ export const sequencerExample: Elements = [
     className: "react-flow__node-default",
   },
   {
+    id: "filter",
+    type: "filter",
+    data: { label: "Filter" },
+    dragHandle: ".leva-c-hwBXYF",
+    position: { x: spaceWidth * 2, y: 300 },
+    className: "react-flow__node-default",
+  },
+  {
     id: "visualiser",
     type: "visualiser",
     data: { label: "Visualiser" },
     position: { x: spaceWidth * 3, y: 100 },
+    className: "react-flow__node-default",
+    dragHandle: ".leva-c-hwBXYF",
+  },
+  {
+    id: "spectroscope",
+    type: "spectroscope",
+    data: { label: "Spectroscope" },
+    position: { x: spaceWidth * 3, y: 350 },
     className: "react-flow__node-default",
     dragHandle: ".leva-c-hwBXYF",
   },
@@ -208,14 +241,7 @@ export const sequencerExample: Elements = [
     sourceHandle: "out",
     targetHandle: "frequency",
   },
-  {
-    id: "osc-detune-to-osc",
-    source: "oscillatorDetune",
-    target: "oscillator",
-    type: "wire",
-    sourceHandle: "out",
-    targetHandle: "detune",
-  },
+
   {
     id: "osc-gain",
     source: "oscillator",
@@ -225,7 +251,7 @@ export const sequencerExample: Elements = [
     sourceHandle: "out",
   },
   {
-    id: "gain-param-to-gain-gain",
+    id: "ev-param-to-gain-gain",
     source: "gainGain",
     target: "gain",
     type: "wire",

@@ -2,6 +2,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useEditorContext } from "./EditorContext";
 import { useControls, useCreateStore, LevaPanel, levaStore } from "leva";
+import { useRecoilValue } from "recoil";
+import { GlobalClockCounterState } from "./MonoSequencer";
 
 const useGain = (audioContext: AudioContext) =>
   useMemo(() => {
@@ -27,6 +29,7 @@ const useGain = (audioContext: AudioContext) =>
 const Gain = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
   const { audioContext, module } = useEditorContext();
   const inputRange = useRef<HTMLInputElement>(null);
+  const clock = useRecoilValue(GlobalClockCounterState);
 
   const gainNode = useGain(audioContext);
   const levaStore = useCreateStore();
@@ -34,25 +37,86 @@ const Gain = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
   const controls = useControls(
     {
       gain: {
-        value: 1,
+        value: 0,
         min: 0,
         max: 1,
-        label: "lev",
+        label: "+",
       },
+      attack: {
+        value: 0.0,
+        min: 0,
+        max: 0.4,
+        step: 0.001,
+        label: "A",
+      },
+      decay: {
+        value: 0.07,
+        max: 0.5,
+        min: 0,
+        step: 0.001,
+        label: "D",
+      },
+      sustain: {
+        value: 0.38,
+        min: 0,
+        max: 10,
+        step: 0.001,
+        label: "S",
+      },
+      // release: {
+      //   value: 0,
+      //   min: 0,
+      //   max: 10,
+      //   step: 0.001,
+      //   label: "R",
+      // },
     },
     { store: levaStore }
   );
-
-  const [gain, setGain] = useState(1);
 
   useEffect(() => {
     console.log("gain rendered", id);
     module[id] = gainNode;
   }, []);
 
+  // useEffect(() => {
+  //   gainNode.gain.gain.cancelScheduledValues(audioContext.currentTime);
+  //   gainNode.gain.gain.setValueAtTime(0, audioContext.currentTime);
+
+  //   gainNode.gain.gain.linearRampToValueAtTime(
+  //     1,
+  //     audioContext.currentTime + controls.attack
+  //   );
+  //   gainNode.gain.gain.linearRampToValueAtTime(
+  //     0,
+  //     audioContext.currentTime + controls.attack + controls.release
+  //   );
+  // }, [clock]);
+
+  useEffect(() => {
+    gainNode.gain.gain.cancelScheduledValues(audioContext.currentTime);
+    gainNode.gain.gain.setValueAtTime(0, audioContext.currentTime);
+
+    gainNode.gain.gain.linearRampToValueAtTime(
+      1,
+      audioContext.currentTime + controls.attack
+    );
+    gainNode.gain.gain.linearRampToValueAtTime(
+      0,
+      audioContext.currentTime + controls.decay + controls.sustain
+    );
+  }, [clock]);
+
   useEffect(() => {
     gainNode.gain.gain.setValueAtTime(controls.gain, audioContext.currentTime);
-  }, [controls.gain]);
+  }, [
+    // audioContext.currentTime,
+    // controls.attack,
+    // controls.decay,
+    // controls.gain,
+    // controls.sustain,
+    controls.gain,
+  ]);
 
   return (
     <>

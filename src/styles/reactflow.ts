@@ -39,4 +39,20 @@ injectGlobal`
     box-shadow: 0 0 0 0.5px #${LEVA_COLORS.accent2};
   }
 
+  .react-flow__edge-path {
+    stroke: #898989
+  }
+
+  .react-flow__edge.selected .react-flow__edge-path {
+    stroke: #007bff;
+  }
+
+  /* .react-flow__minimap-mask {
+    fill: ${LEVA_COLORS.elevation1}
+  }
+
+  .react-flow__minimap-node {
+    fill:${LEVA_COLORS.accent2}
+  } */
+
 `;
