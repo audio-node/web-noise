@@ -3,7 +3,7 @@ import { useEffect, useState, VoidFunctionComponent } from "react";
 import { Handle, NodeProps, Position } from "react-flow-renderer";
 import { LevaPanel, useControls, useCreateStore } from "leva";
 
-import { useEditorContext } from "./EditorContext";
+import { useModule } from "../ModuleContext";
 import { useParameter } from "./Parameter";
 
 const Envelope: VoidFunctionComponent<NodeProps> = ({
@@ -12,13 +12,14 @@ const Envelope: VoidFunctionComponent<NodeProps> = ({
   sourcePosition,
   targetPosition,
 }) => {
-  const { audioContext, module } = useEditorContext();
+  const { audioContext, registerNode, unregisterNode } = useModule();
   const parameterNode = useParameter(audioContext);
   const store = useCreateStore();
 
   useEffect(() => {
     parameterNode.constantSource.start();
-    module[id] = parameterNode;
+    registerNode(id, parameterNode);
+    return () => unregisterNode(id);
   }, []);
 
   const controls = useControls(

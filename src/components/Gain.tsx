@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
-import { useEditorContext } from "./EditorContext";
+import { useModule } from "../ModuleContext";
 import {
   useControls,
   useCreateStore,
@@ -34,7 +34,7 @@ const useGain = (audioContext: AudioContext) =>
   }, [audioContext]);
 
 const Gain = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
-  const { audioContext, module } = useEditorContext();
+  const { audioContext, registerNode, unregisterNode } = useModule();
   const inputRange = useRef<HTMLInputElement>(null);
   const clock = useRecoilValue(GlobalClockCounterState);
 
@@ -89,7 +89,8 @@ const Gain = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
 
   useEffect(() => {
     console.log("gain rendered", id);
-    module[id] = gainNode;
+    registerNode(id, gainNode);
+    return () => unregisterNode(id);
   }, []);
 
   // useEffect(() => {

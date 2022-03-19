@@ -1,7 +1,7 @@
 import { useMemo, useEffect, useCallback, useState, useRef } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 import styled from "@emotion/styled";
-import { useEditorContext } from "./EditorContext";
+import { useModule } from "../ModuleContext";
 import { useParameter } from "./Parameter";
 import { Range, Scale, Note, Midi } from "@tonaljs/tonal";
 import { Leva, useCreateStore, useControls, LevaPanel, button } from "leva";
@@ -36,7 +36,7 @@ const MonoSequencer = ({ sourcePosition, data, id }: NodeProps) => {
     GlobalClockCounterState
   );
 
-  const { audioContext, module } = useEditorContext();
+  const { audioContext, registerNode, unregisterNode } = useModule();
   const parameterNode = useParameter(audioContext);
 
   const range = Scale.rangeOf("C major");
@@ -67,7 +67,8 @@ const MonoSequencer = ({ sourcePosition, data, id }: NodeProps) => {
 
   useEffect(() => {
     parameterNode.constantSource.start();
-    module[id] = parameterNode;
+    registerNode(id, parameterNode);
+    return () => unregisterNode(id);
   }, []);
 
   useEffect(() => {

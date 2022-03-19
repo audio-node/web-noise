@@ -9,26 +9,24 @@ import ReactFlow, {
   addEdge,
   Elements,
 } from "react-flow-renderer";
-import "./styles/reactflow.ts";
-import MultiHandlesNode from "./MultiHandlesNode";
-import Oscillator from "./components/Oscillator";
-import Destination from "./components/Destination";
-import Gain from "./components/Gain";
-import Wire from "./components/Wire";
-import Visualizer from "./components/Visualizer";
-import Spectroscope from "./components/Spectroscope";
-import WhiteNoise from "./components/WhiteNoise";
-import Filter from "./components/Filter";
-import Parameter from "./components/Parameter";
-import MonoSequencer from "./components/MonoSequencer";
-import Envelope from "./components/Envelope";
-import { EditorContext, contextValue } from "./components/EditorContext";
-import ResumeContext from "./components/ResumeContext";
-import Reverb from "./components/Reverb";
-import { defaultExample } from "./editorExamples";
+import "../styles/reactflow.ts";
+import { ModuleContext, contextValue } from "../ModuleContext";
+import Oscillator from "./Oscillator";
+import Destination from "./Destination";
+import Gain from "./Gain";
+import Wire from "./Wire";
+import Visualizer from "./Visualizer";
+import Spectroscope from "./Spectroscope";
+import WhiteNoise from "./WhiteNoise";
+import Filter from "./Filter";
+import Parameter from "./Parameter";
+import MonoSequencer from "./MonoSequencer";
+import Envelope from "./Envelope";
+import ResumeContext from "./ResumeContext";
+import Reverb from "./Reverb";
+import { defaultExample } from "../editorExamples";
 
 const nodeTypes = {
-  multiHandlesNode: MultiHandlesNode,
   oscillator: Oscillator,
   gain: Gain,
   visualiser: Visualizer,
@@ -75,6 +73,7 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
     []
   );
   const onConnect = useCallback((params) => {
+    // @ts-ignore
     setElements((els) => addEdge({ ...params, type: "wire" }, els));
   }, []);
 
@@ -89,7 +88,7 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
   );
 
   return (
-    <EditorContext.Provider value={contextValue}>
+    <ModuleContext.Provider value={contextValue}>
       <ReactFlow
         elements={initialElements}
         onElementClick={onElementClick}
@@ -109,7 +108,7 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
           <ResumeContext />
         </Controls>
       </ReactFlow>
-    </EditorContext.Provider>
+    </ModuleContext.Provider>
   );
 };
 

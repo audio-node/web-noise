@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useCallback } from "react";
 //@ts-ignore
 import useAnimationFrame from "use-animation-frame";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
-import { useEditorContext } from "./EditorContext";
+import { useModule } from "../ModuleContext";
 import { Leva, useCreateStore, useControls, LevaPanel } from "leva";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../styles/consts";
 
@@ -30,7 +30,7 @@ const Visualizer = ({
   data,
   id,
 }: NodeProps) => {
-  const { audioContext, module } = useEditorContext();
+  const { audioContext, registerNode, unregisterNode } = useModule();
   const analyserNode = useAnalyser(audioContext);
   const { analyser } = analyserNode;
 
@@ -50,7 +50,8 @@ const Visualizer = ({
 
   useEffect(() => {
     console.log("visualiser rendered", id);
-    module[id] = analyserNode;
+    registerNode(id, analyserNode);
+    return () => unregisterNode(id);
   }, []);
 
   const canvasCtx = useMemo(() => {
@@ -97,18 +98,17 @@ const Visualizer = ({
   useAnimationFrame(tick);
   return (
     <>
+      <Handle
+        id="in"
+        type="target"
+        position={targetPosition || Position.Left}
+      />
       <LevaPanel
         store={levaStore}
         titleBar={{ drag: false, title: data.label }}
         fill
+        flat
       />
-      <div>
-        <Handle
-          id="in"
-          type="target"
-          position={targetPosition || Position.Left}
-        />
-      </div>
       <canvas ref={canvasRef} style={{ display: "block", width: "100%" }} />
       <Handle
         id="out"

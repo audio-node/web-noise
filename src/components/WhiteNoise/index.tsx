@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 
-import { useEditorContext } from "../EditorContext";
+import { useModule } from "../../ModuleContext";
 //@ts-ignore
 import whiteNoiseWorklet from "worklet-loader!./worklet.ts"; // eslint-disable-line
 import { LevaPanel, useControls, useCreateStore } from "leva";
@@ -56,7 +56,7 @@ const WhiteNoise = ({
   data,
   id,
 }: NodeProps) => {
-  const { audioContext, module } = useEditorContext();
+  const { audioContext, registerNode, unregisterNode } = useModule();
 
   const whiteNoiseNode = useWhiteNoise(audioContext);
   const { ready } = whiteNoiseNode;
@@ -74,7 +74,8 @@ const WhiteNoise = ({
   );
 
   useEffect(() => {
-    module[id] = whiteNoiseNode;
+    registerNode(id, whiteNoiseNode);
+    return () => unregisterNode(id);
   }, []);
 
   return (

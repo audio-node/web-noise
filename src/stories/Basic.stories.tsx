@@ -10,7 +10,7 @@ import {
   demoExample,
   hackdaysDemo,
 } from "../editorExamples";
-import Editor from "../Editor";
+import Editor from "../components/ModuleEditor";
 
 export default {
   /* 👇 The title prop is optional.
