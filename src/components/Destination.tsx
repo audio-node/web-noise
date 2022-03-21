@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useControls, useCreateStore, LevaPanel } from "leva";
-import { useEditorContext } from "./EditorContext";
+import { useModule } from "../ModuleContext";
 
 const useDestination = (audioContext: AudioContext) =>
   useMemo(() => {
@@ -28,11 +28,12 @@ const Destination = ({ targetPosition, data, id }: NodeProps) => {
     },
     { store }
   );
-  const { audioContext, module } = useEditorContext();
+  const { audioContext, registerNode, unregisterNode } = useModule();
   const destinationNode = useDestination(audioContext);
 
   useEffect(() => {
-    module[id] = destinationNode;
+    registerNode(id, destinationNode);
+    return () => unregisterNode(id);
   }, []);
 
   return (

@@ -3,7 +3,7 @@ import { useEffect, useState, VoidFunctionComponent } from "react";
 import { Handle, NodeProps, Position } from "react-flow-renderer";
 import { LevaPanel, useControls, useCreateStore } from "leva";
 
-import { useEditorContext } from "../EditorContext";
+import { useModule } from "../../ModuleContext";
 import useReverb from "./useReverb";
 // @ts-expect-error
 import reverbImpulse from "./impulse.wav";
@@ -14,7 +14,7 @@ const Reverb: VoidFunctionComponent<NodeProps> = ({
   sourcePosition,
   targetPosition,
 }) => {
-  const { audioContext, module } = useEditorContext();
+  const { audioContext, registerNode, unregisterNode } = useModule();
   const [impulseBuffer, setImpulseBuffer] = useState<AudioBuffer>();
   const reverb = useReverb(audioContext, impulseBuffer);
   const store = useCreateStore();
@@ -38,15 +38,13 @@ const Reverb: VoidFunctionComponent<NodeProps> = ({
   useEffect(() => {
     if (!reverb) return;
 
-    module[id] = reverb;
+    registerNode(id, reverb);
 
     reverb.dryGain.gain.setValueAtTime(0.5, audioContext.currentTime);
     reverb.wetGain.gain.setValueAtTime(0.5, audioContext.currentTime);
 
-    return () => {
-      delete module[id];
-    };
-  }, [reverb, id, module, audioContext]);
+    return () => unregisterNode(id);
+  }, [reverb, id, audioContext]);
 
   useEffect(() => {
     reverb.wetGain.gain.setValueAtTime(

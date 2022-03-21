@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
-import { useEditorContext } from "./EditorContext";
+import { useModule } from "../ModuleContext";
 import { useControls, useCreateStore, LevaPanel } from "leva";
 
 const DEFAULT_FREQUENCY = 440;
@@ -32,7 +32,7 @@ const Oscillator = ({
   id,
   data,
 }: NodeProps) => {
-  const { audioContext, module } = useEditorContext();
+  const { audioContext, registerNode, unregisterNode } = useModule();
 
   const oscillatorNode = useOscillator(audioContext);
   const store = useCreateStore();
@@ -61,7 +61,11 @@ const Oscillator = ({
 
   useEffect(() => {
     oscillator.start();
-    module[id] = oscillatorNode;
+    registerNode(id, oscillatorNode);
+    return () => {
+      oscillator.stop();
+      unregisterNode(id);
+    };
   }, []);
 
   useEffect(() => {

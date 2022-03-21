@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useCallback } from "react";
 //@ts-ignore
 import useAnimationFrame from "use-animation-frame";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
-import { useEditorContext } from "./EditorContext";
+import { useModule } from "../ModuleContext";
 import { useAnalyser } from "./Visualizer";
 import { Leva, useCreateStore, useControls, LevaPanel } from "leva";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../styles/consts";
@@ -13,7 +13,7 @@ const Spectroscope = ({
   data,
   id,
 }: NodeProps) => {
-  const { audioContext, module } = useEditorContext();
+  const { audioContext, registerNode, unregisterNode } = useModule();
   const analyserNode = useAnalyser(audioContext);
   const { analyser } = analyserNode;
 
@@ -32,7 +32,8 @@ const Spectroscope = ({
 
   useEffect(() => {
     console.log("visualiser rendered", id);
-    module[id] = analyserNode;
+    registerNode(id, analyserNode);
+    return () => unregisterNode(id);
   }, []);
 
   const canvasCtx = useMemo(() => {

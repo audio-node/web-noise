@@ -5,7 +5,7 @@ import {
   getMarkerEnd,
   EdgeProps,
 } from "react-flow-renderer";
-import { useEditorContext } from "./EditorContext";
+import { useModule } from "../ModuleContext";
 
 const Wire = ({
   id,
@@ -25,21 +25,16 @@ const Wire = ({
   targetHandleId,
   ...rest
 }: EdgeProps) => {
-  const { module } = useEditorContext();
+  const { connect, disconnect } = useModule();
   useEffect(() => {
-    console.log(`connected ${source} to ${target}`);
     if (!sourceHandleId || !targetHandleId) {
       return;
     }
-    const outputNode = module[source]?.outputs?.[sourceHandleId]?.port;
-    const inputNode = module[target]?.inputs?.[targetHandleId]?.port;
-    if (!outputNode || !inputNode) {
-      return;
-    }
-    outputNode.connect(inputNode);
+    connect([source, sourceHandleId], [target, targetHandleId]);
+    console.log(`connected ${source} to ${target}`);
     return () => {
-      console.log(`disconnected ${source} to ${target}`);
-      outputNode.disconnect(inputNode);
+      disconnect([source, sourceHandleId], [target, targetHandleId]);
+      console.log(`disconnected ${source} from ${target}`);
     };
   }, [source, target]);
   const edgePath = getBezierPath({

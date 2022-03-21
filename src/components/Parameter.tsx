@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useControls, useCreateStore, LevaPanel } from "leva";
-import { useEditorContext } from "./EditorContext";
+import { useModule } from "../ModuleContext";
 
 export const useParameter = (audioContext: AudioContext) =>
   useMemo(() => {
@@ -19,7 +19,7 @@ export const useParameter = (audioContext: AudioContext) =>
 
 const Parameter = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
   const store = useCreateStore();
-  const { audioContext, module } = useEditorContext();
+  const { audioContext, registerNode, unregisterNode } = useModule();
 
   const values = useControls(
     {
@@ -38,7 +38,8 @@ const Parameter = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
 
   useEffect(() => {
     parameterNode.constantSource.start();
-    module[id] = parameterNode;
+    registerNode(id, parameterNode);
+    return () => unregisterNode(id);
   }, []);
 
   useEffect(() => {

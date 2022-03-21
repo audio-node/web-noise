@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
-import { useEditorContext } from "./EditorContext";
+import { useModule } from "../ModuleContext";
 import { useControls, useCreateStore, LevaPanel } from "leva";
 
 const FilterTypes: Record<BiquadFilterType, BiquadFilterType> = {
@@ -35,7 +35,7 @@ const useFilter = (audioContext: AudioContext) =>
   }, []);
 
 const Filter = ({ sourcePosition, targetPosition, data, id }: NodeProps) => {
-  const { audioContext, module } = useEditorContext();
+  const { audioContext, registerNode, unregisterNode } = useModule();
   const filterNode = useFilter(audioContext);
   const { filter } = filterNode;
   const store = useCreateStore();
@@ -81,9 +81,9 @@ const Filter = ({ sourcePosition, targetPosition, data, id }: NodeProps) => {
   }, [controls.type]);
 
   useEffect(() => {
-    console.log("filter rendered", id);
-    module[id] = filterNode;
+    registerNode(id, filterNode);
     filter.gain.setValueAtTime(10, audioContext.currentTime);
+    return () => unregisterNode(id);
   }, []);
   return (
     <>
