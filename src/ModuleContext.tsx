@@ -34,7 +34,7 @@ export const useModule = () => {
     //disconnect all ports
     const node = module.get(id);
     if (!node) {
-      console.error(`can't fine node with id: ${id}`);
+      console.error(`can't find node with id: ${id}`);
       return;
     }
     Object.values(node.inputs || {}).forEach(
