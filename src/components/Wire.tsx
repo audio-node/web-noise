@@ -4,6 +4,7 @@ import {
   getEdgeCenter,
   getMarkerEnd,
   EdgeProps,
+  MarkerType,
 } from "react-flow-renderer";
 import { useModule } from "../ModuleContext";
 
@@ -17,8 +18,8 @@ const Wire = ({
   targetPosition,
   style = {},
   data,
-  arrowHeadType,
-  markerEndId,
+  markerStart,
+  markerEnd,
   source,
   target,
   sourceHandleId,
@@ -44,13 +45,6 @@ const Wire = ({
     sourceX,
     sourceY,
     sourcePosition,
-  });
-  const markerEnd = getMarkerEnd(arrowHeadType, markerEndId);
-  const [_edgeCenterX, _edgeCenterY] = getEdgeCenter({
-    targetX,
-    targetY,
-    sourceX,
-    sourceY,
   });
 
   return (
