@@ -33,7 +33,9 @@ const Destination = ({ targetPosition, data, id }: NodeProps) => {
 
   useEffect(() => {
     registerNode(id, destinationNode);
-    return () => unregisterNode(id);
+    return () => {
+      unregisterNode(id);
+    };
   }, []);
 
   return (

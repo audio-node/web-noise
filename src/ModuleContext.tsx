@@ -12,7 +12,7 @@ interface Node extends Record<string, any> {
   inputs?: Record<string, InputPort | never>;
   outputs?: Record<string, OutputPort | never>;
 }
-const module: Map<string, Node> = new Map();
+const module: Map<string, Node | Promise<Node>> = new Map();
 
 const audioContext = new AudioContext();
 
@@ -30,9 +30,9 @@ export const useModule = () => {
     module.set(id, node);
   };
 
-  const unregisterNode = (id: string) => {
+  const unregisterNode = async (id: string) => {
     //disconnect all ports
-    const node = module.get(id);
+    const node = await module.get(id);
     if (!node) {
       console.error(`can't find node with id: ${id}`);
       return;
@@ -47,25 +47,25 @@ export const useModule = () => {
     module.delete(id);
   };
 
-  const getNodePort = (
+  const getNodePort = async (
     id: string,
     type: "inputs" | "outputs",
     portId: string
-  ) => {
-    return module.get(id)?.[type]?.[portId]?.port;
+  ): Promise<AudioNode> => {
+    return (await module.get(id))?.[type]?.[portId]?.port;
   };
 
-  const connect = (
+  const connect = async (
     [sourceId, sourcePort]: [string, string],
     [targetId, targetPort]: [string, string]
   ) => {
-    const outputNode = getNodePort(sourceId, "outputs", sourcePort);
+    const outputNode = await getNodePort(sourceId, "outputs", sourcePort);
     if (!outputNode) {
       console.error(`could not find output port ${targetId}:${targetPort}`);
       return false;
     }
 
-    const inputNode = getNodePort(targetId, "inputs", targetPort);
+    const inputNode = await getNodePort(targetId, "inputs", targetPort);
     if (!inputNode) {
       console.error(`could not find input port ${sourceId}:${sourcePort}`);
       return false;
@@ -75,17 +75,17 @@ export const useModule = () => {
     return true;
   };
 
-  const disconnect = (
+  const disconnect = async (
     [sourceId, sourcePort]: [string, string],
     [targetId, targetPort]: [string, string]
   ) => {
-    const outputNode = getNodePort(sourceId, "outputs", sourcePort);
+    const outputNode = await getNodePort(sourceId, "outputs", sourcePort);
     if (!outputNode) {
       console.error(`could not find output port ${targetId}:${targetPort}`);
       return;
     }
 
-    const inputNode = getNodePort(targetId, "inputs", targetPort);
+    const inputNode = await getNodePort(targetId, "inputs", targetPort);
     if (!inputNode) {
       console.error(`could not find input port ${sourceId}:${sourcePort}`);
       return;

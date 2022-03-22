@@ -16,39 +16,23 @@ export const loadModule = async (audioContext: AudioContext) => {
   }
 };
 
-const useWhiteNoise = (audioContext: AudioContext) => {
-  const [node, setNode] = useState<any>();
-  const [ready, setReady] = useState(false);
+const useWhiteNoise = (audioContext: AudioContext) =>
+  useMemo(async () => {
+    await loadModule(audioContext);
+    const whiteNoise = new AudioWorkletNode(
+      audioContext,
+      "white-noise-processor"
+    );
 
-  const [innerPort, port] = useMemo(() => {
-    const innerPort = audioContext.createMediaStreamDestination();
-    const port = audioContext.createMediaStreamSource(innerPort.stream);
-    return [innerPort, port];
-  }, [audioContext]);
-
-  useEffect(() => {
-    (async () => {
-      await loadModule(audioContext);
-      const whiteNoise = new AudioWorkletNode(
-        audioContext,
-        "white-noise-processor"
-      );
-      whiteNoise.connect(innerPort);
-      setNode(whiteNoise);
-      setReady(true);
-    })();
-  }, [audioContext]);
-
-  return {
-    outputs: {
-      out: {
-        port,
+    return {
+      outputs: {
+        out: {
+          port: whiteNoise,
+        },
       },
-    },
-    whiteNoise: node,
-    ready,
-  };
-};
+      whiteNoise,
+    };
+  }, []);
 
 const WhiteNoise = ({
   targetPosition,
@@ -59,7 +43,7 @@ const WhiteNoise = ({
   const { audioContext, registerNode, unregisterNode } = useModule();
 
   const whiteNoiseNode = useWhiteNoise(audioContext);
-  const { ready } = whiteNoiseNode;
+  const [ready, setReady] = useState<boolean>(false);
 
   const store = useCreateStore();
 
@@ -75,7 +59,10 @@ const WhiteNoise = ({
 
   useEffect(() => {
     registerNode(id, whiteNoiseNode);
-    return () => unregisterNode(id);
+    whiteNoiseNode.then(() => setReady(true));
+    return () => {
+      unregisterNode(id);
+    };
   }, []);
 
   return (

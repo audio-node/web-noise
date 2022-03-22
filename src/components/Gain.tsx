@@ -90,7 +90,9 @@ const Gain = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
   useEffect(() => {
     console.log("gain rendered", id);
     registerNode(id, gainNode);
-    return () => unregisterNode(id);
+    return () => {
+      unregisterNode(id);
+    };
   }, []);
 
   // useEffect(() => {

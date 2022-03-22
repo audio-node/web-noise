@@ -51,7 +51,9 @@ const Visualizer = ({
   useEffect(() => {
     console.log("visualiser rendered", id);
     registerNode(id, analyserNode);
-    return () => unregisterNode(id);
+    return () => {
+      unregisterNode(id);
+    };
   }, []);
 
   const canvasCtx = useMemo(() => {

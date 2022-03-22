@@ -83,7 +83,9 @@ const Filter = ({ sourcePosition, targetPosition, data, id }: NodeProps) => {
   useEffect(() => {
     registerNode(id, filterNode);
     filter.gain.setValueAtTime(10, audioContext.currentTime);
-    return () => unregisterNode(id);
+    return () => {
+      unregisterNode(id);
+    };
   }, []);
   return (
     <>

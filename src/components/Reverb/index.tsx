@@ -43,7 +43,9 @@ const Reverb: VoidFunctionComponent<NodeProps> = ({
     reverb.dryGain.gain.setValueAtTime(0.5, audioContext.currentTime);
     reverb.wetGain.gain.setValueAtTime(0.5, audioContext.currentTime);
 
-    return () => unregisterNode(id);
+    return () => {
+      unregisterNode(id);
+    };
   }, [reverb, id, audioContext]);
 
   useEffect(() => {

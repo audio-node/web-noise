@@ -68,7 +68,9 @@ const MonoSequencer = ({ sourcePosition, data, id }: NodeProps) => {
   useEffect(() => {
     parameterNode.constantSource.start();
     registerNode(id, parameterNode);
-    return () => unregisterNode(id);
+    return () => {
+      unregisterNode(id);
+    };
   }, []);
 
   useEffect(() => {
