@@ -5,9 +5,12 @@ import ReactFlow, {
   BackgroundVariant,
   MiniMap,
   Controls,
-  removeElements,
+  Node,
+  Edge,
+  Position,
   addEdge,
-  Elements,
+  applyNodeChanges,
+  applyEdgeChanges,
 } from "react-flow-renderer";
 import "../styles/reactflow.ts";
 import { ModuleContext, contextValue } from "../ModuleContext";
@@ -25,6 +28,11 @@ import Envelope from "./Envelope";
 import ResumeContext from "./ResumeContext";
 import Reverb from "./Reverb";
 import { defaultExample } from "../editorExamples";
+
+export interface Elements {
+  nodes: Array<Node>;
+  edges: Array<Edge>;
+}
 
 const nodeTypes = {
   oscillator: Oscillator,
@@ -46,38 +54,49 @@ const edgeTypes = {
 
 const onNodeDragStop = (_event: any, node: any) =>
   console.log("drag stop", node);
-const onElementClick = (_event: any, element: any) =>
+const onNodeClick = (_event: any, element: any) =>
   console.log("click", element);
 
 const snapGrid: [number, number] = [20, 20];
 
 export const Editor = ({ elements }: { elements?: Elements }) => {
+  const { nodes: initialNodes, edges: initialEdges } = elements || {
+    nodes: [],
+    edges: [],
+  };
+  const [nodes, setNodes] = useState<Array<Node>>(
+    initialNodes.map((node) => ({
+      ...node,
+      targetPosition: Position.Left,
+      sourcePosition: Position.Right,
+    }))
+  );
+  const [edges, setEdges] = useState(initialEdges);
+
+  const onNodesChange = useCallback(
+    (changes) => setNodes((ns) => applyNodeChanges(changes, ns)),
+    []
+  );
+  const onEdgesChange = useCallback(
+    (changes) => setEdges((es) => applyEdgeChanges(changes, es)),
+    []
+  );
+  const onConnect = useCallback(
+    (connection) =>
+      setEdges((eds) => addEdge({ ...connection, type: "wire" }, eds)),
+    []
+  );
+
   const [reactflowInstance, setReactflowInstance] = useState(null);
-  const [initialElements, setElements] = useState(elements || defaultExample);
 
   useEffect(() => {
-    setElements(initialElements);
-  }, [initialElements]);
-
-  useEffect(() => {
-    if (reactflowInstance && initialElements.length > 0) {
+    if (reactflowInstance && initialNodes.length > 0) {
       // @ts-ignore
       reactflowInstance.fitView();
     }
-  }, [reactflowInstance, initialElements.length]);
+  }, [reactflowInstance, initialNodes.length]);
 
-  const onElementsRemove = useCallback(
-    (elementsToRemove) =>
-      // @ts-ignore
-      setElements((els) => removeElements(elementsToRemove, els)),
-    []
-  );
-  const onConnect = useCallback((params) => {
-    // @ts-ignore
-    setElements((els) => addEdge({ ...params, type: "wire" }, els));
-  }, []);
-
-  const onLoad = useCallback(
+  const onInit = useCallback(
     (rfi) => {
       if (!reactflowInstance) {
         setReactflowInstance(rfi);
@@ -90,12 +109,14 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
   return (
     <ModuleContext.Provider value={contextValue}>
       <ReactFlow
-        elements={initialElements}
-        onElementClick={onElementClick}
-        onElementsRemove={onElementsRemove}
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         onNodeDragStop={onNodeDragStop}
-        onLoad={onLoad}
+        onInit={onInit}
+        onNodeClick={onNodeClick}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         snapToGrid={true}
