@@ -1,30 +1,31 @@
 import { useEffect, useMemo } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
-import { useModule } from "../ModuleContext";
+import { useModule, Node as WebNoiseNode, useNode } from "../ModuleContext";
 import { useControls, useCreateStore, LevaPanel } from "leva";
 
 const DEFAULT_FREQUENCY = 440;
 
-const useOscillator = (audioContext: AudioContext) =>
-  useMemo(() => {
-    const oscillator = audioContext.createOscillator();
-    return {
-      inputs: {
-        frequency: {
-          port: oscillator.frequency,
-        },
-        detune: {
-          port: oscillator.detune,
-        },
+const createOscillator = (
+  audioContext: AudioContext
+): WebNoiseNode & { oscillator: OscillatorNode } => {
+  const oscillator = audioContext.createOscillator();
+  return {
+    inputs: {
+      frequency: {
+        port: oscillator.frequency,
       },
-      outputs: {
-        out: {
-          port: oscillator,
-        },
+      detune: {
+        port: oscillator.detune,
       },
-      oscillator,
-    };
-  }, [audioContext]);
+    },
+    outputs: {
+      out: {
+        port: oscillator,
+      },
+    },
+    oscillator,
+  };
+};
 
 const Oscillator = ({
   sourcePosition,
@@ -32,9 +33,8 @@ const Oscillator = ({
   id,
   data,
 }: NodeProps) => {
-  const { audioContext, registerNode, unregisterNode } = useModule();
-
-  const oscillatorNode = useOscillator(audioContext);
+  const { audioContext } = useModule();
+  const oscillatorNode = useNode(id, createOscillator);
   const store = useCreateStore();
 
   const values = useControls(
@@ -61,10 +61,10 @@ const Oscillator = ({
 
   useEffect(() => {
     oscillator.start();
-    registerNode(id, oscillatorNode);
+    // registerNode(id, oscillatorNode);
     return () => {
       oscillator.stop();
-      unregisterNode(id);
+      // unregisterNode(id);
     };
   }, []);
 
@@ -102,6 +102,7 @@ const Oscillator = ({
       />
       <Handle
         type="source"
+        isValidConnection={() => true}
         position={sourcePosition || Position.Right}
         id="out"
       />

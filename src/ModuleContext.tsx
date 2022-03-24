@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useEffect, useMemo } from "react";
 
 interface InputPort {
   port: AudioNode | any /* any other type of port */;
@@ -8,7 +8,7 @@ interface OutputPort {
   port: AudioNode;
 }
 
-interface Node extends Record<string, any> {
+export interface Node extends Record<string, any> {
   inputs?: Record<string, InputPort | never>;
   outputs?: Record<string, OutputPort | never>;
 }
@@ -101,4 +101,24 @@ export const useModule = () => {
     connect,
     disconnect,
   };
+};
+
+export const useNode = (
+  id: string,
+  nodeFactory: (audioContext: AudioContext) => Node
+) => {
+  const { audioContext, registerNode, unregisterNode } = useModule();
+  const node = useMemo(
+    () => nodeFactory(audioContext),
+    [audioContext, nodeFactory]
+  );
+
+  useEffect(() => {
+    registerNode(id, node);
+    return () => {
+      unregisterNode(id);
+    };
+  }, []);
+
+  return node;
 };
