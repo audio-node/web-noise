@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 
 import ReactFlow, {
   Background,
@@ -11,6 +11,7 @@ import ReactFlow, {
   addEdge,
   applyNodeChanges,
   applyEdgeChanges,
+  ReactFlowProvider,
 } from "react-flow-renderer";
 import "../styles/reactflow.ts";
 import { ModuleContext, contextValue } from "../ModuleContext";
@@ -34,24 +35,6 @@ export interface Elements {
   edges: Array<Edge>;
 }
 
-const nodeTypes = {
-  oscillator: Oscillator,
-  gain: Gain,
-  visualiser: Visualizer,
-  spectroscope: Spectroscope,
-  destination: Destination,
-  whiteNoise: WhiteNoise,
-  filter: Filter,
-  parameter: Parameter,
-  reverb: Reverb,
-  monoSequencer: MonoSequencer,
-  envelope: Envelope,
-};
-
-const edgeTypes = {
-  wire: Wire,
-};
-
 const onNodeDragStop = (_event: any, node: any) =>
   console.log("drag stop", node);
 const onNodeClick = (_event: any, element: any) =>
@@ -60,6 +43,30 @@ const onNodeClick = (_event: any, element: any) =>
 const snapGrid: [number, number] = [20, 20];
 
 export const Editor = ({ elements }: { elements?: Elements }) => {
+  const nodeTypes = useMemo(
+    () => ({
+      oscillator: Oscillator,
+      gain: Gain,
+      visualiser: Visualizer,
+      spectroscope: Spectroscope,
+      destination: Destination,
+      whiteNoise: WhiteNoise,
+      filter: Filter,
+      parameter: Parameter,
+      reverb: Reverb,
+      monoSequencer: MonoSequencer,
+      envelope: Envelope,
+    }),
+    []
+  );
+
+  const edgeTypes = useMemo(
+    () => ({
+      wire: Wire,
+    }),
+    []
+  );
+
   const { nodes: initialNodes, edges: initialEdges } = elements || {
     nodes: [],
     edges: [],
@@ -108,27 +115,29 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
 
   return (
     <ModuleContext.Provider value={contextValue}>
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-        onNodeDragStop={onNodeDragStop}
-        onInit={onInit}
-        onNodeClick={onNodeClick}
-        nodeTypes={nodeTypes}
-        edgeTypes={edgeTypes}
-        snapToGrid={true}
-        snapGrid={snapGrid}
-        defaultZoom={1.5}
-      >
-        <Background variant={BackgroundVariant.Dots} gap={12} />
-        <MiniMap />
-        <Controls>
-          <ResumeContext />
-        </Controls>
-      </ReactFlow>
+      <ReactFlowProvider>
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onConnect={onConnect}
+          onNodeDragStop={onNodeDragStop}
+          onInit={onInit}
+          onNodeClick={onNodeClick}
+          nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
+          snapToGrid={true}
+          snapGrid={snapGrid}
+          defaultZoom={1.5}
+        >
+          <Background variant={BackgroundVariant.Dots} gap={12} />
+          <MiniMap />
+          <Controls>
+            <ResumeContext />
+          </Controls>
+        </ReactFlow>
+      </ReactFlowProvider>
     </ModuleContext.Provider>
   );
 };
