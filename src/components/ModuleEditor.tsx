@@ -12,6 +12,8 @@ import ReactFlow, {
   applyNodeChanges,
   applyEdgeChanges,
   ReactFlowProvider,
+  useNodesState,
+  useEdgesState,
 } from "react-flow-renderer";
 import "../styles/reactflow.ts";
 import { ModuleContext, contextValue } from "../ModuleContext";
@@ -71,23 +73,15 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
     nodes: [],
     edges: [],
   };
-  const [nodes, setNodes] = useState<Array<Node>>(
+  const [nodes, setNodes, onNodesChange] = useNodesState<Array<Node>>(
     initialNodes.map((node) => ({
       ...node,
       targetPosition: Position.Left,
       sourcePosition: Position.Right,
     }))
   );
-  const [edges, setEdges] = useState(initialEdges);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
-  const onNodesChange = useCallback(
-    (changes) => setNodes((ns) => applyNodeChanges(changes, ns)),
-    []
-  );
-  const onEdgesChange = useCallback(
-    (changes) => setEdges((es) => applyEdgeChanges(changes, es)),
-    []
-  );
   const onConnect = useCallback(
     (connection) =>
       setEdges((eds) => addEdge({ ...connection, type: "wire" }, eds)),
