@@ -14,7 +14,13 @@ import ReactFlow, {
   useEdgesState,
 } from "react-flow-renderer";
 import "../styles/reactflow.ts";
-import { ModuleContext, contextValue, useModule } from "../ModuleContext";
+import {
+  ModuleContext,
+  contextValue,
+  useModule,
+  useAudioGraph,
+} from "../ModuleContext";
+import AudioGraph from "./AudioGraph";
 import Oscillator from "./Oscillator";
 import Destination from "./Destination";
 import Gain from "./Gain";
@@ -41,52 +47,6 @@ const onNodeClick = (_event: any, element: any) =>
   console.log("click", element);
 
 const snapGrid: [number, number] = [20, 20];
-
-const diff = <T extends Array<any>>(
-  newList: T,
-  oldList: T
-): { create: T; remove: T } => {
-  const newObj = newList.reduce(
-    (acc, { id, ...rest }) => ({
-      ...acc,
-      [id]: rest,
-    }),
-    {}
-  );
-  const oldObj = oldList.reduce(
-    (acc, { id, ...rest }) => ({
-      ...acc,
-      [id]: rest,
-    }),
-    {}
-  );
-  //@ts-ignore
-  const create = Object.keys(newObj).reduce((acc, id) => {
-    //@ts-ignore
-    if (oldObj[id]) {
-      return acc;
-    } else {
-      //@ts-ignore
-      return [...acc, { id, ...newObj[id] }];
-    }
-  }, []);
-  //@ts-ignore
-  const remove = Object.keys(oldObj).reduce((acc, id) => {
-    //@ts-ignore
-    if (newObj[id]) {
-      return acc;
-    } else {
-      //@ts-ignore
-      return [...acc, { id, ...oldObj[id] }];
-    }
-  }, []);
-  return {
-    //@ts-ignore
-    create,
-    //@ts-ignore
-    remove,
-  };
-};
 
 export const Editor = ({ elements }: { elements?: Elements }) => {
   // const {  } = useModule();
@@ -126,11 +86,9 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
     }))
   );
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-  const prevEdges = useRef<Array<Edge>>([]);
 
   const onConnect = useCallback(
-    (connection) =>
-      setEdges((eds) => addEdge({ ...connection, type: "wire" }, eds)),
+    (connection) => setEdges((eds) => addEdge(connection, eds)),
     []
   );
 
@@ -153,17 +111,10 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
     [reactflowInstance]
   );
 
-  useEffect(() => {
-    console.log("edge changes:", diff(edges, prevEdges.current));
-    prevEdges.current = edges;
-    return () => {
-      console.log("TODO: remove ", edges.length, "edges");
-    };
-  }, [edges]);
-
   return (
     <ModuleContext.Provider value={contextValue}>
       <ReactFlowProvider>
+        <AudioGraph nodes={nodes} edges={edges} />
         <ReactFlow
           nodes={nodes}
           edges={edges}
@@ -178,6 +129,7 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
           snapToGrid={true}
           snapGrid={snapGrid}
           defaultZoom={1.5}
+          defaultEdgeOptions={{ type: "wire" }}
         >
           <Background variant={BackgroundVariant.Dots} gap={12} />
           <MiniMap />
