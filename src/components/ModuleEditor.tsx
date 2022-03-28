@@ -14,12 +14,7 @@ import ReactFlow, {
   useEdgesState,
 } from "react-flow-renderer";
 import "../styles/reactflow.ts";
-import {
-  ModuleContext,
-  contextValue,
-  useModule,
-  useAudioGraph,
-} from "../ModuleContext";
+import { ModuleContext, contextValue, useModule } from "../ModuleContext";
 import AudioGraph from "./AudioGraph";
 import Oscillator from "./Oscillator";
 import Destination from "./Destination";
@@ -34,7 +29,6 @@ import MonoSequencer from "./MonoSequencer";
 import Envelope from "./Envelope";
 import ResumeContext from "./ResumeContext";
 import Reverb from "./Reverb";
-import { defaultExample } from "../editorExamples";
 
 export interface Elements {
   nodes: Array<Node>;
@@ -49,7 +43,6 @@ const onNodeClick = (_event: any, element: any) =>
 const snapGrid: [number, number] = [20, 20];
 
 export const Editor = ({ elements }: { elements?: Elements }) => {
-  // const {  } = useModule();
   const nodeTypes = useMemo(
     () => ({
       oscillator: Oscillator,
@@ -94,13 +87,6 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
 
   const [reactflowInstance, setReactflowInstance] = useState(null);
 
-  useEffect(() => {
-    if (reactflowInstance && initialNodes.length > 0) {
-      // @ts-ignore
-      reactflowInstance.fitView();
-    }
-  }, [reactflowInstance, initialNodes.length]);
-
   const onInit = useCallback(
     (rfi) => {
       if (!reactflowInstance) {
@@ -130,6 +116,7 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
           snapGrid={snapGrid}
           defaultZoom={1.5}
           defaultEdgeOptions={{ type: "wire" }}
+          fitView
         >
           <Background variant={BackgroundVariant.Dots} gap={12} />
           <MiniMap />
