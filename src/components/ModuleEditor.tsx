@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 
 import ReactFlow, {
   Background,
@@ -9,14 +9,12 @@ import ReactFlow, {
   Edge,
   Position,
   addEdge,
-  applyNodeChanges,
-  applyEdgeChanges,
   ReactFlowProvider,
   useNodesState,
   useEdgesState,
 } from "react-flow-renderer";
 import "../styles/reactflow.ts";
-import { ModuleContext, contextValue } from "../ModuleContext";
+import { ModuleContext, contextValue, useModule } from "../ModuleContext";
 import Oscillator from "./Oscillator";
 import Destination from "./Destination";
 import Gain from "./Gain";
@@ -44,7 +42,54 @@ const onNodeClick = (_event: any, element: any) =>
 
 const snapGrid: [number, number] = [20, 20];
 
+const diff = <T extends Array<any>>(
+  newList: T,
+  oldList: T
+): { create: T; remove: T } => {
+  const newObj = newList.reduce(
+    (acc, { id, ...rest }) => ({
+      ...acc,
+      [id]: rest,
+    }),
+    {}
+  );
+  const oldObj = oldList.reduce(
+    (acc, { id, ...rest }) => ({
+      ...acc,
+      [id]: rest,
+    }),
+    {}
+  );
+  //@ts-ignore
+  const create = Object.keys(newObj).reduce((acc, id) => {
+    //@ts-ignore
+    if (oldObj[id]) {
+      return acc;
+    } else {
+      //@ts-ignore
+      return [...acc, { id, ...newObj[id] }];
+    }
+  }, []);
+  //@ts-ignore
+  const remove = Object.keys(oldObj).reduce((acc, id) => {
+    //@ts-ignore
+    if (newObj[id]) {
+      return acc;
+    } else {
+      //@ts-ignore
+      return [...acc, { id, ...oldObj[id] }];
+    }
+  }, []);
+  return {
+    //@ts-ignore
+    create,
+    //@ts-ignore
+    remove,
+  };
+};
+
 export const Editor = ({ elements }: { elements?: Elements }) => {
+  // const {  } = useModule();
   const nodeTypes = useMemo(
     () => ({
       oscillator: Oscillator,
@@ -81,6 +126,7 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
     }))
   );
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const prevEdges = useRef<Array<Edge>>([]);
 
   const onConnect = useCallback(
     (connection) =>
@@ -106,6 +152,14 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
     },
     [reactflowInstance]
   );
+
+  useEffect(() => {
+    console.log("edge changes:", diff(edges, prevEdges.current));
+    prevEdges.current = edges;
+    return () => {
+      console.log("TODO: remove ", edges.length, "edges");
+    };
+  }, [edges]);
 
   return (
     <ModuleContext.Provider value={contextValue}>
