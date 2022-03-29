@@ -28,7 +28,7 @@ const WhiteNoise = ({
 
   useEffect(() => {
     node?.then(() => setReady(true));
-  }, []);
+  }, [node, setReady]);
 
   return (
     <>

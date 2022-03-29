@@ -3,6 +3,8 @@ import { Edge, Node, useEdges, useNodes } from "react-flow-renderer";
 import { useModule } from "../../ModuleContext";
 import { nodeTypes } from "../../nodes";
 
+type NodeTypes = keyof typeof nodeTypes;
+
 const diff = <T extends Array<any>>(
   newList: T,
   oldList: T
@@ -69,49 +71,51 @@ const AudioGraph: FC<{ edges: Array<Edge>; nodes: Array<Node> }> = ({
       prevEdges.current
     );
 
-    removeEdges.forEach(
-      ({ id, source, sourceHandle, target, targetHandle, ...edge }) => {
-        if (!sourceHandle || !targetHandle) {
-          return;
-        }
-        console.log("removing edge", edge);
-        disconnect([source, sourceHandle], [target, targetHandle]);
-      }
-    );
+    (async () => {
+      await Promise.all(
+        removeEdges.map(
+          ({ id, source, sourceHandle, target, targetHandle }) => {
+            if (!sourceHandle || !targetHandle) {
+              return null;
+            }
+            console.log("removing edge", id);
+            return disconnect([source, sourceHandle], [target, targetHandle]);
+          }
+        )
+      );
 
-    removeNodes.forEach(({ type, id, ...node }) => {
-      if (!type) {
-        return;
-      }
-      console.log("removing node", node);
-      //@ts-ignore
-      if (nodeTypes[type]) {
-        unregisterNode(id);
-      }
-    });
+      await Promise.all(
+        removeNodes.map(({ type, id, ...node }) => {
+          if (!type || !nodeTypes[type as NodeTypes]) {
+            return null;
+          }
+          console.log("removing node", node);
+          return unregisterNode(id);
+        })
+      );
 
-    createNodes.forEach(({ type, id, ...node }) => {
-      if (!type) {
-        return;
-      }
-      console.log("creating node", node);
-      //@ts-ignore
-      if (nodeTypes[type]) {
-        //@ts-ignore
-        registerNode(id, nodeTypes[type](audioContext));
-      }
-    });
+      await Promise.all(
+        createNodes.map(({ type, id, ...node }) => {
+          if (!type || !nodeTypes[type as NodeTypes]) {
+            return null;
+          }
+          console.log("creating node", node);
+          return registerNode(id, nodeTypes[type as NodeTypes](audioContext));
+        })
+      );
 
-    createEdges.forEach(
-      ({ id, source, sourceHandle, target, targetHandle, ...edge }) => {
-        if (!sourceHandle || !targetHandle) {
-          return;
-        }
-        console.log("creating edge", id);
-        connect([source, sourceHandle], [target, targetHandle]);
-      }
-    );
-
+      await Promise.all(
+        createEdges.map(
+          ({ id, source, sourceHandle, target, targetHandle }) => {
+            if (!sourceHandle || !targetHandle) {
+              return null;
+            }
+            console.log("creating edge", id);
+            return connect([source, sourceHandle], [target, targetHandle]);
+          }
+        )
+      );
+    })();
     prevNodes.current = nodes;
     prevEdges.current = edges;
   }, [

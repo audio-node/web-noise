@@ -31,18 +31,20 @@ export const useModule = () => {
   };
 
   const unregisterNode = async (id: string) => {
-    //disconnect all ports
     const node = await module.get(id);
     if (!node) {
       console.error(`can't find node with id: ${id}`);
       return;
     }
-    // Object.values(node.inputs || {}).forEach(
-    // ({ port }) => port.disconnect && port.disconnect()
-    // );
-    // Object.values(node.outputs || {}).forEach(
-    // ({ port }) => port.disconnect && port.disconnect()
-    // );
+
+    //disconnect all ports
+    Object.values(node.inputs || {}).forEach(
+      ({ port }) => port.disconnect && port.disconnect()
+    );
+
+    Object.values(node.outputs || {}).forEach(
+      ({ port }) => port.disconnect && port.disconnect()
+    );
 
     module.delete(id);
   };
