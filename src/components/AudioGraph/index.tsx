@@ -107,7 +107,7 @@ const AudioGraph: FC<{ edges: Array<Edge>; nodes: Array<Node> }> = ({
         if (!sourceHandle || !targetHandle) {
           return;
         }
-        console.log("creating edge", edge);
+        console.log("creating edge", id);
         connect([source, sourceHandle], [target, targetHandle]);
       }
     );

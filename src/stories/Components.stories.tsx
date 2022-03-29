@@ -51,7 +51,6 @@ export const Oscillator = () => (
       edges: [
         {
           id: "oscillator-to-visualiser",
-          type: "wire",
           source: "oscillator",
           sourceHandle: "out",
           target: "visualiser",
@@ -61,7 +60,6 @@ export const Oscillator = () => (
           id: "visualiser-to-destination",
           source: "visualiser",
           target: "destination",
-          type: "wire",
           targetHandle: "in",
           sourceHandle: "out",
         },
@@ -99,7 +97,6 @@ export const WhiteNoise = () => (
       edges: [
         {
           id: "white-noise-to-visualiser",
-          type: "wire",
           source: "white-noise",
           sourceHandle: "out",
           target: "visualiser",
@@ -109,7 +106,6 @@ export const WhiteNoise = () => (
           id: "visualiser-to-destination",
           source: "visualiser",
           target: "destination",
-          type: "wire",
           targetHandle: "in",
           sourceHandle: "out",
         },
