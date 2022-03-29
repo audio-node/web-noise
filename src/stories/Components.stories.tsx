@@ -244,3 +244,49 @@ export const Parameter = () => (
     }}
   />
 );
+
+export const Spectroscope = () => (
+  <Editor
+    elements={{
+      nodes: [
+        {
+          id: "white-noise",
+          type: "whiteNoise",
+          data: { label: "White Noise" },
+          position: { x: 0, y: 50 },
+          className: "react-flow__node-default",
+        },
+        {
+          id: "visualiser",
+          type: "spectroscope",
+          data: { label: "Spectroscope" },
+          position: { x: spaceWidth, y: 50 },
+          className: "react-flow__node-default",
+        },
+        {
+          id: "destination",
+          type: "destination",
+          data: { label: "Destination" },
+          position: { x: spaceWidth * 2, y: 50 },
+          className: "react-flow__node-default",
+        },
+      ],
+      edges: [
+        {
+          id: "white-noise-to-visualiser",
+          source: "white-noise",
+          sourceHandle: "out",
+          target: "visualiser",
+          targetHandle: "in",
+        },
+        {
+          id: "visualiser-to-destination",
+          source: "visualiser",
+          target: "destination",
+          targetHandle: "in",
+          sourceHandle: "out",
+        },
+      ],
+    }}
+  />
+);

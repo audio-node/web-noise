@@ -71,21 +71,22 @@ export interface ConstantSource extends Node {
 }
 
 export const constantSource = (audioContext: AudioContext) => {
-    const constantSource = audioContext.createConstantSource();
-    return {
-      outputs: {
-        out: {
-          port: constantSource,
-        },
+  const constantSource = audioContext.createConstantSource();
+  return {
+    outputs: {
+      out: {
+        port: constantSource,
       },
-      constantSource,
-    };
+    },
+    constantSource,
+  };
 };
 
 export const nodeTypes = {
   oscillator,
   analyser,
   visualiser: analyser,
+  spectroscope: analyser,
   destination,
   whiteNoise,
   reverb,
