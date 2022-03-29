@@ -6,28 +6,6 @@ import { useControls, useCreateStore, LevaPanel } from "leva";
 
 const DEFAULT_FREQUENCY = 440;
 
-// const createOscillator = (
-// audioContext: AudioContext
-// ): WebNoiseNode & { oscillator: OscillatorNode } => {
-// const oscillator = audioContext.createOscillator();
-// return {
-// inputs: {
-// frequency: {
-// port: oscillator.frequency,
-// },
-// detune: {
-// port: oscillator.detune,
-// },
-// },
-// outputs: {
-// out: {
-// port: oscillator,
-// },
-// },
-// oscillator,
-// };
-// };
-
 const Oscillator = ({
   sourcePosition,
   targetPosition,
@@ -70,7 +48,7 @@ const Oscillator = ({
     return () => {
       oscillator.stop();
     };
-  }, []);
+  }, [oscillator]);
 
   useEffect(() => {
     if (!oscillator) {
