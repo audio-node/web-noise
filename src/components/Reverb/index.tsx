@@ -3,8 +3,8 @@ import { useEffect, useState, VoidFunctionComponent } from "react";
 import { Handle, NodeProps, Position } from "react-flow-renderer";
 import { LevaPanel, useControls, useCreateStore } from "leva";
 
-import { useModule } from "../../ModuleContext";
-import useReverb from "./useReverb";
+import { useModule, useNode } from "../../ModuleContext";
+import { Reverb as TReverb } from "../../nodes";
 // @ts-expect-error
 import reverbImpulse from "./impulse.wav";
 
@@ -14,12 +14,14 @@ const Reverb: VoidFunctionComponent<NodeProps> = ({
   sourcePosition,
   targetPosition,
 }) => {
-  const { audioContext, registerNode, unregisterNode } = useModule();
+  const { audioContext } = useModule();
   const [impulseBuffer, setImpulseBuffer] = useState<AudioBuffer>();
-  const reverb = useReverb(audioContext, impulseBuffer);
+  // const reverb = useReverb(audioContext, impulseBuffer);
+  const { node: reverb } = useNode<TReverb>(id);
   const store = useCreateStore();
 
   useEffect(() => {
+    //TODO: maybe makes sense to move to audio node?
     loadImpulse(audioContext).then(setImpulseBuffer);
   }, [audioContext]);
 
@@ -38,17 +40,13 @@ const Reverb: VoidFunctionComponent<NodeProps> = ({
   useEffect(() => {
     if (!reverb) return;
 
-    registerNode(id, reverb);
-
     reverb.dryGain.gain.setValueAtTime(0.5, audioContext.currentTime);
     reverb.wetGain.gain.setValueAtTime(0.5, audioContext.currentTime);
-
-    return () => {
-      unregisterNode(id);
-    };
   }, [reverb, id, audioContext]);
 
   useEffect(() => {
+    if (!reverb) return;
+
     reverb.wetGain.gain.setValueAtTime(
       controls.wetDry,
       audioContext.currentTime
@@ -58,6 +56,12 @@ const Reverb: VoidFunctionComponent<NodeProps> = ({
       audioContext.currentTime
     );
   }, [controls.wetDry, reverb, audioContext]);
+
+  useEffect(() => {
+    if (!reverb) return;
+
+    reverb.convolver.buffer = impulseBuffer ?? null;
+  }, [reverb, impulseBuffer]);
 
   return (
     <>

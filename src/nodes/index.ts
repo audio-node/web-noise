@@ -1,8 +1,9 @@
-// import WhiteNoise from "../components/WhiteNoise";
 import { Node } from "../ModuleContext";
 import whiteNoise from "./whiteNoise";
+import reverb from "./reverb";
 
 export type { WhiteNoise } from "./whiteNoise";
+export type { Reverb } from "./reverb";
 
 export interface Oscillator extends Node {
   oscillator: OscillatorNode;
@@ -71,4 +72,5 @@ export const nodeTypes = {
   visualiser: analyser,
   destination,
   whiteNoise,
+  reverb,
 };

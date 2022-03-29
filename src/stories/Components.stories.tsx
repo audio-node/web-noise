@@ -31,6 +31,7 @@ export const Oscillator = () => (
           type: "oscillator",
           data: { label: "Oscillator" },
           position: { x: 0, y: 50 },
+          dragHandle: ".leva-c-hwBXYF",
           className: "react-flow__node-default",
         },
         {
@@ -98,6 +99,68 @@ export const WhiteNoise = () => (
         {
           id: "white-noise-to-visualiser",
           source: "white-noise",
+          sourceHandle: "out",
+          target: "visualiser",
+          targetHandle: "in",
+        },
+        {
+          id: "visualiser-to-destination",
+          source: "visualiser",
+          target: "destination",
+          targetHandle: "in",
+          sourceHandle: "out",
+        },
+      ],
+    }}
+  />
+);
+
+export const Reverb = () => (
+  <Editor
+    elements={{
+      nodes: [
+        {
+          id: "oscillator",
+          type: "oscillator",
+          data: { label: "Oscillator" },
+          position: { x: 0, y: 50 },
+          dragHandle: ".leva-c-hwBXYF",
+          className: "react-flow__node-default",
+        },
+        {
+          id: "reverb",
+          type: "reverb",
+          data: { label: "Reverb" },
+          position: { x: spaceWidth, y: 50 },
+          dragHandle: ".leva-c-hwBXYF",
+          className: "react-flow__node-default",
+        },
+        {
+          id: "visualiser",
+          type: "visualiser",
+          data: { label: "Visualiser" },
+          position: { x: spaceWidth * 2, y: 50 },
+          className: "react-flow__node-default",
+        },
+        {
+          id: "destination",
+          type: "destination",
+          data: { label: "Destination" },
+          position: { x: spaceWidth * 3, y: 50 },
+          className: "react-flow__node-default",
+        },
+      ],
+      edges: [
+        {
+          id: "oscillator-to-reverb",
+          source: "oscillator",
+          sourceHandle: "out",
+          target: "reverb",
+          targetHandle: "in",
+        },
+        {
+          id: "reverb-to-visualiser",
+          source: "reverb",
           sourceHandle: "out",
           target: "visualiser",
           targetHandle: "in",
