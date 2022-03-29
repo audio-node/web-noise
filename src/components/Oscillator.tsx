@@ -1,31 +1,32 @@
 import { useEffect, useMemo } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useModule, Node as WebNoiseNode, useNode } from "../ModuleContext";
+import { Oscillator as TOscillator } from "../nodes";
 import { useControls, useCreateStore, LevaPanel } from "leva";
 
 const DEFAULT_FREQUENCY = 440;
 
-const createOscillator = (
-  audioContext: AudioContext
-): WebNoiseNode & { oscillator: OscillatorNode } => {
-  const oscillator = audioContext.createOscillator();
-  return {
-    inputs: {
-      frequency: {
-        port: oscillator.frequency,
-      },
-      detune: {
-        port: oscillator.detune,
-      },
-    },
-    outputs: {
-      out: {
-        port: oscillator,
-      },
-    },
-    oscillator,
-  };
-};
+// const createOscillator = (
+// audioContext: AudioContext
+// ): WebNoiseNode & { oscillator: OscillatorNode } => {
+// const oscillator = audioContext.createOscillator();
+// return {
+// inputs: {
+// frequency: {
+// port: oscillator.frequency,
+// },
+// detune: {
+// port: oscillator.detune,
+// },
+// },
+// outputs: {
+// out: {
+// port: oscillator,
+// },
+// },
+// oscillator,
+// };
+// };
 
 const Oscillator = ({
   sourcePosition,
@@ -34,7 +35,7 @@ const Oscillator = ({
   data,
 }: NodeProps) => {
   const { audioContext } = useModule();
-  const oscillatorNode = useNode(id, createOscillator);
+  const oscillatorNode = useNode<TOscillator>(id);
   const store = useCreateStore();
 
   const values = useControls(
@@ -57,18 +58,24 @@ const Oscillator = ({
     { store }
   );
 
-  const { oscillator } = oscillatorNode;
+  const { node } = oscillatorNode;
+
+  const { oscillator } = node || {};
 
   useEffect(() => {
+    if (!oscillator) {
+      return;
+    }
     oscillator.start();
-    // registerNode(id, oscillatorNode);
     return () => {
       oscillator.stop();
-      // unregisterNode(id);
     };
   }, []);
 
   useEffect(() => {
+    if (!oscillator) {
+      return;
+    }
     oscillator.frequency.setValueAtTime(
       values.frequency,
       audioContext.currentTime
@@ -76,6 +83,9 @@ const Oscillator = ({
   }, [values.frequency]);
 
   useEffect(() => {
+    if (!oscillator) {
+      return;
+    }
     //@ts-ignore
     oscillator.type = values.type;
     console.log(values.type);

@@ -37,12 +37,12 @@ export const useModule = () => {
       console.error(`can't find node with id: ${id}`);
       return;
     }
-    Object.values(node.inputs || {}).forEach(
-      ({ port }) => port.disconnect && port.disconnect()
-    );
-    Object.values(node.outputs || {}).forEach(
-      ({ port }) => port.disconnect && port.disconnect()
-    );
+    // Object.values(node.inputs || {}).forEach(
+    // ({ port }) => port.disconnect && port.disconnect()
+    // );
+    // Object.values(node.outputs || {}).forEach(
+    // ({ port }) => port.disconnect && port.disconnect()
+    // );
 
     module.delete(id);
   };
@@ -55,17 +55,25 @@ export const useModule = () => {
     return (await module.get(id))?.[type]?.[portId]?.port;
   };
 
+  const getNode = <T extends Node>(id: string): T | undefined => {
+    //@ts-ignore
+    return module.get(id);
+  };
+
   const connect = async (
     [sourceId, sourcePort]: [string, string],
     [targetId, targetPort]: [string, string]
   ) => {
-    const outputNode = await getNodePort(sourceId, "outputs", sourcePort);
+    const [outputNode, inputNode] = await Promise.all([
+      getNodePort(sourceId, "outputs", sourcePort),
+      getNodePort(targetId, "inputs", targetPort),
+    ]);
+
     if (!outputNode) {
       console.error(`could not find output port ${targetId}:${targetPort}`);
       return false;
     }
 
-    const inputNode = await getNodePort(targetId, "inputs", targetPort);
     if (!inputNode) {
       console.error(`could not find input port ${sourceId}:${sourcePort}`);
       return false;
@@ -79,46 +87,45 @@ export const useModule = () => {
     [sourceId, sourcePort]: [string, string],
     [targetId, targetPort]: [string, string]
   ) => {
-    const outputNode = await getNodePort(sourceId, "outputs", sourcePort);
+    const [outputNode, inputNode] = await Promise.all([
+      getNodePort(sourceId, "outputs", sourcePort),
+      getNodePort(targetId, "inputs", targetPort),
+    ]);
+
     if (!outputNode) {
       console.error(`could not find output port ${targetId}:${targetPort}`);
       return;
     }
 
-    const inputNode = await getNodePort(targetId, "inputs", targetPort);
     if (!inputNode) {
       console.error(`could not find input port ${sourceId}:${sourcePort}`);
       return;
     }
 
-    outputNode.disconnect(inputNode);
+    try {
+      outputNode.disconnect(inputNode);
+    } catch (e) {
+      console.error(`error disconnecting`, e);
+    }
   };
 
   return {
     audioContext,
     registerNode,
     unregisterNode,
+    getNode,
     connect,
     disconnect,
   };
 };
 
-export const useNode = (
-  id: string,
-  nodeFactory: (audioContext: AudioContext) => Node
-) => {
-  const { audioContext, registerNode, unregisterNode } = useModule();
-  const node = useMemo(
-    () => nodeFactory(audioContext),
-    [audioContext, nodeFactory]
-  );
+export const useNode = <T,>(
+  id: string
+): { node: T | undefined; ready: boolean } => {
+  const { getNode } = useModule();
 
-  useEffect(() => {
-    registerNode(id, node);
-    return () => {
-      unregisterNode(id);
-    };
-  }, []);
+  const node = getNode<T>(id);
 
-  return node;
+  //@ts-ignore
+  return { node, ready: true };
 };

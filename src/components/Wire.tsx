@@ -31,10 +31,10 @@ const Wire = ({
     if (!sourceHandleId || !targetHandleId) {
       return;
     }
-    connect([source, sourceHandleId], [target, targetHandleId]);
+    // connect([source, sourceHandleId], [target, targetHandleId]);
     console.log(`connected ${source} to ${target}`);
     return () => {
-      disconnect([source, sourceHandleId], [target, targetHandleId]);
+      // disconnect([source, sourceHandleId], [target, targetHandleId]);
       console.log(`disconnected ${source} from ${target}`);
     };
   }, [source, target]);

@@ -32,9 +32,9 @@ const Destination = ({ targetPosition, data, id }: NodeProps) => {
   const destinationNode = useDestination(audioContext);
 
   useEffect(() => {
-    registerNode(id, destinationNode);
+    // registerNode(id, destinationNode);
     return () => {
-      unregisterNode(id);
+      // unregisterNode(id);
     };
   }, []);
 

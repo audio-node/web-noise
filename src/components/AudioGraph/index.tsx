@@ -1,5 +1,7 @@
 import { FC, useEffect, useRef } from "react";
 import { Edge, Node, useEdges, useNodes } from "react-flow-renderer";
+import { useModule } from "../../ModuleContext";
+import { nodeTypes } from "../../nodes";
 
 const diff = <T extends Array<any>>(
   newList: T,
@@ -51,36 +53,76 @@ const AudioGraph: FC<{ edges: Array<Edge>; nodes: Array<Node> }> = ({
   nodes,
   edges,
 }) => {
+  const { registerNode, unregisterNode, connect, disconnect, audioContext } =
+    useModule();
+
   const prevEdges = useRef<Array<Edge>>([]);
   const prevNodes = useRef<Array<Node>>([]);
 
   useEffect(() => {
-    const { create, remove } = diff(nodes, prevNodes.current);
+    const { create: createNodes, remove: removeNodes } = diff(
+      nodes,
+      prevNodes.current
+    );
+    const { create: createEdges, remove: removeEdges } = diff(
+      edges,
+      prevEdges.current
+    );
 
-    create.forEach((node) => {
-      console.log("creating node", node);
-    });
+    removeEdges.forEach(
+      ({ id, source, sourceHandle, target, targetHandle, ...edge }) => {
+        if (!sourceHandle || !targetHandle) {
+          return;
+        }
+        console.log("removing edge", edge);
+        disconnect([source, sourceHandle], [target, targetHandle]);
+      }
+    );
 
-    remove.forEach((node) => {
+    removeNodes.forEach(({ type, id, ...node }) => {
+      if (!type) {
+        return;
+      }
       console.log("removing node", node);
+      //@ts-ignore
+      if (nodeTypes[type]) {
+        unregisterNode(id);
+      }
     });
+
+    createNodes.forEach(({ type, id, ...node }) => {
+      if (!type) {
+        return;
+      }
+      console.log("creating node", node);
+      //@ts-ignore
+      if (nodeTypes[type]) {
+        //@ts-ignore
+        registerNode(id, nodeTypes[type](audioContext));
+      }
+    });
+
+    createEdges.forEach(
+      ({ id, source, sourceHandle, target, targetHandle, ...edge }) => {
+        if (!sourceHandle || !targetHandle) {
+          return;
+        }
+        console.log("creating edge", edge);
+        connect([source, sourceHandle], [target, targetHandle]);
+      }
+    );
 
     prevNodes.current = nodes;
-  }, [nodes]);
-
-  useEffect(() => {
-    const { create, remove } = diff(edges, prevEdges.current);
-
-    create.forEach((edge) => {
-      console.log("creating edge", edge);
-    });
-
-    remove.forEach((edge) => {
-      console.log("removing edge", edge);
-    });
-
     prevEdges.current = edges;
-  }, [edges]);
+  }, [
+    nodes,
+    edges,
+    registerNode,
+    unregisterNode,
+    connect,
+    disconnect,
+    audioContext,
+  ]);
 
   useEffect(() => {
     return () => {
