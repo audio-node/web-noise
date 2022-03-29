@@ -2,7 +2,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useControls, useCreateStore, LevaPanel } from "leva";
-import { useModule } from "../ModuleContext";
+import { useNode } from "../ModuleContext";
+import { ConstantSource } from "../nodes";
 
 export const useParameter = (audioContext: AudioContext) =>
   useMemo(() => {
@@ -19,7 +20,6 @@ export const useParameter = (audioContext: AudioContext) =>
 
 const Parameter = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
   const store = useCreateStore();
-  const { audioContext, registerNode, unregisterNode } = useModule();
 
   const values = useControls(
     {
@@ -34,17 +34,19 @@ const Parameter = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
     { store }
   );
 
-  const parameterNode = useParameter(audioContext);
+  const { node: parameterNode } = useNode<ConstantSource>(id);
 
   useEffect(() => {
+    if (!parameterNode) {
+      return;
+    }
     parameterNode.constantSource.start();
-    registerNode(id, parameterNode);
-    return () => {
-      unregisterNode(id);
-    };
   }, []);
 
   useEffect(() => {
+    if (!parameterNode) {
+      return;
+    }
     //@ts-ignore
     parameterNode.constantSource.offset.value = values.value;
   }, [values.value]);

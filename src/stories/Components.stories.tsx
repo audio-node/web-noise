@@ -176,3 +176,71 @@ export const Reverb = () => (
     }}
   />
 );
+
+export const Parameter = () => (
+  <Editor
+    elements={{
+      nodes: [
+        {
+          id: "parameter",
+          type: "parameter",
+          data: {
+            label: "Oscillator Frequency",
+            min: 0,
+            max: 200,
+            step: 1,
+            value: 0,
+          },
+          position: { x: 0, y: 50 },
+          dragHandle: ".leva-c-hwBXYF",
+          className: "react-flow__node-default",
+        },
+        {
+          id: "oscillator",
+          type: "oscillator",
+          data: { label: "Oscillator" },
+          position: { x: spaceWidth, y: 50 },
+          dragHandle: ".leva-c-hwBXYF",
+          className: "react-flow__node-default",
+        },
+        {
+          id: "visualiser",
+          type: "visualiser",
+          data: { label: "Visualiser" },
+          position: { x: spaceWidth * 2, y: 50 },
+          className: "react-flow__node-default",
+        },
+        {
+          id: "destination",
+          type: "destination",
+          data: { label: "Destination" },
+          position: { x: spaceWidth * 3, y: 50 },
+          className: "react-flow__node-default",
+        },
+      ],
+      edges: [
+        {
+          id: "parameter-to-oscillator",
+          source: "parameter",
+          sourceHandle: "out",
+          target: "oscillator",
+          targetHandle: "frequency",
+        },
+        {
+          id: "oscillator-to-visualiser",
+          source: "oscillator",
+          sourceHandle: "out",
+          target: "visualiser",
+          targetHandle: "in",
+        },
+        {
+          id: "visualiser-to-destination",
+          source: "visualiser",
+          target: "destination",
+          targetHandle: "in",
+          sourceHandle: "out",
+        },
+      ],
+    }}
+  />
+);
