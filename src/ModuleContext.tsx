@@ -13,12 +13,14 @@ export interface Node extends Record<string, any> {
   outputs?: Record<string, OutputPort | never>;
 }
 const module: Map<string, Node | Promise<Node>> = new Map();
+const connections: Map<string, true> = new Map();
 
 const audioContext = new AudioContext();
 
 export const contextValue = {
   audioContext,
   module,
+  connections,
 };
 
 export const ModuleContext = createContext(contextValue);
@@ -82,6 +84,11 @@ export const useModule = () => {
     }
 
     outputNode.connect(inputNode);
+
+    connections.set(
+      [sourceId, sourcePort, targetId, targetPort].join(":"),
+      true
+    );
     return true;
   };
 
@@ -109,6 +116,23 @@ export const useModule = () => {
     } catch (e) {
       console.error(`error disconnecting`, e);
     }
+    connections.delete([sourceId, sourcePort, targetId, targetPort].join(":"));
+  };
+
+  const destroy = async () => {
+    //@ts-ignore
+    const connectionNames = [...connections.keys()];
+    await Promise.all(
+      connectionNames.map((name) => {
+        const [sourceId, sourcePort, targetId, targetPort] = name.split(":");
+        return disconnect([sourceId, sourcePort], [targetId, targetPort]);
+      })
+    );
+
+    //@ts-ignore
+    const ids = [...module.keys()];
+    await Promise.all(ids.map((id) => unregisterNode(id)));
+    return true
   };
 
   return {
@@ -118,6 +142,7 @@ export const useModule = () => {
     getNode,
     connect,
     disconnect,
+    destroy,
   };
 };
 

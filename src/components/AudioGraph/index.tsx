@@ -55,8 +55,14 @@ const AudioGraph: FC<{ edges: Array<Edge>; nodes: Array<Node> }> = ({
   nodes,
   edges,
 }) => {
-  const { registerNode, unregisterNode, connect, disconnect, audioContext } =
-    useModule();
+  const {
+    registerNode,
+    unregisterNode,
+    connect,
+    disconnect,
+    destroy,
+    audioContext,
+  } = useModule();
 
   const prevEdges = useRef<Array<Edge>>([]);
   const prevNodes = useRef<Array<Node>>([]);
@@ -128,11 +134,13 @@ const AudioGraph: FC<{ edges: Array<Edge>; nodes: Array<Node> }> = ({
     audioContext,
   ]);
 
-  useEffect(() => {
-    return () => {
+  useEffect(
+    () => () => {
       console.log("Cleanup module");
-    };
-  }, []);
+      destroy();
+    },
+    []
+  );
 
   return null;
 };

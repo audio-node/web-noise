@@ -26,7 +26,7 @@ const MonoSequencer = ({ sourcePosition, data, id }: NodeProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const startButton = useRef(null);
 
-  const { node: parameterNode } = useNode<TMonoSequencer>(id);
+  const { node: monoSequencer } = useNode<TMonoSequencer>(id);
 
   const store = useCreateStore();
 
@@ -44,24 +44,24 @@ const MonoSequencer = ({ sourcePosition, data, id }: NodeProps) => {
   );
 
   useEffect(() => {
-    if (!parameterNode) {
+    if (!monoSequencer) {
       return;
     }
-    parameterNode.constantSource.start();
+    monoSequencer.constantSource.start();
     return () => {
-      parameterNode.constantSource.stop();
+      monoSequencer.constantSource.stop();
     };
-  }, [parameterNode]);
+  }, [monoSequencer]);
 
   const stop = useCallback(() => {
-    parameterNode?.stop();
-  }, [parameterNode]);
+    monoSequencer?.stop();
+  }, [monoSequencer]);
 
   const start = useCallback(() => {
-    parameterNode?.start();
+    monoSequencer?.start();
     // @ts-ignore
     startButton.current.classList.add("pulsing");
-  }, [startButton, parameterNode]);
+  }, [startButton, monoSequencer]);
 
   useEffect(() => {
     if (isPlaying) {
@@ -72,8 +72,8 @@ const MonoSequencer = ({ sourcePosition, data, id }: NodeProps) => {
   }, [isPlaying]);
 
   useEffect(() => {
-    parameterNode?.setTempo(controls.bpm);
-  }, [controls.bpm, parameterNode]);
+    monoSequencer?.setTempo(controls.bpm);
+  }, [controls.bpm, monoSequencer]);
 
   return (
     <div>
