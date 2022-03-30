@@ -82,6 +82,30 @@ export const constantSource = (audioContext: AudioContext) => {
   };
 };
 
+export interface Gain extends Node {
+  gain: GainNode;
+}
+
+export const gain = (audioContext: AudioContext) => {
+  const gain = audioContext.createGain();
+  return {
+    inputs: {
+      in: {
+        port: gain,
+      },
+      gain: {
+        port: gain.gain,
+      },
+    },
+    outputs: {
+      out: {
+        port: gain,
+      },
+    },
+    gain,
+  };
+};
+
 export const nodeTypes = {
   oscillator,
   analyser,
@@ -92,4 +116,5 @@ export const nodeTypes = {
   reverb,
   constantSource,
   parameter: constantSource,
+  gain,
 };
