@@ -41,7 +41,10 @@ const Parameter = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
       return;
     }
     parameterNode.constantSource.start();
-  }, []);
+    return () => {
+      parameterNode.constantSource.stop();
+    };
+  }, [parameterNode]);
 
   useEffect(() => {
     if (!parameterNode) {
@@ -49,7 +52,7 @@ const Parameter = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
     }
     //@ts-ignore
     parameterNode.constantSource.offset.value = values.value;
-  }, [values.value]);
+  }, [values.value, parameterNode]);
 
   return (
     <>
