@@ -5,7 +5,7 @@ import { useModule, useNode } from "../ModuleContext";
 import { Range, Scale, Note, Midi } from "@tonaljs/tonal";
 import { Leva, useCreateStore, useControls, LevaPanel, button } from "leva";
 import { atom, selector, useRecoilState } from "recoil";
-import { ConstantSource } from "../nodes";
+import { MonoSequencer as TMonoSequencer } from "../nodes";
 import { LEVA_COLORS } from "../styles/consts";
 import { keyframes } from "@emotion/css";
 
@@ -23,17 +23,10 @@ export const GlobalClockCounterState = atom({
 });
 
 const MonoSequencer = ({ sourcePosition, data, id }: NodeProps) => {
-  const [globalClock, setGlobalClock] = useRecoilState(GlobalClockState);
   const [isPlaying, setIsPlaying] = useState(false);
   const startButton = useRef(null);
 
-  const { audioContext } = useModule();
-  const { node: parameterNode } = useNode<ConstantSource>(id);
-
-  const range = Scale.rangeOf("C major");
-  const freqRange = range("A2", "A6").map((note) => {
-    return Note.freq(note || "C2");
-  });
+  const { node: parameterNode } = useNode<TMonoSequencer>(id);
 
   const store = useCreateStore();
 
@@ -50,10 +43,6 @@ const MonoSequencer = ({ sourcePosition, data, id }: NodeProps) => {
     { store }
   );
 
-  const futureTickTime = useRef(1);
-  const counter = useRef(1);
-  const timeoutId = useRef(0);
-
   useEffect(() => {
     if (!parameterNode) {
       return;
@@ -64,58 +53,15 @@ const MonoSequencer = ({ sourcePosition, data, id }: NodeProps) => {
     };
   }, [parameterNode]);
 
-  useEffect(() => {
-    if (startButton.current) {
-      // @ts-ignore
-      startButton.current.classList.add("pulsing");
-    }
-  }, [counter]);
-
   const stop = useCallback(() => {
-    window.clearTimeout(timeoutId.current);
-    timeoutId.current = 0;
-  }, [timeoutId]);
-
-  const scheduler = useCallback(() => {
-    const tempo = controls.bpm;
-    const secondsPerBeat = 60 / tempo;
-    const counterTimeValue = secondsPerBeat / 4;
-
-    if (futureTickTime.current < audioContext.currentTime + 0.1) {
-      // console.log("This is 16th note: " + counter);
-      counter.current = counter.current + 1;
-
-      futureTickTime.current = futureTickTime.current + counterTimeValue;
-
-      const randomIndex = Math.floor(Math.random() * freqRange.length);
-      const randomFreq = freqRange[randomIndex];
-
-      if (parameterNode && randomFreq) {
-        parameterNode.constantSource.offset.value = randomFreq;
-      }
-
-      if (counter.current > 16) {
-        counter.current = 1;
-      }
-    }
-    timeoutId.current = window.setTimeout(scheduler, 0);
-  }, [
-    counter,
-    futureTickTime,
-    timeoutId,
-    audioContext,
-    freqRange,
-    parameterNode,
-    controls.bpm,
-  ]);
+    parameterNode?.stop();
+  }, [parameterNode]);
 
   const start = useCallback(() => {
-    counter.current = 1;
-    futureTickTime.current = audioContext.currentTime;
-    scheduler();
+    parameterNode?.start();
     // @ts-ignore
     startButton.current.classList.add("pulsing");
-  }, [audioContext, startButton, scheduler]);
+  }, [startButton, parameterNode]);
 
   useEffect(() => {
     if (isPlaying) {
@@ -124,6 +70,10 @@ const MonoSequencer = ({ sourcePosition, data, id }: NodeProps) => {
       stop();
     }
   }, [isPlaying]);
+
+  useEffect(() => {
+    parameterNode?.setTempo(controls.bpm);
+  }, [controls.bpm, parameterNode]);
 
   return (
     <div>
