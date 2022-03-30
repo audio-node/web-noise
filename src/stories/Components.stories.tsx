@@ -352,3 +352,67 @@ export const Gain = () => (
     }}
   />
 );
+
+export const MonoSequencer = () => (
+  <Editor
+    elements={{
+      nodes: [
+        {
+          id: "mono-sequencer",
+          type: "monoSequencer",
+          data: {
+            label: "MonoSequencer",
+          },
+          position: { x: 0, y: 50 },
+          dragHandle: ".leva-c-hwBXYF",
+          className: "react-flow__node-default",
+        },
+        {
+          id: "oscillator",
+          type: "oscillator",
+          data: { label: "Oscillator" },
+          position: { x: spaceWidth, y: 50 },
+          dragHandle: ".leva-c-hwBXYF",
+          className: "react-flow__node-default",
+        },
+        {
+          id: "visualiser",
+          type: "visualiser",
+          data: { label: "Visualiser" },
+          position: { x: spaceWidth * 2, y: 50 },
+          className: "react-flow__node-default",
+        },
+        {
+          id: "destination",
+          type: "destination",
+          data: { label: "Destination" },
+          position: { x: spaceWidth * 3, y: 50 },
+          className: "react-flow__node-default",
+        },
+      ],
+      edges: [
+        {
+          id: "mono-sequencer-to-oscillator",
+          source: "mono-sequencer",
+          sourceHandle: "out",
+          target: "oscillator",
+          targetHandle: "frequency",
+        },
+        {
+          id: "oscillator-to-visualiser",
+          source: "oscillator",
+          sourceHandle: "out",
+          target: "visualiser",
+          targetHandle: "in",
+        },
+        {
+          id: "visualiser-to-destination",
+          source: "visualiser",
+          target: "destination",
+          targetHandle: "in",
+          sourceHandle: "out",
+        },
+      ],
+    }}
+  />
+);

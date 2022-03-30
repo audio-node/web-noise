@@ -3,14 +3,12 @@ import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useModule, useNode } from "../ModuleContext";
 import { useControls, useCreateStore, LevaPanel, folder } from "leva";
 import { useRecoilValue } from "recoil";
-import { GlobalClockCounterState } from "./MonoSequencer";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../styles/consts";
 import { Gain as TGain } from "../nodes";
 
-//@TODO: sort out release control, figure out comments
+//@TODO: sort out release control, figure out comments, figure out the global clock
 const Gain = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
   const { audioContext } = useModule();
-  const clock = useRecoilValue(GlobalClockCounterState);
 
   const { node: gainNode } = useNode<TGain>(id);
   const levaStore = useCreateStore();
@@ -92,7 +90,7 @@ const Gain = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
         audioContext.currentTime + controls.decay + controls.sustain
       );
     }
-  }, [clock, gainNode]);
+  }, [controls, gainNode, audioContext]);
 
   useEffect(() => {
     if (!gainNode) {

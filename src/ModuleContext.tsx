@@ -72,12 +72,12 @@ export const useModule = () => {
     ]);
 
     if (!outputNode) {
-      console.error(`could not find output port ${targetId}:${targetPort}`);
+      console.error(`could not find output port ${sourceId}:${sourcePort}`);
       return false;
     }
 
     if (!inputNode) {
-      console.error(`could not find input port ${sourceId}:${sourcePort}`);
+      console.error(`could not find input port ${targetId}:${targetPort}`);
       return false;
     }
 

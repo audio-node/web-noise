@@ -116,5 +116,6 @@ export const nodeTypes = {
   reverb,
   constantSource,
   parameter: constantSource,
+  monoSequencer: constantSource,
   gain,
 };
