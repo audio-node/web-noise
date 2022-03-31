@@ -2,10 +2,12 @@ import { Node } from "../ModuleContext";
 import whiteNoise from "./whiteNoise";
 import reverb from "./reverb";
 import monoSequencer from "./monoSequencer";
+import sequencer from "./sequencer";
 
 export type { WhiteNoise } from "./whiteNoise";
 export type { Reverb } from "./reverb";
 export type { MonoSequencer } from "./monoSequencer";
+export type { Sequencer } from "./sequencer";
 
 export interface Oscillator extends Node {
   oscillator: OscillatorNode;
@@ -139,4 +141,5 @@ export const nodeTypes = {
   monoSequencer,
   gain,
   filter,
+  sequencer,
 };

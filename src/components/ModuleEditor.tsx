@@ -29,6 +29,7 @@ import MonoSequencer from "./MonoSequencer";
 import Envelope from "./Envelope";
 import ResumeContext from "./ResumeContext";
 import Reverb from "./Reverb";
+import Sequencer from "./Sequencer";
 import { nodeTypes as baseAudioNodeTypes } from "../nodes";
 import ContextMenu from "./ContextMenu";
 
@@ -58,6 +59,7 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
       reverb: Reverb,
       monoSequencer: MonoSequencer,
       envelope: Envelope,
+      sequencer: Sequencer,
     }),
     []
   );
