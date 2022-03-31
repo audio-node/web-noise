@@ -16,12 +16,13 @@ const Oscillator = ({
   const oscillatorNode = useNode<TOscillator>(id);
   const store = useCreateStore();
 
+  const value = parseInt(data.value);
   const values = useControls(
     {
       frequency: {
-        value: DEFAULT_FREQUENCY,
-        max: 800,
-        min: 0,
+        value: isNaN(value) ? DEFAULT_FREQUENCY : value,
+        max: data.max || 800,
+        min: data.min || 0,
         label: "freq",
       },
       type: {
