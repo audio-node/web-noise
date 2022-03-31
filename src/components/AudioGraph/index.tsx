@@ -5,7 +5,6 @@ import { useModule } from "../../ModuleContext";
 import { nodeTypes as baseNodeTypes } from "../../nodes";
 
 type BaseNodeTypes = typeof baseNodeTypes;
-type NodeType = keyof BaseNodeTypes;
 
 interface NodeTypes
   extends BaseNodeTypes,
