@@ -56,7 +56,7 @@ export interface Destination extends Node {
   destination: AudioDestinationNode;
 }
 
-export const destination = (audioContext: AudioContext) => {
+export const destination = (audioContext: AudioContext): Destination => {
   const destination = audioContext.destination;
   return {
     inputs: {
@@ -72,7 +72,7 @@ export interface ConstantSource extends Node {
   constantSource: ConstantSourceNode;
 }
 
-export const constantSource = (audioContext: AudioContext) => {
+export const constantSource = (audioContext: AudioContext): ConstantSource => {
   const constantSource = audioContext.createConstantSource();
   return {
     outputs: {
@@ -88,7 +88,7 @@ export interface Gain extends Node {
   gain: GainNode;
 }
 
-export const gain = (audioContext: AudioContext) => {
+export const gain = (audioContext: AudioContext): Gain => {
   const gain = audioContext.createGain();
   return {
     inputs: {
