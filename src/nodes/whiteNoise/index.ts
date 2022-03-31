@@ -3,10 +3,10 @@ import whiteNoiseWorklet from "worklet-loader!./worklet.ts"; // eslint-disable-l
 import { Node } from "../../ModuleContext";
 
 export interface WhiteNoise extends Node {
-  whiteNoise: AudioDestinationNode;
+  whiteNoise: AudioWorkletNode;
 }
 
-const whiteNoise = async (audioContext: AudioContext) => {
+const whiteNoise = async (audioContext: AudioContext): Promise<WhiteNoise> => {
   await audioContext.audioWorklet.addModule(whiteNoiseWorklet);
   const whiteNoise = new AudioWorkletNode(
     audioContext,
@@ -23,4 +23,4 @@ const whiteNoise = async (audioContext: AudioContext) => {
   };
 };
 
-export default whiteNoise
+export default whiteNoise;
