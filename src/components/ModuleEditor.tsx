@@ -29,6 +29,7 @@ import MonoSequencer from "./MonoSequencer";
 import Envelope from "./Envelope";
 import ResumeContext from "./ResumeContext";
 import Reverb from "./Reverb";
+import { nodeTypes as baseAudioNodeTypes } from "../nodes";
 
 export interface Elements {
   nodes: Array<Node>;
@@ -56,6 +57,16 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
       reverb: Reverb,
       monoSequencer: MonoSequencer,
       envelope: Envelope,
+    }),
+    []
+  );
+
+  const audioNodeTypes = useMemo(
+    () => ({
+      ...baseAudioNodeTypes,
+      visualiser: baseAudioNodeTypes.analyser,
+      spectroscope: baseAudioNodeTypes.analyser,
+      parameter: baseAudioNodeTypes.constantSource,
     }),
     []
   );
@@ -100,7 +111,7 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
   return (
     <ModuleContext.Provider value={contextValue}>
       <ReactFlowProvider>
-        <AudioGraph nodes={nodes} edges={edges} />
+        <AudioGraph nodes={nodes} edges={edges} nodeTypes={audioNodeTypes} />
         <ReactFlow
           nodes={nodes}
           edges={edges}

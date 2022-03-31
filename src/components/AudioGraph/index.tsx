@@ -1,9 +1,18 @@
 import { FC, useEffect, useRef } from "react";
-import { Edge, Node, useEdges, useNodes } from "react-flow-renderer";
+import { Edge, Node } from "react-flow-renderer";
+import { Node as TAudioNode } from "../../ModuleContext";
 import { useModule } from "../../ModuleContext";
-import { nodeTypes } from "../../nodes";
+import { nodeTypes as baseNodeTypes } from "../../nodes";
 
-type NodeTypes = keyof typeof nodeTypes;
+type BaseNodeTypes = typeof baseNodeTypes;
+type NodeType = keyof BaseNodeTypes;
+
+interface NodeTypes
+  extends BaseNodeTypes,
+    Record<
+      string,
+      (audioContext: AudioContext) => TAudioNode | Promise<TAudioNode>
+    > {}
 
 const diff = <T extends Array<any>>(
   newList: T,
@@ -51,10 +60,11 @@ const diff = <T extends Array<any>>(
   };
 };
 
-const AudioGraph: FC<{ edges: Array<Edge>; nodes: Array<Node> }> = ({
-  nodes,
-  edges,
-}) => {
+const AudioGraph: FC<{
+  edges: Array<Edge>;
+  nodes: Array<Node>;
+  nodeTypes: NodeTypes;
+}> = ({ nodes, edges, nodeTypes }) => {
   const {
     registerNode,
     unregisterNode,
@@ -92,9 +102,6 @@ const AudioGraph: FC<{ edges: Array<Edge>; nodes: Array<Node> }> = ({
 
       await Promise.all(
         removeNodes.map(({ type, id, ...node }) => {
-          if (!type || !nodeTypes[type as NodeTypes]) {
-            return null;
-          }
           console.log("removing node", node);
           return unregisterNode(id);
         })
@@ -102,11 +109,11 @@ const AudioGraph: FC<{ edges: Array<Edge>; nodes: Array<Node> }> = ({
 
       await Promise.all(
         createNodes.map(({ type, id, ...node }) => {
-          if (!type || !nodeTypes[type as NodeTypes]) {
+          if (!type || !nodeTypes[type]) {
             return null;
           }
           console.log("creating node", node);
-          return registerNode(id, nodeTypes[type as NodeTypes](audioContext));
+          return registerNode(id, nodeTypes[type](audioContext));
         })
       );
 
@@ -132,6 +139,7 @@ const AudioGraph: FC<{ edges: Array<Edge>; nodes: Array<Node> }> = ({
     connect,
     disconnect,
     audioContext,
+    nodeTypes,
   ]);
 
   useEffect(

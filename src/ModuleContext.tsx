@@ -132,7 +132,7 @@ export const useModule = () => {
     //@ts-ignore
     const ids = [...module.keys()];
     await Promise.all(ids.map((id) => unregisterNode(id)));
-    return true
+    return true;
   };
 
   return {

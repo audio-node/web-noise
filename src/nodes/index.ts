@@ -132,13 +132,10 @@ const filter = (audioContext: AudioContext): Filter => {
 export const nodeTypes = {
   oscillator,
   analyser,
-  visualiser: analyser,
-  spectroscope: analyser,
   destination,
   whiteNoise,
   reverb,
   constantSource,
-  parameter: constantSource,
   monoSequencer,
   gain,
   filter,
