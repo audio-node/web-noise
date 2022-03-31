@@ -108,6 +108,27 @@ export const gain = (audioContext: AudioContext) => {
   };
 };
 
+export interface Filter extends Node {
+  filter: BiquadFilterNode;
+}
+
+const filter = (audioContext: AudioContext): Filter => {
+  const filter = audioContext.createBiquadFilter();
+  return {
+    inputs: {
+      in: {
+        port: filter,
+      },
+    },
+    outputs: {
+      out: {
+        port: filter,
+      },
+    },
+    filter,
+  };
+};
+
 export const nodeTypes = {
   oscillator,
   analyser,
@@ -120,4 +141,5 @@ export const nodeTypes = {
   parameter: constantSource,
   monoSequencer,
   gain,
+  filter,
 };
