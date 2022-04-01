@@ -2,12 +2,18 @@ import { Scale, Note } from "@tonaljs/tonal";
 
 export class SequencerProcessor extends AudioWorkletProcessor {
   freqRange: Array<number>;
+  counter: number;
+  futureTickTime: number;
+  currentFrequency: number;
   constructor() {
     super();
     const range = Scale.rangeOf("C major");
     this.freqRange = range("A2", "A6").map((note) => {
       return Note.freq(note || "C2") as number;
     });
+    this.counter = 1;
+    this.futureTickTime = 1;
+    this.currentFrequency = 0;
   }
 
   static get parameterDescriptors() {
@@ -23,15 +29,28 @@ export class SequencerProcessor extends AudioWorkletProcessor {
   }
 
   process(inputs: any, outputs: any, parameters: any) {
-    console.log(parameters);
     const output = outputs[0];
+
+    const secondsPerBeat = 60 / parameters["tempo"][0];
+    const counterTimeValue = secondsPerBeat / 4;
+
+    if (this.futureTickTime < currentTime + 0.1) {
+      // console.log("This is 16th note: " + this.counter);
+      this.counter = this.counter + 1;
+
+      this.futureTickTime = this.futureTickTime + counterTimeValue;
+
+      const randomIndex = Math.floor(Math.random() * this.freqRange.length);
+      this.currentFrequency = this.freqRange[randomIndex];
+
+      if (this.counter > 16) {
+        this.counter = 1;
+      }
+    }
+
     output.forEach((channel: any) => {
       for (let i = 0; i < channel.length; i++) {
-        const tempo =
-          parameters["tempo"].length > 1
-            ? parameters["tempo"][i]
-            : parameters["tempo"][0];
-        channel[i] = tempo;
+        channel[i] = this.currentFrequency;
       }
     });
     return true;
