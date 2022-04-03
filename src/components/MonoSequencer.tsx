@@ -4,10 +4,8 @@ import styled from "@emotion/styled";
 import { useModule, useNode } from "../ModuleContext";
 import { Range, Scale, Note, Midi } from "@tonaljs/tonal";
 import { Leva, useCreateStore, useControls, LevaPanel, button } from "leva";
-import { atom, selector, useRecoilState } from "recoil";
+import { atom } from "recoil";
 import { MonoSequencer as TMonoSequencer } from "../nodes";
-import { LEVA_COLORS } from "../styles/consts";
-import { keyframes } from "@emotion/css";
 
 export const GlobalClockState = atom({
   key: "globalClock",
@@ -23,22 +21,18 @@ export const GlobalClockCounterState = atom({
 });
 
 const MonoSequencer = ({ sourcePosition, data, id }: NodeProps) => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const startButton = useRef(null);
+  const { node } = useNode<TMonoSequencer>(id);
+  const [monoSequencer, setMonoSequencer] = useState<TMonoSequencer | null>(
+    null
+  );
 
-  const { node: monoSequencer } = useNode<TMonoSequencer>(id);
+  const [ready, setReady] = useState<boolean>(false);
 
   const store = useCreateStore();
 
   const controls = useControls(
     {
-      bpm: { min: 20, max: 300, step: 1, value: 70 },
-      // start_stop: button(() =>
-      //   setGlobalClock({
-      //     ...globalClock,
-      //     ...{ isPlaying: !globalClock.isPlaying },
-      //   })
-      // ),
+      sequencer: { value: "", editable: false },
     },
     { store }
   );
@@ -53,27 +47,12 @@ const MonoSequencer = ({ sourcePosition, data, id }: NodeProps) => {
     };
   }, [monoSequencer]);
 
-  const stop = useCallback(() => {
-    monoSequencer?.stop();
-  }, [monoSequencer]);
-
-  const start = useCallback(() => {
-    monoSequencer?.start();
-    // @ts-ignore
-    startButton.current.classList.add("pulsing");
-  }, [startButton, monoSequencer]);
-
   useEffect(() => {
-    if (isPlaying) {
-      start();
-    } else {
-      stop();
-    }
-  }, [isPlaying]);
-
-  useEffect(() => {
-    monoSequencer?.setTempo(controls.bpm);
-  }, [controls.bpm, monoSequencer]);
+    node?.then((result: TMonoSequencer) => {
+      setMonoSequencer(result);
+      setReady(true);
+    });
+  }, [node, setReady]);
 
   return (
     <div>
@@ -84,17 +63,7 @@ const MonoSequencer = ({ sourcePosition, data, id }: NodeProps) => {
         flat
       />
 
-      <StartStopButton>
-        <div className="leva-c-bduird">
-          <button
-            ref={startButton}
-            onClick={() => setIsPlaying(!isPlaying)}
-            className={`leva-c-ihqPFh`}
-          >
-            {isPlaying ? "stop" : "start"}
-          </button>
-        </div>
-      </StartStopButton>
+      {!ready ? <div>loading</div> : null}
 
       <Handle
         type="source"
@@ -104,33 +73,5 @@ const MonoSequencer = ({ sourcePosition, data, id }: NodeProps) => {
     </div>
   );
 };
-
-const pulse = keyframes`
-  0% { opacity: 0}
-  100% { opacity: 1}
-`;
-
-const StartStopButton = styled.div`
-  button {
-    background: ${LEVA_COLORS.accent3};
-    border: 0;
-
-    &.pulsing {
-      animation: ${pulse} 0.01s;
-    }
-
-    /* display: block;
-    outline: none;
-    font-size: inherit;
-    font-family: inherit;
-    border: none;
-    appearance: none;
-    font-weight: var(--leva-fontWeights-button);
-    height: var(--leva-sizes-rowHeight);
-    border-radius: var(--leva-radii-sm);
-    background-color: var(--leva-colors-elevation1);
-    color: var(--leva-colors-highlight1); */
-  }
-`;
 
 export default MonoSequencer;

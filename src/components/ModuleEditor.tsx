@@ -1,5 +1,6 @@
 import { useState, useCallback, useMemo } from "react";
 
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import ReactFlow, {
   Background,
   BackgroundVariant,
@@ -14,7 +15,8 @@ import ReactFlow, {
   useEdgesState,
 } from "react-flow-renderer";
 import "../styles/reactflow.ts";
-import { ModuleContext, contextValue } from "../ModuleContext";
+import { ModuleContext, contextValue, useModule } from "../ModuleContext";
+import Toolbar from "./Toolbar";
 import AudioGraph from "./AudioGraph";
 import Oscillator from "./Oscillator";
 import Destination from "./Destination";
@@ -135,6 +137,7 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
   return (
     <ModuleContext.Provider value={contextValue}>
       <ReactFlowProvider>
+        <Toolbar />
         <AudioGraph nodes={nodes} edges={edges} nodeTypes={audioNodeTypes} />
         <ReactFlow
           nodes={nodes}

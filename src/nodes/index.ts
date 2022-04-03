@@ -3,11 +3,24 @@ import whiteNoise from "./whiteNoise";
 import reverb from "./reverb";
 import monoSequencer from "./monoSequencer";
 import sequencer from "./sequencer";
+import createClock, { Clock } from "./clock";
 
 export type { WhiteNoise } from "./whiteNoise";
 export type { Reverb } from "./reverb";
 export type { MonoSequencer } from "./monoSequencer";
 export type { Sequencer } from "./sequencer";
+export type { Clock } from "./clock";
+
+const clockMap = new Map<AudioContext, Promise<Clock>>();
+export const getClock = async (audioContext: AudioContext): Promise<Clock> => {
+  if (clockMap.has(audioContext)) {
+    //@ts-expect-error very strange behaviour, typewise get() can return undefined
+    return clockMap.get(audioContext);
+  }
+  const clock = createClock(audioContext);
+  clockMap.set(audioContext, clock);
+  return clock;
+};
 
 export interface Oscillator extends Node {
   oscillator: OscillatorNode;
