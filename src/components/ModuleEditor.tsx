@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { useState, useCallback, useMemo } from "react";
 
 import ReactFlow, {
   Background,
@@ -14,7 +14,7 @@ import ReactFlow, {
   useEdgesState,
 } from "react-flow-renderer";
 import "../styles/reactflow.ts";
-import { ModuleContext, contextValue, useModule } from "../ModuleContext";
+import { ModuleContext, contextValue } from "../ModuleContext";
 import AudioGraph from "./AudioGraph";
 import Oscillator from "./Oscillator";
 import Destination from "./Destination";
@@ -110,14 +110,15 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
   );
 
   const onAdd = useCallback(
-    (nodeType) => {
+    (nodeType, nodePosition) => {
       const newNode = {
         id: `${nodeType}-${+new Date()}`,
         type: nodeType,
         data: { label: nodeType },
+        // TODO: calculate position properly!
         position: {
-          x: 100,
-          y: 100,
+          x: nodePosition.x,
+          y: nodePosition.y,
         },
         targetPosition: Position.Left,
         sourcePosition: Position.Right,
@@ -155,8 +156,11 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
             <ResumeContext />
           </Controls>
         </ReactFlow>
+        <ContextMenu
+          nodeTypes={nodeTypes}
+          onMenuItem={(nodeType, nodePosition) => onAdd(nodeType, nodePosition)}
+        />
       </ReactFlowProvider>
-      <ContextMenu nodeTypes={nodeTypes} onMenuItem={(e) => onAdd(e)} />
     </ModuleContext.Provider>
   );
 };

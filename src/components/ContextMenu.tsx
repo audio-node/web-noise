@@ -1,10 +1,11 @@
-import { FC, useState, useEffect, useCallback } from "react";
+import { FC, useState, useEffect, useCallback, useRef } from "react";
 import styled from "@emotion/styled";
 import { LEVA_COLORS } from "../styles/consts";
+import { useViewport } from "react-flow-renderer";
 
 interface ContextMenuProps {
   nodeTypes: any;
-  onMenuItem: (node: string) => void;
+  onMenuItem: (node: string, nodePosition: MousePosition) => void;
 }
 
 type MousePosition = {
@@ -14,15 +15,23 @@ type MousePosition = {
 
 const ContextMenu: FC<ContextMenuProps> = ({ nodeTypes, onMenuItem }) => {
   const [isOpen, setisOpen] = useState(false);
+  const { x, y, zoom } = useViewport();
   const [mousePosition, setMousePosition] = useState<MousePosition>({
     x: 0,
     y: 0,
   });
+  const menuWrapper = useRef(null);
 
-  const onMouseClick = (e: MouseEvent) => {
+  const onContextMenu = (e: MouseEvent) => {
     e.preventDefault();
     setMousePosition({ x: e.clientX, y: e.clientY });
     setisOpen(true);
+  };
+
+  const onClick = (e: MouseEvent) => {
+    if (e.target !== menuWrapper.current) {
+      setisOpen(false);
+    }
   };
 
   const onKeyUp = (e: KeyboardEvent) => {
@@ -32,18 +41,20 @@ const ContextMenu: FC<ContextMenuProps> = ({ nodeTypes, onMenuItem }) => {
   };
 
   useEffect(() => {
-    document.addEventListener("contextmenu", onMouseClick);
+    document.addEventListener("contextmenu", onContextMenu);
+    document.addEventListener("click", onClick);
     document.addEventListener("keyup", onKeyUp);
 
     return () => {
-      document.removeEventListener("contextmenu", onMouseClick);
+      document.removeEventListener("contextmenu", onContextMenu);
+      document.removeEventListener("click", onClick);
       document.removeEventListener("keyup", onKeyUp);
     };
   }, []);
 
   const onMenuItemClick = useCallback(
     (node: string) => {
-      onMenuItem(node);
+      onMenuItem(node, { x, y });
       setisOpen(false);
     },
     [onMenuItem]
@@ -52,13 +63,21 @@ const ContextMenu: FC<ContextMenuProps> = ({ nodeTypes, onMenuItem }) => {
   return (
     <>
       {isOpen ? (
-        <MenuWrapper mousePosition={mousePosition}>
+        <MenuWrapper
+          className="context-menu__wrapper"
+          mousePosition={mousePosition}
+          ref={menuWrapper}
+        >
           <ul>
             {Object.keys(nodeTypes).map((node, idx) => (
               <li onClick={() => onMenuItemClick(node)} key={idx}>
                 {node}
               </li>
             ))}
+          </ul>
+          <ul>
+            <li>new patch </li>
+            <li>save patch</li>
           </ul>
         </MenuWrapper>
       ) : null}
@@ -71,7 +90,7 @@ const MenuWrapper = styled.div<{ mousePosition: MousePosition }>`
   top: ${({ mousePosition }) => mousePosition.y}px;
   left: ${({ mousePosition }) => mousePosition.x}px;
   z-index: 10;
-  background: ${LEVA_COLORS.elevation2};
+  background: rgb(24 28 32 / 78%);
   color: white;
   padding: 14px 20px;
 
@@ -79,13 +98,18 @@ const MenuWrapper = styled.div<{ mousePosition: MousePosition }>`
     list-style: none;
     margin: 0;
     padding: 0;
+    border-bottom: 1px solid rgb(255 255 255 / 34%);
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    columns: 2;
   }
 
   li {
-    padding: 2px 0;
+    padding: 4px;
     &:hover {
       color: ${LEVA_COLORS.accent2};
       cursor: pointer;
+      background: rgb(0 0 0 / 32%);
     }
   }
 `;
