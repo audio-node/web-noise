@@ -30,6 +30,7 @@ import Envelope from "./Envelope";
 import ResumeContext from "./ResumeContext";
 import Reverb from "./Reverb";
 import { nodeTypes as baseAudioNodeTypes } from "../nodes";
+import ContextMenu from "./ContextMenu";
 
 export interface Elements {
   nodes: Array<Node>;
@@ -108,6 +109,23 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
     [reactflowInstance]
   );
 
+  const onAdd = useCallback(
+    (nodeType) => {
+      const newNode = {
+        id: `${nodeType}-${+new Date()}`,
+        type: nodeType,
+        data: { label: nodeType },
+        position: {
+          x: 100,
+          y: 100,
+        },
+      };
+      //@ts-ignore
+      setNodes((nds) => nds.concat(newNode));
+    },
+    [setNodes]
+  );
+
   return (
     <ModuleContext.Provider value={contextValue}>
       <ReactFlowProvider>
@@ -136,6 +154,7 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
           </Controls>
         </ReactFlow>
       </ReactFlowProvider>
+      <ContextMenu nodeTypes={nodeTypes} onMenuItem={(e) => onAdd(e)} />
     </ModuleContext.Provider>
   );
 };
