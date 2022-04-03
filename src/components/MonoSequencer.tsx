@@ -61,6 +61,7 @@ const MonoSequencer = ({ sourcePosition, data, id }: NodeProps) => {
         titleBar={{ drag: false, title: data.label }}
         fill
         flat
+        collapsed
       />
 
       {!ready ? <div>loading</div> : null}
