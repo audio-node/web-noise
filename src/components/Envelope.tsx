@@ -19,7 +19,9 @@ const Envelope: VoidFunctionComponent<NodeProps> = ({
   useEffect(() => {
     parameterNode.constantSource.start();
     registerNode(id, parameterNode);
-    return () => unregisterNode(id);
+    return () => {
+      unregisterNode(id);
+    };
   }, []);
 
   const controls = useControls(

@@ -2,9 +2,10 @@ import { useEffect, useMemo, useRef, useCallback } from "react";
 //@ts-ignore
 import useAnimationFrame from "use-animation-frame";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
-import { useModule } from "../ModuleContext";
+import { useModule, useNode } from "../ModuleContext";
 import { Leva, useCreateStore, useControls, LevaPanel } from "leva";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../styles/consts";
+import { Analyser } from "../nodes";
 
 export const useAnalyser = (audioContext: AudioContext) =>
   useMemo(() => {
@@ -30,16 +31,13 @@ const Visualizer = ({
   data,
   id,
 }: NodeProps) => {
-  const { audioContext, registerNode, unregisterNode } = useModule();
-  const analyserNode = useAnalyser(audioContext);
-  const { analyser } = analyserNode;
+  const analyserNode = useNode<Analyser>(id);
+  const { node } = analyserNode;
+  const { analyser } = node || {};
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
   const canvas = canvasRef.current;
-  const bufferLength = analyser.frequencyBinCount;
-
-  const dataArray = new Uint8Array(bufferLength);
-
   const levaStore = useCreateStore();
 
   const controls = useControls(
@@ -47,12 +45,6 @@ const Visualizer = ({
     // { color: { value: "#14df42" } },
     { store: levaStore }
   );
-
-  useEffect(() => {
-    console.log("visualiser rendered", id);
-    registerNode(id, analyserNode);
-    return () => unregisterNode(id);
-  }, []);
 
   const canvasCtx = useMemo(() => {
     return canvas?.getContext("2d");
@@ -62,6 +54,13 @@ const Visualizer = ({
     if (!canvas || !canvasCtx) {
       return;
     }
+    if (!analyser) {
+      return;
+    }
+    const bufferLength = analyser.frequencyBinCount;
+
+    const dataArray = new Uint8Array(bufferLength);
+
     analyser.getByteTimeDomainData(dataArray);
 
     canvasCtx.fillStyle = "#292d39";
@@ -91,7 +90,7 @@ const Visualizer = ({
 
     canvasCtx.lineTo(canvas.width, canvas.height / 2);
     canvasCtx.stroke();
-  }, [canvas, controls.color]);
+  }, [canvas, controls.color, analyser]);
 
   const tick = useCallback(draw, [draw]);
 

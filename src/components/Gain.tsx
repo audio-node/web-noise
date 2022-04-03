@@ -1,44 +1,16 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
-import { useModule } from "../ModuleContext";
-import {
-  useControls,
-  useCreateStore,
-  LevaPanel,
-  levaStore,
-  folder,
-} from "leva";
+import { useModule, useNode } from "../ModuleContext";
+import { useControls, useCreateStore, LevaPanel, folder } from "leva";
 import { useRecoilValue } from "recoil";
-import { GlobalClockCounterState } from "./MonoSequencer";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../styles/consts";
+import { Gain as TGain } from "../nodes";
 
-const useGain = (audioContext: AudioContext) =>
-  useMemo(() => {
-    const gain = audioContext.createGain();
-    return {
-      inputs: {
-        in: {
-          port: gain,
-        },
-        gain: {
-          port: gain.gain,
-        },
-      },
-      outputs: {
-        out: {
-          port: gain,
-        },
-      },
-      gain,
-    };
-  }, [audioContext]);
-
+//@TODO: sort out release control, figure out comments, figure out the global clock
 const Gain = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
-  const { audioContext, registerNode, unregisterNode } = useModule();
-  const inputRange = useRef<HTMLInputElement>(null);
-  const clock = useRecoilValue(GlobalClockCounterState);
+  const { audioContext } = useModule();
 
-  const gainNode = useGain(audioContext);
+  const { node: gainNode } = useNode<TGain>(id);
   const levaStore = useCreateStore();
 
   const controls = useControls(
@@ -87,12 +59,6 @@ const Gain = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
     { store: levaStore }
   );
 
-  useEffect(() => {
-    console.log("gain rendered", id);
-    registerNode(id, gainNode);
-    return () => unregisterNode(id);
-  }, []);
-
   // useEffect(() => {
   //   gainNode.gain.gain.cancelScheduledValues(audioContext.currentTime);
   //   gainNode.gain.gain.setValueAtTime(0, audioContext.currentTime);
@@ -108,6 +74,9 @@ const Gain = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
   // }, [clock]);
 
   useEffect(() => {
+    if (!gainNode) {
+      return;
+    }
     if (controls.t) {
       gainNode.gain.gain.cancelScheduledValues(audioContext.currentTime);
       gainNode.gain.gain.setValueAtTime(0, audioContext.currentTime);
@@ -121,9 +90,12 @@ const Gain = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
         audioContext.currentTime + controls.decay + controls.sustain
       );
     }
-  }, [clock]);
+  }, [controls, gainNode, audioContext]);
 
   useEffect(() => {
+    if (!gainNode) {
+      return;
+    }
     gainNode.gain.gain.setValueAtTime(controls.gain, audioContext.currentTime);
   }, [
     // audioContext.currentTime,
@@ -132,6 +104,7 @@ const Gain = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
     // controls.gain,
     // controls.sustain,
     controls.gain,
+    gainNode,
   ]);
 
   return (

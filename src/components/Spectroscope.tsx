@@ -2,8 +2,8 @@ import { useEffect, useMemo, useRef, useCallback } from "react";
 //@ts-ignore
 import useAnimationFrame from "use-animation-frame";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
-import { useModule } from "../ModuleContext";
-import { useAnalyser } from "./Visualizer";
+import { useNode } from "../ModuleContext";
+import { Analyser } from "../nodes";
 import { Leva, useCreateStore, useControls, LevaPanel } from "leva";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../styles/consts";
 
@@ -13,28 +13,17 @@ const Spectroscope = ({
   data,
   id,
 }: NodeProps) => {
-  const { audioContext, registerNode, unregisterNode } = useModule();
-  const analyserNode = useAnalyser(audioContext);
-  const { analyser } = analyserNode;
+  const { node } = useNode<Analyser>(id);
+  const { analyser } = node || {};
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvas = canvasRef.current;
-  const bufferLength = analyser.frequencyBinCount;
-
-  const dataArray = new Uint8Array(bufferLength);
-
   const levaStore = useCreateStore();
   const controls = useControls(
     { color: { value: LEVA_COLOR_ACCENT2_BLUE } },
     // { color: { value: "#14df42" } },
     { store: levaStore }
   );
-
-  useEffect(() => {
-    console.log("visualiser rendered", id);
-    registerNode(id, analyserNode);
-    return () => unregisterNode(id);
-  }, []);
 
   const canvasCtx = useMemo(() => {
     return canvas?.getContext("2d");
@@ -45,12 +34,18 @@ const Spectroscope = ({
       return;
     }
 
+    if (!analyser) {
+      return;
+    }
+
+    const bufferLength = analyser.frequencyBinCount;
+
+    const dataArray = new Uint8Array(bufferLength);
+
     analyser.getByteFrequencyData(dataArray);
 
     canvasCtx.fillStyle = "#292d39";
     canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
-
-    console.log(canvas.width, canvas.height);
 
     const barWidth = (canvas.width / bufferLength) * 2.5;
     let barHeight;
@@ -73,6 +68,7 @@ const Spectroscope = ({
         store={levaStore}
         titleBar={{ drag: false, title: data.label }}
         fill
+        flat
       />
       <div>
         <Handle

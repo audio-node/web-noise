@@ -31,11 +31,6 @@ const Destination = ({ targetPosition, data, id }: NodeProps) => {
   const { audioContext, registerNode, unregisterNode } = useModule();
   const destinationNode = useDestination(audioContext);
 
-  useEffect(() => {
-    registerNode(id, destinationNode);
-    return () => unregisterNode(id);
-  }, []);
-
   return (
     <>
       <LevaPanel

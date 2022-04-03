@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 
 import ReactFlow, {
   Background,
@@ -9,11 +9,13 @@ import ReactFlow, {
   Edge,
   Position,
   addEdge,
-  applyNodeChanges,
-  applyEdgeChanges,
+  ReactFlowProvider,
+  useNodesState,
+  useEdgesState,
 } from "react-flow-renderer";
 import "../styles/reactflow.ts";
-import { ModuleContext, contextValue } from "../ModuleContext";
+import { ModuleContext, contextValue, useModule } from "../ModuleContext";
+import AudioGraph from "./AudioGraph";
 import Oscillator from "./Oscillator";
 import Destination from "./Destination";
 import Gain from "./Gain";
@@ -27,30 +29,12 @@ import MonoSequencer from "./MonoSequencer";
 import Envelope from "./Envelope";
 import ResumeContext from "./ResumeContext";
 import Reverb from "./Reverb";
-import { defaultExample } from "../editorExamples";
+import { nodeTypes as baseAudioNodeTypes } from "../nodes";
 
 export interface Elements {
   nodes: Array<Node>;
   edges: Array<Edge>;
 }
-
-const nodeTypes = {
-  oscillator: Oscillator,
-  gain: Gain,
-  visualiser: Visualizer,
-  spectroscope: Spectroscope,
-  destination: Destination,
-  whiteNoise: WhiteNoise,
-  filter: Filter,
-  parameter: Parameter,
-  reverb: Reverb,
-  monoSequencer: MonoSequencer,
-  envelope: Envelope,
-};
-
-const edgeTypes = {
-  wire: Wire,
-};
 
 const onNodeDragStop = (_event: any, node: any) =>
   console.log("drag stop", node);
@@ -60,41 +44,59 @@ const onNodeClick = (_event: any, element: any) =>
 const snapGrid: [number, number] = [20, 20];
 
 export const Editor = ({ elements }: { elements?: Elements }) => {
+  const nodeTypes = useMemo(
+    () => ({
+      oscillator: Oscillator,
+      gain: Gain,
+      visualiser: Visualizer,
+      spectroscope: Spectroscope,
+      destination: Destination,
+      whiteNoise: WhiteNoise,
+      filter: Filter,
+      parameter: Parameter,
+      reverb: Reverb,
+      monoSequencer: MonoSequencer,
+      envelope: Envelope,
+    }),
+    []
+  );
+
+  const audioNodeTypes = useMemo(
+    () => ({
+      ...baseAudioNodeTypes,
+      visualiser: baseAudioNodeTypes.analyser,
+      spectroscope: baseAudioNodeTypes.analyser,
+      parameter: baseAudioNodeTypes.constantSource,
+    }),
+    []
+  );
+
+  const edgeTypes = useMemo(
+    () => ({
+      wire: Wire,
+    }),
+    []
+  );
+
   const { nodes: initialNodes, edges: initialEdges } = elements || {
     nodes: [],
     edges: [],
   };
-  const [nodes, setNodes] = useState<Array<Node>>(
+  const [nodes, setNodes, onNodesChange] = useNodesState<Array<Node>>(
     initialNodes.map((node) => ({
       ...node,
       targetPosition: Position.Left,
       sourcePosition: Position.Right,
     }))
   );
-  const [edges, setEdges] = useState(initialEdges);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
-  const onNodesChange = useCallback(
-    (changes) => setNodes((ns) => applyNodeChanges(changes, ns)),
-    []
-  );
-  const onEdgesChange = useCallback(
-    (changes) => setEdges((es) => applyEdgeChanges(changes, es)),
-    []
-  );
   const onConnect = useCallback(
-    (connection) =>
-      setEdges((eds) => addEdge({ ...connection, type: "wire" }, eds)),
+    (connection) => setEdges((eds) => addEdge(connection, eds)),
     []
   );
 
   const [reactflowInstance, setReactflowInstance] = useState(null);
-
-  useEffect(() => {
-    if (reactflowInstance && initialNodes.length > 0) {
-      // @ts-ignore
-      reactflowInstance.fitView();
-    }
-  }, [reactflowInstance, initialNodes.length]);
 
   const onInit = useCallback(
     (rfi) => {
@@ -108,27 +110,32 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
 
   return (
     <ModuleContext.Provider value={contextValue}>
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-        onNodeDragStop={onNodeDragStop}
-        onInit={onInit}
-        onNodeClick={onNodeClick}
-        nodeTypes={nodeTypes}
-        edgeTypes={edgeTypes}
-        snapToGrid={true}
-        snapGrid={snapGrid}
-        defaultZoom={1.5}
-      >
-        <Background variant={BackgroundVariant.Dots} gap={12} />
-        <MiniMap />
-        <Controls>
-          <ResumeContext />
-        </Controls>
-      </ReactFlow>
+      <ReactFlowProvider>
+        <AudioGraph nodes={nodes} edges={edges} nodeTypes={audioNodeTypes} />
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onConnect={onConnect}
+          onNodeDragStop={onNodeDragStop}
+          onInit={onInit}
+          onNodeClick={onNodeClick}
+          nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
+          snapToGrid={true}
+          snapGrid={snapGrid}
+          defaultZoom={1.5}
+          defaultEdgeOptions={{ type: "wire" }}
+          fitView
+        >
+          <Background variant={BackgroundVariant.Dots} gap={12} />
+          <MiniMap />
+          <Controls>
+            <ResumeContext />
+          </Controls>
+        </ReactFlow>
+      </ReactFlowProvider>
     </ModuleContext.Provider>
   );
 };

@@ -1,11 +1,11 @@
 import { useMemo, useEffect, useCallback, useState, useRef } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 import styled from "@emotion/styled";
-import { useModule } from "../ModuleContext";
-import { useParameter } from "./Parameter";
+import { useModule, useNode } from "../ModuleContext";
 import { Range, Scale, Note, Midi } from "@tonaljs/tonal";
 import { Leva, useCreateStore, useControls, LevaPanel, button } from "leva";
 import { atom, selector, useRecoilState } from "recoil";
+import { MonoSequencer as TMonoSequencer } from "../nodes";
 import { LEVA_COLORS } from "../styles/consts";
 import { keyframes } from "@emotion/css";
 
@@ -22,114 +22,58 @@ export const GlobalClockCounterState = atom({
   default: 0,
 });
 
-export const GlobalClockTempo = atom({
-  key: "globalClockTempo",
-  default: 70,
-});
-
 const MonoSequencer = ({ sourcePosition, data, id }: NodeProps) => {
-  const [globalClock, setGlobalClock] = useRecoilState(GlobalClockState);
-  const [globalTempo, setGlobalTempo] = useRecoilState(GlobalClockTempo);
+  const [isPlaying, setIsPlaying] = useState(false);
   const startButton = useRef(null);
 
-  const [globalCounter, setGlobalCounter] = useRecoilState(
-    GlobalClockCounterState
-  );
-
-  const { audioContext, registerNode, unregisterNode } = useModule();
-  const parameterNode = useParameter(audioContext);
-
-  const range = Scale.rangeOf("C major");
-  const freqRange = range("A2", "A6").map((note) => {
-    return Note.freq(note || "C2");
-  });
+  const { node: monoSequencer } = useNode<TMonoSequencer>(id);
 
   const store = useCreateStore();
 
-  const [controls, set] = useControls(
-    () => ({
-      bpm: { min: 20, max: 300, step: 1, value: globalTempo },
+  const controls = useControls(
+    {
+      bpm: { min: 20, max: 300, step: 1, value: 70 },
       // start_stop: button(() =>
       //   setGlobalClock({
       //     ...globalClock,
       //     ...{ isPlaying: !globalClock.isPlaying },
       //   })
       // ),
-    }),
+    },
     { store }
   );
 
-  let futureTickTime = audioContext.currentTime;
-  let counter = 1;
-  let tempo = globalTempo;
-  let secondsPerBeat = 60 / tempo;
-  let counterTimeValue = secondsPerBeat / 4;
-
   useEffect(() => {
-    parameterNode.constantSource.start();
-    registerNode(id, parameterNode);
-    return () => unregisterNode(id);
-  }, []);
-
-  useEffect(() => {
-    if (startButton.current) {
-      // @ts-ignore
-      startButton.current.classList.add("pulsing");
-      // @ts-ignore
+    if (!monoSequencer) {
+      return;
     }
-  }, [globalCounter]);
+    monoSequencer.constantSource.start();
+    return () => {
+      monoSequencer.constantSource.stop();
+    };
+  }, [monoSequencer]);
+
+  const stop = useCallback(() => {
+    monoSequencer?.stop();
+  }, [monoSequencer]);
+
+  const start = useCallback(() => {
+    monoSequencer?.start();
+    // @ts-ignore
+    startButton.current.classList.add("pulsing");
+  }, [startButton, monoSequencer]);
 
   useEffect(() => {
-    setGlobalTempo(controls.bpm);
-  }, [controls.bpm]);
-
-  useEffect(() => {
-    if (globalClock.isPlaying) {
+    if (isPlaying) {
       start();
     } else {
       stop();
     }
-  }, [globalClock.isPlaying]);
+  }, [isPlaying]);
 
-  function start() {
-    let counter = 1;
-    setGlobalCounter(counter);
-    futureTickTime = audioContext.currentTime;
-    scheduler();
-    // @ts-ignore
-    startButton.current.classList.add("pulsing");
-  }
-
-  function stop() {
-    window.clearTimeout(globalClock.timeOutID);
-    setGlobalClock({ ...globalClock, ...{ timeOutID: 0 } });
-  }
-
-  function scheduler() {
-    if (futureTickTime < audioContext.currentTime + 0.1) {
-      // console.log("This is 16th note: " + counter);
-      counter += 1;
-      setGlobalCounter(counter);
-
-      futureTickTime += counterTimeValue;
-
-      const randomIndex = Math.floor(Math.random() * freqRange.length);
-      const randomFreq = freqRange[randomIndex];
-
-      // @ts-ignore
-      parameterNode.constantSource.offset.value = randomFreq;
-
-      if (counter > 16) {
-        counter = 1;
-        setGlobalCounter(counter);
-      }
-    }
-
-    setGlobalClock({
-      ...globalClock,
-      ...{ timeOutID: window.setTimeout(scheduler, 0) },
-    });
-  }
+  useEffect(() => {
+    monoSequencer?.setTempo(controls.bpm);
+  }, [controls.bpm, monoSequencer]);
 
   return (
     <div>
@@ -137,21 +81,17 @@ const MonoSequencer = ({ sourcePosition, data, id }: NodeProps) => {
         store={store}
         titleBar={{ drag: false, title: data.label }}
         fill
+        flat
       />
 
       <StartStopButton>
         <div className="leva-c-bduird">
           <button
             ref={startButton}
-            onClick={() =>
-              setGlobalClock({
-                ...globalClock,
-                ...{ isPlaying: !globalClock.isPlaying },
-              })
-            }
+            onClick={() => setIsPlaying(!isPlaying)}
             className={`leva-c-ihqPFh`}
           >
-            {globalClock.isPlaying ? "stop" : "start"}
+            {isPlaying ? "stop" : "start"}
           </button>
         </div>
       </StartStopButton>

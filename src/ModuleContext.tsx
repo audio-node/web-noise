@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useEffect, useMemo } from "react";
 
 interface InputPort {
   port: AudioNode | any /* any other type of port */;
@@ -8,17 +8,19 @@ interface OutputPort {
   port: AudioNode;
 }
 
-interface Node extends Record<string, any> {
+export interface Node extends Record<string, any> {
   inputs?: Record<string, InputPort | never>;
   outputs?: Record<string, OutputPort | never>;
 }
-const module: Map<string, Node> = new Map();
+const module: Map<string, Node | Promise<Node>> = new Map();
+const connections: Map<string, true> = new Map();
 
 const audioContext = new AudioContext();
 
 export const contextValue = {
   audioContext,
   module,
+  connections,
 };
 
 export const ModuleContext = createContext(contextValue);
@@ -30,16 +32,18 @@ export const useModule = () => {
     module.set(id, node);
   };
 
-  const unregisterNode = (id: string) => {
-    //disconnect all ports
-    const node = module.get(id);
+  const unregisterNode = async (id: string) => {
+    const node = await module.get(id);
     if (!node) {
       console.error(`can't find node with id: ${id}`);
       return;
     }
+
+    //disconnect all ports
     Object.values(node.inputs || {}).forEach(
       ({ port }) => port.disconnect && port.disconnect()
     );
+
     Object.values(node.outputs || {}).forEach(
       ({ port }) => port.disconnect && port.disconnect()
     );
@@ -47,58 +51,108 @@ export const useModule = () => {
     module.delete(id);
   };
 
-  const getNodePort = (
+  const getNodePort = async (
     id: string,
     type: "inputs" | "outputs",
     portId: string
-  ) => {
-    return module.get(id)?.[type]?.[portId]?.port;
+  ): Promise<AudioNode> => {
+    return (await module.get(id))?.[type]?.[portId]?.port;
   };
 
-  const connect = (
+  const getNode = <T extends Node>(id: string): T | undefined => {
+    //@ts-ignore
+    return module.get(id);
+  };
+
+  const connect = async (
     [sourceId, sourcePort]: [string, string],
     [targetId, targetPort]: [string, string]
   ) => {
-    const outputNode = getNodePort(sourceId, "outputs", sourcePort);
+    const [outputNode, inputNode] = await Promise.all([
+      getNodePort(sourceId, "outputs", sourcePort),
+      getNodePort(targetId, "inputs", targetPort),
+    ]);
+
     if (!outputNode) {
-      console.error(`could not find output port ${targetId}:${targetPort}`);
+      console.error(`could not find output port ${sourceId}:${sourcePort}`);
       return false;
     }
 
-    const inputNode = getNodePort(targetId, "inputs", targetPort);
     if (!inputNode) {
-      console.error(`could not find input port ${sourceId}:${sourcePort}`);
+      console.error(`could not find input port ${targetId}:${targetPort}`);
       return false;
     }
 
     outputNode.connect(inputNode);
+
+    connections.set(
+      [sourceId, sourcePort, targetId, targetPort].join(":"),
+      true
+    );
     return true;
   };
 
-  const disconnect = (
+  const disconnect = async (
     [sourceId, sourcePort]: [string, string],
     [targetId, targetPort]: [string, string]
   ) => {
-    const outputNode = getNodePort(sourceId, "outputs", sourcePort);
+    const [outputNode, inputNode] = await Promise.all([
+      getNodePort(sourceId, "outputs", sourcePort),
+      getNodePort(targetId, "inputs", targetPort),
+    ]);
+
     if (!outputNode) {
       console.error(`could not find output port ${targetId}:${targetPort}`);
       return;
     }
 
-    const inputNode = getNodePort(targetId, "inputs", targetPort);
     if (!inputNode) {
       console.error(`could not find input port ${sourceId}:${sourcePort}`);
       return;
     }
 
-    outputNode.disconnect(inputNode);
+    try {
+      outputNode.disconnect(inputNode);
+    } catch (e) {
+      console.error(`error disconnecting`, e);
+    }
+    connections.delete([sourceId, sourcePort, targetId, targetPort].join(":"));
+  };
+
+  const destroy = async () => {
+    //@ts-ignore
+    const connectionNames = [...connections.keys()];
+    await Promise.all(
+      connectionNames.map((name) => {
+        const [sourceId, sourcePort, targetId, targetPort] = name.split(":");
+        return disconnect([sourceId, sourcePort], [targetId, targetPort]);
+      })
+    );
+
+    //@ts-ignore
+    const ids = [...module.keys()];
+    await Promise.all(ids.map((id) => unregisterNode(id)));
+    return true;
   };
 
   return {
     audioContext,
     registerNode,
     unregisterNode,
+    getNode,
     connect,
     disconnect,
+    destroy,
   };
+};
+
+export const useNode = <T,>(
+  id: string
+): { node: T | undefined; ready: boolean } => {
+  const { getNode } = useModule();
+
+  const node = getNode<T>(id);
+
+  //@ts-ignore
+  return { node, ready: true };
 };
