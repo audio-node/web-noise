@@ -119,6 +119,8 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
           x: 100,
           y: 100,
         },
+        targetPosition: Position.Left,
+        sourcePosition: Position.Right,
       };
       //@ts-ignore
       setNodes((nds) => nds.concat(newNode));

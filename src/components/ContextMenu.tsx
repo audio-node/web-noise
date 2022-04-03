@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect, useCallback } from "react";
 import styled from "@emotion/styled";
 import { LEVA_COLORS } from "../styles/consts";
 
@@ -41,13 +41,21 @@ const ContextMenu: FC<ContextMenuProps> = ({ nodeTypes, onMenuItem }) => {
     };
   }, []);
 
+  const onMenuItemClick = useCallback(
+    (node: string) => {
+      onMenuItem(node);
+      setisOpen(false);
+    },
+    [onMenuItem]
+  );
+
   return (
     <>
       {isOpen ? (
         <MenuWrapper mousePosition={mousePosition}>
           <ul>
             {Object.keys(nodeTypes).map((node, idx) => (
-              <li onClick={() => onMenuItem(node)} key={idx}>
+              <li onClick={() => onMenuItemClick(node)} key={idx}>
                 {node}
               </li>
             ))}
