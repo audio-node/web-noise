@@ -1,6 +1,28 @@
 import { FC, useCallback, useEffect, useState } from "react";
+import styled from "@emotion/styled";
 import { useModule, useNode } from "../ModuleContext";
 import { getClock, Clock } from "../nodes";
+
+const ToolbarWrapper = styled.div`
+  background: #181c20;
+  padding: 1rem 1rem;
+  position: absolute;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  display: flex;
+  color: #8c92a4;
+  font-family: ui-monospace, SFMono-Regular, Menlo, "Roboto Mono", monospace;
+`;
+
+const Tempo = styled.input`
+  background-color: #373c4b;
+  border: none;
+  border-radius: 3px;
+  width: 3rem;
+  padding: 0.25rem;
+  color: inherit;
+`;
 
 const Toolbar: FC = () => {
   const { audioContext, registerNode } = useModule();
@@ -18,7 +40,6 @@ const Toolbar: FC = () => {
   }, [node]);
 
   useEffect(() => {
-    console.log(45645646456456, value);
     clock?.setTempo(value);
   }, [value, clock]);
 
@@ -27,12 +48,15 @@ const Toolbar: FC = () => {
   }, []);
 
   return (
-    <div>
-      <label>
-        bpm: <input type="number" value={value} onChange={setBpm} />
-      </label>
-      {!ready ? <div>loading</div> : null}
-    </div>
+    <ToolbarWrapper>
+      {!ready ? (
+        <div>loading</div>
+      ) : (
+        <label>
+          bpm: <Tempo type="number" value={value} onChange={setBpm} />
+        </label>
+      )}
+    </ToolbarWrapper>
   );
 };
 
