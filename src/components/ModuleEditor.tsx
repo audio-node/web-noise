@@ -145,10 +145,10 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
           onNodeClick={onNodeClick}
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
-          snapToGrid={true}
           snapGrid={snapGrid}
           defaultZoom={1.5}
           defaultEdgeOptions={{ type: "wire" }}
+          snapToGrid
           fitView
         >
           <Background variant={BackgroundVariant.Dots} gap={12} />
