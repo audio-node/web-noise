@@ -5,7 +5,7 @@ import { useModule, useNode } from "../ModuleContext";
 import { Range, Scale, Note, Midi } from "@tonaljs/tonal";
 import { Leva, useCreateStore, useControls, LevaPanel, button } from "leva";
 import { atom } from "recoil";
-import { MonoSequencer as TMonoSequencer } from "../nodes";
+import { RandomSequencer as TRandomSequencer } from "../nodes";
 
 export const GlobalClockState = atom({
   key: "globalClock",
@@ -20,11 +20,10 @@ export const GlobalClockCounterState = atom({
   default: 0,
 });
 
-const MonoSequencer = ({ sourcePosition, data, id }: NodeProps) => {
-  const { node } = useNode<TMonoSequencer>(id);
-  const [monoSequencer, setMonoSequencer] = useState<TMonoSequencer | null>(
-    null
-  );
+const RandomSequencer = ({ sourcePosition, data, id }: NodeProps) => {
+  const { node } = useNode<TRandomSequencer>(id);
+  const [randomSequencer, setRandomSequencer] =
+    useState<TRandomSequencer | null>(null);
 
   const [ready, setReady] = useState<boolean>(false);
 
@@ -38,18 +37,18 @@ const MonoSequencer = ({ sourcePosition, data, id }: NodeProps) => {
   );
 
   useEffect(() => {
-    if (!monoSequencer) {
+    if (!randomSequencer) {
       return;
     }
-    monoSequencer.constantSource.start();
+    randomSequencer.constantSource.start();
     return () => {
-      monoSequencer.constantSource.stop();
+      randomSequencer.constantSource.stop();
     };
-  }, [monoSequencer]);
+  }, [randomSequencer]);
 
   useEffect(() => {
-    node?.then((result: TMonoSequencer) => {
-      setMonoSequencer(result);
+    node?.then((result: TRandomSequencer) => {
+      setRandomSequencer(result);
       setReady(true);
     });
   }, [node, setReady]);
@@ -75,4 +74,4 @@ const MonoSequencer = ({ sourcePosition, data, id }: NodeProps) => {
   );
 };
 
-export default MonoSequencer;
+export default RandomSequencer;

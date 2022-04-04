@@ -27,7 +27,7 @@ import Spectroscope from "./Spectroscope";
 import WhiteNoise from "./WhiteNoise";
 import Filter from "./Filter";
 import Parameter from "./Parameter";
-import MonoSequencer from "./MonoSequencer";
+import RandomSequencer from "./RandomSequencer";
 import Envelope from "./Envelope";
 import ResumeContext from "./ResumeContext";
 import Reverb from "./Reverb";
@@ -59,7 +59,7 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
       filter: Filter,
       parameter: Parameter,
       reverb: Reverb,
-      monoSequencer: MonoSequencer,
+      randomSequencer: RandomSequencer,
       envelope: Envelope,
       sequencer: Sequencer,
     }),

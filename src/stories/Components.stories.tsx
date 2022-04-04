@@ -353,15 +353,15 @@ export const Gain = () => (
   />
 );
 
-export const MonoSequencer = () => (
+export const RandomSequencer = () => (
   <Editor
     elements={{
       nodes: [
         {
           id: "mono-sequencer",
-          type: "monoSequencer",
+          type: "randomSequencer",
           data: {
-            label: "MonoSequencer",
+            label: "Random Sequencer",
           },
           position: { x: 0, y: 50 },
           dragHandle: ".leva-c-hwBXYF",

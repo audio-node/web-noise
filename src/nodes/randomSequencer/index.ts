@@ -1,8 +1,8 @@
 import { Scale, Note } from "@tonaljs/tonal";
-import { Node } from "../ModuleContext";
-import { getClock } from ".";
+import { Node } from "../../ModuleContext";
+import { getClock } from "../";
 
-export interface MonoSequencer extends Node {
+export interface RandomSequencer extends Node {
   constantSource: ConstantSourceNode;
 }
 
@@ -11,9 +11,9 @@ const freqRange = range("A2", "A6").map((note) => {
   return Note.freq(note || "C2");
 });
 
-const monoSequencer = async (
+const randomSequencer = async (
   audioContext: AudioContext
-): Promise<MonoSequencer> => {
+): Promise<RandomSequencer> => {
   const clock = await getClock(audioContext);
 
   const constantSource = audioContext.createConstantSource();
@@ -38,4 +38,4 @@ const monoSequencer = async (
   };
 };
 
-export default monoSequencer;
+export default randomSequencer;

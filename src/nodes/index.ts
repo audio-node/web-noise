@@ -1,13 +1,13 @@
 import { Node } from "../ModuleContext";
 import whiteNoise from "./whiteNoise";
 import reverb from "./reverb";
-import monoSequencer from "./monoSequencer";
+import randomSequencer from "./randomSequencer";
 import sequencer from "./sequencer";
 import createClock, { Clock } from "./clock";
 
 export type { WhiteNoise } from "./whiteNoise";
 export type { Reverb } from "./reverb";
-export type { MonoSequencer } from "./monoSequencer";
+export type { RandomSequencer } from "./randomSequencer";
 export type { Sequencer } from "./sequencer";
 export type { Clock } from "./clock";
 
@@ -151,7 +151,7 @@ export const nodeTypes = {
   whiteNoise,
   reverb,
   constantSource,
-  monoSequencer,
+  randomSequencer,
   gain,
   filter,
   sequencer,
