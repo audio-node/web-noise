@@ -94,7 +94,7 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
 
   const onConnect = useCallback(
     (connection) => setEdges((eds) => addEdge(connection, eds)),
-    []
+    [setEdges]
   );
 
   const [reactflowInstance, setReactflowInstance] = useState(null);
@@ -122,6 +122,7 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
         },
         targetPosition: Position.Left,
         sourcePosition: Position.Right,
+        dragHandle: ".leva-c-hwBXYF",
       };
       //@ts-ignore
       setNodes((nds) => nds.concat(newNode));
