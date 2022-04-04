@@ -479,13 +479,13 @@ export const Filter = () => (
   />
 );
 
-export const Sequencer = () => (
+export const RandomSequencerWorker = () => (
   <Editor
     elements={{
       nodes: [
         {
           id: "sequencer",
-          type: "sequencer",
+          type: "randomSequencerWorklet",
           data: { label: "Sequencer" },
           position: { x: 0, y: 50 },
           className: "react-flow__node-default",

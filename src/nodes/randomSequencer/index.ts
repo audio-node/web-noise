@@ -1,4 +1,6 @@
 import { Scale, Note } from "@tonaljs/tonal";
+//@ts-ignore
+import randomSequencerWorkletProcessor from "worklet-loader!./worklet.ts"; // eslint-disable-line
 import { Node } from "../../ModuleContext";
 import { getClock } from "../";
 
@@ -35,6 +37,35 @@ const randomSequencer = async (
       },
     },
     constantSource,
+  };
+};
+
+export interface RandomSequencerWorklet extends Node {
+  randomSequencer: AudioWorkletNode;
+}
+
+export const randomSequencerWorklet = async (
+  audioContext: AudioContext
+): Promise<RandomSequencerWorklet> => {
+  await audioContext.audioWorklet.addModule(randomSequencerWorkletProcessor);
+  const randomSequencer = new AudioWorkletNode(
+    audioContext,
+    "random-sequencer-processor"
+  );
+
+  const clock = await getClock(audioContext);
+
+  clock.onTick((e) => {
+    randomSequencer.port.postMessage({ ...e, timeHost: +new Date() });
+  });
+
+  return {
+    outputs: {
+      out: {
+        port: randomSequencer,
+      },
+    },
+    randomSequencer,
   };
 };
 

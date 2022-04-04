@@ -31,7 +31,7 @@ import RandomSequencer from "./RandomSequencer";
 import Envelope from "./Envelope";
 import ResumeContext from "./ResumeContext";
 import Reverb from "./Reverb";
-import Sequencer from "./Sequencer";
+import RandomSequencerWorklet from "./RandomSequencerWorklet";
 import { nodeTypes as baseAudioNodeTypes } from "../nodes";
 import ContextMenu from "./ContextMenu";
 
@@ -61,7 +61,7 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
       reverb: Reverb,
       randomSequencer: RandomSequencer,
       envelope: Envelope,
-      sequencer: Sequencer,
+      randomSequencerWorklet: RandomSequencerWorklet,
     }),
     []
   );

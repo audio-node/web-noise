@@ -3,9 +3,14 @@ import { Handle, Position, NodeProps, useStore } from "react-flow-renderer";
 
 import { useModule, useNode } from "../ModuleContext";
 import { LevaPanel, useControls, useCreateStore } from "leva";
-import { Sequencer as TSequencer } from "../nodes";
+import { RandomSequencerWorklet as TSequencer } from "../nodes";
 
-const Sequencer = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
+const RandomSequencerWorklet = ({
+  targetPosition,
+  sourcePosition,
+  data,
+  id,
+}: NodeProps) => {
   const { audioContext } = useModule();
   const { node } = useNode<Promise<TSequencer>>(id);
   const [sequencer, setSequencer] = useState<TSequencer | null>(null);
@@ -16,7 +21,7 @@ const Sequencer = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
 
   const controls = useControls(
     {
-      bpm: { min: 20, max: 300, step: 1, value: 70 },
+      sequencer: { value: "", editable: false },
     },
     { store }
   );
@@ -28,14 +33,6 @@ const Sequencer = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
     });
   }, [node, setReady]);
 
-  useEffect(() => {
-    if (!sequencer) {
-      return;
-    }
-    const tempoParam = sequencer.sequencer.parameters.get("tempo");
-    tempoParam?.setValueAtTime(controls.bpm, audioContext.currentTime);
-  }, [controls.bpm, sequencer, audioContext]);
-
   return (
     <>
       <LevaPanel
@@ -45,6 +42,7 @@ const Sequencer = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
         fill
         flat
         titleBar={{ drag: false, title: data.label }}
+        collapsed
       />
       {!ready ? <div>loading</div> : null}
       <Handle
@@ -56,4 +54,4 @@ const Sequencer = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
   );
 };
 
-export default Sequencer;
+export default RandomSequencerWorklet;

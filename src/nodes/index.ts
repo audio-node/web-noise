@@ -1,14 +1,15 @@
 import { Node } from "../ModuleContext";
 import whiteNoise from "./whiteNoise";
 import reverb from "./reverb";
-import randomSequencer from "./randomSequencer";
-import sequencer from "./sequencer";
+import randomSequencer, { randomSequencerWorklet } from "./randomSequencer";
 import createClock, { Clock } from "./clock";
 
 export type { WhiteNoise } from "./whiteNoise";
 export type { Reverb } from "./reverb";
-export type { RandomSequencer } from "./randomSequencer";
-export type { Sequencer } from "./sequencer";
+export type {
+  RandomSequencer,
+  RandomSequencerWorklet,
+} from "./randomSequencer";
 export type { Clock } from "./clock";
 
 const clockMap = new Map<AudioContext, Promise<Clock>>();
@@ -151,8 +152,8 @@ export const nodeTypes = {
   whiteNoise,
   reverb,
   constantSource,
-  randomSequencer,
   gain,
   filter,
-  sequencer,
+  randomSequencer,
+  randomSequencerWorklet,
 };
