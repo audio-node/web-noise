@@ -6,6 +6,7 @@ import { useViewport } from "react-flow-renderer";
 interface ContextMenuProps {
   nodeTypes: any;
   onMenuItem: (node: string, nodePosition: MousePosition) => void;
+  onClearEditor?: () => void;
 }
 
 type MousePosition = {
@@ -13,7 +14,11 @@ type MousePosition = {
   y: number;
 };
 
-const ContextMenu: FC<ContextMenuProps> = ({ nodeTypes, onMenuItem }) => {
+const ContextMenu: FC<ContextMenuProps> = ({
+  nodeTypes,
+  onMenuItem,
+  onClearEditor,
+}) => {
   const [isOpen, setisOpen] = useState(false);
   const { x, y, zoom } = useViewport();
   const [mousePosition, setMousePosition] = useState<MousePosition>({
@@ -76,8 +81,7 @@ const ContextMenu: FC<ContextMenuProps> = ({ nodeTypes, onMenuItem }) => {
             ))}
           </ul>
           <ul>
-            <li>new patch </li>
-            <li>save patch</li>
+            <li onClick={onClearEditor}>clear editor</li>
           </ul>
         </MenuWrapper>
       ) : null}

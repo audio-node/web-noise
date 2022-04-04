@@ -160,6 +160,7 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
         <ContextMenu
           nodeTypes={nodeTypes}
           onMenuItem={(nodeType, nodePosition) => onAdd(nodeType, nodePosition)}
+          onClearEditor={() => setNodes([])}
         />
       </ReactFlowProvider>
     </ModuleContext.Provider>
