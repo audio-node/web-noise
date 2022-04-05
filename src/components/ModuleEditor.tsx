@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { useState, useCallback, useMemo } from "react";
 
 import ReactFlow, {
   Background,
@@ -14,7 +14,7 @@ import ReactFlow, {
   useEdgesState,
 } from "react-flow-renderer";
 import "../styles/reactflow.ts";
-import { ModuleContext, contextValue, useModule } from "../ModuleContext";
+import { ModuleContext, contextValue } from "../ModuleContext";
 import AudioGraph from "./AudioGraph";
 import Oscillator from "./Oscillator";
 import Destination from "./Destination";
@@ -30,6 +30,7 @@ import Envelope from "./Envelope";
 import ResumeContext from "./ResumeContext";
 import Reverb from "./Reverb";
 import { nodeTypes as baseAudioNodeTypes } from "../nodes";
+import ContextMenu from "./ContextMenu";
 
 export interface Elements {
   nodes: Array<Node>;
@@ -93,7 +94,7 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
 
   const onConnect = useCallback(
     (connection) => setEdges((eds) => addEdge(connection, eds)),
-    []
+    [setEdges]
   );
 
   const [reactflowInstance, setReactflowInstance] = useState(null);
@@ -106,6 +107,27 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
       }
     },
     [reactflowInstance]
+  );
+
+  const onAdd = useCallback(
+    (nodeType, nodePosition) => {
+      const newNode = {
+        id: `${nodeType}-${+new Date()}`,
+        type: nodeType,
+        data: { label: nodeType },
+        // TODO: calculate position properly!
+        position: {
+          x: nodePosition.x,
+          y: nodePosition.y,
+        },
+        targetPosition: Position.Left,
+        sourcePosition: Position.Right,
+        dragHandle: ".leva-c-hwBXYF",
+      };
+      //@ts-ignore
+      setNodes((nds) => nds.concat(newNode));
+    },
+    [setNodes]
   );
 
   return (
@@ -123,10 +145,10 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
           onNodeClick={onNodeClick}
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
-          snapToGrid={true}
           snapGrid={snapGrid}
           defaultZoom={1.5}
           defaultEdgeOptions={{ type: "wire" }}
+          snapToGrid
           fitView
         >
           <Background variant={BackgroundVariant.Dots} gap={12} />
@@ -135,6 +157,11 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
             <ResumeContext />
           </Controls>
         </ReactFlow>
+        <ContextMenu
+          nodeTypes={nodeTypes}
+          onMenuItem={(nodeType, nodePosition) => onAdd(nodeType, nodePosition)}
+          onClearEditor={() => setNodes([])}
+        />
       </ReactFlowProvider>
     </ModuleContext.Provider>
   );
