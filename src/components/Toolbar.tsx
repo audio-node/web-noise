@@ -29,6 +29,7 @@ const Toolbar: FC = () => {
   const [clock, setClock] = useState<Clock>();
   const [ready, setReady] = useState(false);
   const [value, setValue] = useState(70);
+  const [isPlaying, setPlaying] = useState(false);
 
   useEffect(() => {
     clockNode?.then((result: Clock) => {
@@ -45,14 +46,31 @@ const Toolbar: FC = () => {
     setValue(+value);
   }, []);
 
+  const togglePlaying = useCallback(() => {
+    if (!clock) {
+      return;
+    }
+    if (isPlaying) {
+      clock.stop();
+    } else {
+      clock.start();
+    }
+    setPlaying(!isPlaying);
+  }, [clock, setPlaying, isPlaying]);
+
   return (
     <ToolbarWrapper>
       {!ready ? (
         <div>loading</div>
       ) : (
-        <label>
-          bpm: <Tempo type="number" value={value} onChange={setBpm} />
-        </label>
+        <div>
+          <button onClick={togglePlaying}>
+            {isPlaying ? "stop" : "start"}
+          </button>
+          <label>
+            bpm: <Tempo type="number" value={value} onChange={setBpm} />
+          </label>
+        </div>
       )}
     </ToolbarWrapper>
   );

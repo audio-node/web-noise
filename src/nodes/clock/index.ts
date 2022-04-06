@@ -6,6 +6,8 @@ export interface Clock extends Node {
   clock: AudioWorkletNode;
   onTick: (fn: (data: MessageEvent<any>["data"]) => void) => void;
   setTempo: (value: number) => void;
+  start: () => void;
+  stop: () => void;
 }
 
 const clock = async (audioContext: AudioContext): Promise<Clock> => {
@@ -28,12 +30,20 @@ const clock = async (audioContext: AudioContext): Promise<Clock> => {
         const now = +new Date();
         fn({
           ...e.data,
-          name: "tick-host",
+          name: "tick",
           hostReceived: now,
           diff: now - e.data.time,
         });
       };
     },
+    start: () =>
+      clock.port.postMessage({
+        name: "start",
+      }),
+    stop: () =>
+      clock.port.postMessage({
+        name: "stop",
+      }),
     clock,
   };
 };

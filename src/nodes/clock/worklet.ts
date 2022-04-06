@@ -1,10 +1,19 @@
 export class ClockProcessor extends AudioWorkletProcessor {
-  counter: number;
-  futureTickTime: number | null;
+  counter: number = 1;
+  futureTickTime: number | null = null;
+  isTicking: boolean = false;
   constructor() {
     super();
-    this.counter = 1;
-    this.futureTickTime = null;
+    this.port.onmessage = (e) => {
+      switch (e.data.name) {
+        case "start":
+          this.isTicking = true;
+          break;
+        case "stop":
+          this.isTicking = false;
+          break;
+      }
+    };
   }
 
   static get parameterDescriptors() {
@@ -20,6 +29,9 @@ export class ClockProcessor extends AudioWorkletProcessor {
   }
 
   process(_inputs: any, _outputs: any, parameters: any) {
+    if (!this.isTicking) {
+      return true;
+    }
     const secondsPerBeat = 60 / parameters["tempo"][0];
     const counterTimeValue = secondsPerBeat / 4;
 
