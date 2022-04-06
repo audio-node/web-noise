@@ -1,7 +1,7 @@
 import { FC, useCallback, useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { useModule, useNode } from "../ModuleContext";
-import { getClock, Clock } from "../nodes";
+import { Clock } from "../nodes";
 
 const ToolbarWrapper = styled.div`
   background: #181c20;
@@ -25,19 +25,17 @@ const Tempo = styled.input`
 `;
 
 const Toolbar: FC = () => {
-  const { audioContext, registerNode } = useModule();
-  registerNode("application-clock", getClock(audioContext));
-  const { node } = useNode<Promise<Clock>>("application-clock");
+  const { clock: clockNode } = useModule();
   const [clock, setClock] = useState<Clock>();
   const [ready, setReady] = useState(false);
   const [value, setValue] = useState(70);
 
   useEffect(() => {
-    node?.then((result: Clock) => {
+    clockNode?.then((result: Clock) => {
       setClock(result);
       setReady(true);
     });
-  }, [node]);
+  }, [clockNode]);
 
   useEffect(() => {
     clock?.setTempo(value);
