@@ -14,6 +14,7 @@ const ToolbarWrapper = styled.div`
   display: flex;
   color: #8c92a4;
   font-family: ui-monospace, SFMono-Regular, Menlo, "Roboto Mono", monospace;
+  box-sizing: border-box;
 `;
 
 const Tempo = styled.input`
