@@ -1,7 +1,8 @@
 import { FC, useCallback, useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import { useModule, useNode } from "../ModuleContext";
-import { Clock } from "../nodes";
+import { useModule, useNode } from "../../ModuleContext";
+import { Clock } from "../../nodes";
+import { Play, Pause } from "./icons";
 
 const ToolbarWrapper = styled.div`
   background: #181c20;
@@ -22,6 +23,20 @@ const Tempo = styled.input`
   width: 3rem;
   padding: 0.25rem;
   color: inherit;
+`;
+
+const PlayPauseButton = styled.button`
+  background: transparent;
+  border: none;
+  padding: 0;
+  height: 100%;
+  width: 1rem;
+  margin-right: 1rem;
+  cursor: pointer;
+
+  svg {
+    fill: #8c92a4;
+  }
 `;
 
 const Toolbar: FC = () => {
@@ -63,14 +78,14 @@ const Toolbar: FC = () => {
       {!ready ? (
         <div>loading</div>
       ) : (
-        <div>
-          <button onClick={togglePlaying}>
-            {isPlaying ? "stop" : "start"}
-          </button>
+        <>
+          <PlayPauseButton onClick={togglePlaying}>
+            {isPlaying ? <Pause /> : <Play />}
+          </PlayPauseButton>
           <label>
             bpm: <Tempo type="number" value={value} onChange={setBpm} />
           </label>
-        </div>
+        </>
       )}
     </ToolbarWrapper>
   );
