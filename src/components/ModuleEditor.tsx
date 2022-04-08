@@ -1,5 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
-
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import ReactFlow, {
   Background,
   BackgroundVariant,
@@ -14,7 +13,8 @@ import ReactFlow, {
   useEdgesState,
 } from "react-flow-renderer";
 import "../styles/reactflow.ts";
-import { ModuleContext, contextValue } from "../ModuleContext";
+import { ModuleContext, contextValue, useModule } from "../ModuleContext";
+import Toolbar from "./Toolbar";
 import AudioGraph from "./AudioGraph";
 import Oscillator from "./Oscillator";
 import Destination from "./Destination";
@@ -25,10 +25,11 @@ import Spectroscope from "./Spectroscope";
 import WhiteNoise from "./WhiteNoise";
 import Filter from "./Filter";
 import Parameter from "./Parameter";
-import MonoSequencer from "./MonoSequencer";
+import RandomSequencer from "./RandomSequencer";
 import Envelope from "./Envelope";
 import ResumeContext from "./ResumeContext";
 import Reverb from "./Reverb";
+import RandomSequencerWorklet from "./RandomSequencerWorklet";
 import { nodeTypes as baseAudioNodeTypes } from "../nodes";
 import ContextMenu from "./ContextMenu";
 
@@ -56,8 +57,9 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
       filter: Filter,
       parameter: Parameter,
       reverb: Reverb,
-      monoSequencer: MonoSequencer,
+      randomSequencer: RandomSequencer,
       envelope: Envelope,
+      randomSequencerWorklet: RandomSequencerWorklet,
     }),
     []
   );
@@ -133,6 +135,7 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
   return (
     <ModuleContext.Provider value={contextValue}>
       <ReactFlowProvider>
+        <Toolbar />
         <AudioGraph nodes={nodes} edges={edges} nodeTypes={audioNodeTypes} />
         <ReactFlow
           nodes={nodes}

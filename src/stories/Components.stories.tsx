@@ -353,15 +353,15 @@ export const Gain = () => (
   />
 );
 
-export const MonoSequencer = () => (
+export const RandomSequencer = () => (
   <Editor
     elements={{
       nodes: [
         {
           id: "mono-sequencer",
-          type: "monoSequencer",
+          type: "randomSequencer",
           data: {
-            label: "MonoSequencer",
+            label: "Random Sequencer",
           },
           position: { x: 0, y: 50 },
           dragHandle: ".leva-c-hwBXYF",
@@ -463,6 +463,68 @@ export const Filter = () => (
         {
           id: "reverb-to-visualiser",
           source: "filter",
+          sourceHandle: "out",
+          target: "visualiser",
+          targetHandle: "in",
+        },
+        {
+          id: "visualiser-to-destination",
+          source: "visualiser",
+          target: "destination",
+          targetHandle: "in",
+          sourceHandle: "out",
+        },
+      ],
+    }}
+  />
+);
+
+export const RandomSequencerWorker = () => (
+  <Editor
+    elements={{
+      nodes: [
+        {
+          id: "sequencer",
+          type: "randomSequencerWorklet",
+          data: { label: "Sequencer" },
+          position: { x: 0, y: 50 },
+          className: "react-flow__node-default",
+          dragHandle: ".leva-c-hwBXYF",
+        },
+        {
+          id: "oscillator",
+          type: "oscillator",
+          data: { label: "Oscillator", min: 0, max: 200, step: 1, value: 0 },
+          position: { x: spaceWidth, y: 50 },
+          className: "react-flow__node-default",
+          dragHandle: ".leva-c-hwBXYF",
+        },
+        {
+          id: "visualiser",
+          type: "visualiser",
+          data: { label: "Visualiser" },
+          position: { x: spaceWidth * 2, y: 50 },
+          className: "react-flow__node-default",
+        },
+        {
+          id: "destination",
+          type: "destination",
+          data: { label: "Destination" },
+          position: { x: spaceWidth * 3, y: 50 },
+          className: "react-flow__node-default",
+        },
+      ],
+      edges: [
+        {
+          id: "sequencer-to-oscillator",
+          source: "sequencer",
+          sourceHandle: "out",
+          target: "oscillator",
+          targetHandle: "frequency",
+        },
+        {
+          id: "oscillator-to-visualiser",
+          source: "oscillator",
           sourceHandle: "out",
           target: "visualiser",
           targetHandle: "in",
