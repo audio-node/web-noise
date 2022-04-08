@@ -1,22 +1,11 @@
-import { useEffect, useMemo } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useControls, useCreateStore, LevaPanel } from "leva";
-import { useModule } from "../ModuleContext";
-
-const useDestination = (audioContext: AudioContext) =>
-  useMemo(() => {
-    const destination = audioContext.destination;
-    return {
-      inputs: {
-        in: {
-          port: destination,
-        },
-      },
-      destination,
-    };
-  }, []);
+import { Destination as TDestination } from "../nodes";
+import { useNode } from "../ModuleContext";
 
 const Destination = ({ targetPosition, data, id }: NodeProps) => {
+  useNode<TDestination>(id);
+
   const store = useCreateStore();
 
   useControls(
@@ -28,8 +17,6 @@ const Destination = ({ targetPosition, data, id }: NodeProps) => {
     },
     { store }
   );
-  const { audioContext, registerNode, unregisterNode } = useModule();
-  const destinationNode = useDestination(audioContext);
 
   return (
     <>
