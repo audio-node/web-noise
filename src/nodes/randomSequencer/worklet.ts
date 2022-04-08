@@ -12,8 +12,6 @@ export class SequencerProcessor extends AudioWorkletProcessor {
     this.currentFrequency = 0;
 
     this.port.onmessage = (e) => {
-      //@ts-ignore
-      console.log(e.data.diff, +new Date() - e.data.time);
       const randomIndex = Math.floor(Math.random() * this.freqRange.length);
       this.currentFrequency = this.freqRange[randomIndex];
     };

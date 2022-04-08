@@ -40,7 +40,7 @@ export class ClockProcessor extends AudioWorkletProcessor {
     }
 
     if (this.futureTickTime < currentTime + 0.1) {
-      console.log("This is 16th note: " + this.counter);
+      // console.log("This is 16th note: " + this.counter);
       this.counter = this.counter + 1;
 
       this.futureTickTime = this.futureTickTime + counterTimeValue;

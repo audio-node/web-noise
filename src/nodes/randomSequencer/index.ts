@@ -25,7 +25,6 @@ const randomSequencer = async (
     const randomFreq = freqRange[randomIndex];
 
     if (randomFreq) {
-      console.log(e.diff, +new Date() - e.time);
       constantSource.offset.value = randomFreq;
     }
   });
