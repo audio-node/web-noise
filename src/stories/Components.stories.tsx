@@ -540,3 +540,65 @@ export const RandomSequencerWorker = () => (
     }}
   />
 );
+
+export const SignalGenerator = () => (
+  <Editor
+    elements={{
+      nodes: [
+        {
+          id: "oscillator",
+          type: "oscillator",
+          data: { label: "Oscillator", min: 0, max: 200, step: 1, value: 0 },
+          position: { x: 0, y: 50 },
+          className: "react-flow__node-default",
+          dragHandle: ".leva-c-hwBXYF",
+        },
+        {
+          id: "signal-generator",
+          type: "signalGenerator",
+          data: { label: "Signal Generator" },
+          position: { x: spaceWidth, y: 50 },
+          className: "react-flow__node-default",
+          dragHandle: ".leva-c-hwBXYF",
+        },
+        {
+          id: "visualiser",
+          type: "visualiser",
+          data: { label: "Visualiser" },
+          position: { x: spaceWidth * 2, y: 50 },
+          className: "react-flow__node-default",
+        },
+        {
+          id: "destination",
+          type: "destination",
+          data: { label: "Destination" },
+          position: { x: spaceWidth * 3, y: 50 },
+          className: "react-flow__node-default",
+        },
+      ],
+      edges: [
+        {
+          id: "oscillator-to-signal-generator",
+          source: "oscillator",
+          sourceHandle: "out",
+          target: "signal-generator",
+          targetHandle: "in",
+        },
+        {
+          id: "signal-generator-to-visualiser",
+          source: "signal-generator",
+          sourceHandle: "out",
+          target: "visualiser",
+          targetHandle: "in",
+        },
+        {
+          id: "visualiser-to-destination",
+          source: "visualiser",
+          target: "destination",
+          targetHandle: "in",
+          sourceHandle: "out",
+        },
+      ],
+    }}
+  />
+);
