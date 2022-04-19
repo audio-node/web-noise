@@ -2,10 +2,9 @@ import { useEffect, useMemo, useState, useCallback } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { LevaPanel, useControls, useCreateStore, button, folder } from "leva";
 
-import { useNode } from "../ModuleContext";
-import { ScriptNode as TScriptNode } from "../nodes";
-
-const DEFAULT_EXPRESSION = "";
+import { useNode } from "../../ModuleContext";
+import { ScriptNode as TScriptNode } from "../../nodes";
+import codeEditor from "./CodeEditorPlugin";
 
 const ScriptNode = ({
   targetPosition,
@@ -17,7 +16,7 @@ const ScriptNode = ({
   const [scriptNode, setScriptNode] = useState<TScriptNode>();
   const [ready, setReady] = useState<boolean>(false);
 
-  const expressionParameter = data.value || DEFAULT_EXPRESSION;
+  const expressionParameter = data.value || "";
   const [expression, setExpression] = useState<string>(expressionParameter);
 
   useEffect(() => {
@@ -35,10 +34,7 @@ const ScriptNode = ({
 
   const values = useControls(
     {
-      script: {
-        value: expressionParameter,
-        rows: true,
-      },
+      script: codeEditor(expressionParameter),
       set: button((get) => setExpression(get("script"))),
     },
     { store }

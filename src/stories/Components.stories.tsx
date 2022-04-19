@@ -548,7 +548,7 @@ export const ScriptNode = () => (
         {
           id: "oscillator",
           type: "oscillator",
-          data: { label: "Oscillator", min: 0, max: 200, step: 1, value: 0 },
+          data: { label: "Oscillator", value: 440 },
           position: { x: 0, y: 50 },
           className: "react-flow__node-default",
           dragHandle: ".leva-c-hwBXYF",
@@ -567,27 +567,30 @@ output.forEach((outputChannel, channelIndex) => {
     sampleIndex < outputChannel.length;
     sampleIndex++
   ) {
-    outputChannel[sampleIndex] = input[channelIndex]?.[sampleIndex] || 0;
+    outputChannel[sampleIndex] = input[channelIndex]?.[sampleIndex];
   }
 });
           `,
           },
           position: { x: spaceWidth, y: 50 },
           className: "react-flow__node-default",
+          style: {
+            width: "auto",
+          },
           dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "visualiser",
           type: "visualiser",
           data: { label: "Visualiser" },
-          position: { x: spaceWidth * 2, y: 50 },
+          position: { x: spaceWidth * 3, y: 50 },
           className: "react-flow__node-default",
         },
         {
           id: "destination",
           type: "destination",
           data: { label: "Destination" },
-          position: { x: spaceWidth * 3, y: 50 },
+          position: { x: spaceWidth * 4, y: 50 },
           className: "react-flow__node-default",
         },
       ],

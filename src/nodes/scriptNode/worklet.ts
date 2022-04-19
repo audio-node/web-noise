@@ -1,4 +1,3 @@
-
 export class WhiteNoiseProcessor extends AudioWorkletProcessor {
   expressionFn: (inputs: any, outputs: any) => void = () => {};
   constructor() {
@@ -16,7 +15,7 @@ export class WhiteNoiseProcessor extends AudioWorkletProcessor {
     try {
       this.expressionFn(inputs, outputs);
     } catch (e) {
-      // console.log();
+      console.error(e);
     }
     return true;
   }
