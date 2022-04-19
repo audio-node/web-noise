@@ -48,4 +48,4 @@ export class WhiteNoiseProcessor extends AudioWorkletProcessor {
 }
 
 //@ts-ignore
-registerProcessor("signal-generator-processor", WhiteNoiseProcessor);
+registerProcessor("script-node-processor", WhiteNoiseProcessor);

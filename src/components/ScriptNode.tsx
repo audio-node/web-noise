@@ -3,19 +3,18 @@ import { Handle, Position, NodeProps } from "react-flow-renderer";
 
 import { useNode } from "../ModuleContext";
 import { LevaPanel, useControls, useCreateStore, button } from "leva";
-import { plot } from "@leva-ui/plugin-plot";
-import { SignalGenerator as TSignalGenerator } from "../nodes";
+import { ScriptNode as TScriptNode } from "../nodes";
 
 const DEFAULT_EXPRESSION = "inputSampleValue";
 
-const SignalGenerator = ({
+const ScriptNode = ({
   targetPosition,
   sourcePosition,
   data,
   id,
 }: NodeProps) => {
-  const { node } = useNode<Promise<TSignalGenerator>>(id);
-  const [generatorNode, setGeneratorNode] = useState<TSignalGenerator>();
+  const { node } = useNode<Promise<TScriptNode>>(id);
+  const [scriptNode, setScriptNode] = useState<TScriptNode>();
   const [ready, setReady] = useState<boolean>(false);
 
   const expressionParameter = data.value || DEFAULT_EXPRESSION;
@@ -23,14 +22,14 @@ const SignalGenerator = ({
 
   useEffect(() => {
     node?.then((response) => {
-      setGeneratorNode(response);
+      setScriptNode(response);
       setReady(true);
     });
   }, [node, setReady]);
 
   useEffect(() => {
-    generatorNode?.setExpression(expression);
-  }, [expression, generatorNode]);
+    scriptNode?.setExpression(expression);
+  }, [expression, scriptNode]);
 
   const store = useCreateStore();
 
@@ -70,4 +69,4 @@ const SignalGenerator = ({
   );
 };
 
-export default SignalGenerator;
+export default ScriptNode;

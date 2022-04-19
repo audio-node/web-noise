@@ -1,12 +1,12 @@
 import { Node } from "../ModuleContext";
 import whiteNoise from "./whiteNoise";
-import signalGenerator from "./signalGenerator";
+import scriptNode from "./scriptNode";
 import reverb from "./reverb";
 import randomSequencer, { randomSequencerWorklet } from "./randomSequencer";
 import createClock, { Clock } from "./clock";
 
 export type { WhiteNoise } from "./whiteNoise";
-export type { SignalGenerator } from "./signalGenerator";
+export type { ScriptNode } from "./scriptNode";
 export type { Reverb } from "./reverb";
 export type {
   RandomSequencer,
@@ -158,5 +158,5 @@ export const nodeTypes = {
   filter,
   randomSequencer,
   randomSequencerWorklet,
-  signalGenerator,
+  scriptNode,
 };

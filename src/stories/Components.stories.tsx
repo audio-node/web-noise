@@ -541,7 +541,7 @@ export const RandomSequencerWorker = () => (
   />
 );
 
-export const SignalGenerator = () => (
+export const ScriptNode = () => (
   <Editor
     elements={{
       nodes: [
@@ -554,9 +554,9 @@ export const SignalGenerator = () => (
           dragHandle: ".leva-c-hwBXYF",
         },
         {
-          id: "signal-generator",
-          type: "signalGenerator",
-          data: { label: "Signal Generator" },
+          id: "script-node",
+          type: "scriptNode",
+          data: { label: "Script Node" },
           position: { x: spaceWidth, y: 50 },
           className: "react-flow__node-default",
           dragHandle: ".leva-c-hwBXYF",
@@ -578,15 +578,15 @@ export const SignalGenerator = () => (
       ],
       edges: [
         {
-          id: "oscillator-to-signal-generator",
+          id: "oscillator-to-script-node",
           source: "oscillator",
           sourceHandle: "out",
-          target: "signal-generator",
+          target: "script-node",
           targetHandle: "in",
         },
         {
-          id: "signal-generator-to-visualiser",
-          source: "signal-generator",
+          id: "script-node-to-visualiser",
+          source: "script-node",
           sourceHandle: "out",
           target: "visualiser",
           targetHandle: "in",
