@@ -556,7 +556,22 @@ export const ScriptNode = () => (
         {
           id: "script-node",
           type: "scriptNode",
-          data: { label: "Script Node" },
+          data: {
+            label: "Script Node",
+            value: `
+const output = outputs[0];
+const input = inputs[0];
+output.forEach((outputChannel, channelIndex) => {
+  for (
+    let sampleIndex = 0;
+    sampleIndex < outputChannel.length;
+    sampleIndex++
+  ) {
+    outputChannel[sampleIndex] = input[channelIndex]?.[sampleIndex] || 0;
+  }
+});
+          `,
+          },
           position: { x: spaceWidth, y: 50 },
           className: "react-flow__node-default",
           dragHandle: ".leva-c-hwBXYF",

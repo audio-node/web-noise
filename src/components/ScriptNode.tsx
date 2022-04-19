@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
+import { LevaPanel, useControls, useCreateStore, button, folder } from "leva";
 
 import { useNode } from "../ModuleContext";
-import { LevaPanel, useControls, useCreateStore, button } from "leva";
 import { ScriptNode as TScriptNode } from "../nodes";
 
-const DEFAULT_EXPRESSION = "inputSampleValue";
+const DEFAULT_EXPRESSION = "";
 
 const ScriptNode = ({
   targetPosition,
@@ -35,11 +35,11 @@ const ScriptNode = ({
 
   const values = useControls(
     {
-      data: {
-        value: "",
+      script: {
+        value: expressionParameter,
         rows: true,
       },
-      set: button((get) => setExpression(get("data"))),
+      set: button((get) => setExpression(get("script"))),
     },
     { store }
   );
