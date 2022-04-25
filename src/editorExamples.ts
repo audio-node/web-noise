@@ -123,14 +123,14 @@ export const filterExample: Elements = setWires([
     type: "visualiser",
     data: { label: "Visualiser 2" },
     dragHandle: DRAG_HANDLE_CLASS,
-    position: { x: spaceWidth * 3, y: 0 },
+    position: { x: spaceWidth * 4, y: 0 },
     className: "react-flow__node-default",
   },
   {
     id: "destination",
     type: "destination",
     data: { label: "Destination" },
-    position: { x: spaceWidth * 4, y: 0 },
+    position: { x: spaceWidth * 5, y: 0 },
     className: "react-flow__node-default",
   },
 ]);

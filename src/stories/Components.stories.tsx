@@ -574,9 +574,6 @@ output.forEach((outputChannel, channelIndex) => {
           },
           position: { x: spaceWidth, y: 50 },
           className: "react-flow__node-default",
-          style: {
-            width: "auto",
-          },
           dragHandle: ".leva-c-hwBXYF",
         },
         {
