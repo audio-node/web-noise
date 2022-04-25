@@ -23,6 +23,7 @@ import Wire from "./Wire";
 import Visualizer from "./Visualizer";
 import Spectroscope from "./Spectroscope";
 import WhiteNoise from "./WhiteNoise";
+import ScriptNode from "./ScriptNode";
 import Filter from "./Filter";
 import Parameter from "./Parameter";
 import RandomSequencer from "./RandomSequencer";
@@ -60,6 +61,7 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
       randomSequencer: RandomSequencer,
       envelope: Envelope,
       randomSequencerWorklet: RandomSequencerWorklet,
+      scriptNode: ScriptNode,
     }),
     []
   );

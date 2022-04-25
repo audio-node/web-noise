@@ -540,3 +540,83 @@ export const RandomSequencerWorker = () => (
     }}
   />
 );
+
+export const ScriptNode = () => (
+  <Editor
+    elements={{
+      nodes: [
+        {
+          id: "oscillator",
+          type: "oscillator",
+          data: { label: "Oscillator", value: 440 },
+          position: { x: 0, y: 50 },
+          className: "react-flow__node-default",
+          dragHandle: ".leva-c-hwBXYF",
+        },
+        {
+          id: "script-node",
+          type: "scriptNode",
+          data: {
+            label: "Script Node",
+            value: `
+const output = outputs[0];
+const input = inputs[0];
+output.forEach((outputChannel, channelIndex) => {
+  for (
+    let sampleIndex = 0;
+    sampleIndex < outputChannel.length;
+    sampleIndex++
+  ) {
+    outputChannel[sampleIndex] = input[channelIndex]?.[sampleIndex];
+  }
+});
+          `,
+          },
+          position: { x: spaceWidth, y: 50 },
+          className: "react-flow__node-default",
+          style: {
+            width: "auto",
+          },
+          dragHandle: ".leva-c-hwBXYF",
+        },
+        {
+          id: "visualiser",
+          type: "visualiser",
+          data: { label: "Visualiser" },
+          position: { x: spaceWidth * 3, y: 50 },
+          className: "react-flow__node-default",
+        },
+        {
+          id: "destination",
+          type: "destination",
+          data: { label: "Destination" },
+          position: { x: spaceWidth * 4, y: 50 },
+          className: "react-flow__node-default",
+        },
+      ],
+      edges: [
+        {
+          id: "oscillator-to-script-node",
+          source: "oscillator",
+          sourceHandle: "out",
+          target: "script-node",
+          targetHandle: "in",
+        },
+        {
+          id: "script-node-to-visualiser",
+          source: "script-node",
+          sourceHandle: "out",
+          target: "visualiser",
+          targetHandle: "in",
+        },
+        {
+          id: "visualiser-to-destination",
+          source: "visualiser",
+          target: "destination",
+          targetHandle: "in",
+          sourceHandle: "out",
+        },
+      ],
+    }}
+  />
+);
