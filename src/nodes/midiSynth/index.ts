@@ -10,11 +10,22 @@ export interface MidiSynth extends Node {
 
 const midiSynth = (audioContext: AudioContext): MidiSynth => {
   const gain = audioContext.createGain();
-  const frequency = audioContext.createConstantSource();
-  frequency.start();
   gain.gain.value = 0.5;
 
+  const frequency = audioContext.createConstantSource();
+  frequency.start();
+
+  //const oscillator = audioContext.createOscillator();
+  //oscillator.start();
+
   let oscillators: Record<number, OscillatorNode> = {};
+
+  const controls = {
+    attack: 0.1,
+    decay: 0.1,
+    sustain: 1,
+    release: 0.1
+  };
 
   return {
     outputs: {
@@ -36,9 +47,19 @@ const midiSynth = (audioContext: AudioContext): MidiSynth => {
       oscillators[note] = oscillator;
       oscillator.frequency.value = frequencyValue;
       oscillator.connect(gain);
-      // gain.gain.setValueAtTime(0, audioContext.currentTime);
-      // gain.gain.linearRampToValueAtTime(1, audioContext.currentTime + 0.01);
       oscillator.start(audioContext.currentTime);
+
+      gain.gain.cancelScheduledValues(audioContext.currentTime);
+      gain.gain.setValueAtTime(0, audioContext.currentTime);
+
+      gain.gain.linearRampToValueAtTime(
+        1,
+        audioContext.currentTime + controls.attack
+      );
+      gain.gain.linearRampToValueAtTime(
+        0,
+        audioContext.currentTime + controls.decay + controls.sustain
+      );
     },
     stop(note) {
       frequency.offset.setValueAtTime(0, audioContext.currentTime);
