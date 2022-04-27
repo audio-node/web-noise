@@ -25,7 +25,8 @@ const Keyboard = ({ sourcePosition, targetPosition, id, data }: NodeProps) => {
     },
     { store }
   );
-  const firstNote = useMemo(() => values.range[0] || DEFAULT_MIN_MIDI, [values]);
+
+  const firstNote = useMemo(() => values.range[0], [values]);
   const lastNote = useMemo(() => values.range[1], [values]);
   const keyboardShortcuts = useMemo(() => KeyboardShortcuts.create({
     firstNote: firstNote,
