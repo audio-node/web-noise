@@ -17,20 +17,10 @@ const Keyboard = ({ sourcePosition, targetPosition, id, data }: NodeProps) => {
 
   const values = useControls(
     {
-      layout: folder(
-        {
-          range: {
-            value: [DEFAULT_MIN_MIDI, DEFAULT_MAX_MIDI],
-            min: MidiNumbers.MIN_MIDI_NUMBER,
-            max: MidiNumbers.MAX_MIDI_NUMBER,
-          },
-        },
-        { collapsed: true }
-      ),
-      source: {
-        options: {
-          "Computer keyboard": "computerKeyboard",
-        },
+      range: {
+        value: [DEFAULT_MIN_MIDI, DEFAULT_MAX_MIDI],
+        min: MidiNumbers.MIN_MIDI_NUMBER,
+        max: MidiNumbers.MAX_MIDI_NUMBER,
       },
     },
     { store }
@@ -71,6 +61,7 @@ const Keyboard = ({ sourcePosition, targetPosition, id, data }: NodeProps) => {
         flat
         hideCopyButton
         oneLineLabels
+        collapsed
         titleBar={{ drag: false, title: data.label }}
       />
       <Piano
