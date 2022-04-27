@@ -31,6 +31,7 @@ import Envelope from "./Envelope";
 import ResumeContext from "./ResumeContext";
 import Reverb from "./Reverb";
 import RandomSequencerWorklet from "./RandomSequencerWorklet";
+import Keyboard from "./Keyboard";
 import { nodeTypes as baseAudioNodeTypes } from "../nodes";
 import ContextMenu from "./ContextMenu";
 
@@ -62,6 +63,7 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
       envelope: Envelope,
       randomSequencerWorklet: RandomSequencerWorklet,
       scriptNode: ScriptNode,
+      keyboard: Keyboard,
     }),
     []
   );
@@ -72,6 +74,7 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
       visualiser: baseAudioNodeTypes.analyser,
       spectroscope: baseAudioNodeTypes.analyser,
       parameter: baseAudioNodeTypes.constantSource,
+      keyboard: baseAudioNodeTypes.midiSynth,
     }),
     []
   );

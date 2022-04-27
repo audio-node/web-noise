@@ -617,3 +617,50 @@ output.forEach((outputChannel, channelIndex) => {
     }}
   />
 );
+
+export const Keyboard = () => (
+  <Editor
+    elements={{
+      nodes: [
+        {
+          id: "keyboard",
+          type: "keyboard",
+          data: { label: "Keyboard" },
+          position: { x: 0, y: 50 },
+          dragHandle: ".leva-c-hwBXYF",
+          className: "react-flow__node-default",
+        },
+        {
+          id: "visualiser",
+          type: "visualiser",
+          data: { label: "Visualiser" },
+          position: { x: spaceWidth * 2, y: 50 },
+          className: "react-flow__node-default",
+        },
+        {
+          id: "destination",
+          type: "destination",
+          data: { label: "Destination" },
+          position: { x: spaceWidth * 3, y: 50 },
+          className: "react-flow__node-default",
+        },
+      ],
+      edges: [
+        {
+          id: "keyboard-to-visualiser",
+          source: "keyboard",
+          sourceHandle: "out",
+          target: "visualiser",
+          targetHandle: "in",
+        },
+        {
+          id: "visualiser-to-destination",
+          source: "visualiser",
+          target: "destination",
+          targetHandle: "in",
+          sourceHandle: "out",
+        },
+      ],
+    }}
+  />
+);
