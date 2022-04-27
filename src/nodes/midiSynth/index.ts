@@ -35,33 +35,12 @@ const midiSynth = (audioContext: AudioContext): MidiSynth => {
 
       frequency.offset.setValueAtTime(frequencyValue, audioContext.currentTime);
       gate.offset.setValueAtTime(1, audioContext.currentTime)
-
-      //oscillator.frequency.setValueAtTime(frequencyValue, audioContext.currentTime);
-
-      /*gain.gain.cancelScheduledValues(audioContext.currentTime);
-      gain.gain.setValueAtTime(0, audioContext.currentTime);
-
-      gain.gain.linearRampToValueAtTime(
-        1,
-        audioContext.currentTime + controls.attack
-      );
-      gain.gain.linearRampToValueAtTime(
-        0,
-        audioContext.currentTime + controls.decay + controls.sustain
-      );*/
     },
     stop(note) {
       if (note === currentNote) {
         frequency.offset.setValueAtTime(0, audioContext.currentTime);
-        gate.offset.setValueAtTime(0, audioContext.currentTime)
+        gate.offset.setValueAtTime(0, audioContext.currentTime);
       }
-
-      //oscillator.frequency.setValueAtTime(0, audioContext.currentTime);
-      //const oscillator = oscillators[note];
-      //oscillator.stop(audioContext.currentTime);
-      //oscillator.disconnect(gain);
-      //delete oscillators[note];
-      // console.log(9090, note);
     },
   };
 };
