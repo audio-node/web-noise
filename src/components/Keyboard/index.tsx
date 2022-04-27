@@ -70,16 +70,16 @@ const Keyboard = ({ sourcePosition, targetPosition, id, data }: NodeProps) => {
       />
       <Handle
         type="source"
-        isValidConnection={() => true}
         position={sourcePosition || Position.Right}
         style={{ top: 50 }}
-        id="out"
+        id="frequency"
       />
       <Handle
         type="source"
+        isValidConnection={() => true}
         position={sourcePosition || Position.Right}
         style={{ top: 70 }}
-        id="frequency"
+        id="gate"
       />
     </>
   );

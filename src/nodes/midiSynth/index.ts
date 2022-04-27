@@ -2,54 +2,43 @@ import { Scale, Note, Midi } from "@tonaljs/tonal";
 import { Node } from "../../ModuleContext";
 
 export interface MidiSynth extends Node {
-  gain: GainNode;
+  gate: ConstantSourceNode;
   frequency: ConstantSourceNode;
   play: (note: number) => void;
   stop: (note: number) => void;
 }
 
 const midiSynth = (audioContext: AudioContext): MidiSynth => {
-  const gain = audioContext.createGain();
-  gain.gain.value = 0.5;
+  const gate = audioContext.createConstantSource();
+  gate.offset.value = 0;
+  gate.start();
 
   const frequency = audioContext.createConstantSource();
   frequency.start();
 
-  //const oscillator = audioContext.createOscillator();
-  //oscillator.start();
-
-  let oscillators: Record<number, OscillatorNode> = {};
-
-  const controls = {
-    attack: 0.1,
-    decay: 0.1,
-    sustain: 1,
-    release: 0.1
-  };
+  let currentNote: number;
 
   return {
     outputs: {
-      out: {
-        port: gain,
+      gate: {
+        port: gate,
       },
       frequency: {
         port: frequency
       }
     },
-    gain,
+    gate,
     frequency,
     play(note) {
+      currentNote = note;
       const frequencyValue = Midi.midiToFreq(note);
 
       frequency.offset.setValueAtTime(frequencyValue, audioContext.currentTime);
+      gate.offset.setValueAtTime(1, audioContext.currentTime)
 
-      const oscillator = audioContext.createOscillator();
-      oscillators[note] = oscillator;
-      oscillator.frequency.value = frequencyValue;
-      oscillator.connect(gain);
-      oscillator.start(audioContext.currentTime);
+      //oscillator.frequency.setValueAtTime(frequencyValue, audioContext.currentTime);
 
-      gain.gain.cancelScheduledValues(audioContext.currentTime);
+      /*gain.gain.cancelScheduledValues(audioContext.currentTime);
       gain.gain.setValueAtTime(0, audioContext.currentTime);
 
       gain.gain.linearRampToValueAtTime(
@@ -59,15 +48,19 @@ const midiSynth = (audioContext: AudioContext): MidiSynth => {
       gain.gain.linearRampToValueAtTime(
         0,
         audioContext.currentTime + controls.decay + controls.sustain
-      );
+      );*/
     },
     stop(note) {
-      frequency.offset.setValueAtTime(0, audioContext.currentTime);
+      if (note === currentNote) {
+        frequency.offset.setValueAtTime(0, audioContext.currentTime);
+        gate.offset.setValueAtTime(0, audioContext.currentTime)
+      }
 
-      const oscillator = oscillators[note];
-      oscillator.stop(audioContext.currentTime);
-      oscillator.disconnect(gain);
-      delete oscillators[note];
+      //oscillator.frequency.setValueAtTime(0, audioContext.currentTime);
+      //const oscillator = oscillators[note];
+      //oscillator.stop(audioContext.currentTime);
+      //oscillator.disconnect(gain);
+      //delete oscillators[note];
       // console.log(9090, note);
     },
   };
