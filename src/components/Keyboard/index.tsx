@@ -1,28 +1,32 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
-import { useControls, useCreateStore, LevaPanel } from "leva";
+import { useControls, useCreateStore, LevaPanel, folder } from "leva";
 //@ts-ignore
 import { Piano, KeyboardShortcuts, MidiNumbers } from "react-piano";
 import "react-piano/dist/styles.css";
 import { MidiSynth as TMidiSynth } from "../../nodes";
 import { useNode } from "../../ModuleContext";
 
+const DEFAULT_MIN_MIDI = MidiNumbers.fromNote("c3");
+const DEFAULT_MAX_MIDI = MidiNumbers.fromNote("f5");
+
 const Keyboard = ({ sourcePosition, targetPosition, id, data }: NodeProps) => {
   const { node } = useNode<TMidiSynth>(id);
-  console.log(node);
-
-  const firstNote = MidiNumbers.fromNote("c3");
-  const lastNote = MidiNumbers.fromNote("f5");
-  const keyboardShortcuts = KeyboardShortcuts.create({
-    firstNote: firstNote,
-    lastNote: lastNote,
-    keyboardConfig: KeyboardShortcuts.HOME_ROW,
-  });
 
   const store = useCreateStore();
 
   const values = useControls(
     {
+      layout: folder(
+        {
+          range: {
+            value: [DEFAULT_MIN_MIDI, DEFAULT_MAX_MIDI],
+            min: MidiNumbers.MIN_MIDI_NUMBER,
+            max: MidiNumbers.MAX_MIDI_NUMBER,
+          },
+        },
+        { collapsed: true }
+      ),
       source: {
         options: {
           "Computer keyboard": "computerKeyboard",
@@ -31,6 +35,13 @@ const Keyboard = ({ sourcePosition, targetPosition, id, data }: NodeProps) => {
     },
     { store }
   );
+  const firstNote = useMemo(() => values.range[0] || DEFAULT_MIN_MIDI, [values]);
+  const lastNote = useMemo(() => values.range[1], [values]);
+  const keyboardShortcuts = useMemo(() => KeyboardShortcuts.create({
+    firstNote: firstNote,
+    lastNote: lastNote,
+    keyboardConfig: KeyboardShortcuts.HOME_ROW,
+  }), [firstNote, lastNote]);
 
   const playNote = useCallback(
     (midiNumber: number) => {
@@ -59,6 +70,7 @@ const Keyboard = ({ sourcePosition, targetPosition, id, data }: NodeProps) => {
         fill
         flat
         hideCopyButton
+        oneLineLabels
         titleBar={{ drag: false, title: data.label }}
       />
       <Piano
