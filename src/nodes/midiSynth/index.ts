@@ -16,6 +16,9 @@ const midiSynth = (audioContext: AudioContext): MidiSynth => {
   const frequency = audioContext.createConstantSource();
   frequency.start();
 
+  const midi = audioContext.createConstantSource();
+  midi.start();
+
   let currentNote: number;
 
   return {
@@ -25,6 +28,9 @@ const midiSynth = (audioContext: AudioContext): MidiSynth => {
       },
       frequency: {
         port: frequency
+      },
+      midi: {
+        port: midi
       }
     },
     gate,

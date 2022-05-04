@@ -1,8 +1,15 @@
 import { useCallback, useMemo } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useControls, useCreateStore, LevaPanel, folder } from "leva";
-//@ts-ignore
-import { Piano, KeyboardShortcuts, MidiNumbers } from "react-piano";
+import {
+  Piano,
+  KeyboardShortcuts,
+  MidiNumbers,
+  //@ts-ignore
+} from "react-piano";
+import { Scale, Note } from "@tonaljs/tonal";
+import Range from "@tonaljs/range";
+import { Midi } from "@tonaljs/tonal";
 import "react-piano/dist/styles.css";
 import { MidiSynth as TMidiSynth } from "../../nodes";
 import { useNode } from "../../ModuleContext";
@@ -17,29 +24,47 @@ const Keyboard = ({ sourcePosition, targetPosition, id, data }: NodeProps) => {
 
   const values = useControls(
     {
-      range: {
-        value: [DEFAULT_MIN_MIDI, DEFAULT_MAX_MIDI],
-        min: MidiNumbers.MIN_MIDI_NUMBER,
-        max: MidiNumbers.MAX_MIDI_NUMBER,
+      firstNote: {
+        options: Range.chromatic([
+          MidiNumbers.MIN_MIDI_NUMBER,
+          MidiNumbers.MAX_MIDI_NUMBER,
+        ]).reduce<Record<number, number>>(
+          (acc, note) => ({
+            ...acc,
+            [note]: Midi.toMidi(note),
+          }),
+          {}
+        ),
+        value: MidiNumbers.fromNote("a4"),
+      },
+      size: {
+        options: [12, 24],
       },
     },
     { store }
   );
 
-  const firstNote = useMemo(() => values.range[0], [values]);
-  const lastNote = useMemo(() => values.range[1], [values]);
-  const keyboardShortcuts = useMemo(() => KeyboardShortcuts.create({
-    firstNote: firstNote,
-    lastNote: lastNote,
-    keyboardConfig: KeyboardShortcuts.HOME_ROW,
-  }), [firstNote, lastNote]);
+  const firstNote = useMemo(() => values.firstNote, [values]);
+  const lastNote = useMemo(
+    () => Midi.toMidi(values.firstNote + values.size),
+    [values]
+  );
+  const keyboardShortcuts = useMemo(
+    () =>
+      KeyboardShortcuts.create({
+        firstNote: firstNote,
+        lastNote: lastNote,
+        keyboardConfig: KeyboardShortcuts.HOME_ROW,
+      }),
+    [firstNote, lastNote]
+  );
 
   const playNote = useCallback(
     (midiNumber: number) => {
       if (!node) {
         return;
       }
-      node.play(midiNumber);
+      requestAnimationFrame(() => node.play(midiNumber));
     },
     [node]
   );
@@ -49,7 +74,7 @@ const Keyboard = ({ sourcePosition, targetPosition, id, data }: NodeProps) => {
       if (!node) {
         return;
       }
-      node.stop(midiNumber);
+      requestAnimationFrame(() => node.stop(midiNumber));
     },
     [node]
   );
