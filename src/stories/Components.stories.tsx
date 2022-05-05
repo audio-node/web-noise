@@ -633,7 +633,7 @@ export const Keyboard = () => (
         {
           id: "oscillator",
           type: "oscillator",
-          data: { label: "Oscillator" },
+          data: { label: "Oscillator", value: 0 },
           position: { x: spaceWidth * 2 - 20, y: 0 },
           dragHandle: ".leva-c-hwBXYF",
           className: "react-flow__node-default",

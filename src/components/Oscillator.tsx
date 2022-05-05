@@ -59,16 +59,14 @@ const Oscillator = ({
       values.frequency,
       audioContext.currentTime
     );
-  }, [values.frequency]);
+  }, [values.frequency, oscillator]);
 
   useEffect(() => {
     if (!oscillator) {
       return;
     }
-    //@ts-ignore
-    oscillator.type = values.type;
-    console.log(values.type);
-  }, [values.type]);
+    oscillator.type = values.type as OscillatorType;
+  }, [values.type, oscillator]);
 
   return (
     <>
