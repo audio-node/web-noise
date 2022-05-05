@@ -11,12 +11,12 @@ export const PortsPanel = styled.div`
 
 export const InputPorts = styled.div`
   grid-area: inputs;
-  justify-self: left;
+  text-align: left;
 `;
 
 export const OutputPorts = styled.div`
   grid-area: outputs;
-  justify-self: right;
+  text-align: right;
 `;
 
 export const Port = styled.div`
