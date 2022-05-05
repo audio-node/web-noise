@@ -14,9 +14,6 @@ import "react-piano/dist/styles.css";
 import { MidiSynth as TMidiSynth } from "../../nodes";
 import { useNode } from "../../ModuleContext";
 
-const DEFAULT_MIN_MIDI = MidiNumbers.fromNote("c3");
-const DEFAULT_MAX_MIDI = MidiNumbers.fromNote("f5");
-
 const Keyboard = ({ sourcePosition, targetPosition, id, data }: NodeProps) => {
   const { node } = useNode<TMidiSynth>(id);
 
@@ -25,16 +22,18 @@ const Keyboard = ({ sourcePosition, targetPosition, id, data }: NodeProps) => {
   const values = useControls(
     {
       firstNote: {
-        options: Range.chromatic([
-          MidiNumbers.MIN_MIDI_NUMBER,
-          MidiNumbers.MAX_MIDI_NUMBER,
-        ]).reduce<Record<number, number>>(
-          (acc, note) => ({
-            ...acc,
-            [note]: Midi.toMidi(note),
-          }),
-          {}
-        ),
+        options: Range.chromatic(
+          [MidiNumbers.MIN_MIDI_NUMBER, MidiNumbers.MAX_MIDI_NUMBER - 12],
+          { sharps: true }
+        )
+          .filter((note) => /[A-G]\d/.test(note))
+          .reduce<Record<number, number>>(
+            (acc, note) => ({
+              ...acc,
+              [note]: Midi.toMidi(note),
+            }),
+            {}
+          ),
         value: MidiNumbers.fromNote("a4"),
       },
       size: {
@@ -49,6 +48,8 @@ const Keyboard = ({ sourcePosition, targetPosition, id, data }: NodeProps) => {
     () => Midi.toMidi(values.firstNote + values.size),
     [values]
   );
+  console.log(1212, firstNote, lastNote);
+
   const keyboardShortcuts = useMemo(
     () =>
       KeyboardShortcuts.create({
@@ -105,9 +106,15 @@ const Keyboard = ({ sourcePosition, targetPosition, id, data }: NodeProps) => {
       />
       <Handle
         type="source"
-        isValidConnection={() => true}
         position={sourcePosition || Position.Right}
         style={{ top: 70 }}
+        id="midi"
+      />
+      <Handle
+        type="source"
+        isValidConnection={() => true}
+        position={sourcePosition || Position.Right}
+        style={{ top: 90 }}
         id="gate"
       />
     </>

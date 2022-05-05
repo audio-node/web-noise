@@ -4,6 +4,7 @@ import { Node } from "../../ModuleContext";
 export interface MidiSynth extends Node {
   gate: ConstantSourceNode;
   frequency: ConstantSourceNode;
+  midi: ConstantSourceNode;
   play: (note: number) => void;
   stop: (note: number) => void;
 }
@@ -33,6 +34,7 @@ const midiSynth = (audioContext: AudioContext): MidiSynth => {
         port: midi
       }
     },
+    midi,
     gate,
     frequency,
     play(note) {
@@ -40,12 +42,14 @@ const midiSynth = (audioContext: AudioContext): MidiSynth => {
       const frequencyValue = Midi.midiToFreq(note);
 
       frequency.offset.setValueAtTime(frequencyValue, audioContext.currentTime);
+      midi.offset.setValueAtTime(note, audioContext.currentTime);
       gate.offset.setValueAtTime(1, audioContext.currentTime)
     },
     stop(note) {
       if (note === currentNote) {
         frequency.offset.setValueAtTime(0, audioContext.currentTime);
         gate.offset.setValueAtTime(0, audioContext.currentTime);
+        midi.offset.setValueAtTime(0, audioContext.currentTime);
       }
     },
   };
