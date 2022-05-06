@@ -624,7 +624,7 @@ export const Keyboard = () => (
       nodes: [
         {
           id: "keyboard",
-          type: "keyboard",
+          type: "virtualKeyboard",
           data: { label: "Keyboard" },
           position: { x: 0, y: 50 },
           dragHandle: ".leva-c-hwBXYF",

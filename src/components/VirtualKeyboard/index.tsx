@@ -1,22 +1,23 @@
-import { useCallback, useMemo } from "react";
-import { Handle, Position, NodeProps } from "react-flow-renderer";
-import { useControls, useCreateStore, LevaPanel, folder } from "leva";
-import {
-  Piano,
-  KeyboardShortcuts,
-  MidiNumbers,
-  //@ts-ignore
-} from "react-piano";
 import Range from "@tonaljs/range";
 import { Midi } from "@tonaljs/tonal";
+import { LevaPanel, useControls, useCreateStore } from "leva";
+import { useCallback, useMemo } from "react";
+import { Handle, NodeProps, Position } from "react-flow-renderer";
+//@ts-ignore
+import { KeyboardShortcuts, MidiNumbers, Piano } from "react-piano";
 import "react-piano/dist/styles.css";
-import { LEVA_COLOR_ACCENT2_BLUE } from "../../styles/consts";
-import { PortsPanel, OutputPorts, Port } from "../Node";
-import { MidiSynth as TMidiSynth } from "../../nodes";
 import { useNode } from "../../ModuleContext";
+import { VirtualKeyboard as TVirtualKeyboard } from "../../nodes";
+import { LEVA_COLOR_ACCENT2_BLUE } from "../../styles/consts";
+import { OutputPorts, Port, PortsPanel } from "../Node";
 
-const Keyboard = ({ sourcePosition, targetPosition, id, data }: NodeProps) => {
-  const { node } = useNode<TMidiSynth>(id);
+const VirtualKeyboard = ({
+  sourcePosition,
+  targetPosition,
+  id,
+  data,
+}: NodeProps) => {
+  const { node } = useNode<TVirtualKeyboard>(id);
 
   const store = useCreateStore();
 
@@ -122,4 +123,4 @@ const Keyboard = ({ sourcePosition, targetPosition, id, data }: NodeProps) => {
   );
 };
 
-export default Keyboard;
+export default VirtualKeyboard;

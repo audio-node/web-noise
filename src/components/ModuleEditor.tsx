@@ -1,39 +1,39 @@
-import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { useCallback, useMemo, useState } from "react";
 import ReactFlow, {
+  addEdge,
   Background,
   BackgroundVariant,
-  MiniMap,
   Controls,
-  Node,
   Edge,
+  MiniMap,
+  Node,
   Position,
-  addEdge,
   ReactFlowProvider,
-  useNodesState,
   useEdgesState,
+  useNodesState,
 } from "react-flow-renderer";
+import { contextValue, ModuleContext } from "../ModuleContext";
+import { nodeTypes as baseAudioNodeTypes } from "../nodes";
 import "../styles/reactflow.ts";
-import { ModuleContext, contextValue, useModule } from "../ModuleContext";
-import Toolbar from "./Toolbar";
 import AudioGraph from "./AudioGraph";
-import Oscillator from "./Oscillator";
+import ContextMenu from "./ContextMenu";
 import Destination from "./Destination";
-import Gain from "./Gain";
-import Wire from "./Wire";
-import Visualizer from "./Visualizer";
-import Spectroscope from "./Spectroscope";
-import WhiteNoise from "./WhiteNoise";
-import ScriptNode from "./ScriptNode";
+import Envelope from "./Envelope";
 import Filter from "./Filter";
+import Gain from "./Gain";
+import Oscillator from "./Oscillator";
 import Parameter from "./Parameter";
 import RandomSequencer from "./RandomSequencer";
-import Envelope from "./Envelope";
+import RandomSequencerWorklet from "./RandomSequencerWorklet";
 import ResumeContext from "./ResumeContext";
 import Reverb from "./Reverb";
-import RandomSequencerWorklet from "./RandomSequencerWorklet";
-import Keyboard from "./Keyboard";
-import { nodeTypes as baseAudioNodeTypes } from "../nodes";
-import ContextMenu from "./ContextMenu";
+import ScriptNode from "./ScriptNode";
+import Spectroscope from "./Spectroscope";
+import Toolbar from "./Toolbar";
+import VirtualKeyboard from "./VirtualKeyboard";
+import Visualizer from "./Visualizer";
+import WhiteNoise from "./WhiteNoise";
+import Wire from "./Wire";
 
 export interface Elements {
   nodes: Array<Node>;
@@ -63,7 +63,7 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
       envelope: Envelope,
       randomSequencerWorklet: RandomSequencerWorklet,
       scriptNode: ScriptNode,
-      keyboard: Keyboard,
+      virtualKeyboard: VirtualKeyboard,
     }),
     []
   );
@@ -74,7 +74,6 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
       visualiser: baseAudioNodeTypes.analyser,
       spectroscope: baseAudioNodeTypes.analyser,
       parameter: baseAudioNodeTypes.constantSource,
-      keyboard: baseAudioNodeTypes.midiSynth,
     }),
     []
   );

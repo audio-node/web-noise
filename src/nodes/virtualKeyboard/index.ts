@@ -1,7 +1,7 @@
-import { Scale, Note, Midi } from "@tonaljs/tonal";
+import { Midi } from "@tonaljs/tonal";
 import { Node } from "../../ModuleContext";
 
-export interface MidiSynth extends Node {
+export interface VirtualKeyboard extends Node {
   gate: ConstantSourceNode;
   frequency: ConstantSourceNode;
   midi: ConstantSourceNode;
@@ -9,7 +9,7 @@ export interface MidiSynth extends Node {
   stop: (note: number) => void;
 }
 
-const midiSynth = (audioContext: AudioContext): MidiSynth => {
+const virtualKeyboard = (audioContext: AudioContext): VirtualKeyboard => {
   const gate = audioContext.createConstantSource();
   gate.offset.value = 0;
   gate.start();
@@ -55,4 +55,4 @@ const midiSynth = (audioContext: AudioContext): MidiSynth => {
   };
 };
 
-export default midiSynth;
+export default virtualKeyboard;
