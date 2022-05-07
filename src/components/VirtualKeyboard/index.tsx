@@ -116,7 +116,7 @@ const VirtualKeyboard = ({
         noteRange={{ first: firstNote, last: lastNote }}
         playNote={playNote}
         stopNote={stopNote}
-        width={600}
+        width={400}
         keyboardShortcuts={keyboardShortcuts}
       />
     </>
