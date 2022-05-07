@@ -617,3 +617,87 @@ output.forEach((outputChannel, channelIndex) => {
     }}
   />
 );
+
+export const Keyboard = () => (
+  <Editor
+    elements={{
+      nodes: [
+        {
+          id: "keyboard",
+          type: "virtualKeyboard",
+          data: { label: "Keyboard" },
+          position: { x: 0, y: 50 },
+          dragHandle: ".leva-c-hwBXYF",
+          className: "react-flow__node-default",
+        },
+        {
+          id: "oscillator",
+          type: "oscillator",
+          data: { label: "Oscillator", value: 0 },
+          position: { x: spaceWidth * 2 - 20, y: 0 },
+          dragHandle: ".leva-c-hwBXYF",
+          className: "react-flow__node-default",
+        },
+        {
+          id: "gain",
+          type: "gain",
+          data: { label: "Gain" },
+          position: { x: spaceWidth * 3 - 50, y: 60 },
+          dragHandle: ".leva-c-hwBXYF",
+          className: "react-flow__node-default",
+        },
+        {
+          id: "visualiser",
+          type: "visualiser",
+          data: { label: "Visualiser" },
+          position: { x: spaceWidth * 4 - 100, y: 50 },
+          className: "react-flow__node-default",
+        },
+        {
+          id: "destination",
+          type: "destination",
+          data: { label: "Destination" },
+          position: { x: spaceWidth * 5 - 50, y: 50 },
+          className: "react-flow__node-default",
+        },
+      ],
+      edges: [
+        {
+          id: "keyboard-to-oscillator",
+          source: "keyboard",
+          sourceHandle: "frequency",
+          target: "oscillator",
+          targetHandle: "frequency",
+        },
+        {
+          id: "keyboard-to-gain",
+          source: "keyboard",
+          sourceHandle: "gate",
+          target: "gain",
+          targetHandle: "gain",
+        },
+        {
+          id: "oscillator-to-gain",
+          source: "oscillator",
+          sourceHandle: "out",
+          target: "gain",
+          targetHandle: "in",
+        },
+        {
+          id: "gain-to-visualiser",
+          source: "gain",
+          sourceHandle: "out",
+          target: "visualiser",
+          targetHandle: "in",
+        },
+        {
+          id: "visualiser-to-destination",
+          source: "visualiser",
+          target: "destination",
+          targetHandle: "in",
+          sourceHandle: "out",
+        },
+      ],
+    }}
+  />
+);
