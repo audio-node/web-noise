@@ -1,6 +1,15 @@
 import styled from "@emotion/styled";
+import { FC } from "react";
 import { LEVA_COLORS } from "../../styles/consts";
 
+export const TitleBar: FC<{ className?: string }> = ({
+  children,
+  className,
+}) => (
+  <div className={`leva-c-hwBXYF leva-c-iLtnIm leva-c-kWgxhW ${className}`}>
+    {children}
+  </div>
+);
 
 export const PortsPanel = styled.div`
   display: grid;

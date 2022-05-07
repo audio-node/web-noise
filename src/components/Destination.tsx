@@ -1,34 +1,30 @@
-import { Handle, Position, NodeProps } from "react-flow-renderer";
-import { useControls, useCreateStore, LevaPanel } from "leva";
-import { Destination as TDestination } from "../nodes";
+import styled from "@emotion/styled";
+import { FC } from "react";
+import { Handle, NodeProps, Position } from "react-flow-renderer";
+import { MdSpeaker } from "react-icons/md";
 import { useNode } from "../ModuleContext";
+import { Destination as TDestination } from "../nodes";
+import { TitleBar } from "./Node";
 
-const Destination = ({ targetPosition, data, id }: NodeProps) => {
+const TitleBarWrapper = styled(TitleBar)`
+  width: auto;
+  height: auto;
+  padding: 0.5rem;
+`;
+
+const SpeakerIcon = styled(MdSpeaker)`
+  width: 3rem;
+  height: 3rem;
+`;
+
+const Destination: FC<NodeProps> = ({ targetPosition, id }) => {
   useNode<TDestination>(id);
-
-  const store = useCreateStore();
-
-  useControls(
-    {
-      destination: {
-        value: "",
-        editable: false,
-      },
-    },
-    { store }
-  );
 
   return (
     <>
-      <LevaPanel
-        oneLineLabels
-        hideCopyButton
-        collapsed
-        store={store}
-        fill
-        flat
-        titleBar={{ drag: false, title: data.label }}
-      />
+      <TitleBarWrapper>
+        <SpeakerIcon />
+      </TitleBarWrapper>
       <Handle
         type="target"
         position={targetPosition || Position.Left}
