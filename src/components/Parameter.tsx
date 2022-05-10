@@ -26,9 +26,7 @@ const Parameter = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
       value: {
         value: data.value || 1,
         label: "value",
-        min: data.min || 0,
-        max: data.max || 1,
-        step: data.step || 0.1,
+        step: 0.01
       },
     },
     { store }

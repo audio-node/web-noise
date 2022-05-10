@@ -1,8 +1,8 @@
 import { FC, useCallback, useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import { useModule, useNode } from "../../ModuleContext";
+import { FaPause, FaPlay } from "react-icons/fa";
+import { useModule } from "../../ModuleContext";
 import { Clock } from "../../nodes";
-import { Play, Pause } from "./icons";
 
 const ToolbarWrapper = styled.div`
   background: #181c20;
@@ -81,7 +81,7 @@ const Toolbar: FC = () => {
       ) : (
         <>
           <PlayPauseButton onClick={togglePlaying}>
-            {isPlaying ? <Pause /> : <Play />}
+            {isPlaying ? <FaPause /> : <FaPlay />}
           </PlayPauseButton>
           <label>
             bpm: <Tempo type="number" value={value} onChange={setBpm} />

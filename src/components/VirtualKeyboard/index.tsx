@@ -1,5 +1,6 @@
 import Range from "@tonaljs/range";
 import { Midi } from "@tonaljs/tonal";
+import styled from "@emotion/styled";
 import { LevaPanel, useControls, useCreateStore } from "leva";
 import { useCallback, useMemo } from "react";
 import { Handle, NodeProps, Position } from "react-flow-renderer";
@@ -10,6 +11,16 @@ import { useNode } from "../../ModuleContext";
 import { VirtualKeyboard as TVirtualKeyboard } from "../../nodes";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../../styles/consts";
 import { OutputPorts, Port, PortsPanel } from "../Node";
+
+const Keyboard = styled(Piano)`
+  .ReactPiano__Key--natural {
+    border-radius: 0;
+  }
+
+  .ReactPiano__Key--accidental {
+    border-radius: 0 0 3px 3px;
+  }
+`;
 
 const VirtualKeyboard = ({
   sourcePosition,
@@ -37,7 +48,7 @@ const VirtualKeyboard = ({
             }),
             {}
           ),
-        value: MidiNumbers.fromNote("a4") as number,
+        value: MidiNumbers.fromNote("c4") as number,
       },
       size: {
         options: [12, 24],
@@ -112,7 +123,7 @@ const VirtualKeyboard = ({
         oneLineLabels
         titleBar={false}
       />
-      <Piano
+      <Keyboard
         noteRange={{ first: firstNote, last: lastNote }}
         playNote={playNote}
         stopNote={stopNote}
