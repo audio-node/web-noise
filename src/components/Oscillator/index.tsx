@@ -1,24 +1,22 @@
+import { LevaPanel, useControls, useCreateStore } from "leva";
 import { useEffect } from "react";
-import { Handle, Position, NodeProps } from "react-flow-renderer";
-import { useControls, useCreateStore, LevaPanel } from "leva";
-import { useModule, useNode } from "../../ModuleContext";
+import { NodeProps } from "react-flow-renderer";
+import { useNode } from "../../ModuleContext";
 import { Oscillator as TOscillator } from "../../nodes";
+import { LEVA_COLOR_ACCENT2_BLUE } from "../../styles/consts";
+import { Node } from "../Node";
+import { SawToothIcon, SineIcon, SquareIcon, TriangleIcon } from "./icons";
 import iconsGroup from "./iconsGroup";
-import { SineIcon, SawToothIcon, TriangleIcon, SquareIcon } from "./icons";
 
 const DEFAULT_FREQUENCY = 440;
 
-const Oscillator = ({
-  sourcePosition,
-  targetPosition,
-  id,
-  data,
-}: NodeProps) => {
+const Oscillator = ({ id, data }: NodeProps) => {
   const oscillatorNode = useNode<TOscillator>(id);
   const store = useCreateStore();
 
   const value = parseInt(data.value);
   const values = useControls(
+    "settings",
     {
       frequency: {
         value: isNaN(value) ? DEFAULT_FREQUENCY : value,
@@ -49,6 +47,7 @@ const Oscillator = ({
         ],
       }),
     },
+    { collapsed: true, color: LEVA_COLOR_ACCENT2_BLUE },
     { store }
   );
 
@@ -62,30 +61,9 @@ const Oscillator = ({
   }, [values, node]);
 
   return (
-    <>
-      <Handle
-        type="target"
-        position={targetPosition || Position.Left}
-        style={{ top: 10 }}
-        id="frequency"
-      />
-      <Handle
-        type="target"
-        position={targetPosition || Position.Left}
-        id="detune"
-      />
-      <LevaPanel
-        store={store}
-        fill
-        flat
-        titleBar={{ drag: false, title: data.label }}
-      />
-      <Handle
-        type="source"
-        position={sourcePosition || Position.Right}
-        id="out"
-      />
-    </>
+    <Node title={data.label} inputs={node?.inputs} outputs={node?.outputs}>
+      <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
+    </Node>
   );
 };
 

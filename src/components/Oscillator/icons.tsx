@@ -7,7 +7,7 @@ interface IconProps {
 }
 
 const Icon = styled.div<IconProps>`
-  width: 1rem;
+  width: 0.9rem;
   cursor: pointer;
   svg {
     fill: ${({ selected }) =>
