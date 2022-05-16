@@ -1,5 +1,6 @@
 import { createPlugin, useInputContext } from "leva/plugin";
 import styled from "@emotion/styled";
+import { LEVA_COLORS } from '../../styles/consts'
 
 
 const IconsGroupWrapper = styled.div`
@@ -9,7 +10,7 @@ const IconsGroupWrapper = styled.div`
   row-gap: var(--leva-space-rowGap);
   grid-template-rows: minmax(var(--leva-sizes-rowHeight), max-content);
   align-items: center;
-  color: var(--leva-colors-highlight2);
+  color: ${LEVA_COLORS.highlight2};
   grid-template-columns: auto var(--leva-sizes-controlWidth);
   column-gap: var(--leva-space-colGap);
 `;
@@ -37,8 +38,8 @@ const IconGroup = () => {
       <IconsGroupLabel>{label}</IconsGroupLabel>
       <IconsGroupIcons>
         {(settings as any)?.options.map(
-          ({ icon: Icon, value: optionValue }: any) => (
-            <IconsGroupIconWrapper onClick={() => onUpdate(optionValue)}>
+          ({ icon: Icon, value: optionValue }: any, index: number) => (
+            <IconsGroupIconWrapper key={index} onClick={() => onUpdate(optionValue)}>
               <Icon selected={optionValue === value} />
             </IconsGroupIconWrapper>
           )

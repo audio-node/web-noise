@@ -6,6 +6,7 @@ export interface Oscillator extends Node {
 
 const oscillator = (audioContext: AudioContext): Oscillator => {
   const oscillator = audioContext.createOscillator();
+  oscillator.start();
   return {
     inputs: {
       frequency: {
@@ -19,6 +20,9 @@ const oscillator = (audioContext: AudioContext): Oscillator => {
       out: {
         port: oscillator,
       },
+    },
+    destroy: () => {
+      oscillator.stop();
     },
     oscillator,
   };

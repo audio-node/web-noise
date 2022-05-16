@@ -61,16 +61,6 @@ const Oscillator = ({
     if (!oscillator) {
       return;
     }
-    oscillator.start();
-    return () => {
-      oscillator.stop();
-    };
-  }, [oscillator]);
-
-  useEffect(() => {
-    if (!oscillator) {
-      return;
-    }
     oscillator.frequency.setValueAtTime(
       values.frequency,
       audioContext.currentTime
