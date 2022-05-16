@@ -14,7 +14,6 @@ const Oscillator = ({
   id,
   data,
 }: NodeProps) => {
-  const { audioContext } = useModule();
   const oscillatorNode = useNode<TOscillator>(id);
   const store = useCreateStore();
 
@@ -55,24 +54,12 @@ const Oscillator = ({
 
   const { node } = oscillatorNode;
 
-  const { oscillator } = node || {};
-
   useEffect(() => {
-    if (!oscillator) {
-      return;
-    }
-    oscillator.frequency.setValueAtTime(
-      values.frequency,
-      audioContext.currentTime
-    );
-  }, [values.frequency, oscillator]);
-
-  useEffect(() => {
-    if (!oscillator) {
-      return;
-    }
-    oscillator.type = values.type as OscillatorType;
-  }, [values.type, oscillator]);
+    node?.setValues({
+      frequency: values.frequency,
+      type: values.type as OscillatorType,
+    });
+  }, [values, node]);
 
   return (
     <>
@@ -95,7 +82,6 @@ const Oscillator = ({
       />
       <Handle
         type="source"
-        isValidConnection={() => true}
         position={sourcePosition || Position.Right}
         id="out"
       />

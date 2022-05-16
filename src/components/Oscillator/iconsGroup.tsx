@@ -32,7 +32,7 @@ const IconsGroupIconWrapper = styled.div`
 `;
 
 const IconGroup = () => {
-  const { value, settings, label, onUpdate, ...rest } = useInputContext();
+  const { value, settings, label, onUpdate } = useInputContext();
   return (
     <IconsGroupWrapper>
       <IconsGroupLabel>{label}</IconsGroupLabel>
