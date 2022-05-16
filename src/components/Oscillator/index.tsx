@@ -1,8 +1,10 @@
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
-import { useModule, Node as WebNoiseNode, useNode } from "../ModuleContext";
-import { Oscillator as TOscillator } from "../nodes";
 import { useControls, useCreateStore, LevaPanel } from "leva";
+import { useModule, useNode } from "../../ModuleContext";
+import { Oscillator as TOscillator } from "../../nodes";
+import iconsGroup from "./iconsGroup";
+import { SineIcon, SawToothIcon, TriangleIcon, SquareIcon } from "./icons";
 
 const DEFAULT_FREQUENCY = 440;
 
@@ -25,14 +27,28 @@ const Oscillator = ({
         min: data.min || 0,
         label: "freq",
       },
-      type: {
-        options: {
-          sine: "sine",
-          sawtooth: "sawtooth",
-          triangle: "triangle",
-          square: "square",
-        },
-      },
+      type: iconsGroup({
+        label: "type",
+        value: data.type || "sine",
+        options: [
+          {
+            icon: SineIcon,
+            value: "sine",
+          },
+          {
+            icon: SawToothIcon,
+            value: "sawtooth",
+          },
+          {
+            icon: TriangleIcon,
+            value: "triangle",
+          },
+          {
+            icon: SquareIcon,
+            value: "square",
+          },
+        ],
+      }),
     },
     { store }
   );
