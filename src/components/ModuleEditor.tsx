@@ -14,7 +14,6 @@ import ReactFlow, {
 } from "react-flow-renderer";
 import { contextValue, ModuleContext } from "../ModuleContext";
 import { nodeTypes as baseAudioNodeTypes } from "../nodes";
-import "../styles/reactflow.ts";
 import AudioGraph from "./AudioGraph";
 import ContextMenu from "./ContextMenu";
 import Destination from "./Destination";
@@ -36,6 +35,8 @@ import Visualiser from "./Visualiser";
 import WhiteNoise from "./WhiteNoise";
 import Clock from "./Clock";
 import Wire from "./Wire";
+import StepSequencer from "./StepSequencer";
+import "../styles/reactflow.ts";
 
 export interface Elements {
   nodes: Array<Node>;
@@ -67,7 +68,11 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
       randomSequencerWorklet: RandomSequencerWorklet,
       scriptNode: ScriptNode,
       virtualKeyboard: VirtualKeyboard,
+<<<<<<< HEAD
       clock: Clock,
+=======
+      stepSequencer: StepSequencer,
+>>>>>>> start implementing
     }),
     []
   );
