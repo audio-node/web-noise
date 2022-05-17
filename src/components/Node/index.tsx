@@ -1,6 +1,12 @@
 import styled from "@emotion/styled";
 import { FC } from "react";
+import { Handle, Position, HandleProps } from "react-flow-renderer";
+import { Node as TNode } from "../../ModuleContext";
 import { LEVA_COLORS } from "../../styles/consts";
+
+interface NodeProps extends Pick<TNode, "inputs" | "outputs"> {
+  title: string;
+}
 
 export const TitleBar: FC<{ className?: string }> = ({
   children,
@@ -16,6 +22,8 @@ export const PortsPanel = styled.div`
   grid-template-areas: "inputs outputs";
   background: ${LEVA_COLORS.elevation2};
   border-bottom: 1px solid ${LEVA_COLORS.elevation1};
+  color: ${LEVA_COLORS.highlight3};
+  font-size: 0.6rem;
 `;
 
 export const InputPorts = styled.div`
@@ -32,3 +40,49 @@ export const Port = styled.div`
   position: relative;
   padding: 5px 10px;
 `;
+
+const StyledInputHandle = styled(Handle)`
+  left: -2px;
+`
+
+const InputHandle: FC<Partial<HandleProps>> = (props) => (
+  <StyledInputHandle {...props} type="target" position={Position.Left} />
+);
+
+const StyledOutputHandle = styled(Handle)`
+  right: -2px;
+`
+
+const OutputHandle: FC<Partial<HandleProps>> = (props) => (
+  <StyledOutputHandle {...props} type="source" position={Position.Right} />
+);
+
+export const Node: FC<NodeProps> = ({
+  children,
+  title,
+  inputs = {},
+  outputs = {},
+}) => (
+  <>
+    <div className="leva-c-hwBXYF leva-c-iLtnIm leva-c-kWgxhW">{title}</div>
+    <PortsPanel className="leva-c-kWgxhW">
+      <InputPorts>
+        {Object.keys(inputs).map((key, index) => (
+          <Port key={index}>
+            <InputHandle id={key} />
+            <span>{key}</span>
+          </Port>
+        ))}
+      </InputPorts>
+      <OutputPorts>
+        {Object.keys(outputs).map((key, index) => (
+          <Port key={index}>
+            <OutputHandle id={key} />
+            <span>{key}</span>
+          </Port>
+        ))}
+      </OutputPorts>
+    </PortsPanel>
+    {children}
+  </>
+);

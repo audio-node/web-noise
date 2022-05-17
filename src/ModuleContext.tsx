@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo } from "react";
+import { createContext, useContext } from "react";
 import { getClock } from "./nodes";
 
 interface InputPort {
@@ -12,6 +12,8 @@ interface OutputPort {
 export interface Node extends Record<string, any> {
   inputs?: Record<string, InputPort | never>;
   outputs?: Record<string, OutputPort | never>;
+  destroy?: () => void;
+  setValues?: (values: any) => void;
 }
 const module: Map<string, Node | Promise<Node>> = new Map();
 const connections: Map<string, true> = new Map();
@@ -41,6 +43,8 @@ export const useModule = () => {
       console.error(`can't find node with id: ${id}`);
       return;
     }
+
+    node.destroy && node.destroy();
 
     //disconnect all ports
     Object.values(node.inputs || {}).forEach(

@@ -2,6 +2,7 @@ import { Node } from "../ModuleContext";
 import whiteNoise from "./whiteNoise";
 import scriptNode from "./scriptNode";
 import reverb from "./reverb";
+import oscillator from "./oscillator";
 import randomSequencer, { randomSequencerWorklet } from "./randomSequencer";
 import virtualKeyboard from "./virtualKeyboard";
 import createClock, { Clock } from "./clock";
@@ -9,6 +10,7 @@ import createClock, { Clock } from "./clock";
 export type { WhiteNoise } from "./whiteNoise";
 export type { ScriptNode } from "./scriptNode";
 export type { Reverb } from "./reverb";
+export type { Oscillator } from "./oscillator";
 export type {
   RandomSequencer,
   RandomSequencerWorklet,
@@ -27,29 +29,6 @@ export const getClock = async (audioContext: AudioContext): Promise<Clock> => {
   return clock;
 };
 
-export interface Oscillator extends Node {
-  oscillator: OscillatorNode;
-}
-
-const oscillator = (audioContext: AudioContext): Oscillator => {
-  const oscillator = audioContext.createOscillator();
-  return {
-    inputs: {
-      frequency: {
-        port: oscillator.frequency,
-      },
-      detune: {
-        port: oscillator.detune,
-      },
-    },
-    outputs: {
-      out: {
-        port: oscillator,
-      },
-    },
-    oscillator,
-  };
-};
 
 export interface Analyser extends Node {
   analyser: AnalyserNode;
