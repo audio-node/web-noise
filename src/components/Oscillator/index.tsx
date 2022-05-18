@@ -74,7 +74,7 @@ const Oscillator = ({ id, data }: NodeProps<OscillatorData>) => {
   }, [values]);
 
   return (
-    <Node title={data.label} inputs={node?.inputs} outputs={node?.outputs}>
+    <Node id={id} title={data.label} inputs={node?.inputs} outputs={node?.outputs}>
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
     </Node>
   );
