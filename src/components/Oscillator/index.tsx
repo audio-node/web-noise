@@ -12,8 +12,10 @@ import iconsGroup from "./iconsGroup";
 interface OscillatorData {
   label: string;
   values?: OscillatorValues;
-  min?: number;
-  max?: number;
+  config?: {
+    min?: number;
+    max?: number;
+  };
 }
 
 const DEFAULT_FREQUENCY = 440;
@@ -32,8 +34,8 @@ const Oscillator = ({ id, data }: NodeProps<OscillatorData>) => {
     {
       frequency: {
         value: frequency,
-        max: data.max || 800,
-        min: data.min || 0,
+        max: data.config?.max ?? 800,
+        min: data.config?.min ?? 0,
         label: "freq",
       },
       type: iconsGroup({
@@ -65,16 +67,16 @@ const Oscillator = ({ id, data }: NodeProps<OscillatorData>) => {
 
   const { node } = oscillatorNode;
 
-  useEffect(() => {
-    node?.setValues(data.values || {});
-  }, [node, data]);
-
-  useEffect(() => {
-    updateNodeValues(values);
-  }, [values]);
+  useEffect(() => node?.setValues(data.values), [node, data]);
+  useEffect(() => updateNodeValues(values), [values]);
 
   return (
-    <Node id={id} title={data.label} inputs={node?.inputs} outputs={node?.outputs}>
+    <Node
+      id={id}
+      title={data.label}
+      inputs={node?.inputs}
+      outputs={node?.outputs}
+    >
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
     </Node>
   );

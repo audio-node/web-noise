@@ -494,7 +494,7 @@ export const RandomSequencerWorker = () => (
         {
           id: "oscillator",
           type: "oscillator",
-          data: { label: "Oscillator", min: 0, max: 200, step: 1, values: { frequency: 0 } },
+          data: { label: "Oscillator", config: { min: 0, max: 200, step: 1 }, values: { frequency: 0 } },
           position: { x: spaceWidth, y: 50 },
           className: "react-flow__node-default",
           dragHandle: ".leva-c-hwBXYF",

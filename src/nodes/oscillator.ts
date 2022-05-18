@@ -7,7 +7,7 @@ export interface OscillatorValues {
 
 export interface Oscillator extends Node {
   oscillator: OscillatorNode;
-  setValues: (values: OscillatorValues) => void;
+  setValues: (values?: OscillatorValues) => void;
 }
 
 const oscillator = (audioContext: AudioContext): Oscillator => {
@@ -30,7 +30,7 @@ const oscillator = (audioContext: AudioContext): Oscillator => {
     destroy: () => {
       oscillator.stop();
     },
-    setValues: ({ frequency, type }) => {
+    setValues: ({ frequency, type } = {}) => {
       frequency &&
         oscillator.frequency.setValueAtTime(
           frequency,
