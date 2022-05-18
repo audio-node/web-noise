@@ -1,8 +1,13 @@
 import { Node } from "../ModuleContext";
 
+export interface OscillatorValues {
+  frequency?: number;
+  type?: OscillatorType;
+}
+
 export interface Oscillator extends Node {
   oscillator: OscillatorNode;
-  setValues: (values: { frequency?: number; type?: OscillatorType }) => void;
+  setValues: (values: OscillatorValues) => void;
 }
 
 const oscillator = (audioContext: AudioContext): Oscillator => {

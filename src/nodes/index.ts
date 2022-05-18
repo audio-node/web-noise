@@ -10,7 +10,7 @@ import createClock, { Clock } from "./clock";
 export type { WhiteNoise } from "./whiteNoise";
 export type { ScriptNode } from "./scriptNode";
 export type { Reverb } from "./reverb";
-export type { Oscillator } from "./oscillator";
+export type { Oscillator, OscillatorValues } from "./oscillator";
 export type {
   RandomSequencer,
   RandomSequencerWorklet,

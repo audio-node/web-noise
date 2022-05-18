@@ -1,32 +1,44 @@
 import { LevaPanel, useControls, useCreateStore } from "leva";
 import { useEffect } from "react";
 import { NodeProps } from "react-flow-renderer";
+import useFlowNode from "../../hooks/useFlowNode";
 import { useNode } from "../../ModuleContext";
-import { Oscillator as TOscillator } from "../../nodes";
+import { Oscillator as TOscillator, OscillatorValues } from "../../nodes";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../../styles/consts";
 import { Node } from "../Node";
 import { SawToothIcon, SineIcon, SquareIcon, TriangleIcon } from "./icons";
 import iconsGroup from "./iconsGroup";
 
-const DEFAULT_FREQUENCY = 440;
+interface OscillatorData {
+  label: string;
+  values?: OscillatorValues;
+  min?: number;
+  max?: number;
+}
 
-const Oscillator = ({ id, data }: NodeProps) => {
+const DEFAULT_FREQUENCY = 440;
+const DEFAULT_TYPE = "sine";
+
+const Oscillator = ({ id, data }: NodeProps<OscillatorData>) => {
   const oscillatorNode = useNode<TOscillator>(id);
+  const { updateNodeValues } = useFlowNode(id);
   const store = useCreateStore();
 
-  const value = parseInt(data.value);
+  const { frequency = DEFAULT_FREQUENCY, type = DEFAULT_TYPE } =
+    data.values || {};
+
   const values = useControls(
     "settings",
     {
       frequency: {
-        value: isNaN(value) ? DEFAULT_FREQUENCY : value,
+        value: frequency,
         max: data.max || 800,
         min: data.min || 0,
         label: "freq",
       },
       type: iconsGroup({
         label: "type",
-        value: data.type || "sine",
+        value: type,
         options: [
           {
             icon: SineIcon,
@@ -54,11 +66,12 @@ const Oscillator = ({ id, data }: NodeProps) => {
   const { node } = oscillatorNode;
 
   useEffect(() => {
-    node?.setValues({
-      frequency: values.frequency,
-      type: values.type as OscillatorType,
-    });
-  }, [values, node]);
+    node?.setValues(data.values || {});
+  }, [node, data]);
+
+  useEffect(() => {
+    updateNodeValues(values);
+  }, [values]);
 
   return (
     <Node title={data.label} inputs={node?.inputs} outputs={node?.outputs}>
