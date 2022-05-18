@@ -26,19 +26,18 @@ const StepSequencer = ({ id, data }: NodeProps) => {
   const [mouseDownXY, setMouseDownXY] = useState({ x: 0, y: 0 });
   const [deltaXY, setDeltaXY] = useState({ x: 0, y: 0 });
 
-  useEffect(() => {
-    window.addEventListener("mousedown", (e: MouseEvent) => {
-      setIsMousePressed(true);
-      setMouseDownXY({ x: e.clientX, y: e.clientY });
-    });
+  const onMouseDown = (e: MouseEvent) => {
+    setIsMousePressed(true);
+    setMouseDownXY({ x: e.clientX, y: e.clientY });
+  };
 
-    window.addEventListener("mouseup", () => {
-      setIsMousePressed(false);
-    });
-  }, []);
+  const onMouseUp = (e: MouseEvent) => {
+    setIsMousePressed(false);
+  };
 
   const onMouseMove = (e: MouseEvent) => {
     const delta = mouseDownXY.y - e.clientY;
+    const target = e.target as HTMLElement;
 
     if (delta >= 0 && delta <= 127) {
       console.log(delta, Midi.midiToNoteName(delta));
@@ -48,6 +47,15 @@ const StepSequencer = ({ id, data }: NodeProps) => {
       console.log("X");
     }
   };
+
+  useEffect(() => {
+    window.addEventListener("mousedown", onMouseDown);
+    window.addEventListener("mouseup", onMouseUp);
+    return () => {
+      window.removeEventListener("mousedown", onMouseDown);
+      window.removeEventListener("mouseup", onMouseUp);
+    };
+  }, []);
 
   useEffect(() => {
     if (isMousePressed) {
@@ -74,11 +82,6 @@ const StepSequencer = ({ id, data }: NodeProps) => {
   //   // setgridData(newGrid);
   // };
 
-  const onDrag = (e: any) => {
-    e.preventDefault();
-    console.log(e);
-  };
-
   return (
     <Node title={data.label}>
       <LevaPanel store={levaStore} fill flat hideCopyButton titleBar={false} />
@@ -86,7 +89,7 @@ const StepSequencer = ({ id, data }: NodeProps) => {
       <Grid>
         {gridData.map((el, idx) => {
           return (
-            <StepBlock key={idx}>
+            <StepBlock key={`step-${idx}`} id={`step-${idx}`}>
               <>
                 {el.value !== null ? el.value : "-"}
                 {/* <Step></Step> */}
