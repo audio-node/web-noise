@@ -31,7 +31,7 @@ const oscillator = (audioContext: AudioContext): Oscillator => {
       oscillator.stop();
     },
     setValues: ({ frequency, type } = {}) => {
-      frequency &&
+      typeof frequency !== 'undefined' &&
         oscillator.frequency.setValueAtTime(
           frequency,
           audioContext.currentTime
