@@ -1,9 +1,11 @@
 import { LevaPanel, useControls, useCreateStore } from "leva";
 import styled from "@emotion/styled";
+import { css } from "@emotion/react";
 import { NodeProps } from "react-flow-renderer";
 import { Node } from "../Node";
 import { useState, useEffect } from "react";
 import { Midi } from "@tonaljs/tonal";
+import { getClock } from "../../nodes";
 
 // @ts-ignore
 import Step from "./Step";
@@ -22,34 +24,27 @@ const StepSequencer = ({ id, data }: NodeProps) => {
   const [gridData, setgridData] = useState<StepData[]>(
     new Array(GRID_NUMBER).fill({ value: 0, active: false, selected: false })
   );
+  const { audioContext } = useModule();
   const [isMousePressed, setIsMousePressed] = useState(false);
   const [mouseDownXY, setMouseDownXY] = useState({ x: 0, y: 0 });
   const [delta, setDelta] = useState(0);
   const [selectedStep, setSelectedStep] = useState<number | null>(null);
+  const [sequenceIndex, setSequenceIndex] = useState(0);
+
   const [selectedStepValue, setSelectedStepValue] =
     useState<number | null>(null);
-
-  const updateStep = (
-    index: number,
-    value: Record<string, boolean | number>
-  ): void => {
-    const newGrid = gridData.map((step, stepIdx) => {
-      if (stepIdx === index) {
-        const updatedStep = {
-          ...step,
-          ...value,
-        };
-        return updatedStep;
-      }
-      return step;
-    });
-
-    setgridData(newGrid);
-  };
 
   useEffect(() => {
     window.addEventListener("mousedown", onMouseDown);
     window.addEventListener("mouseup", onMouseUp);
+
+    let counter = 0;
+
+    setInterval(() => {
+      setSequenceIndex(counter % GRID_NUMBER);
+      counter++;
+    }, 300);
+
     return () => {
       window.removeEventListener("mousedown", onMouseDown);
       window.removeEventListener("mouseup", onMouseUp);
@@ -75,6 +70,24 @@ const StepSequencer = ({ id, data }: NodeProps) => {
     }
   }, [delta, selectedStep, selectedStepValue]);
 
+  const updateStep = (
+    index: number,
+    value: Record<string, boolean | number>
+  ): void => {
+    const newGrid = gridData.map((step, stepIdx) => {
+      if (stepIdx === index) {
+        const updatedStep = {
+          ...step,
+          ...value,
+        };
+        return updatedStep;
+      }
+      return step;
+    });
+
+    setgridData(newGrid);
+  };
+
   const onMouseDown = (e: MouseEvent): void => {
     setIsMousePressed(true);
     setMouseDownXY({ x: e.clientX, y: e.clientY });
@@ -99,14 +112,15 @@ const StepSequencer = ({ id, data }: NodeProps) => {
   return (
     <Node title={data.label}>
       <LevaPanel store={levaStore} fill flat hideCopyButton titleBar={false} />
-      {isMousePressed ? "pressed" : "not-pressed"}
-      <p>step: {selectedStep}</p>
-      <p>delta: {delta}</p>
+      {/* {isMousePressed ? "pressed" : "not-pressed"} */}
+      {/* <p>step: {selectedStep}</p>
+      <p>delta: {delta}</p> */}
       <Grid>
         {gridData.map((el, index) => {
           return (
             <StepBlock
               isActive={gridData[index].active}
+              isSequenceIndex={index === sequenceIndex}
               key={`step-${index}`}
               id={`step-${index}`}
               onClick={() =>
@@ -133,7 +147,13 @@ const Grid = styled.div`
 
 interface StepBlockProps {
   isActive: boolean;
+  isSequenceIndex: boolean;
 }
+
+const inSequence = css`
+  background: #3684f3;
+  color: white;
+`;
 
 const StepBlock = styled.div<StepBlockProps>`
   display: flex;
@@ -146,10 +166,12 @@ const StepBlock = styled.div<StepBlockProps>`
   min-height: 25px;
   align-items: center;
   opacity: ${({ isActive }) => (isActive ? 1 : 0.3)};
+
   &:hover {
     border-color: gray;
     cursor: pointer;
   }
+  ${({ isSequenceIndex }) => isSequenceIndex && inSequence}
 `;
 
 export default StepSequencer;
