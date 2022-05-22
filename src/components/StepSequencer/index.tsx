@@ -1,3 +1,4 @@
+import { useModule, useNode } from "../../ModuleContext";
 import { LevaPanel, useControls, useCreateStore } from "leva";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
@@ -5,13 +6,10 @@ import { NodeProps } from "react-flow-renderer";
 import { Node } from "../Node";
 import { useState, useEffect } from "react";
 import { Midi } from "@tonaljs/tonal";
-import { getClock } from "../../nodes";
+import { StepSequencer as NodeStepSequencer } from "../../nodes/stepSequencer";
 
 // @ts-ignore
 import Step from "./Step";
-import { useModule } from "../../ModuleContext";
-
-const GRID_NUMBER = 16;
 
 interface StepData {
   active: boolean;
@@ -20,11 +18,13 @@ interface StepData {
 }
 
 const StepSequencer = ({ id, data }: NodeProps) => {
+  const { node } = useNode<NodeStepSequencer>(id);
+
   const levaStore = useCreateStore();
+  const [gridNumber] = useState(16);
   const [gridData, setgridData] = useState<StepData[]>(
-    new Array(GRID_NUMBER).fill({ value: 0, active: false, selected: false })
+    new Array(gridNumber).fill({ value: 0, active: false, selected: false })
   );
-  const { audioContext } = useModule();
   const [isMousePressed, setIsMousePressed] = useState(false);
   const [mouseDownXY, setMouseDownXY] = useState({ x: 0, y: 0 });
   const [delta, setDelta] = useState(0);
@@ -38,10 +38,10 @@ const StepSequencer = ({ id, data }: NodeProps) => {
     window.addEventListener("mousedown", onMouseDown);
     window.addEventListener("mouseup", onMouseUp);
 
+    // TODO: use real clock
     let counter = 0;
-
     setInterval(() => {
-      setSequenceIndex(counter % GRID_NUMBER);
+      setSequenceIndex(counter % gridNumber);
       counter++;
     }, 300);
 
@@ -50,6 +50,27 @@ const StepSequencer = ({ id, data }: NodeProps) => {
       window.removeEventListener("mouseup", onMouseUp);
     };
   }, []);
+
+  useEffect(() => {
+    node?.gateSource.start();
+    node?.freqSource.start();
+    node?.ctrlSource.start();
+
+    return () => {
+      node?.gateSource.stop();
+      node?.freqSource.stop();
+      node?.ctrlSource.stop();
+    };
+  }, [node]);
+
+  useEffect(() => {
+    if (node && gridData[sequenceIndex].active) {
+      node.freqSource.offset.value = Midi.midiToFreq(
+        gridData[sequenceIndex].value
+      );
+      node.ctrlSource.offset.value = gridData[sequenceIndex].value;
+    }
+  }, [node, sequenceIndex]);
 
   useEffect(() => {
     if (isMousePressed) {
@@ -110,7 +131,7 @@ const StepSequencer = ({ id, data }: NodeProps) => {
   };
 
   return (
-    <Node title={data.label}>
+    <Node title={data.label} outputs={node?.outputs}>
       <LevaPanel store={levaStore} fill flat hideCopyButton titleBar={false} />
       {/* {isMousePressed ? "pressed" : "not-pressed"} */}
       {/* <p>step: {selectedStep}</p>

@@ -68,11 +68,8 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
       randomSequencerWorklet: RandomSequencerWorklet,
       scriptNode: ScriptNode,
       virtualKeyboard: VirtualKeyboard,
-<<<<<<< HEAD
       clock: Clock,
-=======
       stepSequencer: StepSequencer,
->>>>>>> start implementing
     }),
     []
   );
