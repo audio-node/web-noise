@@ -6,21 +6,21 @@ import { useState, useEffect } from "react";
 import { Midi } from "@tonaljs/tonal";
 
 // @ts-ignore
-import { MidiNumbers } from "react-piano";
 import Step from "./Step";
+import { useModule } from "../../ModuleContext";
 
 const GRID_NUMBER = 16;
 
 interface StepData {
   active: boolean;
-  value: any;
+  value: number;
   selected: boolean;
 }
 
 const StepSequencer = ({ id, data }: NodeProps) => {
   const levaStore = useCreateStore();
   const [gridData, setgridData] = useState<StepData[]>(
-    new Array(GRID_NUMBER).fill({ value: -1, active: false, selected: false })
+    new Array(GRID_NUMBER).fill({ value: 0, active: false, selected: false })
   );
   const [isMousePressed, setIsMousePressed] = useState(false);
   const [mouseDownXY, setMouseDownXY] = useState({ x: 0, y: 0 });
@@ -29,28 +29,15 @@ const StepSequencer = ({ id, data }: NodeProps) => {
   const [selectedStepValue, setSelectedStepValue] =
     useState<number | null>(null);
 
-  const onMouseDown = (e: MouseEvent): void => {
-    setIsMousePressed(true);
-    setMouseDownXY({ x: e.clientX, y: e.clientY });
-  };
-
-  const onMouseUp = (e: MouseEvent): void => {
-    setIsMousePressed(false);
-    setSelectedStep(null);
-    setDelta(0);
-  };
-
-  const onMouseMove = function (e: MouseEvent): void {
-    const delta = mouseDownXY.y - e.clientY;
-    setDelta(delta);
-  };
-
-  const updateStep = (index: number, value: number): void => {
+  const updateStep = (
+    index: number,
+    value: Record<string, boolean | number>
+  ): void => {
     const newGrid = gridData.map((step, stepIdx) => {
       if (stepIdx === index) {
         const updatedStep = {
           ...step,
-          value,
+          ...value,
         };
         return updatedStep;
       }
@@ -79,24 +66,34 @@ const StepSequencer = ({ id, data }: NodeProps) => {
   }, [mouseDownXY, isMousePressed]);
 
   useEffect(() => {
-    if (selectedStep !== null && selectedStepValue) {
+    if (selectedStep !== null && selectedStepValue !== null) {
       let newValue = selectedStepValue + delta;
 
-      if (newValue >= -1 && newValue <= 127) {
-        updateStep(selectedStep, newValue);
+      if (newValue >= 0 && newValue <= 127) {
+        updateStep(selectedStep, { value: newValue });
       }
     }
   }, [delta, selectedStep, selectedStepValue]);
 
+  const onMouseDown = (e: MouseEvent): void => {
+    setIsMousePressed(true);
+    setMouseDownXY({ x: e.clientX, y: e.clientY });
+  };
+
+  const onMouseUp = (e: MouseEvent): void => {
+    setIsMousePressed(false);
+    setSelectedStep(null);
+    setDelta(0);
+  };
+
+  const onMouseMove = function (e: MouseEvent): void {
+    const delta = mouseDownXY.y - e.clientY;
+    setDelta(delta);
+  };
+
   // TODO: convert to component
   const formatStepValue = (value: number) => {
-    if (value < 0) {
-      return "-";
-    }
-
-    if (value) {
-      return Midi.midiToNoteName(value);
-    }
+    return Midi.midiToNoteName(value);
   };
 
   return (
@@ -109,8 +106,12 @@ const StepSequencer = ({ id, data }: NodeProps) => {
         {gridData.map((el, index) => {
           return (
             <StepBlock
+              isActive={gridData[index].active}
               key={`step-${index}`}
               id={`step-${index}`}
+              onClick={() =>
+                updateStep(index, { active: !gridData[index].active })
+              }
               onMouseDown={() => {
                 setSelectedStep(index);
                 setSelectedStepValue(gridData[index].value);
@@ -130,10 +131,13 @@ const Grid = styled.div`
   grid-template-columns: 1fr 1fr 1fr 1fr;
 `;
 
-const StepBlock = styled.div`
+interface StepBlockProps {
+  isActive: boolean;
+}
+
+const StepBlock = styled.div<StepBlockProps>`
   display: flex;
   justify-content: center;
-  /* padding: 0.5em; */
   font-size: 0.8em;
   box-sizing: border-box;
   font-size: 8px;
@@ -141,6 +145,7 @@ const StepBlock = styled.div`
   min-width: 25px;
   min-height: 25px;
   align-items: center;
+  opacity: ${({ isActive }) => (isActive ? 1 : 0.3)};
   &:hover {
     border-color: gray;
     cursor: pointer;
