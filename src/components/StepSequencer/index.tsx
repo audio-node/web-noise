@@ -133,9 +133,9 @@ const StepSequencer = ({ id, data }: NodeProps) => {
   return (
     <Node title={data.label} outputs={node?.outputs}>
       <LevaPanel store={levaStore} fill flat hideCopyButton titleBar={false} />
-      {/* {isMousePressed ? "pressed" : "not-pressed"} */}
-      {/* <p>step: {selectedStep}</p>
-      <p>delta: {delta}</p> */}
+      {/*  */}
+      {/*
+       */}
       <Grid>
         {gridData.map((el, index) => {
           return (
@@ -157,6 +157,16 @@ const StepSequencer = ({ id, data }: NodeProps) => {
           );
         })}
       </Grid>
+      <Debug>
+        <p>
+          output:
+          {gridData[sequenceIndex].active && gridData[sequenceIndex].value}
+        </p>
+        <p>sequence Index: {sequenceIndex + 1}</p>
+        <p>selected step: {selectedStep}</p>
+        <p>mouse delta: {delta}</p>
+        <p>mouse: {isMousePressed ? "pressed" : "not pressed"}</p>
+      </Debug>
     </Node>
   );
 };
@@ -164,6 +174,16 @@ const StepSequencer = ({ id, data }: NodeProps) => {
 const Grid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
+`;
+
+const Debug = styled.div`
+  background: #181c20;
+  font-size: 6px;
+  text-align: left;
+  padding: 4px;
+  p {
+    margin: 0;
+  }
 `;
 
 interface StepBlockProps {
