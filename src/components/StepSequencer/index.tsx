@@ -79,7 +79,7 @@ const StepSequencer = ({ id, data }: NodeProps) => {
   }, [mouseDownXY, isMousePressed]);
 
   useEffect(() => {
-    if (selectedStep && selectedStepValue) {
+    if (selectedStep !== null && selectedStepValue) {
       let newValue = selectedStepValue + delta;
 
       if (newValue >= -1 && newValue <= 127) {
@@ -106,24 +106,17 @@ const StepSequencer = ({ id, data }: NodeProps) => {
       <p>step: {selectedStep}</p>
       <p>delta: {delta}</p>
       <Grid>
-        {gridData.map((el, idx) => {
+        {gridData.map((el, index) => {
           return (
             <StepBlock
+              key={`step-${index}`}
+              id={`step-${index}`}
               onMouseDown={() => {
-                setSelectedStep(idx);
-                setSelectedStepValue(gridData[idx].value);
+                setSelectedStep(index);
+                setSelectedStepValue(gridData[index].value);
               }}
-              key={`step-${idx}`}
-              id={`step-${idx}`}
             >
               {formatStepValue(el.value)}
-              {/* <input
-                type="range"
-                id="volume"
-                name="volume"
-                min={MidiNumbers.MIN_MIDI_NUMBER}
-                max={MidiNumbers.MAX_MIDI_NUMBER}
-              ></input> */}
             </StepBlock>
           );
         })}
