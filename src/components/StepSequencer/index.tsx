@@ -15,7 +15,7 @@ import { useState, useEffect } from "react";
 import { Midi } from "@tonaljs/tonal";
 import { StepSequencer as NodeStepSequencer } from "../../nodes/stepSequencer";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../../styles/consts";
-import { Grid, StepBlock, DebugBlock } from "./styles";
+import { Grid, Step, DebugBlock } from "./styles";
 
 interface StepData {
   active: boolean;
@@ -28,9 +28,9 @@ const StepSequencer = ({ id, data }: NodeProps) => {
   const { node } = useNode<NodeStepSequencer>(id);
 
   const levaStore = useCreateStore();
-  const [gridNumber] = useState(16);
-  const [gridData, setgridData] = useState<StepData[]>(
-    new Array(gridNumber).fill({ value: DEFAULT_STEP_VALUE, active: false })
+  const [stepsNumber] = useState(16);
+  const [sequenceData, setsequenceData] = useState<StepData[]>(
+    new Array(stepsNumber).fill({ value: DEFAULT_STEP_VALUE, active: false })
   );
   const [isMousePressed, setIsMousePressed] = useState(false);
   const [mouseDownXY, setMouseDownXY] = useState({ x: 0, y: 0 });
@@ -57,7 +57,7 @@ const StepSequencer = ({ id, data }: NodeProps) => {
     // TODO: use real clock
     let counter = 0;
     setInterval(() => {
-      setSequenceIndex(counter % gridNumber);
+      setSequenceIndex(counter % stepsNumber);
       counter++;
     }, 200);
 
@@ -80,11 +80,11 @@ const StepSequencer = ({ id, data }: NodeProps) => {
   }, [node]);
 
   useEffect(() => {
-    if (node && gridData[sequenceIndex].active) {
+    if (node && sequenceData[sequenceIndex].active) {
       node.freqSource.offset.value = Midi.midiToFreq(
-        gridData[sequenceIndex].value
+        sequenceData[sequenceIndex].value
       );
-      node.ctrlSource.offset.value = gridData[sequenceIndex].value;
+      node.ctrlSource.offset.value = sequenceData[sequenceIndex].value;
     }
   }, [node, sequenceIndex]);
 
@@ -111,7 +111,7 @@ const StepSequencer = ({ id, data }: NodeProps) => {
     index: number,
     value: Record<string, boolean | number>
   ): void => {
-    const newGrid = gridData.map((step, stepIdx) => {
+    const newSeq = sequenceData.map((step, stepIdx) => {
       if (stepIdx === index) {
         return {
           ...step,
@@ -121,7 +121,7 @@ const StepSequencer = ({ id, data }: NodeProps) => {
       return step;
     });
 
-    setgridData(newGrid);
+    setsequenceData(newSeq);
   };
 
   const onMouseDown = (e: MouseEvent): void => {
@@ -146,7 +146,7 @@ const StepSequencer = ({ id, data }: NodeProps) => {
   };
 
   function clearSeq() {
-    const newGrid = gridData.map((step, index) => {
+    const newSeq = sequenceData.map((step, index) => {
       return {
         ...step,
         value: 0,
@@ -154,11 +154,11 @@ const StepSequencer = ({ id, data }: NodeProps) => {
       };
     });
 
-    setgridData(newGrid);
+    setsequenceData(newSeq);
   }
 
   function generateRandomSeq() {
-    const newSeq = gridData.map((step, index) => {
+    const newSeq = sequenceData.map((step, index) => {
       return {
         ...step,
         active: Math.random() < 0.5,
@@ -166,37 +166,38 @@ const StepSequencer = ({ id, data }: NodeProps) => {
       };
     });
 
-    setgridData(newSeq);
+    setsequenceData(newSeq);
   }
 
   return (
     <Node title={data.label} outputs={node?.outputs}>
       <LevaPanel store={levaStore} fill flat hideCopyButton titleBar={false} />
       <Grid>
-        {gridData.map((el, index) => {
+        {sequenceData.map((el, index) => {
           return (
-            <StepBlock
-              isActive={gridData[index].active}
+            <Step
+              isActive={sequenceData[index].active}
               isSequenceIndex={index === sequenceIndex}
               key={`step-${index}`}
               id={`step-${index}`}
               onClick={() =>
-                updateStep(index, { active: !gridData[index].active })
+                updateStep(index, { active: !sequenceData[index].active })
               }
               onMouseDown={() => {
                 setSelectedStep(index);
-                setSelectedStepValue(gridData[index].value);
+                setSelectedStepValue(sequenceData[index].value);
               }}
             >
               {formatStepValue(el.value)}
-            </StepBlock>
+            </Step>
           );
         })}
       </Grid>
       <DebugBlock>
         <p>
           output:
-          {gridData[sequenceIndex].active && gridData[sequenceIndex].value}
+          {sequenceData[sequenceIndex].active &&
+            sequenceData[sequenceIndex].value}
         </p>
         <p>sequence Index: {sequenceIndex + 1}</p>
         <p>selected step: {selectedStep}</p>

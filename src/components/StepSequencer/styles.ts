@@ -16,7 +16,7 @@ export const DebugBlock = styled.div`
   }
 `;
 
-interface StepBlockProps {
+interface StepProps {
   isActive: boolean;
   isSequenceIndex: boolean;
 }
@@ -26,7 +26,7 @@ const inSequence = css`
   color: white;
 `;
 
-export const StepBlock = styled.div<StepBlockProps>`
+export const Step = styled.div<StepProps>`
   display: flex;
   justify-content: center;
   font-size: 0.8em;
