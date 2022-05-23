@@ -4,14 +4,9 @@ import { Handle, Position, NodeProps, useStore } from "react-flow-renderer";
 import { useModule, useNode } from "../ModuleContext";
 import { LevaPanel, useControls, useCreateStore } from "leva";
 import { RandomSequencerWorklet as TSequencer } from "../nodes";
+import { Node } from "./Node";
 
-const RandomSequencerWorklet = ({
-  targetPosition,
-  sourcePosition,
-  data,
-  id,
-}: NodeProps) => {
-  const { audioContext } = useModule();
+const RandomSequencerWorklet = ({ data, id }: NodeProps) => {
   const { node } = useNode<Promise<TSequencer>>(id);
   const [sequencer, setSequencer] = useState<TSequencer | null>(null);
 
@@ -19,12 +14,7 @@ const RandomSequencerWorklet = ({
 
   const store = useCreateStore();
 
-  const controls = useControls(
-    {
-      sequencer: { value: "", editable: false },
-    },
-    { store }
-  );
+  const controls = useControls({}, { store });
 
   useEffect(() => {
     node?.then((result) => {
@@ -34,23 +24,18 @@ const RandomSequencerWorklet = ({
   }, [node, setReady]);
 
   return (
-    <>
-      <LevaPanel
-        oneLineLabels
-        hideCopyButton
-        store={store}
-        fill
-        flat
-        titleBar={{ drag: false, title: data.label }}
-        collapsed
-      />
-      {!ready ? <div>loading</div> : null}
-      <Handle
-        type="source"
-        id="out"
-        position={sourcePosition || Position.Right}
-      />
-    </>
+    <Node
+      id={id}
+      title={data.label}
+      inputs={sequencer?.inputs}
+      outputs={sequencer?.outputs}
+    >
+      {ready ? (
+        <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
+      ) : (
+        <div>loading</div>
+      )}
+    </Node>
   );
 };
 

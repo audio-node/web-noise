@@ -494,7 +494,11 @@ export const RandomSequencerWorker = () => (
         {
           id: "oscillator",
           type: "oscillator",
-          data: { label: "Oscillator", config: { min: 0, max: 200, step: 1 }, values: { frequency: 0 } },
+          data: {
+            label: "Oscillator",
+            config: { min: 0, max: 200, step: 1 },
+            values: { frequency: 0 },
+          },
           position: { x: spaceWidth, y: 50 },
           className: "react-flow__node-default",
           dragHandle: ".leva-c-hwBXYF",
@@ -693,6 +697,105 @@ export const Keyboard = () => (
         {
           id: "visualiser-to-destination",
           source: "visualiser",
+          target: "destination",
+          targetHandle: "in",
+          sourceHandle: "out",
+        },
+      ],
+    }}
+  />
+);
+
+export const Clock = () => (
+  <Editor
+    elements={{
+      nodes: [
+        {
+          id: "clock",
+          type: "clock",
+          data: { label: "Clock" },
+          position: { x: 0, y: 0 },
+          dragHandle: ".leva-c-hwBXYF",
+          className: "react-flow__node-default",
+        },
+        {
+          id: "sequencer",
+          type: "randomSequencerWorklet",
+          data: { label: "randomSequencer Worklet" },
+          position: { x: spaceWidth, y: 0 },
+          dragHandle: ".leva-c-hwBXYF",
+          className: "react-flow__node-default",
+        },
+        {
+          id: "randomSequencer",
+          type: "randomSequencer",
+          data: { label: "randomSequencer" },
+          position: { x: spaceWidth, y: 100 },
+          dragHandle: ".leva-c-hwBXYF",
+          className: "react-flow__node-default",
+        },
+        {
+          id: "oscillator",
+          type: "oscillator",
+          data: { label: "Oscillator", values: { frequency: 0 } },
+          position: { x: spaceWidth * 2, y: 0 },
+          dragHandle: ".leva-c-hwBXYF",
+          className: "react-flow__node-default",
+        },
+        {
+          id: "gain",
+          type: "gain",
+          data: { label: "Gain" },
+          position: { x: spaceWidth * 3, y: 50 },
+          dragHandle: ".leva-c-hwBXYF",
+          className: "react-flow__node-default",
+        },
+        {
+          id: "visualiser",
+          type: "visualiser",
+          data: { label: "Visualiser" },
+          position: { x: spaceWidth * 4, y: 0 },
+          className: "react-flow__node-default",
+        },
+        {
+          id: "destination",
+          type: "destination",
+          data: { label: "Destination" },
+          position: { x: spaceWidth * 4, y: 350 },
+          className: "react-flow__node-default",
+        },
+      ],
+      edges: [
+        {
+          id: "oscillator-to-gain",
+          source: "oscillator",
+          sourceHandle: "out",
+          target: "gain",
+          targetHandle: "in",
+        },
+        {
+          id: "clock-to-sequencer",
+          source: "clock",
+          sourceHandle: "trigger",
+          target: "randomSequencer",
+          targetHandle: "trigger",
+        },{
+          id: "sequencer-to-oscillator",
+          source: "randomSequencer",
+          sourceHandle: "out",
+          target: "oscillator",
+          targetHandle: "frequency",
+        },
+        {
+          id: "gain-to-visualiser",
+          source: "gain",
+          sourceHandle: "out",
+          target: "visualiser",
+          targetHandle: "in",
+        },
+        {
+          id: "gain-to-destination",
+          source: "gain",
           target: "destination",
           targetHandle: "in",
           sourceHandle: "out",

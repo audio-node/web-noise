@@ -1,41 +1,73 @@
-import { Scale, Note } from "@tonaljs/tonal";
+import { Note, Scale } from "@tonaljs/tonal";
+//@ts-ignore
+import clockCounterProcessor from "worklet-loader!../clockCounter/worklet.ts"; // eslint-disable-line
 //@ts-ignore
 import randomSequencerWorkletProcessor from "worklet-loader!./worklet.ts"; // eslint-disable-line
 import { Node } from "../../ModuleContext";
-import { getClock } from "../";
+
+type NoteChangeHandler = (args: { note: string }) => void;
 
 export interface RandomSequencer extends Node {
   constantSource: ConstantSourceNode;
+  onNoteChange: (fn: NoteChangeHandler) => void;
 }
 
 const range = Scale.rangeOf("C major");
-const freqRange = range("A2", "A6").map((note) => {
-  return Note.freq(note || "C2");
-});
+const notesRange = range("A2", "A6");
 
 const randomSequencer = async (
   audioContext: AudioContext
 ): Promise<RandomSequencer> => {
-  const clock = await getClock(audioContext);
+  await audioContext.audioWorklet.addModule(clockCounterProcessor);
+  const clock = new AudioWorkletNode(audioContext, "clock-counter-processor");
 
-  const constantSource = audioContext.createConstantSource();
+  const frequency = audioContext.createConstantSource();
+  const midi = audioContext.createConstantSource();
 
-  clock.onTick((e) => {
-    const randomIndex = Math.floor(Math.random() * freqRange.length);
-    const randomFreq = freqRange[randomIndex];
+  frequency.start();
+  midi.start();
 
-    if (randomFreq) {
-      constantSource.offset.value = randomFreq;
+  let noteChangeHandler: NoteChangeHandler = () => {};
+
+  clock.port.onmessage = ({ data }: MessageEvent) => {
+    if (data.name === "tick") {
+      const randomIndex = Math.floor(Math.random() * notesRange.length);
+      const note = notesRange[randomIndex] || "C2";
+
+      const randomFreq = Note.freq(note);
+      if (randomFreq) {
+        frequency.offset.value = randomFreq;
+      }
+
+      const randomMidi = Note.freq(note);
+      if (randomMidi) {
+        midi.offset.value = randomMidi;
+      }
+
+      noteChangeHandler({ note });
     }
-  });
+  };
 
   return {
-    outputs: {
-      out: {
-        port: constantSource,
+    inputs: {
+      trigger: {
+        port: clock,
       },
     },
-    constantSource,
+    outputs: {
+      out: {
+        port: frequency,
+      },
+      midi: {
+        port: midi,
+      },
+    },
+    onNoteChange: (fn) => (noteChangeHandler = fn),
+    destroy: () => {
+      frequency.stop();
+      midi.stop();
+    },
+    constantSource: frequency,
   };
 };
 
@@ -52,13 +84,12 @@ export const randomSequencerWorklet = async (
     "random-sequencer-processor"
   );
 
-  const clock = await getClock(audioContext);
-
-  clock.onTick((e) => {
-    randomSequencer.port.postMessage({ ...e, timeHost: +new Date() });
-  });
-
   return {
+    inputs: {
+      trigger: {
+        port: randomSequencer,
+      },
+    },
     outputs: {
       out: {
         port: randomSequencer,
