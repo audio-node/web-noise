@@ -1,21 +1,28 @@
-import { useModule, useNode } from "../../ModuleContext";
-import { LevaPanel, useControls, useCreateStore } from "leva";
-import styled from "@emotion/styled";
-import { css } from "@emotion/react";
+/**
+ * Step Sequencer
+ *
+ * TODO:
+ *  - use real clock
+ *  - implement clock input
+ *  - toggle to display midi/values
+ */
+
+import { useNode } from "../../ModuleContext";
+import { LevaPanel, useControls, useCreateStore, button } from "leva";
 import { NodeProps } from "react-flow-renderer";
 import { Node } from "../Node";
 import { useState, useEffect } from "react";
 import { Midi } from "@tonaljs/tonal";
 import { StepSequencer as NodeStepSequencer } from "../../nodes/stepSequencer";
-
-// @ts-ignore
-import Step from "./Step";
+import { LEVA_COLOR_ACCENT2_BLUE } from "../../styles/consts";
+import { Grid, StepBlock, DebugBlock } from "./styles";
 
 interface StepData {
   active: boolean;
   value: number;
-  selected: boolean;
 }
+
+const DEFAULT_STEP_VALUE = 36;
 
 const StepSequencer = ({ id, data }: NodeProps) => {
   const { node } = useNode<NodeStepSequencer>(id);
@@ -23,16 +30,25 @@ const StepSequencer = ({ id, data }: NodeProps) => {
   const levaStore = useCreateStore();
   const [gridNumber] = useState(16);
   const [gridData, setgridData] = useState<StepData[]>(
-    new Array(gridNumber).fill({ value: 0, active: false, selected: false })
+    new Array(gridNumber).fill({ value: DEFAULT_STEP_VALUE, active: false })
   );
   const [isMousePressed, setIsMousePressed] = useState(false);
   const [mouseDownXY, setMouseDownXY] = useState({ x: 0, y: 0 });
   const [delta, setDelta] = useState(0);
   const [selectedStep, setSelectedStep] = useState<number | null>(null);
   const [sequenceIndex, setSequenceIndex] = useState(0);
-
   const [selectedStepValue, setSelectedStepValue] =
     useState<number | null>(null);
+
+  useControls(
+    "settings",
+    {
+      clear: button(() => clearSeq()),
+      "random seq": button(() => generateRandomSeq()),
+    },
+    { collapsed: true, color: LEVA_COLOR_ACCENT2_BLUE },
+    { store: levaStore }
+  );
 
   useEffect(() => {
     window.addEventListener("mousedown", onMouseDown);
@@ -43,7 +59,7 @@ const StepSequencer = ({ id, data }: NodeProps) => {
     setInterval(() => {
       setSequenceIndex(counter % gridNumber);
       counter++;
-    }, 300);
+    }, 200);
 
     return () => {
       window.removeEventListener("mousedown", onMouseDown);
@@ -130,12 +146,33 @@ const StepSequencer = ({ id, data }: NodeProps) => {
     return Midi.midiToNoteName(value);
   };
 
+  function clearSeq() {
+    const newGrid = gridData.map((step, index) => {
+      return {
+        ...step,
+        value: 0,
+        active: false,
+      };
+    });
+
+    setgridData(newGrid);
+  }
+
+  function generateRandomSeq() {
+    const newSeq = gridData.map((step, index) => {
+      return {
+        ...step,
+        active: Math.random() < 0.5,
+        value: Math.round(Math.random() * 127),
+      };
+    });
+
+    setgridData(newSeq);
+  }
+
   return (
     <Node title={data.label} outputs={node?.outputs}>
       <LevaPanel store={levaStore} fill flat hideCopyButton titleBar={false} />
-      {/*  */}
-      {/*
-       */}
       <Grid>
         {gridData.map((el, index) => {
           return (
@@ -157,7 +194,7 @@ const StepSequencer = ({ id, data }: NodeProps) => {
           );
         })}
       </Grid>
-      <Debug>
+      <DebugBlock>
         <p>
           output:
           {gridData[sequenceIndex].active && gridData[sequenceIndex].value}
@@ -166,53 +203,9 @@ const StepSequencer = ({ id, data }: NodeProps) => {
         <p>selected step: {selectedStep}</p>
         <p>mouse delta: {delta}</p>
         <p>mouse: {isMousePressed ? "pressed" : "not pressed"}</p>
-      </Debug>
+      </DebugBlock>
     </Node>
   );
 };
-
-const Grid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-`;
-
-const Debug = styled.div`
-  background: #181c20;
-  font-size: 6px;
-  text-align: left;
-  padding: 4px;
-  p {
-    margin: 0;
-  }
-`;
-
-interface StepBlockProps {
-  isActive: boolean;
-  isSequenceIndex: boolean;
-}
-
-const inSequence = css`
-  background: #3684f3;
-  color: white;
-`;
-
-const StepBlock = styled.div<StepBlockProps>`
-  display: flex;
-  justify-content: center;
-  font-size: 0.8em;
-  box-sizing: border-box;
-  font-size: 8px;
-  border: 1px solid transparent;
-  min-width: 25px;
-  min-height: 25px;
-  align-items: center;
-  opacity: ${({ isActive }) => (isActive ? 1 : 0.3)};
-
-  &:hover {
-    border-color: gray;
-    cursor: pointer;
-  }
-  ${({ isSequenceIndex }) => isSequenceIndex && inSequence}
-`;
 
 export default StepSequencer;
