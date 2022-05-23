@@ -5,6 +5,7 @@
  *  - use real clock
  *  - implement clock input
  *  - toggle to display midi/values
+ *  - implement sequence mode like: 'reverse', 'vertical', 'snake', 'random', etc..
  */
 
 import { useNode } from "../../ModuleContext";
