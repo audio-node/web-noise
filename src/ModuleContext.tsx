@@ -13,7 +13,7 @@ export interface Node extends Record<string, any> {
   inputs?: Record<string, InputPort | never>;
   outputs?: Record<string, OutputPort | never>;
   destroy?: () => void;
-  setValues?: (values: any) => void;
+  setValues?: (values?: any) => void;
 }
 const module: Map<string, Node | Promise<Node>> = new Map();
 const connections: Map<string, true> = new Map();

@@ -1,12 +1,18 @@
 import { Node } from "../ModuleContext";
 
+export interface OscillatorValues {
+  frequency?: number;
+  type?: OscillatorType;
+}
+
 export interface Oscillator extends Node {
   oscillator: OscillatorNode;
-  setValues: (values: { frequency?: number; type?: OscillatorType }) => void;
+  setValues: (values?: OscillatorValues) => void;
 }
 
 const oscillator = (audioContext: AudioContext): Oscillator => {
   const oscillator = audioContext.createOscillator();
+  oscillator.frequency.value = 0;
   oscillator.start();
   return {
     inputs: {
@@ -25,8 +31,8 @@ const oscillator = (audioContext: AudioContext): Oscillator => {
     destroy: () => {
       oscillator.stop();
     },
-    setValues: ({ frequency, type }) => {
-      frequency &&
+    setValues: ({ frequency, type } = {}) => {
+      typeof frequency !== 'undefined' &&
         oscillator.frequency.setValueAtTime(
           frequency,
           audioContext.currentTime

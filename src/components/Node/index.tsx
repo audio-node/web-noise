@@ -5,6 +5,7 @@ import { Node as TNode } from "../../ModuleContext";
 import { LEVA_COLORS } from "../../styles/consts";
 
 interface NodeProps extends Pick<TNode, "inputs" | "outputs"> {
+  id: string;
   title: string;
 }
 
@@ -43,7 +44,7 @@ export const Port = styled.div`
 
 const StyledInputHandle = styled(Handle)`
   left: -2px;
-`
+`;
 
 const InputHandle: FC<Partial<HandleProps>> = (props) => (
   <StyledInputHandle {...props} type="target" position={Position.Left} />
@@ -51,7 +52,7 @@ const InputHandle: FC<Partial<HandleProps>> = (props) => (
 
 const StyledOutputHandle = styled(Handle)`
   right: -2px;
-`
+`;
 
 const OutputHandle: FC<Partial<HandleProps>> = (props) => (
   <StyledOutputHandle {...props} type="source" position={Position.Right} />

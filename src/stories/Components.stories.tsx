@@ -494,7 +494,7 @@ export const RandomSequencerWorker = () => (
         {
           id: "oscillator",
           type: "oscillator",
-          data: { label: "Oscillator", min: 0, max: 200, step: 1, value: 0 },
+          data: { label: "Oscillator", config: { min: 0, max: 200, step: 1 }, values: { frequency: 0 } },
           position: { x: spaceWidth, y: 50 },
           className: "react-flow__node-default",
           dragHandle: ".leva-c-hwBXYF",
@@ -548,7 +548,7 @@ export const ScriptNode = () => (
         {
           id: "oscillator",
           type: "oscillator",
-          data: { label: "Oscillator", value: 440 },
+          data: { label: "Oscillator", values: { frequency: 440 } },
           position: { x: 0, y: 50 },
           className: "react-flow__node-default",
           dragHandle: ".leva-c-hwBXYF",
@@ -633,7 +633,7 @@ export const Keyboard = () => (
         {
           id: "oscillator",
           type: "oscillator",
-          data: { label: "Oscillator", value: 0 },
+          data: { label: "Oscillator", values: { frequency: 0 } },
           position: { x: spaceWidth * 2 - 20, y: 0 },
           dragHandle: ".leva-c-hwBXYF",
           className: "react-flow__node-default",
