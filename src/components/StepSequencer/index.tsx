@@ -113,11 +113,10 @@ const StepSequencer = ({ id, data }: NodeProps) => {
   ): void => {
     const newGrid = gridData.map((step, stepIdx) => {
       if (stepIdx === index) {
-        const updatedStep = {
+        return {
           ...step,
           ...value,
         };
-        return updatedStep;
       }
       return step;
     });
