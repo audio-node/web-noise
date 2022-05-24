@@ -141,25 +141,22 @@ const StepSequencer = ({ id, data }: NodeProps) => {
   }, []);
 
   useEffect(() => {
-    clockNode.then((clock) => {
-      let counter = 1;
+    let counter = sequenceIndex;
 
+    clockNode.then((clock) => {
       clock.onTick(() => {
         if (controls.mode === "forward") {
           counter++;
         }
-
         if (controls.mode === "random") {
           counter = Math.round(Math.random() * stepsNumber);
         }
-
         if (controls.mode === "reverse") {
           if (counter <= 0) {
             counter = stepsNumber;
           }
           counter--;
         }
-
         setSequenceIndex(Math.abs(counter) % stepsNumber);
       });
     });
