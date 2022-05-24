@@ -2,7 +2,6 @@
  * Step Sequencer
  *
  * TODO:
- *  - use real clock
  *  - implement clock input
  *  - toggle to display midi/values
  *  - implement sequence mode like: 'reverse', 'vertical', 'snake', 'random', etc..
@@ -12,12 +11,11 @@ import { useNode, useModule } from "../../ModuleContext";
 import { LevaPanel, useControls, useCreateStore, button } from "leva";
 import { NodeProps } from "react-flow-renderer";
 import { Node } from "../Node";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Midi } from "@tonaljs/tonal";
 import { StepSequencer as NodeStepSequencer } from "../../nodes/stepSequencer";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../../styles/consts";
 import { Grid, Step, DebugBlock } from "./styles";
-import { Clock } from "../../nodes";
 
 interface StepData {
   active: boolean;
@@ -40,9 +38,33 @@ const StepSequencer = ({ id, data }: NodeProps) => {
   const [delta, setDelta] = useState(0);
   const [selectedStep, setSelectedStep] = useState<number | null>(null);
   const [sequenceIndex, setSequenceIndex] = useState(0);
-  // const [clock, setClock] = useState<Clock | null>(null);
   const [selectedStepValue, setSelectedStepValue] =
     useState<number | null>(null);
+
+  const updateStep = useCallback(
+    (index: number, value: Record<string, boolean | number>): void => {
+      const newSeq = sequenceData.map((step, stepIdx) => {
+        if (stepIdx === index) {
+          return {
+            ...step,
+            ...value,
+          };
+        }
+        return step;
+      });
+
+      setsequenceData(newSeq);
+    },
+    [sequenceData]
+  );
+
+  const onMouseMove = useCallback(
+    (e: MouseEvent): void => {
+      const delta = mouseDownXY.y - e.clientY;
+      setDelta(delta);
+    },
+    [mouseDownXY.y]
+  );
 
   useControls(
     "settings",
@@ -76,7 +98,7 @@ const StepSequencer = ({ id, data }: NodeProps) => {
     if (node && sequenceData[sequenceIndex].active) {
       node.setValues({ midi: sequenceData[sequenceIndex].value });
     }
-  }, [node, sequenceIndex]);
+  }, [node, sequenceData, sequenceIndex]);
 
   useEffect(() => {
     if (isMousePressed) {
@@ -85,7 +107,7 @@ const StepSequencer = ({ id, data }: NodeProps) => {
     return () => {
       window.removeEventListener("mousemove", onMouseMove);
     };
-  }, [mouseDownXY, isMousePressed]);
+  }, [mouseDownXY, isMousePressed, onMouseMove]);
 
   useEffect(() => {
     if (selectedStep !== null && selectedStepValue !== null) {
@@ -95,24 +117,7 @@ const StepSequencer = ({ id, data }: NodeProps) => {
         updateStep(selectedStep, { value: newValue });
       }
     }
-  }, [delta, selectedStep, selectedStepValue]);
-
-  const updateStep = (
-    index: number,
-    value: Record<string, boolean | number>
-  ): void => {
-    const newSeq = sequenceData.map((step, stepIdx) => {
-      if (stepIdx === index) {
-        return {
-          ...step,
-          ...value,
-        };
-      }
-      return step;
-    });
-
-    setsequenceData(newSeq);
-  };
+  }, [delta, selectedStep, selectedStepValue, updateStep]);
 
   const onMouseDown = (e: MouseEvent): void => {
     setIsMousePressed(true);
@@ -123,11 +128,6 @@ const StepSequencer = ({ id, data }: NodeProps) => {
     setIsMousePressed(false);
     setSelectedStep(null);
     setDelta(0);
-  };
-
-  const onMouseMove = function (e: MouseEvent): void {
-    const delta = mouseDownXY.y - e.clientY;
-    setDelta(delta);
   };
 
   // TODO: convert to component
