@@ -2,9 +2,10 @@
  * Step Sequencer
  *
  * TODO:
+ *  - implement gate output
  *  - implement clock input
  *  - toggle to display midi/values
- *  - implement sequence mode like: 'reverse', 'vertical', 'snake', 'random', etc..
+ *  - implement more sequence mode: 'vertical', 'snake', etc..
  */
 
 import { useNode, useModule } from "../../ModuleContext";
@@ -22,7 +23,16 @@ interface StepData {
   value: number;
 }
 
-const DEFAULT_STEP_VALUE = 36;
+type SequenceMode = "forward" | "reverse" | "random";
+
+const sequenceModesOptions: Record<SequenceMode, SequenceMode> = {
+  forward: "forward",
+  reverse: "reverse",
+  random: "random",
+};
+
+const DEFAULT_STEP_VALUE: number = 36;
+const DEFAULT_SEQUENCE_MODE: SequenceMode = "forward";
 
 const StepSequencer = ({ id, data }: NodeProps) => {
   const { node } = useNode<NodeStepSequencer>(id);
@@ -40,6 +50,20 @@ const StepSequencer = ({ id, data }: NodeProps) => {
   const [sequenceIndex, setSequenceIndex] = useState(0);
   const [selectedStepValue, setSelectedStepValue] =
     useState<number | null>(null);
+
+  const controls = useControls(
+    "settings",
+    {
+      clear: button(() => clearSeq()),
+      "random seq": button(() => generateRandomSeq()),
+      mode: {
+        options: sequenceModesOptions,
+        value: DEFAULT_SEQUENCE_MODE,
+      },
+    },
+    { collapsed: true, color: LEVA_COLOR_ACCENT2_BLUE },
+    { store: levaStore }
+  );
 
   const updateStep = useCallback(
     (index: number, value: Record<string, boolean | number>): void => {
@@ -66,33 +90,80 @@ const StepSequencer = ({ id, data }: NodeProps) => {
     [mouseDownXY.y]
   );
 
-  useControls(
-    "settings",
-    {
-      clear: button(() => clearSeq()),
-      "random seq": button(() => generateRandomSeq()),
-    },
-    { collapsed: true, color: LEVA_COLOR_ACCENT2_BLUE },
-    { store: levaStore }
-  );
+  const onMouseDown = (e: MouseEvent): void => {
+    setIsMousePressed(true);
+    setMouseDownXY({ x: e.clientX, y: e.clientY });
+  };
+
+  const onMouseUp = (e: MouseEvent): void => {
+    setIsMousePressed(false);
+    setSelectedStep(null);
+    setDelta(0);
+  };
+
+  // TODO: convert to component
+  const formatStepValue = (value: number) => {
+    return Midi.midiToNoteName(value);
+  };
+
+  function clearSeq() {
+    const newSeq = sequenceData.map((step) => {
+      return {
+        ...step,
+        value: 0,
+        active: false,
+      };
+    });
+
+    setsequenceData(newSeq);
+  }
+
+  function generateRandomSeq() {
+    const newSeq = sequenceData.map((step) => {
+      return {
+        ...step,
+        active: Math.random() < 0.5,
+        value: Math.round(Math.random() * 127),
+      };
+    });
+
+    setsequenceData(newSeq);
+  }
 
   useEffect(() => {
     window.addEventListener("mousedown", onMouseDown);
     window.addEventListener("mouseup", onMouseUp);
-
-    clockNode.then((clock) => {
-      let counter = 0;
-      clock.onTick(() => {
-        setSequenceIndex(counter % stepsNumber);
-        counter++;
-      });
-    });
 
     return () => {
       window.removeEventListener("mousedown", onMouseDown);
       window.removeEventListener("mouseup", onMouseUp);
     };
   }, []);
+
+  useEffect(() => {
+    clockNode.then((clock) => {
+      let counter = 1;
+
+      clock.onTick(() => {
+        if (controls.mode === "forward") {
+          counter++;
+        }
+
+        if (controls.mode === "random") {
+          counter = Math.round(Math.random() * stepsNumber);
+        }
+
+        if (controls.mode === "reverse") {
+          if (counter <= 0) {
+            counter = stepsNumber;
+          }
+          counter--;
+        }
+
+        setSequenceIndex(Math.abs(counter) % stepsNumber);
+      });
+    });
+  }, [controls.mode, stepsNumber]);
 
   useEffect(() => {
     if (node && sequenceData[sequenceIndex].active) {
@@ -119,49 +190,16 @@ const StepSequencer = ({ id, data }: NodeProps) => {
     }
   }, [delta, selectedStep, selectedStepValue, updateStep]);
 
-  const onMouseDown = (e: MouseEvent): void => {
-    setIsMousePressed(true);
-    setMouseDownXY({ x: e.clientX, y: e.clientY });
-  };
-
-  const onMouseUp = (e: MouseEvent): void => {
-    setIsMousePressed(false);
-    setSelectedStep(null);
-    setDelta(0);
-  };
-
-  // TODO: convert to component
-  const formatStepValue = (value: number) => {
-    return Midi.midiToNoteName(value);
-  };
-
-  function clearSeq() {
-    const newSeq = sequenceData.map((step, index) => {
-      return {
-        ...step,
-        value: 0,
-        active: false,
-      };
-    });
-
-    setsequenceData(newSeq);
-  }
-
-  function generateRandomSeq() {
-    const newSeq = sequenceData.map((step, index) => {
-      return {
-        ...step,
-        active: Math.random() < 0.5,
-        value: Math.round(Math.random() * 127),
-      };
-    });
-
-    setsequenceData(newSeq);
-  }
-
   return (
     <Node id="step-sequencer" title={data.label} outputs={node?.outputs}>
-      <LevaPanel store={levaStore} fill flat hideCopyButton titleBar={false} />
+      <LevaPanel
+        store={levaStore}
+        fill
+        flat
+        hideCopyButton
+        titleBar={false}
+        oneLineLabels
+      />
       <Grid>
         {sequenceData.map((el, index) => {
           return (
