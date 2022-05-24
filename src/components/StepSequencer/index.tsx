@@ -61,7 +61,6 @@ const StepSequencer = ({ id, data }: NodeProps) => {
     clockNode.then((clock) => {
       let counter = 0;
       clock.onTick(() => {
-        console.log(counter);
         setSequenceIndex(counter % stepsNumber);
         counter++;
       });
