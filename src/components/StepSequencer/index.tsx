@@ -188,7 +188,7 @@ const StepSequencer = ({ id, data }: NodeProps) => {
   }, [delta, selectedStep, selectedStepValue, updateStep]);
 
   return (
-    <Node id="step-sequencer" title={data.label} outputs={node?.outputs}>
+    <Node id={id} title={data.label} outputs={node?.outputs}>
       <LevaPanel
         store={levaStore}
         fill
