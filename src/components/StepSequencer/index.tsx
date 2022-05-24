@@ -69,23 +69,8 @@ const StepSequencer = ({ id, data }: NodeProps) => {
   }, []);
 
   useEffect(() => {
-    node?.gateSource.start();
-    node?.freqSource.start();
-    node?.ctrlSource.start();
-
-    return () => {
-      node?.gateSource.stop();
-      node?.freqSource.stop();
-      node?.ctrlSource.stop();
-    };
-  }, [node]);
-
-  useEffect(() => {
     if (node && sequenceData[sequenceIndex].active) {
-      node.freqSource.offset.value = Midi.midiToFreq(
-        sequenceData[sequenceIndex].value
-      );
-      node.ctrlSource.offset.value = sequenceData[sequenceIndex].value;
+      node.setValues({ midi: sequenceData[sequenceIndex].value });
     }
   }, [node, sequenceIndex]);
 
@@ -171,7 +156,7 @@ const StepSequencer = ({ id, data }: NodeProps) => {
   }
 
   return (
-    <Node title={data.label} outputs={node?.outputs}>
+    <Node id="step-sequencer" title={data.label} outputs={node?.outputs}>
       <LevaPanel store={levaStore} fill flat hideCopyButton titleBar={false} />
       <Grid>
         {sequenceData.map((el, index) => {
