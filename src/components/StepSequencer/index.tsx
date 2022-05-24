@@ -8,7 +8,7 @@
  *  - implement sequence mode like: 'reverse', 'vertical', 'snake', 'random', etc..
  */
 
-import { useNode } from "../../ModuleContext";
+import { useNode, useModule } from "../../ModuleContext";
 import { LevaPanel, useControls, useCreateStore, button } from "leva";
 import { NodeProps } from "react-flow-renderer";
 import { Node } from "../Node";
@@ -17,6 +17,7 @@ import { Midi } from "@tonaljs/tonal";
 import { StepSequencer as NodeStepSequencer } from "../../nodes/stepSequencer";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../../styles/consts";
 import { Grid, Step, DebugBlock } from "./styles";
+import { Clock } from "../../nodes";
 
 interface StepData {
   active: boolean;
@@ -27,6 +28,7 @@ const DEFAULT_STEP_VALUE = 36;
 
 const StepSequencer = ({ id, data }: NodeProps) => {
   const { node } = useNode<NodeStepSequencer>(id);
+  const { clock: clockNode } = useModule();
 
   const levaStore = useCreateStore();
   const [stepsNumber] = useState(16);
@@ -38,6 +40,7 @@ const StepSequencer = ({ id, data }: NodeProps) => {
   const [delta, setDelta] = useState(0);
   const [selectedStep, setSelectedStep] = useState<number | null>(null);
   const [sequenceIndex, setSequenceIndex] = useState(0);
+  // const [clock, setClock] = useState<Clock | null>(null);
   const [selectedStepValue, setSelectedStepValue] =
     useState<number | null>(null);
 
@@ -55,12 +58,14 @@ const StepSequencer = ({ id, data }: NodeProps) => {
     window.addEventListener("mousedown", onMouseDown);
     window.addEventListener("mouseup", onMouseUp);
 
-    // TODO: use real clock
-    let counter = 0;
-    setInterval(() => {
-      setSequenceIndex(counter % stepsNumber);
-      counter++;
-    }, 200);
+    clockNode.then((clock) => {
+      let counter = 0;
+      clock.onTick(() => {
+        console.log(counter);
+        setSequenceIndex(counter % stepsNumber);
+        counter++;
+      });
+    });
 
     return () => {
       window.removeEventListener("mousedown", onMouseDown);
