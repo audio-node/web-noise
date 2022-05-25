@@ -6,26 +6,21 @@ interface StepSequencerValues {
 }
 
 export interface StepSequencer extends Node {
-  gateSource: ConstantSourceNode;
+  // gateSource: ConstantSourceNode; //TODO: to implement
   freqSource: ConstantSourceNode;
   ctrlSource: ConstantSourceNode;
   setValues: (values: StepSequencerValues) => void;
 }
 
 const stepSequencer = (audioContext: AudioContext): StepSequencer => {
-  const gateSource = audioContext.createConstantSource();
   const freqSource = audioContext.createConstantSource();
   const ctrlSource = audioContext.createConstantSource();
 
-  gateSource.start();
   freqSource.start();
   ctrlSource.start();
 
   return {
     outputs: {
-      gate: {
-        port: gateSource,
-      },
       freq: {
         port: freqSource,
       },
@@ -34,7 +29,6 @@ const stepSequencer = (audioContext: AudioContext): StepSequencer => {
       },
     },
     destroy: () => {
-      gateSource.stop();
       freqSource.stop();
       ctrlSource.stop();
     },
@@ -42,7 +36,6 @@ const stepSequencer = (audioContext: AudioContext): StepSequencer => {
       freqSource.offset.value = Midi.midiToFreq(midi);
       ctrlSource.offset.value = midi;
     },
-    gateSource,
     freqSource,
     ctrlSource,
   };

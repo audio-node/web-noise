@@ -5,7 +5,7 @@
  *  - implement gate output
  *  - implement clock input
  *  - toggle to display midi/values
- *  - implement more sequence mode: 'vertical', 'snake', etc..
+ *  - implement additional sequence mode: e.g. 'vertical', 'snake', etc..
  */
 
 import { useNode, useModule } from "../../ModuleContext";
