@@ -200,7 +200,7 @@ const StepSequencer = ({ id, data }: NodeProps) => {
         oneLineLabels
       />
       <Grid>
-        {sequenceData.map((el, index) => {
+        {sequenceData.map((step, index) => {
           return (
             <Step
               isActive={sequenceData[index].active}
@@ -214,7 +214,7 @@ const StepSequencer = ({ id, data }: NodeProps) => {
                 setSelectedStepValue(sequenceData[index].value);
               }}
             >
-              {formatStepValue(el.value)}
+              {formatStepValue(step.value)}
             </Step>
           );
         })}
