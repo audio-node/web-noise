@@ -181,10 +181,10 @@ const StepSequencer = ({ id, data }: NodeProps) => {
 
   useEffect(() => {
     if (selectedStep !== null && selectedStepValue !== null) {
-      let newValue = selectedStepValue + delta;
+      let value = selectedStepValue + delta;
 
-      if (newValue >= 0 && newValue <= 127) {
-        updateStep(selectedStep, { value: newValue });
+      if (value >= 0 && value <= 127) {
+        updateStep(selectedStep, { value });
       }
     }
   }, [delta, selectedStep, selectedStepValue, updateStep]);
