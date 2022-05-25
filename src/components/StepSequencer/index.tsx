@@ -206,7 +206,6 @@ const StepSequencer = ({ id, data }: NodeProps) => {
               isActive={sequenceData[index].active}
               isSequenceIndex={index === sequenceIndex}
               key={`step-${index}`}
-              id={`step-${index}`}
               onClick={() =>
                 updateStep(index, { active: !sequenceData[index].active })
               }
