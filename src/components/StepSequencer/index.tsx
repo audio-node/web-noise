@@ -17,6 +17,7 @@ import { Midi } from "@tonaljs/tonal";
 import { StepSequencer as NodeStepSequencer } from "../../nodes/stepSequencer";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../../styles/consts";
 import { Grid, Step, DebugBlock } from "./styles";
+import { Clock } from "../../nodes";
 
 interface StepData {
   active: boolean;
@@ -50,6 +51,7 @@ const StepSequencer = ({ id, data }: NodeProps) => {
   const [sequenceIndex, setSequenceIndex] = useState(0);
   const [selectedStepValue, setSelectedStepValue] =
     useState<number | null>(null);
+  const [clock, setClock] = useState<Clock | null>(null);
 
   const controls = useControls(
     "settings",
@@ -95,7 +97,7 @@ const StepSequencer = ({ id, data }: NodeProps) => {
     setMouseDownXY({ x: e.clientX, y: e.clientY });
   };
 
-  const onMouseUp = (e: MouseEvent): void => {
+  const onMouseUp = (): void => {
     setIsMousePressed(false);
     setSelectedStep(null);
     setDelta(0);
@@ -133,6 +135,7 @@ const StepSequencer = ({ id, data }: NodeProps) => {
   useEffect(() => {
     window.addEventListener("mousedown", onMouseDown);
     window.addEventListener("mouseup", onMouseUp);
+    clockNode.then((clock) => setClock(clock));
 
     return () => {
       window.removeEventListener("mousedown", onMouseDown);
@@ -141,9 +144,8 @@ const StepSequencer = ({ id, data }: NodeProps) => {
   }, []);
 
   useEffect(() => {
-    let counter = sequenceIndex;
-
-    clockNode.then((clock) => {
+    if (clock) {
+      let counter = sequenceIndex;
       clock.onTick(() => {
         if (controls.mode === "forward") {
           counter++;
@@ -159,8 +161,8 @@ const StepSequencer = ({ id, data }: NodeProps) => {
         }
         setSequenceIndex(Math.abs(counter) % stepsNumber);
       });
-    });
-  }, [controls.mode, stepsNumber]);
+    }
+  }, [clock, controls.mode, stepsNumber]);
 
   useEffect(() => {
     if (node && sequenceData[sequenceIndex].active) {
