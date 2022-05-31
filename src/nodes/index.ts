@@ -5,7 +5,7 @@ import reverb from "./reverb";
 import oscillator from "./oscillator";
 import randomSequencer, { randomSequencerWorklet } from "./randomSequencer";
 import virtualKeyboard from "./virtualKeyboard";
-import createClock, { Clock } from "./clock";
+import clock, { Clock } from "./clock";
 
 export type { WhiteNoise } from "./whiteNoise";
 export type { ScriptNode } from "./scriptNode";
@@ -24,11 +24,10 @@ export const getClock = async (audioContext: AudioContext): Promise<Clock> => {
     //@ts-expect-error very strange behaviour, typewise get() can return undefined
     return clockMap.get(audioContext);
   }
-  const clock = createClock(audioContext);
-  clockMap.set(audioContext, clock);
-  return clock;
+  const contextClock = clock(audioContext);
+  clockMap.set(audioContext, contextClock);
+  return contextClock;
 };
-
 
 export interface Analyser extends Node {
   analyser: AnalyserNode;
@@ -141,4 +140,5 @@ export const nodeTypes = {
   randomSequencerWorklet,
   scriptNode,
   virtualKeyboard,
+  clock,
 };

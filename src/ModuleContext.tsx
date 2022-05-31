@@ -1,12 +1,14 @@
 import { createContext, useContext } from "react";
 import { getClock } from "./nodes";
 
+type AudioNodeChannel = [AudioNode, number];
+
 interface InputPort {
-  port: AudioNode | any /* any other type of port */;
+  port: AudioNode | AudioNodeChannel | AudioParam;
 }
 
 interface OutputPort {
-  port: AudioNode;
+  port: AudioNode | AudioNodeChannel;
 }
 
 export interface Node extends Record<string, any> {
@@ -48,11 +50,13 @@ export const useModule = () => {
 
     //disconnect all ports
     Object.values(node.inputs || {}).forEach(
-      ({ port }) => port.disconnect && port.disconnect()
+      ({ port }) =>
+        port instanceof AudioNode && port.disconnect && port.disconnect()
     );
 
     Object.values(node.outputs || {}).forEach(
-      ({ port }) => port.disconnect && port.disconnect()
+      ({ port }) =>
+        port instanceof AudioNode && port.disconnect && port.disconnect()
     );
 
     module.delete(id);
@@ -62,7 +66,7 @@ export const useModule = () => {
     id: string,
     type: "inputs" | "outputs",
     portId: string
-  ): Promise<AudioNode> => {
+  ): Promise<AudioNode | AudioParam | AudioNodeChannel | undefined> => {
     return (await module.get(id))?.[type]?.[portId]?.port;
   };
 
@@ -90,7 +94,30 @@ export const useModule = () => {
       return false;
     }
 
-    outputNode.connect(inputNode);
+    const isInputNode = inputNode instanceof AudioNode;
+    const isInputParam = inputNode instanceof AudioParam;
+    const isInputArray = inputNode instanceof Array;
+    const isInputSimple = isInputNode || isInputParam;
+
+    const isOutputNode = outputNode instanceof AudioNode;
+    const isOutputArray = outputNode instanceof Array;
+
+    if (isOutputNode && isInputSimple) {
+      //@ts-ignore inputNode can actually be AudioParam
+      outputNode.connect(inputNode);
+    } else if (isOutputNode && isInputArray) {
+      outputNode.connect(inputNode[0], 0, inputNode[1]);
+    } else if (isOutputArray && isInputSimple) {
+      //@ts-ignore inputNode can actually be AudioParam
+      outputNode[0].connect(inputNode, outputNode[1]);
+    } else if (isOutputArray && isInputArray) {
+      outputNode[0].connect(inputNode[0], outputNode[1], inputNode[1]);
+    } else {
+      console.log(outputNode, inputNode);
+      throw new Error(
+        `output port can not be only AudioNode or AudioNodeChannel: ${sourceId}:${sourcePort}`
+      );
+    }
 
     connections.set(
       [sourceId, sourcePort, targetId, targetPort].join(":"),
@@ -118,10 +145,29 @@ export const useModule = () => {
       return;
     }
 
-    try {
+    const isInputNode = inputNode instanceof AudioNode;
+    const isInputParam = inputNode instanceof AudioParam;
+    const isInputArray = inputNode instanceof Array;
+    const isInputSimple = isInputNode || isInputParam;
+
+    const isOutputNode = outputNode instanceof AudioNode;
+    const isOutputArray = outputNode instanceof Array;
+
+    if (isOutputNode && isInputSimple) {
+      //@ts-ignore inputNode can actually be AudioParam
       outputNode.disconnect(inputNode);
-    } catch (e) {
-      console.error(`error disconnecting`, e);
+    } else if (isOutputNode && isInputArray) {
+      outputNode.disconnect(inputNode[0], 0, inputNode[1]);
+    } else if (isOutputArray && isInputSimple) {
+      //@ts-ignore inputNode can actually be AudioParam
+      outputNode[0].disconnect(inputNode, outputNode[1]);
+    } else if (isOutputArray && isInputArray) {
+      outputNode[0].disconnect(inputNode[0], outputNode[1], inputNode[1]);
+    } else {
+      console.log(outputNode, inputNode);
+      throw new Error(
+        `output port can not be only AudioNode or AudioNodeChannel: ${sourceId}:${sourcePort}`
+      );
     }
     connections.delete([sourceId, sourcePort, targetId, targetPort].join(":"));
   };

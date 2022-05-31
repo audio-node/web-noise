@@ -1,49 +1,37 @@
-import { useMemo, useEffect, useCallback, useState, useRef } from "react";
-import { Handle, Position, NodeProps } from "react-flow-renderer";
-import styled from "@emotion/styled";
-import { useModule, useNode } from "../ModuleContext";
-import { Range, Scale, Note, Midi } from "@tonaljs/tonal";
-import { Leva, useCreateStore, useControls, LevaPanel, button } from "leva";
-import { atom } from "recoil";
+import { LevaPanel, useControls, useCreateStore } from "leva";
+import { useEffect, useState } from "react";
+import { NodeProps } from "react-flow-renderer";
+import { useNode } from "../ModuleContext";
 import { RandomSequencer as TRandomSequencer } from "../nodes";
+import { Node } from "./Node";
 
-export const GlobalClockState = atom({
-  key: "globalClock",
-  default: {
-    isPlaying: false,
-    timeOutID: 0,
-  },
-});
-
-export const GlobalClockCounterState = atom({
-  key: "globalClockCounter",
-  default: 0,
-});
-
-const RandomSequencer = ({ sourcePosition, data, id }: NodeProps) => {
+const RandomSequencer = ({ data, id }: NodeProps) => {
   const { node } = useNode<TRandomSequencer>(id);
   const [randomSequencer, setRandomSequencer] =
     useState<TRandomSequencer | null>(null);
+  const [currentNote, setCurrentNote] = useState<string>();
 
   const [ready, setReady] = useState<boolean>(false);
 
   const store = useCreateStore();
 
-  const controls = useControls(
-    {
-      sequencer: { value: "", editable: false },
-    },
-    { store }
+  const [controls, set] = useControls(
+    () => ({
+      note: {
+        value: "none",
+        label: "Current Note",
+        disabled: true,
+      },
+    }),
+    { store },
+    [ready, currentNote]
   );
 
   useEffect(() => {
     if (!randomSequencer) {
       return;
     }
-    randomSequencer.constantSource.start();
-    return () => {
-      randomSequencer.constantSource.stop();
-    };
+    randomSequencer.onNoteChange(({ note }) => set({ note }));
   }, [randomSequencer]);
 
   useEffect(() => {
@@ -54,23 +42,18 @@ const RandomSequencer = ({ sourcePosition, data, id }: NodeProps) => {
   }, [node, setReady]);
 
   return (
-    <div>
-      <LevaPanel
-        store={store}
-        titleBar={{ drag: false, title: data.label }}
-        fill
-        flat
-        collapsed
-      />
-
-      {!ready ? <div>loading</div> : null}
-
-      <Handle
-        type="source"
-        id="out"
-        position={sourcePosition || Position.Right}
-      />
-    </div>
+    <Node
+      id={id}
+      title={data.label}
+      inputs={randomSequencer?.inputs}
+      outputs={randomSequencer?.outputs}
+    >
+      {ready ? (
+        <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
+      ) : (
+        <div>loading</div>
+      )}
+    </Node>
   );
 };
 

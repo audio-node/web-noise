@@ -33,6 +33,7 @@ import Toolbar from "./Toolbar";
 import VirtualKeyboard from "./VirtualKeyboard";
 import Visualizer from "./Visualizer";
 import WhiteNoise from "./WhiteNoise";
+import Clock from "./Clock";
 import Wire from "./Wire";
 
 export interface Elements {
@@ -64,6 +65,7 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
       randomSequencerWorklet: RandomSequencerWorklet,
       scriptNode: ScriptNode,
       virtualKeyboard: VirtualKeyboard,
+      clock: Clock,
     }),
     []
   );
