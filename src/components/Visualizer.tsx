@@ -106,7 +106,7 @@ const Visualizer = ({ data, id }: NodeProps) => {
       return;
     }
     analyser.analyser.port.onmessage = ({ data }) => {
-      const input1 = data.inputs[0][0];
+      const input1 = data.input;
       if(!input1){ return }
       dataRef.current = input1;
       // requestAnimationFrame(() => {
