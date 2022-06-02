@@ -73,7 +73,7 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
   const audioNodeTypes = useMemo(
     () => ({
       ...baseAudioNodeTypes,
-      visualiser: baseAudioNodeTypes.analyser,
+      visualiser: baseAudioNodeTypes.analyserWorklet,
       spectroscope: baseAudioNodeTypes.analyser,
       parameter: baseAudioNodeTypes.constantSource,
     }),

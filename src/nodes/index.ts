@@ -6,6 +6,7 @@ import oscillator from "./oscillator";
 import randomSequencer, { randomSequencerWorklet } from "./randomSequencer";
 import virtualKeyboard from "./virtualKeyboard";
 import clock, { Clock } from "./clock";
+import { analyser, analyserWorklet } from './analyser';
 
 export type { WhiteNoise } from "./whiteNoise";
 export type { ScriptNode } from "./scriptNode";
@@ -17,6 +18,7 @@ export type {
 } from "./randomSequencer";
 export type { VirtualKeyboard } from "./virtualKeyboard";
 export type { Clock } from "./clock";
+export type { Analyser, AnalyserWorklet } from './analyser';
 
 const clockMap = new Map<AudioContext, Promise<Clock>>();
 export const getClock = async (audioContext: AudioContext): Promise<Clock> => {
@@ -27,27 +29,6 @@ export const getClock = async (audioContext: AudioContext): Promise<Clock> => {
   const contextClock = clock(audioContext);
   clockMap.set(audioContext, contextClock);
   return contextClock;
-};
-
-export interface Analyser extends Node {
-  analyser: AnalyserNode;
-}
-
-export const analyser = (audioContext: AudioContext): Analyser => {
-  const analyser = audioContext.createAnalyser();
-  return {
-    inputs: {
-      in: {
-        port: analyser,
-      },
-    },
-    outputs: {
-      out: {
-        port: analyser,
-      },
-    },
-    analyser,
-  };
 };
 
 export interface Destination extends Node {
@@ -130,6 +111,7 @@ const filter = (audioContext: AudioContext): Filter => {
 export const nodeTypes = {
   oscillator,
   analyser,
+  analyserWorklet,
   destination,
   whiteNoise,
   reverb,

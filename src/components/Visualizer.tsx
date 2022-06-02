@@ -1,73 +1,76 @@
-import { useEffect, useMemo, useRef, useCallback } from "react";
+import { useEffect, useMemo, useRef, useCallback, useState } from "react";
 //@ts-ignore
 import useAnimationFrame from "use-animation-frame";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useModule, useNode } from "../ModuleContext";
 import { Leva, useCreateStore, useControls, LevaPanel } from "leva";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../styles/consts";
-import { Analyser } from "../nodes";
+import { AnalyserWorklet as Analyser } from "../nodes";
+import { Node } from "./Node";
 
-export const useAnalyser = (audioContext: AudioContext) =>
-  useMemo(() => {
-    const analyser = audioContext.createAnalyser();
-    return {
-      inputs: {
-        in: {
-          port: analyser,
-        },
-      },
-      outputs: {
-        out: {
-          port: analyser,
-        },
-      },
-      analyser,
-    };
-  }, [audioContext]);
-
-const Visualizer = ({
-  targetPosition,
-  sourcePosition,
-  data,
-  id,
-}: NodeProps) => {
-  const analyserNode = useNode<Analyser>(id);
-  const { node } = analyserNode;
-  const { analyser } = node || {};
-
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  const canvas = canvasRef.current;
-  const levaStore = useCreateStore();
-
-  const controls = useControls(
-    { color: { value: LEVA_COLOR_ACCENT2_BLUE } },
-    // { color: { value: "#14df42" } },
-    { store: levaStore }
-  );
-
-  const canvasCtx = useMemo(() => {
+const useCanvas = () => {
+  const ref = useRef<HTMLCanvasElement>(null);
+  const canvas = useMemo(() => ref.current, [ref.current]);
+  const context = useMemo(() => {
     return canvas?.getContext("2d");
   }, [canvas]);
+  return { ref, canvas, context };
+};
 
-  const draw = useCallback(() => {
-    if (!canvas || !canvasCtx) {
+const Visualizer = ({ data, id }: NodeProps) => {
+  const analyserNode = useNode<Analyser>(id);
+  const { node } = analyserNode;
+  const [analyser, setAnalyser] = useState<Analyser>();
+
+  // const canvasRef = useRef<HTMLCanvasElement>(null);
+  // const input2CanvasRef = useRef<HTMLCanvasElement>(null);
+  // const gridCanvasRef = useRef<HTMLCanvasElement>(null);
+  const dataRef = useRef<Float32Array>(new Float32Array());
+
+  const input1Canvas = useCanvas();
+  const input2Canvas = useCanvas();
+  const gridCanvas = useCanvas();
+
+  // const canvas = canvasRef.current;
+
+  const store = useCreateStore();
+  const controls = useControls(
+    "settings",
+    {
+      color: { value: LEVA_COLOR_ACCENT2_BLUE },
+      color2: { value: "#14df42" },
+      showGrid: {
+        value: false,
+        label: "Show Grid",
+      },
+      gridColor: {
+        value: "#fff",
+        render: (get) => get("settings.showGrid"),
+      },
+    },
+    { store: store }
+  );
+
+  // const canvasCtx = useMemo(() => {
+  //   return canvas?.getContext("2d");
+  // }, [canvas]);
+
+  const renderInput = useCallback(() => {
+    const data = dataRef.current;
+    const { ref } = input1Canvas;
+    const canvas = ref.current;
+    const canvasCtx = canvas?.getContext("2d");
+    if (!canvas || !canvasCtx || !data) {
       return;
     }
-    if (!analyser) {
-      return;
-    }
-    const bufferLength = analyser.frequencyBinCount;
 
-    const dataArray = new Uint8Array(bufferLength);
-
-    analyser.getByteTimeDomainData(dataArray);
+    const bufferLength = data.length;
 
     canvasCtx.fillStyle = "#292d39";
 
     canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
 
-    canvasCtx.lineWidth = 2;
+    canvasCtx.lineWidth = 1;
     canvasCtx.strokeStyle = controls.color;
 
     canvasCtx.beginPath();
@@ -76,8 +79,12 @@ const Visualizer = ({
     let x = 0;
 
     for (let i = 0; i < bufferLength; i++) {
-      const v = dataArray[i] / 128.0;
+      const v = data[i] + 1;
       const y = (v * canvas.height) / 2;
+
+      if (v > 0 || y > 0) {
+        // console.log(v, y)
+      }
 
       if (i === 0) {
         canvasCtx.moveTo(x, y);
@@ -88,33 +95,99 @@ const Visualizer = ({
       x += sliceWidth;
     }
 
-    canvasCtx.lineTo(canvas.width, canvas.height / 2);
+    // canvasCtx.lineTo(canvas.width, canvas.height / 2);
     canvasCtx.stroke();
-  }, [canvas, controls.color, analyser]);
+    // canvasCtx.setTransform(1, 0, 0, 1, 0, canvas.height / 2);
+  }, [input1Canvas, dataRef]);
 
-  const tick = useCallback(draw, [draw]);
+  useEffect(() => {
+    if (!analyser) {
+      return;
+    }
+    if (!input1Canvas.ref) {
+      return;
+    }
+    analyser.analyser.port.onmessage = ({ data }) => {
+      const input1 = data.inputs[0][0];
+      if(!input1){ return }
+      dataRef.current = input1;
+      // requestAnimationFrame(() => {
+      //   renderInput(input1Canvas, input1);
+      // });
+    };
+  }, [analyser, renderInput, input1Canvas]);
+
+  // const draw = useCallback(() => {
+  //   if (!canvas || !canvasCtx) {
+  //     return;
+  //   }
+  //   if (!analyser) {
+  //     return;
+  //   }
+  //   const bufferLength = analyser.frequencyBinCount;
+  //
+  //   const dataArray = new Uint8Array(bufferLength);
+  //
+  //   analyser.getByteTimeDomainData(dataArray);
+  //
+  //   canvasCtx.fillStyle = "#292d39";
+  //
+  //   canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+  //
+  //   canvasCtx.lineWidth = 2;
+  //   canvasCtx.strokeStyle = controls.color;
+  //
+  //   canvasCtx.beginPath();
+  //
+  //   const sliceWidth = (canvas.width * 1.0) / bufferLength;
+  //   let x = 0;
+  //
+  //   for (let i = 0; i < bufferLength; i++) {
+  //     const v = dataArray[i] / 128.0;
+  //     const y = (v * canvas.height) / 2;
+  //
+  //     if (i === 0) {
+  //       canvasCtx.moveTo(x, y);
+  //     } else {
+  //       canvasCtx.lineTo(x, y);
+  //     }
+  //
+  //     x += sliceWidth;
+  //   }
+  //
+  //   canvasCtx.lineTo(canvas.width, canvas.height / 2);
+  //   canvasCtx.stroke();
+  // }, [canvas, controls.color, analyser]);
+
+  const tick = useCallback(renderInput, [renderInput]);
+
+  useEffect(() => {
+    node?.then((result: Analyser) => {
+      setAnalyser(result);
+    });
+  }, [node, setAnalyser]);
 
   useAnimationFrame(tick);
+
   return (
-    <>
-      <Handle
-        id="in"
-        type="target"
-        position={targetPosition || Position.Left}
-      />
-      <LevaPanel
-        store={levaStore}
-        titleBar={{ drag: false, title: data.label }}
-        fill
-        flat
-      />
-      <canvas ref={canvasRef} style={{ display: "block", width: "100%" }} />
-      <Handle
-        id="out"
-        type="source"
-        position={sourcePosition || Position.Right}
-      />
-    </>
+    <Node
+      id={id}
+      title={data.label}
+      inputs={analyser?.inputs}
+      outputs={analyser?.outputs}
+    >
+      {analyser ? (
+        <>
+          <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
+          <canvas
+            ref={input1Canvas.ref}
+            style={{ display: "block", width: "100%" }}
+          />
+        </>
+      ) : (
+        <div>loading</div>
+      )}
+    </Node>
   );
 };
 
