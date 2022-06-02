@@ -66,9 +66,10 @@ const Visualizer = ({ data, id }: NodeProps) => {
 
     const bufferLength = data.length;
 
+    canvasCtx.setTransform(1,0,0,1,0,0);
     canvasCtx.fillStyle = "#292d39";
 
-    canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+    canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
 
     canvasCtx.lineWidth = 1;
     canvasCtx.strokeStyle = controls.color;
@@ -97,14 +98,11 @@ const Visualizer = ({ data, id }: NodeProps) => {
 
     // canvasCtx.lineTo(canvas.width, canvas.height / 2);
     canvasCtx.stroke();
-    // canvasCtx.setTransform(1, 0, 0, 1, 0, canvas.height / 2);
+    canvasCtx.setTransform(1, 0, 0, 1, 0, canvas.height / 2);
   }, [input1Canvas, dataRef]);
 
   useEffect(() => {
     if (!analyser) {
-      return;
-    }
-    if (!input1Canvas.ref) {
       return;
     }
     analyser.analyser.port.onmessage = ({ data }) => {
@@ -115,7 +113,7 @@ const Visualizer = ({ data, id }: NodeProps) => {
       //   renderInput(input1Canvas, input1);
       // });
     };
-  }, [analyser, renderInput, input1Canvas]);
+  }, [analyser]);
 
   // const draw = useCallback(() => {
   //   if (!canvas || !canvasCtx) {
