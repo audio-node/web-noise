@@ -67,7 +67,8 @@ const Scope: FC<{ analyser: AudioWorkletNode; color?: string }> = ({
   useEffect(() => {
     const canvas = canvasRef.current;
     if (canvas) {
-      setCanvasContext(canvas.getContext("2d"));
+      //@ts-ignore
+      setCanvasContext(canvas.transferControlToOffscreen().getContext("2d"));
     }
   }, [canvasRef, setCanvasContext]);
 
