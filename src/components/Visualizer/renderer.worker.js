@@ -45,7 +45,7 @@ const render = () => {
 };
 
 onmessage = function (evt) {
-  if (evt.data.name === "SET_CANVAS") {
+  if (evt.data.name === "INIT") {
     canvas = evt.data.canvas;
     canvasContext = canvas.getContext("2d");
     evt.data.port.onmessage = ({ data }) => {
@@ -55,8 +55,5 @@ onmessage = function (evt) {
   }
   if (evt.data.name === "SET_COLOR") {
     color = evt.data.color;
-  }
-  if (!canvas) {
-    return;
   }
 };

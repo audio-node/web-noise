@@ -22,22 +22,16 @@ const Scope: FC<{ analyser: AudioWorkletNode; color?: string }> = ({
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
-  const [canvasContext, setCanvasContext] =
-    useState<CanvasRenderingContext2D | null>(null);
 
-  const dataRef = useRef<Float32Array>(new Float32Array());
   useEffect(() => {
     if (!canvas) {
       return;
     }
     //@ts-ignore
-    worker.postMessage({ name: "SET_CANVAS", canvas, port: analyser.port }, [canvas, analyser.port]);
-
-    // analyser.port.onmessage = ({ data }) => {
-    //   dataRef.current = data.input;
-    //   //@ts-ignore
-    //   worker.postMessage({ name: "DATA", data: data.input });
-    // };
+    worker.postMessage({ name: "INIT", canvas, port: analyser.port }, [
+      canvas,
+      analyser.port,
+    ]);
   }, [analyser, canvas]);
 
   useEffect(() => {
@@ -47,7 +41,7 @@ const Scope: FC<{ analyser: AudioWorkletNode; color?: string }> = ({
       const canvas = canvasElement.transferControlToOffscreen();
       setCanvas(canvas);
     }
-  }, [canvasRef, setCanvasContext]);
+  }, [canvasRef]);
 
   return <canvas ref={canvasRef} style={{ display: "block", width: "100%" }} />;
 };
