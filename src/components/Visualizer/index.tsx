@@ -2,73 +2,50 @@ import { useEffect, useMemo, useRef, useCallback, useState, FC } from "react";
 //@ts-ignore
 import useAnimationFrame from "use-animation-frame";
 import { Handle, Position, NodeProps } from "react-flow-renderer";
-import { useModule, useNode } from "../ModuleContext";
+import { useModule, useNode } from "../../ModuleContext";
 import { Leva, useCreateStore, useControls, LevaPanel } from "leva";
-import { LEVA_COLOR_ACCENT2_BLUE } from "../styles/consts";
-import { AnalyserWorklet as Analyser } from "../nodes";
-import { Node } from "./Node";
+import { LEVA_COLOR_ACCENT2_BLUE } from "../../styles/consts";
+import { AnalyserWorklet as Analyser } from "../../nodes";
+import { Node } from "../Node";
+const rendererWorkerUrl = new URL("./renderer.worker.js", import.meta.url);
 
 const Scope: FC<{ analyser: AudioWorkletNode; color?: string }> = ({
   analyser,
   color = LEVA_COLOR_ACCENT2_BLUE,
 }) => {
+  const worker = useMemo(() => {
+    return new Worker(rendererWorkerUrl);
+  }, []);
+  useEffect(() => {
+    return () => worker?.terminate();
+  }, [worker]);
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
   const [canvasContext, setCanvasContext] =
     useState<CanvasRenderingContext2D | null>(null);
 
   const dataRef = useRef<Float32Array>(new Float32Array());
   useEffect(() => {
-    analyser.port.onmessage = ({ data }) => {
-      dataRef.current = data.input;
-    };
-  }, [analyser]);
-
-  const renderInput = useCallback(() => {
-    const data = dataRef.current;
-    if (!canvasContext || !data) {
+    if (!canvas) {
       return;
     }
+    //@ts-ignore
+    worker.postMessage({ name: "SET_CANVAS", canvas, port: analyser.port }, [canvas, analyser.port]);
 
-    const canvas = canvasContext.canvas;
+    // analyser.port.onmessage = ({ data }) => {
+    //   dataRef.current = data.input;
+    //   //@ts-ignore
+    //   worker.postMessage({ name: "DATA", data: data.input });
+    // };
+  }, [analyser, canvas]);
 
-    const bufferLength = data.length;
-
-    canvasContext.setTransform(1, 0, 0, 1, 0, 0);
-    canvasContext.fillStyle = "#292d39";
-
-    canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-
-    canvasContext.lineWidth = 1;
-    canvasContext.strokeStyle = color;
-
-    canvasContext.beginPath();
-
-    const sliceWidth = (canvas.width * 1.0) / bufferLength;
-    let x = 0;
-
-    for (let i = 0; i < bufferLength; i++) {
-      const v = data[i] + 1;
-      const y = (v * canvas.height) / 2;
-
-      if (i === 0) {
-        canvasContext.moveTo(x, y);
-      } else {
-        canvasContext.lineTo(x, y);
-      }
-
-      x += sliceWidth;
-    }
-
-    canvasContext.stroke();
-    canvasContext.setTransform(1, 0, 0, 1, 0, canvas.height / 2);
-  }, [canvasContext, dataRef, color]);
-
-  useAnimationFrame(renderInput);
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (canvas) {
+    const canvasElement = canvasRef.current;
+    if (canvasElement) {
       //@ts-ignore
-      setCanvasContext(canvas.transferControlToOffscreen().getContext("2d"));
+      const canvas = canvasElement.transferControlToOffscreen();
+      setCanvas(canvas);
     }
   }, [canvasRef, setCanvasContext]);
 
