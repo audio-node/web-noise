@@ -1,71 +1,54 @@
-import { useEffect, useMemo, useRef, useCallback, useState, FC } from "react";
-//@ts-ignore
-import useAnimationFrame from "use-animation-frame";
-import { Handle, Position, NodeProps } from "react-flow-renderer";
-import { useModule, useNode } from "../../ModuleContext";
-import { Leva, useCreateStore, useControls, LevaPanel } from "leva";
-import { LEVA_COLOR_ACCENT2_BLUE } from "../../styles/consts";
+import { LevaPanel, useControls, useCreateStore } from "leva";
+import { useEffect, useState } from "react";
+import { NodeProps } from "react-flow-renderer";
+import useFlowNode from "../../hooks/useFlowNode";
+import { useNode } from "../../ModuleContext";
 import { AnalyserWorklet as Analyser } from "../../nodes";
+import { LEVA_COLOR_ACCENT2_BLUE } from "../../styles/consts";
 import { Node } from "../Node";
-const rendererWorkerUrl = new URL("./renderer.worker.js", import.meta.url);
+import Scope from "./Scope";
 
-const Scope: FC<{ analyser: AudioWorkletNode; color?: string }> = ({
-  analyser,
-  color = LEVA_COLOR_ACCENT2_BLUE,
-}) => {
-  const worker = useMemo(() => {
-    return new Worker(rendererWorkerUrl);
-  }, []);
-  useEffect(() => {
-    return () => worker?.terminate();
-  }, [worker]);
+interface OscilloscopeData {
+  label: string;
+  config?: {
+    input1Color?: string;
+    input2Color?: string;
+    showGrid?: boolean;
+    gridColor?: string;
+  };
+}
 
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
-
-  useEffect(() => {
-    if (!canvas) {
-      return;
-    }
-    //@ts-ignore
-    worker.postMessage({ name: "INIT", canvas, port: analyser.port }, [
-      canvas,
-      analyser.port,
-    ]);
-  }, [analyser, canvas]);
-
-  useEffect(() => {
-    const canvasElement = canvasRef.current;
-    if (canvasElement) {
-      //@ts-ignore
-      const canvas = canvasElement.transferControlToOffscreen();
-      setCanvas(canvas);
-    }
-  }, [canvasRef]);
-
-  return <canvas ref={canvasRef} style={{ display: "block", width: "100%" }} />;
-};
-
-const Visualizer = ({ data, id }: NodeProps) => {
+const Visualizer = ({ data, id }: NodeProps<OscilloscopeData>) => {
   const analyserNode = useNode<Analyser>(id);
+  const { updateNodeConfig } = useFlowNode(id);
   const { node } = analyserNode;
   const [analyser, setAnalyser] = useState<Analyser>();
 
   const store = useCreateStore();
-  const controls = useControls(
+
+  const {
+    input1Color = LEVA_COLOR_ACCENT2_BLUE,
+    input2Color = "#14df42",
+    showGrid = false,
+    gridColor = "#fff",
+  } = data.config || {};
+
+  const config = useControls(
     "settings",
     {
-      color: { value: LEVA_COLOR_ACCENT2_BLUE },
-      color2: { value: "#14df42" },
+      input1Color: { value: input1Color, label: "Input1 Color" },
+      input2Color: { value: input2Color, label: "Input2 Color" },
       showGrid: {
-        value: false,
+        value: showGrid,
         label: "Show Grid",
       },
       gridColor: {
-        value: "#fff",
+        value: gridColor,
+        label: "Grid Color",
         render: (get) => get("settings.showGrid"),
       },
     },
+    { collapsed: true, color: LEVA_COLOR_ACCENT2_BLUE },
     { store: store }
   );
 
@@ -74,6 +57,7 @@ const Visualizer = ({ data, id }: NodeProps) => {
       setAnalyser(result);
     });
   }, [node, setAnalyser]);
+  useEffect(() => updateNodeConfig(config), [config]);
 
   return (
     <Node
@@ -85,7 +69,7 @@ const Visualizer = ({ data, id }: NodeProps) => {
       {analyser ? (
         <>
           <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
-          <Scope analyser={analyser.analyser} color={controls.color} />
+          <Scope analyser={analyser.analyser} color={input1Color} />
         </>
       ) : (
         <div>loading</div>

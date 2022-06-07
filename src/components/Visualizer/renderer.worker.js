@@ -54,6 +54,7 @@ onmessage = function (evt) {
     requestAnimationFrame(render);
   }
   if (evt.data.name === "SET_COLOR") {
+    debugger
     color = evt.data.color;
   }
 };
