@@ -13,9 +13,6 @@ const render = () => {
 
   const bufferLength = audioData.length;
 
-  canvasContext.setTransform(1, 0, 0, 1, 0, 0);
-  canvasContext.fillStyle = "#292d39";
-
   canvasContext.clearRect(0, 0, canvas.width, canvas.height);
 
   canvasContext.lineWidth = 1;
@@ -40,7 +37,6 @@ const render = () => {
   }
 
   canvasContext.stroke();
-  canvasContext.setTransform(1, 0, 0, 1, 0, canvas.height / 2);
   requestAnimationFrame(render);
 };
 
@@ -49,12 +45,11 @@ onmessage = function (evt) {
     canvas = evt.data.canvas;
     canvasContext = canvas.getContext("2d");
     evt.data.port.onmessage = ({ data }) => {
-      audioData = new Float32Array(data.input)
+      audioData = new Float32Array(data.input);
     };
     requestAnimationFrame(render);
   }
   if (evt.data.name === "SET_COLOR") {
-    debugger
     color = evt.data.color;
   }
 };

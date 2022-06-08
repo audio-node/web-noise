@@ -1,6 +1,7 @@
 import { LevaPanel, useControls, useCreateStore } from "leva";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, FC } from "react";
 import { NodeProps } from "react-flow-renderer";
+import styled from "@emotion/styled";
 import useFlowNode from "../../hooks/useFlowNode";
 import { useNode } from "../../ModuleContext";
 import { AnalyserWorklet as Analyser } from "../../nodes";
@@ -17,6 +18,51 @@ interface OscilloscopeData {
     gridColor?: string;
   };
 }
+
+const Stage = styled.div`
+  position: relative;
+  height: 10rem;
+  width: 100%;
+  canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+`;
+
+const Grid: FC<{ color: string }> = ({ color }) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext("2d");
+    if (!canvas || !ctx) {
+      return;
+    }
+    const { height, width } = canvas;
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 0.2;
+    ctx.beginPath();
+
+    const xGap = width / 8;
+    for (let x = 1; x < width; x += xGap) {
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, height);
+    }
+
+    const yGap = height / 4;
+    for (var y = 1; y < height; y += yGap) {
+      ctx.moveTo(0, y);
+      ctx.lineTo(width, y);
+    }
+
+    ctx.stroke();
+  }, [color, canvasRef]);
+
+  return <canvas ref={canvasRef} style={{ display: "block", width: "100%" }} />;
+};
 
 const Visualizer = ({ data, id }: NodeProps<OscilloscopeData>) => {
   const analyserNode = useNode<Analyser>(id);
@@ -69,7 +115,10 @@ const Visualizer = ({ data, id }: NodeProps<OscilloscopeData>) => {
       {analyser ? (
         <>
           <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
-          <Scope analyser={analyser.analyser} color={input1Color} />
+          <Stage>
+            <Scope analyser={analyser.analyser} color={input1Color} />
+            {showGrid ? <Grid color={gridColor} /> : null}
+          </Stage>
         </>
       ) : (
         <div>loading</div>
