@@ -44,6 +44,7 @@ onmessage = function (evt) {
   if (evt.data.name === "INIT") {
     canvas = evt.data.canvas;
     canvasContext = canvas.getContext("2d");
+    canvasContext.transform(1, 0, 0, -1, 0, canvas.height);
     evt.data.port.onmessage = ({ data }) => {
       audioData = new Float32Array(data.input);
     };

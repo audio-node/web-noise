@@ -47,13 +47,13 @@ const Grid: FC<{ color: string }> = ({ color }) => {
     ctx.beginPath();
 
     const xGap = width / 8;
-    for (let x = 1; x < width; x += xGap) {
+    for (let x = xGap; x < width; x += xGap) {
       ctx.moveTo(x, 0);
       ctx.lineTo(x, height);
     }
 
     const yGap = height / 4;
-    for (var y = 1; y < height; y += yGap) {
+    for (var y = yGap; y < height; y += yGap) {
       ctx.moveTo(0, y);
       ctx.lineTo(width, y);
     }
