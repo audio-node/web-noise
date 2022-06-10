@@ -15,18 +15,18 @@ const Scope: FC<{ analyser: AudioWorkletNode; color?: string }> = ({
   }, [worker]);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
-    if (!canvas || !worker) {
-      return;
+    const canvasElement = canvasRef.current;
+    if (canvasElement && worker) {
+      //@ts-ignore
+      const canvas = canvasElement.transferControlToOffscreen();
+      worker.postMessage({ name: "INIT", canvas, port: analyser.port }, [
+        canvas,
+        analyser.port,
+      ]);
     }
-    //@ts-ignore
-    worker.postMessage({ name: "INIT", canvas, port: analyser.port }, [
-      canvas,
-      analyser.port,
-    ]);
-  }, [analyser, canvas, worker]);
+  }, [canvasRef, analyser, worker]);
 
   useEffect(() => {
     if (!worker) {
@@ -34,15 +34,6 @@ const Scope: FC<{ analyser: AudioWorkletNode; color?: string }> = ({
     }
     worker.postMessage({ name: "SET_COLOR", color });
   }, [color, worker]);
-
-  useEffect(() => {
-    const canvasElement = canvasRef.current;
-    if (canvasElement) {
-      //@ts-ignore
-      const canvas = canvasElement.transferControlToOffscreen();
-      setCanvas(canvas);
-    }
-  }, [canvasRef]);
 
   return <canvas ref={canvasRef} style={{ display: "block", width: "100%" }} />;
 };
