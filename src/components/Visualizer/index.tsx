@@ -59,6 +59,12 @@ const Grid: FC<{ color: string }> = ({ color }) => {
     }
 
     ctx.stroke();
+
+    ctx.font = "10px serif";
+    ctx.fillStyle = color;
+    ctx.fillText("1", 3, 12);
+    ctx.fillText("0", 3, height / 2 + 12);
+    ctx.fillText("-1", 2, height - 3);
   }, [color, canvasRef]);
 
   return <canvas ref={canvasRef} style={{ display: "block", width: "100%" }} />;
@@ -116,8 +122,8 @@ const Visualizer = ({ data, id }: NodeProps<OscilloscopeData>) => {
         <>
           <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
           <Stage>
-            <Scope analyser={analyser.analyser} color={input1Color} />
             {showGrid ? <Grid color={gridColor} /> : null}
+            <Scope analyser={analyser.analyser} color={input1Color} />
           </Stage>
         </>
       ) : (
