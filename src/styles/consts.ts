@@ -1,4 +1,6 @@
 export const LEVA_COLOR_ACCENT2_BLUE = "#007bff";
+export const COLOR_GREEN_PRIMARY = "#14df42";
+export const COLOR_WHITE_PRIMARY = "#fff";
 
 export const LEVA_COLORS = {
   elevation1: "#292d39", // bg color of the root panel (main title bar)

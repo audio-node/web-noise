@@ -35,7 +35,7 @@ const Scope: FC<{ analyser: AudioWorkletNode; color?: string }> = ({
     worker.postMessage({ name: "SET_COLOR", color });
   }, [color, worker]);
 
-  return <canvas ref={canvasRef} style={{ display: "block", width: "100%" }} />;
+  return <canvas ref={canvasRef} />;
 };
 
 export default Scope;

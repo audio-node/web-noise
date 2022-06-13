@@ -5,9 +5,10 @@ import styled from "@emotion/styled";
 import useFlowNode from "../../hooks/useFlowNode";
 import { useNode } from "../../ModuleContext";
 import { AnalyserWorklet as Analyser } from "../../nodes";
-import { LEVA_COLOR_ACCENT2_BLUE } from "../../styles/consts";
+import { LEVA_COLOR_ACCENT2_BLUE, COLOR_GREEN_PRIMARY, COLOR_WHITE_PRIMARY } from "../../styles/consts";
 import { Node } from "../Node";
 import Scope from "./Scope";
+import Grid from "./Grid";
 
 interface OscilloscopeData {
   label: string;
@@ -32,45 +33,8 @@ const Stage = styled.div`
   }
 `;
 
-const Grid: FC<{ color: string }> = ({ color }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas?.getContext("2d");
-    if (!canvas || !ctx) {
-      return;
-    }
-    const { height, width } = canvas;
-    ctx.strokeStyle = color;
-    ctx.lineWidth = 0.2;
-    ctx.beginPath();
-
-    const xGap = width / 8;
-    for (let x = xGap; x < width; x += xGap) {
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, height);
-    }
-
-    const yGap = height / 4;
-    for (var y = yGap; y < height; y += yGap) {
-      ctx.moveTo(0, y);
-      ctx.lineTo(width, y);
-    }
-
-    ctx.stroke();
-
-    ctx.font = "10px serif";
-    ctx.fillStyle = color;
-    ctx.fillText("1", 3, 12);
-    ctx.fillText("0", 3, height / 2 + 12);
-    ctx.fillText("-1", 2, height - 3);
-  }, [color, canvasRef]);
-
-  return <canvas ref={canvasRef} style={{ display: "block", width: "100%" }} />;
-};
-
-const Visualizer = ({ data, id }: NodeProps<OscilloscopeData>) => {
+const Oscilloscope = ({ data, id }: NodeProps<OscilloscopeData>) => {
   const analyserNode = useNode<Analyser>(id);
   const { updateNodeConfig } = useFlowNode(id);
   const { node } = analyserNode;
@@ -80,9 +44,9 @@ const Visualizer = ({ data, id }: NodeProps<OscilloscopeData>) => {
 
   const {
     input1Color = LEVA_COLOR_ACCENT2_BLUE,
-    input2Color = "#14df42",
+    input2Color = COLOR_GREEN_PRIMARY,
     showGrid = false,
-    gridColor = "#fff",
+    gridColor = COLOR_WHITE_PRIMARY,
   } = data.config || {};
 
   const config = useControls(
@@ -134,4 +98,4 @@ const Visualizer = ({ data, id }: NodeProps<OscilloscopeData>) => {
   );
 };
 
-export default Visualizer;
+export default Oscilloscope;
