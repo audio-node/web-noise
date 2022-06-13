@@ -31,7 +31,7 @@ import ScriptNode from "./ScriptNode";
 import Spectroscope from "./Spectroscope";
 import Toolbar from "./Toolbar";
 import VirtualKeyboard from "./VirtualKeyboard";
-import Visualizer from "./Visualizer";
+import Visualiser from "./Visualiser";
 import WhiteNoise from "./WhiteNoise";
 import Clock from "./Clock";
 import Wire from "./Wire";
@@ -53,7 +53,7 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
     () => ({
       oscillator: Oscillator,
       gain: Gain,
-      visualiser: Visualizer,
+      visualiser: Visualiser,
       spectroscope: Spectroscope,
       destination: Destination,
       whiteNoise: WhiteNoise,

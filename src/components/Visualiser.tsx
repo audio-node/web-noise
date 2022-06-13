@@ -25,7 +25,7 @@ export const useAnalyser = (audioContext: AudioContext) =>
     };
   }, [audioContext]);
 
-const Visualizer = ({
+const Visualiser = ({
   targetPosition,
   sourcePosition,
   data,
@@ -118,4 +118,4 @@ const Visualizer = ({
   );
 };
 
-export default Visualizer;
+export default Visualiser;
