@@ -123,7 +123,8 @@ const Visualizer = ({ data, id }: NodeProps<OscilloscopeData>) => {
           <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
           <Stage>
             {showGrid ? <Grid color={gridColor} /> : null}
-            <Scope analyser={analyser.analyser} color={input1Color} />
+            <Scope analyser={analyser.input1Analyser} color={input1Color} />
+            <Scope analyser={analyser.input2Analyser} color={input2Color} />
           </Stage>
         </>
       ) : (

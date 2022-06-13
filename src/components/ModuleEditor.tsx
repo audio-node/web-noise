@@ -29,6 +29,7 @@ import ResumeContext from "./ResumeContext";
 import Reverb from "./Reverb";
 import ScriptNode from "./ScriptNode";
 import Spectroscope from "./Spectroscope";
+import Oscilloscope from "./Oscilloscope";
 import Toolbar from "./Toolbar";
 import VirtualKeyboard from "./VirtualKeyboard";
 import Visualiser from "./Visualiser";
@@ -55,6 +56,7 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
       gain: Gain,
       visualiser: Visualiser,
       spectroscope: Spectroscope,
+      oscilloscope: Oscilloscope,
       destination: Destination,
       whiteNoise: WhiteNoise,
       filter: Filter,
@@ -75,6 +77,7 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
       ...baseAudioNodeTypes,
       visualiser: baseAudioNodeTypes.analyser,
       spectroscope: baseAudioNodeTypes.analyser,
+      oscilloscope: baseAudioNodeTypes.analyserWorklet,
       parameter: baseAudioNodeTypes.constantSource,
     }),
     []

@@ -25,28 +25,32 @@ export const analyser = (audioContext: AudioContext): Analyser => {
 };
 
 export interface AnalyserWorklet extends Node {
-  analyser: AudioWorkletNode;
+  input1Analyser: AudioWorkletNode;
+  input2Analyser: AudioWorkletNode;
 }
 
 export const analyserWorklet = async (audioContext: AudioContext): Promise<AnalyserWorklet> => {
   await audioContext.audioWorklet.addModule(analyserWorkletUrl);
-  const analyser = new AudioWorkletNode(
+  const input1Analyser = new AudioWorkletNode(
+    audioContext,
+    "analyser-processor"
+  );
+  const input2Analyser = new AudioWorkletNode(
     audioContext,
     "analyser-processor"
   );
 
   return {
     inputs: {
-      in: {
-        port: analyser,
+      input1: {
+        port: input1Analyser,
+      },
+      input2: {
+        port: input2Analyser,
       },
     },
-    outputs: {
-      out: {
-        port: analyser,
-      },
-    },
-    analyser,
+    input1Analyser,
+    input2Analyser,
   };
 };
 
