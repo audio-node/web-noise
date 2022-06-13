@@ -1,6 +1,7 @@
 export class AnalyserProcessor extends AudioWorkletProcessor {
   sampleIndex = 0;
-  buffer?: Float32Array;
+  buffer = new Float32Array();
+  isActive = true;
 
   static get parameterDescriptors() {
     return [{ name: "analysisWindowSize", defaultValue: 1024, minValue: 128 }];
@@ -15,18 +16,26 @@ export class AnalyserProcessor extends AudioWorkletProcessor {
 
     const analysisWindowSize = parameters.analysisWindowSize[0];
 
-    if (!this.buffer) {
+    if (this.buffer.length !== analysisWindowSize) {
       this.buffer = new Float32Array(analysisWindowSize);
     }
 
     const analysis_samples = this.buffer;
+
+    if (!input && this.isActive) {
+      this.port.postMessage(new Float32Array());
+      this.isActive = false;
+    }
+    if (input && !this.isActive) {
+      this.isActive = true;
+    }
 
     for (let i = 0; i < input?.length; i += 1) {
       analysis_samples[this.sampleIndex] = input[i];
       this.sampleIndex += 1;
 
       if (this.sampleIndex === analysisWindowSize) {
-        this.port.postMessage({ input: this.buffer });
+        this.port.postMessage(analysis_samples);
         this.sampleIndex = 0;
       }
     }

@@ -41,7 +41,7 @@ onmessage = function (evt) {
     canvasContext = canvas.getContext("2d");
     canvasContext.transform(1, 0, 0, -1, 0, canvas.height / 2);
     evt.data.port.onmessage = ({ data }) => {
-      audioData = new Float32Array(data.input);
+      audioData = new Float32Array(data);
     };
     requestAnimationFrame(render);
   }
