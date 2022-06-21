@@ -804,3 +804,101 @@ export const Clock = () => (
     }}
   />
 );
+
+export const Oscilloscope = () => (
+  <Editor
+    elements={{
+      nodes: [
+        {
+          id: "oscillator1",
+          type: "oscillator",
+          data: { label: "Oscillator1", values: { frequency: 46 } },
+          position: { x: 0, y: 0 },
+          dragHandle: ".leva-c-hwBXYF",
+          className: "react-flow__node-default",
+        },
+        {
+          id: "oscillator2",
+          type: "oscillator",
+          data: { label: "Oscillator2", values: { frequency: 325 } },
+          position: { x: 0, y: 150 },
+          dragHandle: ".leva-c-hwBXYF",
+          className: "react-flow__node-default",
+        },
+        {
+          id: "oscilloscope",
+          type: "oscilloscope",
+          data: { label: "Oscilloscope" },
+          position: { x: spaceWidth, y: 250 },
+          className: "react-flow__node-default",
+        },
+        {
+          id: "gain",
+          type: "gain",
+          data: { label: "Gain" },
+          position: { x: spaceWidth, y: 0 },
+          dragHandle: ".leva-c-hwBXYF",
+          className: "react-flow__node-default",
+        },
+        {
+          id: "oscilloscope-resulting",
+          type: "oscilloscope",
+          data: { label: "Oscilloscope Resulting" },
+          position: { x: spaceWidth * 2, y: 0 },
+          className: "react-flow__node-default",
+        },
+        {
+          id: "destination",
+          type: "destination",
+          data: { label: "Destination" },
+          position: { x: spaceWidth * 2, y: 300 },
+          className: "react-flow__node-default",
+        },
+      ],
+      edges: [
+        {
+          id: "oscillator1-to-oscilloscope",
+          source: "oscillator1",
+          sourceHandle: "out",
+          target: "oscilloscope",
+          targetHandle: "input1",
+        },
+        {
+          id: "oscillator2-to-oscilloscope",
+          source: "oscillator2",
+          sourceHandle: "out",
+          target: "oscilloscope",
+          targetHandle: "input2",
+        },
+        {
+          id: "oscillator1-to-gain",
+          source: "oscillator1",
+          sourceHandle: "out",
+          target: "gain",
+          targetHandle: "in",
+        },
+        {
+          id: "oscillator2-to-gain",
+          source: "oscillator2",
+          sourceHandle: "out",
+          target: "gain",
+          targetHandle: "in",
+        },
+        {
+          id: "gain-to-oscilloscope-resulting",
+          source: "gain",
+          sourceHandle: "out",
+          target: "oscilloscope-resulting",
+          targetHandle: "input1",
+        },
+        {
+          id: "gain-to-destination",
+          source: "gain",
+          target: "destination",
+          targetHandle: "in",
+          sourceHandle: "out",
+        },
+      ],
+    }}
+  />
+);

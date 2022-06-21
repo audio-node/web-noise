@@ -1,31 +1,14 @@
-import { useEffect, useMemo, useRef, useCallback } from "react";
+import { LevaPanel, useControls, useCreateStore } from "leva";
+import { useCallback, useMemo, useRef } from "react";
+import { Handle, NodeProps, Position } from "react-flow-renderer";
 //@ts-ignore
 import useAnimationFrame from "use-animation-frame";
-import { Handle, Position, NodeProps } from "react-flow-renderer";
-import { useModule, useNode } from "../ModuleContext";
-import { Leva, useCreateStore, useControls, LevaPanel } from "leva";
-import { LEVA_COLOR_ACCENT2_BLUE } from "../styles/consts";
+import { useNode } from "../ModuleContext";
 import { Analyser } from "../nodes";
+import { Node } from "./Node";
+import { LEVA_COLOR_ACCENT2_BLUE } from "../styles/consts";
 
-export const useAnalyser = (audioContext: AudioContext) =>
-  useMemo(() => {
-    const analyser = audioContext.createAnalyser();
-    return {
-      inputs: {
-        in: {
-          port: analyser,
-        },
-      },
-      outputs: {
-        out: {
-          port: analyser,
-        },
-      },
-      analyser,
-    };
-  }, [audioContext]);
-
-const Visualizer = ({
+const Visualiser = ({
   targetPosition,
   sourcePosition,
   data,
@@ -38,12 +21,13 @@ const Visualizer = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const canvas = canvasRef.current;
-  const levaStore = useCreateStore();
+  const store = useCreateStore();
 
   const controls = useControls(
+    "settings",
     { color: { value: LEVA_COLOR_ACCENT2_BLUE } },
-    // { color: { value: "#14df42" } },
-    { store: levaStore }
+    { collapsed: true, color: LEVA_COLOR_ACCENT2_BLUE },
+    { store }
   );
 
   const canvasCtx = useMemo(() => {
@@ -95,27 +79,18 @@ const Visualizer = ({
   const tick = useCallback(draw, [draw]);
 
   useAnimationFrame(tick);
+
   return (
-    <>
-      <Handle
-        id="in"
-        type="target"
-        position={targetPosition || Position.Left}
-      />
-      <LevaPanel
-        store={levaStore}
-        titleBar={{ drag: false, title: data.label }}
-        fill
-        flat
-      />
+    <Node
+      id={id}
+      title={data.label}
+      inputs={node?.inputs}
+      outputs={node?.outputs}
+    >
+      <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
       <canvas ref={canvasRef} style={{ display: "block", width: "100%" }} />
-      <Handle
-        id="out"
-        type="source"
-        position={sourcePosition || Position.Right}
-      />
-    </>
+    </Node>
   );
 };
 
-export default Visualizer;
+export default Visualiser;
