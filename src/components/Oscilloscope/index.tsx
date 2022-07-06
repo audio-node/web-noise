@@ -35,10 +35,8 @@ const Stage = styled.div`
 
 
 const Oscilloscope = ({ data, id }: NodeProps<OscilloscopeData>) => {
-  const analyserNode = useNode<Analyser>(id);
+  const { node: analyser, loading } = useNode<Analyser>(id);
   const { updateNodeConfig } = useFlowNode(id);
-  const { node } = analyserNode;
-  const [analyser, setAnalyser] = useState<Analyser>();
 
   const store = useCreateStore();
 
@@ -68,11 +66,6 @@ const Oscilloscope = ({ data, id }: NodeProps<OscilloscopeData>) => {
     { store: store }
   );
 
-  useEffect(() => {
-    node?.then((result: Analyser) => {
-      setAnalyser(result);
-    });
-  }, [node, setAnalyser]);
   useEffect(() => updateNodeConfig(config), [config]);
 
   return (
@@ -81,6 +74,7 @@ const Oscilloscope = ({ data, id }: NodeProps<OscilloscopeData>) => {
       title={data.label}
       inputs={analyser?.inputs}
       outputs={analyser?.outputs}
+      loading={loading}
     >
       {analyser ? (
         <>
