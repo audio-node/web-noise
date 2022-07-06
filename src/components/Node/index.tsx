@@ -7,6 +7,7 @@ import { LEVA_COLORS } from "../../styles/consts";
 interface NodeProps extends Pick<TNode, "inputs" | "outputs"> {
   id: string;
   title: string;
+  loading?: boolean;
 }
 
 export const TitleBar: FC<{ className?: string }> = ({
@@ -63,6 +64,7 @@ export const Node: FC<NodeProps> = ({
   title,
   inputs = {},
   outputs = {},
+  loading = false,
 }) => (
   <>
     <div className="leva-c-hwBXYF leva-c-iLtnIm leva-c-kWgxhW">{title}</div>
@@ -84,6 +86,6 @@ export const Node: FC<NodeProps> = ({
         ))}
       </OutputPorts>
     </PortsPanel>
-    {children}
+    {loading ? <div>loading</div> : children}
   </>
 );

@@ -10,7 +10,7 @@ import "react-piano/dist/styles.css";
 import { useNode } from "../../ModuleContext";
 import { VirtualKeyboard as TVirtualKeyboard } from "../../nodes";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../../styles/consts";
-import { OutputPorts, Port, PortsPanel } from "../Node";
+import { OutputPorts, Port, PortsPanel, Node } from "../Node";
 
 const Keyboard = styled(Piano)`
   .ReactPiano__Key--natural {
@@ -23,12 +23,10 @@ const Keyboard = styled(Piano)`
 `;
 
 const VirtualKeyboard = ({
-  sourcePosition,
-  targetPosition,
   id,
   data,
 }: NodeProps) => {
-  const { node } = useNode<TVirtualKeyboard>(id);
+  const { node, loading } = useNode<TVirtualKeyboard>(id);
 
   const store = useCreateStore();
 
@@ -95,26 +93,13 @@ const VirtualKeyboard = ({
   );
 
   return (
-    <>
-      <div className="leva-c-hwBXYF leva-c-iLtnIm leva-c-kWgxhW">
-        {data.label}
-      </div>
-      <PortsPanel className="leva-c-kWgxhW">
-        <OutputPorts>
-          <Port>
-            <Handle type="source" position={Position.Right} id="frequency" />
-            <span>frequency</span>
-          </Port>
-          <Port>
-            <Handle type="source" position={Position.Right} id="midi" />
-            <span>midi</span>
-          </Port>
-          <Port>
-            <Handle type="source" position={Position.Right} id="gate" />
-            <span>gate</span>
-          </Port>
-        </OutputPorts>
-      </PortsPanel>
+    <Node
+      id={id}
+      title={data.label}
+      inputs={node?.inputs}
+      outputs={node?.outputs}
+      loading={loading}
+    >
       <LevaPanel
         store={store}
         fill
@@ -130,7 +115,7 @@ const VirtualKeyboard = ({
         width={400}
         keyboardShortcuts={keyboardShortcuts}
       />
-    </>
+    </Node>
   );
 };
 

@@ -1,5 +1,5 @@
 import { LevaPanel, useControls, useCreateStore, folder, button } from "leva";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, FC } from "react";
 import { NodeProps } from "react-flow-renderer";
 import useFlowNode from "../../hooks/useFlowNode";
 import { useNode } from "../../ModuleContext";
@@ -20,11 +20,9 @@ interface ClockData {
 
 const DEFAULT_BPM = 120;
 
-const Clock = ({ data, id }: NodeProps<ClockData>) => {
-  const { node } = useNode<Promise<TClock>>(id);
+const Clock: FC<NodeProps<ClockData>> = ({ data, id }) => {
+  const { node: clock, loading } = useNode<TClock>(id);
   const { updateNodeValues } = useFlowNode(id);
-  const [clock, setClock] = useState<TClock>();
-  const [ready, setReady] = useState<boolean>(false);
   const [isActive, setActive] = useState(false);
 
   const store = useCreateStore();
@@ -66,13 +64,6 @@ const Clock = ({ data, id }: NodeProps<ClockData>) => {
     [isActive, clock]
   );
 
-  useEffect(() => {
-    node?.then((result) => {
-      setClock(result);
-      setReady(true);
-    });
-  }, [node, setReady]);
-
   useEffect(() => clock?.setValues(data.values), [clock, data]);
   useEffect(() => updateNodeValues(values), [values]);
 
@@ -82,12 +73,9 @@ const Clock = ({ data, id }: NodeProps<ClockData>) => {
       title={data.label}
       inputs={clock?.inputs}
       outputs={clock?.outputs}
+      loading={loading}
     >
-      {ready ? (
         <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
-      ) : (
-        <div>loading</div>
-      )}
     </Node>
   );
 };

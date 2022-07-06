@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { getClock } from "./nodes";
 
 type AudioNodeChannel = [AudioNode, number];
@@ -200,13 +200,51 @@ export const useModule = () => {
   };
 };
 
-export const useNode = <T,>(
-  id: string
-): { node: T | undefined; ready: boolean } => {
+interface NodeLoadingState {
+  loading: true;
+  error: null;
+  node: null;
+}
+
+interface NodeErrorState {
+  loading: false;
+  error: Error;
+  node: null;
+}
+
+interface NodeLoadedState<T> {
+  loading: false;
+  error: null;
+  node: T;
+}
+
+type UseNode<T> = NodeLoadingState | NodeErrorState | NodeLoadedState<T>;
+
+export const useNode = <T,>(id: string): UseNode<T> => {
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<Error | null>(null);
+  const [node, setNode] = useState<T | null>(null);
+
   const { getNode } = useModule();
 
-  const node = getNode<T>(id);
+  const nodePromise = getNode<T | Promise<T>>(id);
+
+  useEffect(() => {
+    if (!nodePromise) {
+      return;
+    }
+
+    Promise.resolve(nodePromise)
+      .then((result) => {
+        setNode(result);
+        setLoading(false);
+      })
+      .catch((e) => {
+        setError(e);
+        setLoading(false);
+      });
+  }, [nodePromise]);
 
   //@ts-ignore
-  return { node, ready: true };
+  return { node, loading, error };
 };
