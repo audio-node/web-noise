@@ -5,11 +5,19 @@ import { highlight, languages } from "prismjs/components/prism-core";
 import "prismjs/components/prism-clike";
 import "prismjs/components/prism-javascript";
 import "prismjs/themes/prism-okaidia.css";
+import styled from "@emotion/styled";
+
+const EditorWrapper = styled(Editor)`
+  color: white;
+  min-width: 10rem;
+  background-color: var(--leva-colors-elevation3);
+  border-radius: var(--leva-radii-sm);
+`;
 
 const CodeEditor = () => {
   const { value, onUpdate } = useInputContext();
   return (
-    <Editor
+    <EditorWrapper
       value={(value as string) || ""}
       onValueChange={(code) => onUpdate(code)}
       highlight={(code) => highlight(code, languages.js)}

@@ -75,7 +75,7 @@ const Clock: FC<NodeProps<ClockData>> = ({ data, id }) => {
       outputs={clock?.outputs}
       loading={loading}
     >
-        <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
+      <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
     </Node>
   );
 };

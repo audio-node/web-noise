@@ -10,16 +10,24 @@ interface NodeProps extends Pick<TNode, "inputs" | "outputs"> {
   loading?: boolean;
 }
 
-export const TitleBar: FC<{ className?: string }> = ({
-  children,
-  className,
-}) => (
-  <div className={`leva-c-hwBXYF leva-c-iLtnIm leva-c-kWgxhW ${className}`}>
-    {children}
-  </div>
-);
+const Section = styled.div`
+  position: relative;
+  font-family: var(--leva-fonts-mono);
+  font-size: var(--leva-fontSizes-root);
+  background-color: var(--leva-colors-elevation1);
+`;
 
-export const PortsPanel = styled.div`
+export const TitleBar = styled(Section)`
+  display: flex;
+  height: var(--leva-sizes-titleBarHeight);
+  touch-action: none;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 0%;
+  color: var(--leva-colors-highlight1);
+`;
+
+export const PortsPanel = styled(Section)`
   display: grid;
   grid-template-areas: "inputs outputs";
   background: ${LEVA_COLORS.elevation2};
@@ -67,8 +75,8 @@ export const Node: FC<NodeProps> = ({
   loading = false,
 }) => (
   <>
-    <div className="leva-c-hwBXYF leva-c-iLtnIm leva-c-kWgxhW">{title}</div>
-    <PortsPanel className="leva-c-kWgxhW">
+    <TitleBar className="leva-c-hwBXYF">{title}</TitleBar>
+    <PortsPanel>
       <InputPorts>
         {Object.keys(inputs).map((key, index) => (
           <Port key={index}>
