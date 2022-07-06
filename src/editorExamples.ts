@@ -33,6 +33,14 @@ const setWires = (arr: Elements["nodes"]): Elements => {
 export const defaultExample: Elements = {
   nodes: [
     {
+      id: "stepSequencer",
+      type: "stepSequencer",
+      data: { label: "stepSequencer" },
+      position: { x: -200, y: -50 },
+      className: "react-flow__node-default",
+      dragHandle: DRAG_HANDLE_CLASS,
+    },
+    {
       id: "oscillator",
       type: "oscillator",
       data: { label: "Oscillator" },

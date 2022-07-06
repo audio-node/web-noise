@@ -7,6 +7,7 @@ import randomSequencer, { randomSequencerWorklet } from "./randomSequencer";
 import virtualKeyboard from "./virtualKeyboard";
 import clock, { Clock } from "./clock";
 import { analyser, analyserWorklet } from './analyser';
+import stepSequencer from "./stepSequencer";
 
 export type { WhiteNoise } from "./whiteNoise";
 export type { ScriptNode } from "./scriptNode";
@@ -123,4 +124,5 @@ export const nodeTypes = {
   scriptNode,
   virtualKeyboard,
   clock,
+  stepSequencer,
 };
