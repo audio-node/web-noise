@@ -5,7 +5,11 @@ import styled from "@emotion/styled";
 import useFlowNode from "../../hooks/useFlowNode";
 import { useNode } from "../../ModuleContext";
 import { AnalyserWorklet as Analyser } from "../../nodes";
-import { LEVA_COLOR_ACCENT2_BLUE, COLOR_GREEN_PRIMARY, COLOR_WHITE_PRIMARY } from "../../styles/consts";
+import {
+  LEVA_COLOR_ACCENT2_BLUE,
+  COLOR_GREEN_PRIMARY,
+  COLOR_WHITE_PRIMARY,
+} from "../../styles/consts";
 import { Node } from "../Node";
 import Scope from "./Scope";
 import Grid from "./Grid";
@@ -32,7 +36,6 @@ const Stage = styled.div`
     height: 100%;
   }
 `;
-
 
 const Oscilloscope = ({ data, id }: NodeProps<OscilloscopeData>) => {
   const { node: analyser, loading } = useNode<Analyser>(id);
@@ -76,17 +79,13 @@ const Oscilloscope = ({ data, id }: NodeProps<OscilloscopeData>) => {
       outputs={analyser?.outputs}
       loading={loading}
     >
-      {analyser ? (
-        <>
-          <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
-          <Stage>
-            {showGrid ? <Grid color={gridColor} /> : null}
-            <Scope analyser={analyser.input1Analyser} color={input1Color} />
-            <Scope analyser={analyser.input2Analyser} color={input2Color} />
-          </Stage>
-        </>
-      ) : (
-        <div>loading</div>
+      <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
+      {analyser && (
+        <Stage>
+          {showGrid ? <Grid color={gridColor} /> : null}
+          <Scope analyser={analyser.input1Analyser} color={input1Color} />
+          <Scope analyser={analyser.input2Analyser} color={input2Color} />
+        </Stage>
       )}
     </Node>
   );
