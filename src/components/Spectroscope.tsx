@@ -1,28 +1,23 @@
-import { useEffect, useMemo, useRef, useCallback } from "react";
+import { LevaPanel, useControls, useCreateStore } from "leva";
+import { useCallback, useMemo, useRef } from "react";
+import { NodeProps } from "react-flow-renderer";
 //@ts-ignore
 import useAnimationFrame from "use-animation-frame";
-import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useNode } from "../ModuleContext";
 import { Analyser } from "../nodes";
-import { Leva, useCreateStore, useControls, LevaPanel } from "leva";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../styles/consts";
+import { Node } from "./Node";
 
-const Spectroscope = ({
-  targetPosition,
-  sourcePosition,
-  data,
-  id,
-}: NodeProps) => {
-  const { node } = useNode<Analyser>(id);
+const Spectroscope = ({ data, id }: NodeProps) => {
+  const { node, loading } = useNode<Analyser>(id);
   const { analyser } = node || {};
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvas = canvasRef.current;
-  const levaStore = useCreateStore();
+  const store = useCreateStore();
   const controls = useControls(
     { color: { value: LEVA_COLOR_ACCENT2_BLUE } },
-    // { color: { value: "#14df42" } },
-    { store: levaStore }
+    { store }
   );
 
   const canvasCtx = useMemo(() => {
@@ -57,33 +52,22 @@ const Spectroscope = ({
       canvasCtx.fillRect(x, canvas.height - barHeight / 2, barWidth, barHeight);
       x += barWidth + 1;
     }
-  }, [canvas, controls.color]);
+  }, [canvas, controls.color, analyser]);
 
   const tick = useCallback(draw, [draw]);
 
   useAnimationFrame(tick);
   return (
-    <>
-      <LevaPanel
-        store={levaStore}
-        titleBar={{ drag: false, title: data.label }}
-        fill
-        flat
-      />
-      <div>
-        <Handle
-          id="in"
-          type="target"
-          position={targetPosition || Position.Left}
-        />
-      </div>
+    <Node
+      id={id}
+      title={data.label}
+      inputs={node?.inputs}
+      outputs={node?.outputs}
+      loading={loading}
+    >
+      <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
       <canvas ref={canvasRef} style={{ display: "block", width: "100%" }} />
-      <Handle
-        id="out"
-        type="source"
-        position={sourcePosition || Position.Right}
-      />
-    </>
+    </Node>
   );
 };
 

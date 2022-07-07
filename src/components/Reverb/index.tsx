@@ -16,21 +16,9 @@ const Reverb: FC<NodeProps<ReverbData>> = ({
   id,
   data,
 }) => {
-  const { node } = useNode<Promise<TReverb>>(id);
-
-  const [reverb, setReverb] = useState<TReverb | null>(null);
-  const [ready, setReady] = useState<boolean>(false);
-
+  const { node: reverb, loading } = useNode<TReverb>(id);
   const { updateNodeValues } = useFlowNode(id);
-
   const store = useCreateStore();
-
-  useEffect(() => {
-    node?.then((result) => {
-      setReverb(result);
-      setReady(true);
-    });
-  }, [node, setReady]);
 
   const { wetDry = 0.5 } =
     data.values || {};
@@ -56,12 +44,9 @@ const Reverb: FC<NodeProps<ReverbData>> = ({
       title={data.label}
       inputs={reverb?.inputs}
       outputs={reverb?.outputs}
+      loading={loading}
     >
-      {ready ? (
-        <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
-      ) : (
-        <div>loading</div>
-      )}
+      <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
     </Node>
   );
 };
