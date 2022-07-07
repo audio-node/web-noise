@@ -1,22 +1,30 @@
 import { LevaPanel, useControls, useCreateStore } from "leva";
-import { useEffect } from "react";
+import { useEffect, FC } from "react";
 import { NodeProps } from "react-flow-renderer";
+import useFlowNode from "../hooks/useFlowNode";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../styles/consts";
-import { useModule, useNode } from "../ModuleContext";
-import { Gain as TGain } from "../nodes";
+import { useNode } from "../ModuleContext";
+import { Gain as TGain, GainValues } from "../nodes";
 import { Node } from "./Node";
 
-const Gain = ({ data, id }: NodeProps) => {
-  const { audioContext } = useModule();
+interface GainData {
+  label: string;
+  values?: GainValues;
+}
 
-  const { node: gainNode, loading } = useNode<TGain>(id);
+const Gain: FC<NodeProps<GainData>> = ({ data, id }) => {
+  const { updateNodeValues } = useFlowNode(id);
+  const { node, loading } = useNode<TGain>(id);
   const store = useCreateStore();
 
-  const controls = useControls(
+  const { gain = 0 } =
+    data.values || {};
+
+  const values = useControls(
     "settings",
     {
       gain: {
-        value: 0,
+        value: gain,
         min: 0,
         max: 1,
         label: "lvl",
@@ -26,22 +34,16 @@ const Gain = ({ data, id }: NodeProps) => {
     { store }
   );
 
-  useEffect(() => {
-    if (!gainNode) {
-      return;
-    }
-    gainNode.gain.gain.setValueAtTime(controls.gain, audioContext.currentTime);
-  }, [
-    controls.gain,
-    gainNode,
-  ]);
+
+  useEffect(() => node?.setValues(data.values), [node, data]);
+  useEffect(() => updateNodeValues(values), [values]);
 
   return (
     <Node
       id={id}
       title={data.label}
-      inputs={gainNode?.inputs}
-      outputs={gainNode?.outputs}
+      inputs={node?.inputs}
+      outputs={node?.outputs}
       loading={loading}
     >
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />

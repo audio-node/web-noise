@@ -3,6 +3,7 @@ import whiteNoise from "./whiteNoise";
 import scriptNode from "./scriptNode";
 import reverb from "./reverb";
 import oscillator from "./oscillator";
+import gain from "./gain";
 import randomSequencer, { randomSequencerWorklet } from "./randomSequencer";
 import virtualKeyboard from "./virtualKeyboard";
 import clock, { Clock } from "./clock";
@@ -13,6 +14,7 @@ export type { WhiteNoise } from "./whiteNoise";
 export type { ScriptNode } from "./scriptNode";
 export type { Reverb } from "./reverb";
 export type { Oscillator, OscillatorValues } from "./oscillator";
+export type { Gain, GainValues } from "./gain";
 export type {
   RandomSequencer,
   RandomSequencerWorklet,
@@ -64,29 +66,6 @@ export const constantSource = (audioContext: AudioContext): ConstantSource => {
   };
 };
 
-export interface Gain extends Node {
-  gain: GainNode;
-}
-
-export const gain = (audioContext: AudioContext): Gain => {
-  const gain = audioContext.createGain();
-  return {
-    inputs: {
-      in: {
-        port: gain,
-      },
-      gain: {
-        port: gain.gain,
-      },
-    },
-    outputs: {
-      out: {
-        port: gain,
-      },
-    },
-    gain,
-  };
-};
 
 export interface Filter extends Node {
   filter: BiquadFilterNode;
