@@ -25,6 +25,7 @@ export const TitleBar = styled(Section)`
   justify-content: center;
   flex: 1 1 0%;
   color: var(--leva-colors-highlight1);
+  padding: 0 1rem;
 `;
 
 export const PortsPanel = styled(Section)`

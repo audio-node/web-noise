@@ -4,50 +4,19 @@ import { Handle, Position, NodeProps } from "react-flow-renderer";
 import { useNode } from "../ModuleContext";
 import { LevaPanel, useControls, useCreateStore } from "leva";
 import { WhiteNoise as TWhiteNoise } from "../nodes";
+import { Node } from "./Node";
 
-const WhiteNoise = ({
-  targetPosition,
-  sourcePosition,
-  data,
-  id,
-}: NodeProps) => {
-  const { node } = useNode<TWhiteNoise>(id);
-  const [ready, setReady] = useState<boolean>(false);
-
-  const store = useCreateStore();
-
-  useControls(
-    {
-      whiteNoise: {
-        value: "",
-        editable: false,
-      },
-    },
-    { store }
-  );
-
-  useEffect(() => {
-    node?.then(() => setReady(true));
-  }, [node, setReady]);
+const WhiteNoise = ({ data, id }: NodeProps) => {
+  const { node, loading } = useNode<TWhiteNoise>(id);
 
   return (
-    <>
-      <LevaPanel
-        oneLineLabels
-        hideCopyButton
-        collapsed
-        store={store}
-        fill
-        flat
-        titleBar={{ drag: false, title: data.label }}
-      />
-      {!ready ? <div>loading</div> : null}
-      <Handle
-        type="source"
-        id="out"
-        position={sourcePosition || Position.Right}
-      />
-    </>
+    <Node
+      id={id}
+      title={data.label}
+      inputs={node?.inputs}
+      outputs={node?.outputs}
+      loading={loading}
+    ></Node>
   );
 };
 
