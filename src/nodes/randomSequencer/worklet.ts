@@ -3,31 +3,38 @@ import { Scale, Note } from "@tonaljs/tonal";
 const TRIGGER_THRESHOLD = 0.5;
 
 export class SequencerProcessor extends AudioWorkletProcessor {
-  freqRange: Array<number>;
-  currentFrequency: number;
+  currentFrequency: number = 0;
+  currentMidiNumber: number = 0;
+  notesRange: Array<string | undefined>;
 
   lastInputValue = 0;
 
   constructor() {
     super();
     const range = Scale.rangeOf("C major");
-    this.freqRange = range("A2", "A6").map((note) => {
-      return Note.freq(note || "C2") as number;
-    });
-    this.currentFrequency = 0;
+    this.notesRange = range("A2", "A6");
   }
 
   onTick() {
-    const randomIndex = Math.floor(Math.random() * this.freqRange.length);
-    this.currentFrequency = this.freqRange[randomIndex];
+    const randomIndex = Math.floor(Math.random() * this.notesRange.length);
+    const note = this.notesRange[randomIndex] || "C2";
+    const freq = Note.freq(note);
+    if (freq) {
+      this.currentFrequency = freq;
+    }
+    const midi = Note.midi(note);
+    if (midi) {
+      this.currentMidiNumber = midi;
+    }
+    this.port.postMessage({
+      name: "noteChange",
+      note: note,
+      midiNumber: midi,
+    });
   }
 
   checkTrigger(value: number) {
     if (value > TRIGGER_THRESHOLD && this.lastInputValue < TRIGGER_THRESHOLD) {
-      this.port.postMessage({
-        name: "tick",
-        eventData: { timestamp: +new Date(), currentTime },
-      });
       this.onTick();
     }
     this.lastInputValue = value;
@@ -45,13 +52,20 @@ export class SequencerProcessor extends AudioWorkletProcessor {
     const input = inputs[0];
     input.forEach((channel) => this.checkChannel(channel));
 
-    const output = outputs[0];
+    const [frequencyOutput, midiOutput] = outputs;
 
-    output.forEach((channel: any) => {
+    frequencyOutput.forEach((channel: any) => {
       for (let i = 0; i < channel.length; i++) {
         channel[i] = this.currentFrequency;
       }
     });
+
+    midiOutput.forEach((channel: any) => {
+      for (let i = 0; i < channel.length; i++) {
+        channel[i] = this.currentMidiNumber;
+      }
+    });
+
     return true;
   }
 }
