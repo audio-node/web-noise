@@ -5,8 +5,8 @@ import { useNode } from "../ModuleContext";
 import { RandomSequencerWorklet as TSequencer } from "../nodes";
 import { Node } from "./Node";
 
-const RandomSequencerWorklet = ({ data, id }: NodeProps) => {
-  const { node: sequencer, loading } = useNode<TSequencer>(id);
+const RandomSequencerWorklet = ({ id }: NodeProps) => {
+  const { node: sequencer } = useNode<TSequencer>(id);
 
   const store = useCreateStore();
 
@@ -35,13 +35,7 @@ const RandomSequencerWorklet = ({ data, id }: NodeProps) => {
   }, [sequencer, set]);
 
   return (
-    <Node
-      id={id}
-      title={data.label}
-      inputs={sequencer?.inputs}
-      outputs={sequencer?.outputs}
-      loading={loading}
-    >
+    <Node id={id}>
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
     </Node>
   );

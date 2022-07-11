@@ -21,21 +21,21 @@ interface ClockData {
 const DEFAULT_BPM = 120;
 
 const Clock: FC<NodeProps<ClockData>> = ({ data, id }) => {
-  const { node: clock, loading } = useNode<TClock>(id);
+  const { node } = useNode<TClock>(id);
   const { updateNodeValues } = useFlowNode(id);
   const [isActive, setActive] = useState(false);
 
   const store = useCreateStore();
 
   const startClock = useCallback(() => {
-    clock?.start();
+    node?.start();
     setActive(true);
-  }, [clock, setActive]);
+  }, [node, setActive]);
 
   const stopClock = useCallback(() => {
-    clock?.stop();
+    node?.stop();
     setActive(false);
-  }, [clock, setActive]);
+  }, [node, setActive]);
 
   const { bpm = DEFAULT_BPM } = data.values || {};
 
@@ -56,25 +56,19 @@ const Clock: FC<NodeProps<ClockData>> = ({ data, id }) => {
             stop: button(stopClock),
           }
         : {
-            start: button(startClock, { disabled: !clock }),
+            start: button(startClock, { disabled: !node }),
           }),
     },
 
     { store },
-    [isActive, clock]
+    [isActive, node]
   );
 
-  useEffect(() => clock?.setValues(data.values), [clock, data]);
-  useEffect(() => updateNodeValues(values), [values]);
+  useEffect(() => node?.setValues(data.values), [node, data]);
+  useEffect(() => updateNodeValues(values), [values, updateNodeValues]);
 
   return (
-    <Node
-      id={id}
-      title={data.label}
-      inputs={clock?.inputs}
-      outputs={clock?.outputs}
-      loading={loading}
-    >
+    <Node id={id}>
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
     </Node>
   );

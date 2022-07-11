@@ -220,7 +220,7 @@ interface NodeLoadedState<T> {
 
 type UseNode<T> = NodeLoadingState | NodeErrorState | NodeLoadedState<T>;
 
-export const useNode = <T,>(id: string): UseNode<T> => {
+export const useNode = <T extends Node>(id: string): UseNode<T> => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
   const [node, setNode] = useState<T | null>(null);

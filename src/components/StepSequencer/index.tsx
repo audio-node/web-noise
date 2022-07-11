@@ -8,16 +8,15 @@
  *  - implement additional sequence mode: e.g. 'vertical', 'snake', etc..
  */
 
-import { useNode, useModule } from "../../ModuleContext";
-import { LevaPanel, useControls, useCreateStore, button } from "leva";
-import { NodeProps } from "react-flow-renderer";
-import { Node } from "../Node";
-import { useState, useEffect, useCallback } from "react";
 import { Midi } from "@tonaljs/tonal";
+import { button, LevaPanel, useControls, useCreateStore } from "leva";
+import { useCallback, useEffect, useState } from "react";
+import { NodeProps } from "react-flow-renderer";
+import { useNode } from "../../ModuleContext";
 import { StepSequencer as NodeStepSequencer } from "../../nodes/stepSequencer";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../../styles/consts";
-import { Grid, Step, DebugBlock } from "./styles";
-import { Clock } from "../../nodes";
+import { Node } from "../Node";
+import { DebugBlock, Grid, Step } from "./styles";
 
 interface StepData {
   active: boolean;
@@ -36,7 +35,7 @@ const DEFAULT_STEP_VALUE: number = 36;
 const DEFAULT_SEQUENCE_MODE: SequenceMode = "forward";
 
 const StepSequencer = ({ id, data }: NodeProps) => {
-  const { node: sequencer, loading } = useNode<NodeStepSequencer>(id);
+  const { node: sequencer } = useNode<NodeStepSequencer>(id);
 
   const levaStore = useCreateStore();
   const [stepsNumber] = useState(16);
@@ -187,13 +186,7 @@ const StepSequencer = ({ id, data }: NodeProps) => {
   }, [delta, selectedStep, selectedStepValue, updateStep]);
 
   return (
-    <Node
-      id={id}
-      title={data.label}
-      outputs={sequencer?.outputs}
-      inputs={sequencer?.inputs}
-      loading={loading}
-    >
+    <Node id={id}>
       <LevaPanel
         store={levaStore}
         fill

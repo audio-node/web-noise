@@ -14,11 +14,10 @@ interface GainData {
 
 const Gain: FC<NodeProps<GainData>> = ({ data, id }) => {
   const { updateNodeValues } = useFlowNode(id);
-  const { node, loading } = useNode<TGain>(id);
+  const { node } = useNode<TGain>(id);
   const store = useCreateStore();
 
-  const { gain = 0 } =
-    data.values || {};
+  const { gain = 0 } = data.values || {};
 
   const values = useControls(
     "settings",
@@ -34,18 +33,11 @@ const Gain: FC<NodeProps<GainData>> = ({ data, id }) => {
     { store }
   );
 
-
   useEffect(() => node?.setValues(data.values), [node, data]);
   useEffect(() => updateNodeValues(values), [values]);
 
   return (
-    <Node
-      id={id}
-      title={data.label}
-      inputs={node?.inputs}
-      outputs={node?.outputs}
-      loading={loading}
-    >
+    <Node id={id}>
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
     </Node>
   );

@@ -38,7 +38,7 @@ const Stage = styled.div`
 `;
 
 const Oscilloscope = ({ data, id }: NodeProps<OscilloscopeData>) => {
-  const { node: analyser, loading } = useNode<Analyser>(id);
+  const { node } = useNode<Analyser>(id);
   const { updateNodeConfig } = useFlowNode(id);
 
   const store = useCreateStore();
@@ -69,22 +69,16 @@ const Oscilloscope = ({ data, id }: NodeProps<OscilloscopeData>) => {
     { store: store }
   );
 
-  useEffect(() => updateNodeConfig(config), [config]);
+  useEffect(() => updateNodeConfig(config), [config, updateNodeConfig]);
 
   return (
-    <Node
-      id={id}
-      title={data.label}
-      inputs={analyser?.inputs}
-      outputs={analyser?.outputs}
-      loading={loading}
-    >
+    <Node id={id}>
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
-      {analyser && (
+      {node && (
         <Stage>
           {showGrid ? <Grid color={gridColor} /> : null}
-          <Scope analyser={analyser.input1Analyser} color={input1Color} />
-          <Scope analyser={analyser.input2Analyser} color={input2Color} />
+          <Scope analyser={node.input1Analyser} color={input1Color} />
+          <Scope analyser={node.input2Analyser} color={input2Color} />
         </Stage>
       )}
     </Node>

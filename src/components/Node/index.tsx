@@ -1,14 +1,21 @@
 import styled from "@emotion/styled";
 import { FC } from "react";
-import { Handle, Position, HandleProps } from "react-flow-renderer";
-import { Node as TNode } from "../../ModuleContext";
+import { Handle, HandleProps, Position } from "react-flow-renderer";
+import useFlowNode from "../../hooks/useFlowNode";
+import { useNode } from "../../ModuleContext";
 import { LEVA_COLORS } from "../../styles/consts";
 
-interface NodeProps extends Pick<TNode, "inputs" | "outputs"> {
-  id: string;
-  title: string;
-  loading?: boolean;
-}
+const NodeWrapper = styled.div`
+  background-color: var(--leva-colors-elevation1);
+`;
+
+const NodeLoaderWrapper = styled(NodeWrapper)`
+  padding: 2rem 5rem;
+`;
+
+const NodeErrorWrapper = styled(NodeWrapper)`
+  padding: 1rem 2rem;
+`;
 
 const Section = styled.div`
   position: relative;
@@ -68,33 +75,45 @@ const OutputHandle: FC<Partial<HandleProps>> = (props) => (
   <StyledOutputHandle {...props} type="source" position={Position.Right} />
 );
 
-export const Node: FC<NodeProps> = ({
-  children,
-  title,
-  inputs = {},
-  outputs = {},
-  loading = false,
-}) => (
-  <>
-    <TitleBar className="leva-c-hwBXYF">{title}</TitleBar>
-    <PortsPanel>
-      <InputPorts>
-        {Object.keys(inputs).map((key, index) => (
-          <Port key={index}>
-            <InputHandle id={key} />
-            <span>{key}</span>
-          </Port>
-        ))}
-      </InputPorts>
-      <OutputPorts>
-        {Object.keys(outputs).map((key, index) => (
-          <Port key={index}>
-            <OutputHandle id={key} />
-            <span>{key}</span>
-          </Port>
-        ))}
-      </OutputPorts>
-    </PortsPanel>
-    {loading ? <div>loading</div> : children}
-  </>
-);
+export const Node: FC<{ id: string }> = ({ id, children }) => {
+  const { data } = useFlowNode(id);
+  const { node, loading, error } = useNode(id);
+
+  if (loading || node === null) {
+    return <NodeLoaderWrapper>loading</NodeLoaderWrapper>;
+  }
+
+  if (error) {
+    return <NodeErrorWrapper>error: {error}</NodeErrorWrapper>;
+  }
+
+  const { inputs, outputs } = node;
+  return (
+    <NodeWrapper>
+      <TitleBar className="leva-c-hwBXYF">{data?.label || "No Name"}</TitleBar>
+      <PortsPanel>
+        <InputPorts>
+          {inputs
+            ? Object.keys(inputs).map((key, index) => (
+                <Port key={index}>
+                  <InputHandle id={key} />
+                  <span>{key}</span>
+                </Port>
+              ))
+            : null}
+        </InputPorts>
+        <OutputPorts>
+          {outputs
+            ? Object.keys(outputs).map((key, index) => (
+                <Port key={index}>
+                  <OutputHandle id={key} />
+                  <span>{key}</span>
+                </Port>
+              ))
+            : null}
+        </OutputPorts>
+      </PortsPanel>
+      {children}
+    </NodeWrapper>
+  );
+};

@@ -64,12 +64,7 @@ const Filter: FC<NodeProps<FilterData>> = ({ data, id }) => {
   useEffect(() => updateNodeValues(values), [values]);
 
   return (
-    <Node
-      id={id}
-      title={data.label}
-      inputs={node?.inputs}
-      outputs={node?.outputs}
-    >
+    <Node id={id}>
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
     </Node>
   );

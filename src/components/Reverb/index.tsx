@@ -6,22 +6,17 @@ import { useNode } from "../../ModuleContext";
 import { Reverb as TReverb, ReverbValues } from "../../nodes/reverb";
 import { Node } from "../Node";
 
-
 interface ReverbData {
   label: string;
   values?: ReverbValues;
 }
 
-const Reverb: FC<NodeProps<ReverbData>> = ({
-  id,
-  data,
-}) => {
-  const { node: reverb, loading } = useNode<TReverb>(id);
+const Reverb: FC<NodeProps<ReverbData>> = ({ id, data }) => {
+  const { node: reverb } = useNode<TReverb>(id);
   const { updateNodeValues } = useFlowNode(id);
   const store = useCreateStore();
 
-  const { wetDry = 0.5 } =
-    data.values || {};
+  const { wetDry = 0.5 } = data.values || {};
 
   const values = useControls(
     {
@@ -39,13 +34,7 @@ const Reverb: FC<NodeProps<ReverbData>> = ({
   useEffect(() => updateNodeValues(values), [values]);
 
   return (
-    <Node
-      id={id}
-      title={data.label}
-      inputs={reverb?.inputs}
-      outputs={reverb?.outputs}
-      loading={loading}
-    >
+    <Node id={id}>
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
     </Node>
   );

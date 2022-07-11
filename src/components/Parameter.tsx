@@ -1,9 +1,9 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-
-import { Handle, Position, NodeProps } from "react-flow-renderer";
-import { useControls, useCreateStore, LevaPanel } from "leva";
+import { LevaPanel, useControls, useCreateStore } from "leva";
+import { FC, useEffect, useMemo } from "react";
+import { Handle, NodeProps, Position } from "react-flow-renderer";
 import { useNode } from "../ModuleContext";
 import { ConstantSource } from "../nodes";
+import { Node } from "./Node";
 
 export const useParameter = (audioContext: AudioContext) =>
   useMemo(() => {
@@ -18,7 +18,7 @@ export const useParameter = (audioContext: AudioContext) =>
     };
   }, [audioContext]);
 
-const Parameter = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
+const Parameter: FC<NodeProps> = ({ data, id }) => {
   const store = useCreateStore();
 
   const values = useControls(
@@ -26,7 +26,7 @@ const Parameter = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
       value: {
         value: data.value || 1,
         label: "value",
-        step: 0.01
+        step: 0.01,
       },
     },
     { store }
@@ -53,20 +53,9 @@ const Parameter = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
   }, [values.value, parameterNode]);
 
   return (
-    <>
-      <LevaPanel
-        store={store}
-        fill
-        flat
-        titleBar={{ drag: false, title: data.label }}
-      />
-
-      <Handle
-        type="source"
-        id="out"
-        position={sourcePosition || Position.Right}
-      />
-    </>
+    <Node id={id}>
+      <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
+    </Node>
   );
 };
 

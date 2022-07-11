@@ -22,7 +22,7 @@ const DEFAULT_FREQUENCY = 440;
 const DEFAULT_TYPE = "sine";
 
 const Oscillator = ({ id, data }: NodeProps<OscillatorData>) => {
-  const oscillatorNode = useNode<TOscillator>(id);
+  const { node } = useNode<TOscillator>(id);
   const { updateNodeValues } = useFlowNode(id);
   const store = useCreateStore();
 
@@ -65,18 +65,11 @@ const Oscillator = ({ id, data }: NodeProps<OscillatorData>) => {
     { store }
   );
 
-  const { node } = oscillatorNode;
-
   useEffect(() => node?.setValues(data.values), [node, data]);
-  useEffect(() => updateNodeValues(values), [values]);
+  useEffect(() => updateNodeValues(values), [values, updateNodeValues]);
 
   return (
-    <Node
-      id={id}
-      title={data.label}
-      inputs={node?.inputs}
-      outputs={node?.outputs}
-    >
+    <Node id={id}>
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
     </Node>
   );

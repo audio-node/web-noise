@@ -7,7 +7,7 @@ import { Node } from "../Node";
 import codeEditor from "./CodeEditorPlugin";
 
 const ScriptNode = ({ data, id }: NodeProps) => {
-  const { node: scriptNode, loading } = useNode<TScriptNode>(id);
+  const { node: scriptNode } = useNode<TScriptNode>(id);
 
   const expressionParameter = data.value || "";
   const [expression, setExpression] = useState<string>(expressionParameter);
@@ -27,13 +27,7 @@ const ScriptNode = ({ data, id }: NodeProps) => {
   );
 
   return (
-    <Node
-      id={id}
-      title={data.label}
-      inputs={scriptNode?.inputs}
-      outputs={scriptNode?.outputs}
-      loading={loading}
-    >
+    <Node id={id}>
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
     </Node>
   );

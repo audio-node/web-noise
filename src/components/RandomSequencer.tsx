@@ -1,12 +1,12 @@
 import { LevaPanel, useControls, useCreateStore } from "leva";
-import { useEffect } from "react";
+import { useEffect, FC } from "react";
 import { NodeProps } from "react-flow-renderer";
 import { useNode } from "../ModuleContext";
 import { RandomSequencer as TRandomSequencer } from "../nodes";
 import { Node } from "./Node";
 
-const RandomSequencer = ({ data, id }: NodeProps) => {
-  const { node: randomSequencer, loading } = useNode<TRandomSequencer>(id);
+const RandomSequencer: FC<NodeProps> = ({ id }) => {
+  const { node } = useNode<TRandomSequencer>(id);
 
   const store = useCreateStore();
 
@@ -22,20 +22,14 @@ const RandomSequencer = ({ data, id }: NodeProps) => {
   );
 
   useEffect(() => {
-    if (!randomSequencer) {
+    if (!node) {
       return;
     }
-    randomSequencer.onNoteChange(({ note }) => set({ note }));
-  }, [randomSequencer]);
+    node.onNoteChange(({ note }) => set({ note }));
+  }, [node]);
 
   return (
-    <Node
-      id={id}
-      title={data.label}
-      inputs={randomSequencer?.inputs}
-      outputs={randomSequencer?.outputs}
-      loading={loading}
-    >
+    <Node id={id}>
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
     </Node>
   );

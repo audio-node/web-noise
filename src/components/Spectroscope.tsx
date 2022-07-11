@@ -9,7 +9,7 @@ import { LEVA_COLOR_ACCENT2_BLUE } from "../styles/consts";
 import { Node } from "./Node";
 
 const Spectroscope = ({ data, id }: NodeProps) => {
-  const { node, loading } = useNode<Analyser>(id);
+  const { node } = useNode<Analyser>(id);
   const { analyser } = node || {};
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -58,13 +58,7 @@ const Spectroscope = ({ data, id }: NodeProps) => {
 
   useAnimationFrame(tick);
   return (
-    <Node
-      id={id}
-      title={data.label}
-      inputs={node?.inputs}
-      outputs={node?.outputs}
-      loading={loading}
-    >
+    <Node id={id}>
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
       <canvas ref={canvasRef} style={{ display: "block", width: "100%" }} />
     </Node>
