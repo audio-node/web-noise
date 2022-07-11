@@ -1,30 +1,28 @@
 import { LevaPanel, useControls, useCreateStore } from "leva";
-import { FC, useEffect, useMemo } from "react";
-import { Handle, NodeProps, Position } from "react-flow-renderer";
+import { FC, useEffect } from "react";
+import { NodeProps } from "react-flow-renderer";
+import useFlowNode from "../hooks/useFlowNode";
 import { useNode } from "../ModuleContext";
-import { ConstantSource } from "../nodes";
+import { ConstantSource, ConstantSourceValues } from "../nodes";
 import { Node } from "./Node";
 
-export const useParameter = (audioContext: AudioContext) =>
-  useMemo(() => {
-    const constantSource = audioContext.createConstantSource();
-    return {
-      outputs: {
-        out: {
-          port: constantSource,
-        },
-      },
-      constantSource,
-    };
-  }, [audioContext]);
+interface ParameterData {
+  label: string;
+  values?: ConstantSourceValues;
+}
 
-const Parameter: FC<NodeProps> = ({ data, id }) => {
+const Parameter: FC<NodeProps<ParameterData>> = ({ data, id }) => {
+  const { node } = useNode<ConstantSource>(id);
+
+  const { updateNodeValues } = useFlowNode(id);
   const store = useCreateStore();
+
+  const { value = 1 } = data.values || {};
 
   const values = useControls(
     {
       value: {
-        value: data.value || 1,
+        value: value,
         label: "value",
         step: 0.01,
       },
@@ -32,25 +30,8 @@ const Parameter: FC<NodeProps> = ({ data, id }) => {
     { store }
   );
 
-  const { node: parameterNode } = useNode<ConstantSource>(id);
-
-  useEffect(() => {
-    if (!parameterNode) {
-      return;
-    }
-    parameterNode.constantSource.start();
-    return () => {
-      parameterNode.constantSource.stop();
-    };
-  }, [parameterNode]);
-
-  useEffect(() => {
-    if (!parameterNode) {
-      return;
-    }
-    //@ts-ignore
-    parameterNode.constantSource.offset.value = values.value;
-  }, [values.value, parameterNode]);
+  useEffect(() => node?.setValues(data.values), [node, data]);
+  useEffect(() => updateNodeValues(values), [values, updateNodeValues]);
 
   return (
     <Node id={id}>

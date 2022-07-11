@@ -1,10 +1,22 @@
 /* A convolution reverb */
-import { useEffect, useState, VoidFunctionComponent } from "react";
+import { useEffect, useState, VoidFunctionComponent, useMemo } from "react";
 import { Handle, NodeProps, Position } from "react-flow-renderer";
 import { LevaPanel, useControls, useCreateStore } from "leva";
 
 import { useModule } from "../ModuleContext";
-import { useParameter } from "./Parameter";
+
+const useParameter = (audioContext: AudioContext) =>
+  useMemo(() => {
+    const constantSource = audioContext.createConstantSource();
+    return {
+      outputs: {
+        out: {
+          port: constantSource,
+        },
+      },
+      constantSource,
+    };
+  }, [audioContext]);
 
 const Envelope: VoidFunctionComponent<NodeProps> = ({
   id,

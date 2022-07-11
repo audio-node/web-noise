@@ -10,10 +10,12 @@ import virtualKeyboard from "./virtualKeyboard";
 import clock, { Clock } from "./clock";
 import { analyser, analyserWorklet } from './analyser';
 import stepSequencer from "./stepSequencer";
+import constantSource from './constantSource';
 
 export type { WhiteNoise } from "./whiteNoise";
 export type { ScriptNode } from "./scriptNode";
 export type { Reverb } from "./reverb";
+export type { ConstantSource, ConstantSourceValues } from "./constantSource";
 export type { Oscillator, OscillatorValues } from "./oscillator";
 export type { Gain, GainValues } from "./gain";
 export type { Filter, FilterValues } from "./filter";
@@ -49,22 +51,6 @@ export const destination = (audioContext: AudioContext): Destination => {
       },
     },
     destination,
-  };
-};
-
-export interface ConstantSource extends Node {
-  constantSource: ConstantSourceNode;
-}
-
-export const constantSource = (audioContext: AudioContext): ConstantSource => {
-  const constantSource = audioContext.createConstantSource();
-  return {
-    outputs: {
-      out: {
-        port: constantSource,
-      },
-    },
-    constantSource,
   };
 };
 
