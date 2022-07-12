@@ -227,10 +227,11 @@ export const useNode = <T extends Node>(id: string): UseNode<T> => {
 
   const { getNode } = useModule();
 
-  const nodePromise = getNode<T | Promise<T>>(id);
-
   useEffect(() => {
+    const nodePromise = getNode<T | Promise<T>>(id);
     if (!nodePromise) {
+      setLoading(false);
+      setError(new Error(`could not find node with id: ${id}`));
       return;
     }
 
@@ -243,8 +244,23 @@ export const useNode = <T extends Node>(id: string): UseNode<T> => {
         setError(e);
         setLoading(false);
       });
-  }, [nodePromise]);
+  }, [getNode, id, setNode, setLoading, setError]);
 
-  //@ts-ignore
-  return { node, loading, error };
+  if (loading === true) {
+    return {
+      node: null,
+      error: null,
+      loading: true,
+    };
+  }
+
+  if (error) {
+    return {
+      node: null,
+      loading: false,
+      error,
+    };
+  }
+
+  return { node: node as T, loading: false, error: null };
 };

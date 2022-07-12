@@ -77,17 +77,18 @@ const OutputHandle: FC<Partial<HandleProps>> = (props) => (
 
 export const Node: FC<{ id: string }> = ({ id, children }) => {
   const { data } = useFlowNode(id);
-  const { node, loading, error } = useNode(id);
+  const audioNode = useNode(id);
 
-  if (loading || node === null) {
+  if (audioNode.loading) {
     return <NodeLoaderWrapper>loading</NodeLoaderWrapper>;
   }
 
-  if (error) {
-    return <NodeErrorWrapper>error: {error}</NodeErrorWrapper>;
+  if (audioNode.error) {
+    return <NodeErrorWrapper>error: {audioNode.error}</NodeErrorWrapper>;
   }
 
-  const { inputs, outputs } = node;
+  const { node: { inputs, outputs } } = audioNode;
+
   return (
     <NodeWrapper>
       <TitleBar className="leva-c-hwBXYF">{data?.label || "No Name"}</TitleBar>
