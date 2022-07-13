@@ -1,3 +1,5 @@
+// taken from https://github.com/g200kg/audioworklet-adsrnode/blob/master/audioworklet-adsrnode.js
+
 export class ADSRProcessor extends AudioWorkletProcessor {
   _lasttrig = 0;
   _trig = 0;
