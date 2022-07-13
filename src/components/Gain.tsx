@@ -1,138 +1,45 @@
-import { useEffect } from "react";
-import { Handle, Position, NodeProps } from "react-flow-renderer";
-import { useModule, useNode } from "../ModuleContext";
-import { useControls, useCreateStore, LevaPanel, folder } from "leva";
-import { useRecoilValue } from "recoil";
+import { LevaPanel, useControls, useCreateStore } from "leva";
+import { useEffect, FC } from "react";
+import { NodeProps } from "react-flow-renderer";
+import useFlowNode from "../hooks/useFlowNode";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../styles/consts";
-import { Gain as TGain } from "../nodes";
+import { useNode } from "../ModuleContext";
+import { Gain as TGain, GainValues } from "../nodes";
+import { Node } from "./Node";
 
-//@TODO: sort out release control, figure out comments, figure out the global clock
-const Gain = ({ targetPosition, sourcePosition, data, id }: NodeProps) => {
-  const { audioContext } = useModule();
+interface GainData {
+  label: string;
+  values?: GainValues;
+}
 
-  const { node: gainNode } = useNode<TGain>(id);
-  const levaStore = useCreateStore();
+const Gain: FC<NodeProps<GainData>> = ({ data, id }) => {
+  const { updateNodeValues } = useFlowNode(id);
+  const { node } = useNode<TGain>(id);
+  const store = useCreateStore();
 
-  const controls = useControls(
+  const { gain = 0 } = data.values || {};
+
+  const values = useControls(
+    "settings",
     {
       gain: {
-        value: 0,
+        value: gain,
         min: 0,
         max: 1,
         label: "lvl",
       },
-      env: folder(
-        {
-          t: false,
-          attack: {
-            value: 0.0,
-            min: 0,
-            max: 0.4,
-            step: 0.001,
-            label: "A",
-          },
-          decay: {
-            value: 0.07,
-            max: 0.5,
-            min: 0,
-            step: 0.001,
-            label: "D",
-          },
-          sustain: {
-            value: 0.38,
-            min: 0,
-            max: 10,
-            step: 0.001,
-            label: "S",
-          },
-          // release: {
-          //   value: 0,
-          //   min: 0,
-          //   max: 10,
-          //   step: 0.001,
-          //   label: "R",
-          // },
-        },
-        { collapsed: true, color: LEVA_COLOR_ACCENT2_BLUE }
-      ),
     },
-    { store: levaStore }
+    { collapsed: true, color: LEVA_COLOR_ACCENT2_BLUE },
+    { store }
   );
 
-  // useEffect(() => {
-  //   gainNode.gain.gain.cancelScheduledValues(audioContext.currentTime);
-  //   gainNode.gain.gain.setValueAtTime(0, audioContext.currentTime);
-
-  //   gainNode.gain.gain.linearRampToValueAtTime(
-  //     1,
-  //     audioContext.currentTime + controls.attack
-  //   );
-  //   gainNode.gain.gain.linearRampToValueAtTime(
-  //     0,
-  //     audioContext.currentTime + controls.attack + controls.release
-  //   );
-  // }, [clock]);
-
-  useEffect(() => {
-    if (!gainNode) {
-      return;
-    }
-    if (controls.t) {
-      gainNode.gain.gain.cancelScheduledValues(audioContext.currentTime);
-      gainNode.gain.gain.setValueAtTime(0, audioContext.currentTime);
-
-      gainNode.gain.gain.linearRampToValueAtTime(
-        1,
-        audioContext.currentTime + controls.attack
-      );
-      gainNode.gain.gain.linearRampToValueAtTime(
-        0,
-        audioContext.currentTime + controls.decay + controls.sustain
-      );
-    }
-  }, [controls, gainNode, audioContext]);
-
-  useEffect(() => {
-    if (!gainNode) {
-      return;
-    }
-    gainNode.gain.gain.setValueAtTime(controls.gain, audioContext.currentTime);
-  }, [
-    // audioContext.currentTime,
-    // controls.attack,
-    // controls.decay,
-    // controls.gain,
-    // controls.sustain,
-    controls.gain,
-    gainNode,
-  ]);
+  useEffect(() => node?.setValues(data.values), [node, data]);
+  useEffect(() => updateNodeValues(values), [values]);
 
   return (
-    <>
-      <LevaPanel
-        store={levaStore}
-        fill
-        flat
-        titleBar={{ drag: false, title: data.label }}
-      />
-      <Handle
-        type="target"
-        position={targetPosition || Position.Left}
-        style={{ top: 10 }}
-        id="in"
-      />
-      <Handle
-        type="target"
-        position={targetPosition || Position.Left}
-        id="gain"
-      />
-
-      <Handle
-        type="source"
-        id="out"
-        position={sourcePosition || Position.Right}
-      />
-    </>
+    <Node id={id}>
+      <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
+    </Node>
   );
 };
 

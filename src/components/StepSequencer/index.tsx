@@ -8,16 +8,15 @@
  *  - implement additional sequence mode: e.g. 'vertical', 'snake', etc..
  */
 
-import { useNode, useModule } from "../../ModuleContext";
-import { LevaPanel, useControls, useCreateStore, button } from "leva";
-import { NodeProps } from "react-flow-renderer";
-import { Node } from "../Node";
-import { useState, useEffect, useCallback } from "react";
 import { Midi } from "@tonaljs/tonal";
+import { button, LevaPanel, useControls, useCreateStore } from "leva";
+import { useCallback, useEffect, useState } from "react";
+import { NodeProps } from "react-flow-renderer";
+import { useNode } from "../../ModuleContext";
 import { StepSequencer as NodeStepSequencer } from "../../nodes/stepSequencer";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../../styles/consts";
-import { Grid, Step, DebugBlock } from "./styles";
-import { Clock } from "../../nodes";
+import { Node } from "../Node";
+import { DebugBlock, Grid, Step } from "./styles";
 
 interface StepData {
   active: boolean;
@@ -36,8 +35,7 @@ const DEFAULT_STEP_VALUE: number = 36;
 const DEFAULT_SEQUENCE_MODE: SequenceMode = "forward";
 
 const StepSequencer = ({ id, data }: NodeProps) => {
-  const { node } = useNode<NodeStepSequencer>(id);
-  const { clock: clockNode } = useModule();
+  const { node: sequencer } = useNode<NodeStepSequencer>(id);
 
   const levaStore = useCreateStore();
   const [stepsNumber] = useState(16);
@@ -51,16 +49,6 @@ const StepSequencer = ({ id, data }: NodeProps) => {
   const [sequenceIndex, setSequenceIndex] = useState(0);
   const [selectedStepValue, setSelectedStepValue] =
     useState<number | null>(null);
-  const [clock, setClock] = useState<Clock | null>(null);
-  const [sequencer, setSequencer] = useState<NodeStepSequencer | null>(null);
-  const [ready, setReady] = useState<boolean>(false);
-
-  useEffect(() => {
-    node?.then((result: NodeStepSequencer) => {
-      setSequencer(result);
-      setReady(true);
-    });
-  }, [node, setReady]);
 
   const controls = useControls(
     "settings",
@@ -144,7 +132,6 @@ const StepSequencer = ({ id, data }: NodeProps) => {
   useEffect(() => {
     window.addEventListener("mousedown", onMouseDown);
     window.addEventListener("mouseup", onMouseUp);
-    clockNode.then((clock) => setClock(clock));
 
     return () => {
       window.removeEventListener("mousedown", onMouseDown);
@@ -199,12 +186,7 @@ const StepSequencer = ({ id, data }: NodeProps) => {
   }, [delta, selectedStep, selectedStepValue, updateStep]);
 
   return (
-    <Node
-      id={id}
-      title={data.label}
-      outputs={sequencer?.outputs}
-      inputs={sequencer?.inputs}
-    >
+    <Node id={id}>
       <LevaPanel
         store={levaStore}
         fill
@@ -213,43 +195,37 @@ const StepSequencer = ({ id, data }: NodeProps) => {
         titleBar={false}
         oneLineLabels
       />
-      {ready ? (
-        <>
-          <Grid>
-            {sequenceData.map((step, index) => {
-              return (
-                <Step
-                  isActive={sequenceData[index].active}
-                  isSequenceIndex={index === sequenceIndex}
-                  key={`step-${index}`}
-                  onClick={() =>
-                    updateStep(index, { active: !sequenceData[index].active })
-                  }
-                  onMouseDown={() => {
-                    setSelectedStep(index);
-                    setSelectedStepValue(sequenceData[index].value);
-                  }}
-                >
-                  {formatStepValue(step.value)}
-                </Step>
-              );
-            })}
-          </Grid>
-          <DebugBlock>
-            <p>
-              output:
-              {sequenceData[sequenceIndex].active &&
-                sequenceData[sequenceIndex].value}
-            </p>
-            <p>sequence Index: {sequenceIndex + 1}</p>
-            <p>selected step: {selectedStep}</p>
-            <p>mouse delta: {delta}</p>
-            <p>mouse: {isMousePressed ? "pressed" : "not pressed"}</p>
-          </DebugBlock>
-        </>
-      ) : (
-        <div>loading</div>
-      )}
+      <Grid>
+        {sequenceData.map((step, index) => {
+          return (
+            <Step
+              isActive={sequenceData[index].active}
+              isSequenceIndex={index === sequenceIndex}
+              key={`step-${index}`}
+              onClick={() =>
+                updateStep(index, { active: !sequenceData[index].active })
+              }
+              onMouseDown={() => {
+                setSelectedStep(index);
+                setSelectedStepValue(sequenceData[index].value);
+              }}
+            >
+              {formatStepValue(step.value)}
+            </Step>
+          );
+        })}
+      </Grid>
+      <DebugBlock>
+        <p>
+          output:
+          {sequenceData[sequenceIndex].active &&
+            sequenceData[sequenceIndex].value}
+        </p>
+        <p>sequence Index: {sequenceIndex + 1}</p>
+        <p>selected step: {selectedStep}</p>
+        <p>mouse delta: {delta}</p>
+        <p>mouse: {isMousePressed ? "pressed" : "not pressed"}</p>
+      </DebugBlock>
     </Node>
   );
 };

@@ -39,7 +39,7 @@ const randomSequencer = async (
         frequency.offset.value = randomFreq;
       }
 
-      const randomMidi = Note.freq(note);
+      const randomMidi = Note.midi(note);
       if (randomMidi) {
         midi.offset.value = randomMidi;
       }
@@ -81,7 +81,10 @@ export const randomSequencerWorklet = async (
   await audioContext.audioWorklet.addModule(randomSequencerWorkletProcessor);
   const randomSequencer = new AudioWorkletNode(
     audioContext,
-    "random-sequencer-processor"
+    "random-sequencer-processor",
+    {
+      numberOfOutputs: 2,
+    }
   );
 
   return {
@@ -92,7 +95,10 @@ export const randomSequencerWorklet = async (
     },
     outputs: {
       out: {
-        port: randomSequencer,
+        port: [randomSequencer, 0],
+      },
+      midi: {
+        port: [randomSequencer, 1],
       },
     },
     randomSequencer,

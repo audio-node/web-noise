@@ -1,8 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
-import { Handle, Position, NodeProps } from "react-flow-renderer";
-import { useControls, useCreateStore, LevaPanel } from "leva";
-import { useModule, useNode } from "../ModuleContext";
-import { Filter as TFilter } from "../nodes";
+import { LevaPanel, useControls, useCreateStore } from "leva";
+import { FC, useEffect } from "react";
+import { NodeProps } from "react-flow-renderer";
+import useFlowNode from "../hooks/useFlowNode";
+import { useNode } from "../ModuleContext";
+import { Filter as TFilter, FilterValues } from "../nodes";
+import { Node } from "./Node";
 
 const FilterTypes: Record<BiquadFilterType, BiquadFilterType> = {
   lowpass: "lowpass",
@@ -15,90 +17,56 @@ const FilterTypes: Record<BiquadFilterType, BiquadFilterType> = {
   peaking: "peaking",
 };
 
+interface FilterData {
+  label: string;
+  values?: FilterValues;
+}
+
+const DEFAULT_FREQUENCY = 12000;
+const DEFAULT_Q = 0;
 const DEFAULT_FILTER_TYPE: BiquadFilterType = "lowpass";
 
-const Filter = ({ sourcePosition, targetPosition, data, id }: NodeProps) => {
-  const { audioContext } = useModule();
+const Filter: FC<NodeProps<FilterData>> = ({ data, id }) => {
   const { node } = useNode<TFilter>(id);
-  const { filter } = node || {};
+  const { updateNodeValues } = useFlowNode(id);
   const store = useCreateStore();
 
-  const controls = useControls(
+  const {
+    frequency = DEFAULT_FREQUENCY,
+    q = DEFAULT_Q,
+    type = DEFAULT_FILTER_TYPE,
+  } = data.values || {};
+
+  const values = useControls(
     {
       frequency: {
-        value: 12000,
+        value: frequency,
         max: 24000,
         min: 0,
         label: "freq",
         step: 0.01,
       },
       q: {
-        value: 0,
+        value: q,
         max: 20,
         min: 0,
         label: "q",
       },
       type: {
         options: FilterTypes,
-        value: DEFAULT_FILTER_TYPE,
+        value: type,
       },
     },
     { store }
   );
 
-  useEffect(() => {
-    if (!filter) {
-      return;
-    }
-    filter.frequency.setValueAtTime(
-      controls.frequency,
-      audioContext.currentTime
-    );
-  }, [controls.frequency, filter, audioContext]);
-
-  useEffect(() => {
-    if (!filter) {
-      return;
-    }
-    filter.Q.setValueAtTime(controls.q, audioContext.currentTime);
-  }, [controls.q, filter, audioContext]);
-
-  useEffect(() => {
-    if (!filter) {
-      return;
-    }
-    filter.type = controls.type;
-  }, [controls.type, filter]);
-
-  useEffect(() => {
-    if (!filter) {
-      return;
-    }
-    filter.gain.setValueAtTime(10, audioContext.currentTime);
-  }, []);
+  useEffect(() => node?.setValues(data.values), [node, data]);
+  useEffect(() => updateNodeValues(values), [values]);
 
   return (
-    <>
-      <LevaPanel
-        store={store}
-        fill
-        flat
-        titleBar={{ drag: false, title: data.label }}
-      />
-      <Handle
-        type="target"
-        position={targetPosition || Position.Left}
-        id="in"
-        onConnect={(params) => console.log("handle onConnect", params)}
-      />
-
-      <Handle
-        type="source"
-        position={sourcePosition || Position.Right}
-        id="out"
-        onConnect={(params) => console.log("handle onConnect", params)}
-      />
-    </>
+    <Node id={id}>
+      <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
+    </Node>
   );
 };
 

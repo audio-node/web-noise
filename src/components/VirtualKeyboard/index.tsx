@@ -1,16 +1,16 @@
+import styled from "@emotion/styled";
 import Range from "@tonaljs/range";
 import { Midi } from "@tonaljs/tonal";
-import styled from "@emotion/styled";
 import { LevaPanel, useControls, useCreateStore } from "leva";
-import { useCallback, useMemo } from "react";
-import { Handle, NodeProps, Position } from "react-flow-renderer";
+import { useCallback, useMemo, FC } from "react";
+import { NodeProps } from "react-flow-renderer";
 //@ts-ignore
 import { KeyboardShortcuts, MidiNumbers, Piano } from "react-piano";
 import "react-piano/dist/styles.css";
 import { useNode } from "../../ModuleContext";
 import { VirtualKeyboard as TVirtualKeyboard } from "../../nodes";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../../styles/consts";
-import { OutputPorts, Port, PortsPanel } from "../Node";
+import { Node } from "../Node";
 
 const Keyboard = styled(Piano)`
   .ReactPiano__Key--natural {
@@ -22,12 +22,7 @@ const Keyboard = styled(Piano)`
   }
 `;
 
-const VirtualKeyboard = ({
-  sourcePosition,
-  targetPosition,
-  id,
-  data,
-}: NodeProps) => {
+const VirtualKeyboard: FC<NodeProps> = ({ id }) => {
   const { node } = useNode<TVirtualKeyboard>(id);
 
   const store = useCreateStore();
@@ -95,26 +90,7 @@ const VirtualKeyboard = ({
   );
 
   return (
-    <>
-      <div className="leva-c-hwBXYF leva-c-iLtnIm leva-c-kWgxhW">
-        {data.label}
-      </div>
-      <PortsPanel className="leva-c-kWgxhW">
-        <OutputPorts>
-          <Port>
-            <Handle type="source" position={Position.Right} id="frequency" />
-            <span>frequency</span>
-          </Port>
-          <Port>
-            <Handle type="source" position={Position.Right} id="midi" />
-            <span>midi</span>
-          </Port>
-          <Port>
-            <Handle type="source" position={Position.Right} id="gate" />
-            <span>gate</span>
-          </Port>
-        </OutputPorts>
-      </PortsPanel>
+    <Node id={id}>
       <LevaPanel
         store={store}
         fill
@@ -130,7 +106,7 @@ const VirtualKeyboard = ({
         width={400}
         keyboardShortcuts={keyboardShortcuts}
       />
-    </>
+    </Node>
   );
 };
 

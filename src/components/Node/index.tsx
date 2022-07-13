@@ -1,24 +1,41 @@
 import styled from "@emotion/styled";
 import { FC } from "react";
-import { Handle, Position, HandleProps } from "react-flow-renderer";
-import { Node as TNode } from "../../ModuleContext";
+import { Handle, HandleProps, Position } from "react-flow-renderer";
+import useFlowNode from "../../hooks/useFlowNode";
+import { useNode } from "../../ModuleContext";
 import { LEVA_COLORS } from "../../styles/consts";
 
-interface NodeProps extends Pick<TNode, "inputs" | "outputs"> {
-  id: string;
-  title: string;
-}
+const NodeWrapper = styled.div`
+  background-color: var(--leva-colors-elevation1);
+`;
 
-export const TitleBar: FC<{ className?: string }> = ({
-  children,
-  className,
-}) => (
-  <div className={`leva-c-hwBXYF leva-c-iLtnIm leva-c-kWgxhW ${className}`}>
-    {children}
-  </div>
-);
+const NodeLoaderWrapper = styled(NodeWrapper)`
+  padding: 2rem 5rem;
+`;
 
-export const PortsPanel = styled.div`
+const NodeErrorWrapper = styled(NodeWrapper)`
+  padding: 1rem 2rem;
+`;
+
+const Section = styled.div`
+  position: relative;
+  font-family: var(--leva-fonts-mono);
+  font-size: var(--leva-fontSizes-root);
+  background-color: var(--leva-colors-elevation1);
+`;
+
+export const TitleBar = styled(Section)`
+  display: flex;
+  height: var(--leva-sizes-titleBarHeight);
+  touch-action: none;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 0%;
+  color: var(--leva-colors-highlight1);
+  padding: 0 1rem;
+`;
+
+export const PortsPanel = styled(Section)`
   display: grid;
   grid-template-areas: "inputs outputs";
   background: ${LEVA_COLORS.elevation2};
@@ -58,32 +75,46 @@ const OutputHandle: FC<Partial<HandleProps>> = (props) => (
   <StyledOutputHandle {...props} type="source" position={Position.Right} />
 );
 
-export const Node: FC<NodeProps> = ({
-  children,
-  title,
-  inputs = {},
-  outputs = {},
-}) => (
-  <>
-    <div className="leva-c-hwBXYF leva-c-iLtnIm leva-c-kWgxhW">{title}</div>
-    <PortsPanel className="leva-c-kWgxhW">
-      <InputPorts>
-        {Object.keys(inputs).map((key, index) => (
-          <Port key={index}>
-            <InputHandle id={key} />
-            <span>{key}</span>
-          </Port>
-        ))}
-      </InputPorts>
-      <OutputPorts>
-        {Object.keys(outputs).map((key, index) => (
-          <Port key={index}>
-            <OutputHandle id={key} />
-            <span>{key}</span>
-          </Port>
-        ))}
-      </OutputPorts>
-    </PortsPanel>
-    {children}
-  </>
-);
+export const Node: FC<{ id: string }> = ({ id, children }) => {
+  const { data } = useFlowNode(id);
+  const audioNode = useNode(id);
+
+  if (audioNode.loading) {
+    return <NodeLoaderWrapper>loading</NodeLoaderWrapper>;
+  }
+
+  if (audioNode.error) {
+    return <NodeErrorWrapper>error: {audioNode.error}</NodeErrorWrapper>;
+  }
+
+  const { node: { inputs, outputs } } = audioNode;
+
+  return (
+    <NodeWrapper>
+      <TitleBar className="leva-c-hwBXYF">{data?.label || "No Name"}</TitleBar>
+      <PortsPanel>
+        <InputPorts>
+          {inputs
+            ? Object.keys(inputs).map((key, index) => (
+                <Port key={index}>
+                  <InputHandle id={key} />
+                  <span>{key}</span>
+                </Port>
+              ))
+            : null}
+        </InputPorts>
+        <OutputPorts>
+          {outputs
+            ? Object.keys(outputs).map((key, index) => (
+                <Port key={index}>
+                  <OutputHandle id={key} />
+                  <span>{key}</span>
+                </Port>
+              ))
+            : null}
+        </OutputPorts>
+      </PortsPanel>
+      {children}
+    </NodeWrapper>
+  );
+};

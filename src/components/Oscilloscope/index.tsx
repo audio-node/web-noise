@@ -5,7 +5,11 @@ import styled from "@emotion/styled";
 import useFlowNode from "../../hooks/useFlowNode";
 import { useNode } from "../../ModuleContext";
 import { AnalyserWorklet as Analyser } from "../../nodes";
-import { LEVA_COLOR_ACCENT2_BLUE, COLOR_GREEN_PRIMARY, COLOR_WHITE_PRIMARY } from "../../styles/consts";
+import {
+  LEVA_COLOR_ACCENT2_BLUE,
+  COLOR_GREEN_PRIMARY,
+  COLOR_WHITE_PRIMARY,
+} from "../../styles/consts";
 import { Node } from "../Node";
 import Scope from "./Scope";
 import Grid from "./Grid";
@@ -33,12 +37,9 @@ const Stage = styled.div`
   }
 `;
 
-
 const Oscilloscope = ({ data, id }: NodeProps<OscilloscopeData>) => {
-  const analyserNode = useNode<Analyser>(id);
+  const { node } = useNode<Analyser>(id);
   const { updateNodeConfig } = useFlowNode(id);
-  const { node } = analyserNode;
-  const [analyser, setAnalyser] = useState<Analyser>();
 
   const store = useCreateStore();
 
@@ -68,31 +69,17 @@ const Oscilloscope = ({ data, id }: NodeProps<OscilloscopeData>) => {
     { store: store }
   );
 
-  useEffect(() => {
-    node?.then((result: Analyser) => {
-      setAnalyser(result);
-    });
-  }, [node, setAnalyser]);
-  useEffect(() => updateNodeConfig(config), [config]);
+  useEffect(() => updateNodeConfig(config), [config, updateNodeConfig]);
 
   return (
-    <Node
-      id={id}
-      title={data.label}
-      inputs={analyser?.inputs}
-      outputs={analyser?.outputs}
-    >
-      {analyser ? (
-        <>
-          <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
-          <Stage>
-            {showGrid ? <Grid color={gridColor} /> : null}
-            <Scope analyser={analyser.input1Analyser} color={input1Color} />
-            <Scope analyser={analyser.input2Analyser} color={input2Color} />
-          </Stage>
-        </>
-      ) : (
-        <div>loading</div>
+    <Node id={id}>
+      <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
+      {node && (
+        <Stage>
+          {showGrid ? <Grid color={gridColor} /> : null}
+          <Scope analyser={node.input1Analyser} color={input1Color} />
+          <Scope analyser={node.input2Analyser} color={input2Color} />
+        </Stage>
       )}
     </Node>
   );

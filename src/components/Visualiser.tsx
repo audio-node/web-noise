@@ -8,12 +8,7 @@ import { Analyser } from "../nodes";
 import { Node } from "./Node";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../styles/consts";
 
-const Visualiser = ({
-  targetPosition,
-  sourcePosition,
-  data,
-  id,
-}: NodeProps) => {
+const Visualiser = ({ data, id }: NodeProps) => {
   const analyserNode = useNode<Analyser>(id);
   const { node } = analyserNode;
   const { analyser } = node || {};
@@ -81,12 +76,7 @@ const Visualiser = ({
   useAnimationFrame(tick);
 
   return (
-    <Node
-      id={id}
-      title={data.label}
-      inputs={node?.inputs}
-      outputs={node?.outputs}
-    >
+    <Node id={id}>
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
       <canvas ref={canvasRef} style={{ display: "block", width: "100%" }} />
     </Node>
