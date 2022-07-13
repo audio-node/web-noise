@@ -1,7 +1,7 @@
 import { FC, useState, useEffect, useCallback, useRef } from "react";
 import styled from "@emotion/styled";
 import { LEVA_COLORS } from "../styles/consts";
-import { useViewport } from "react-flow-renderer";
+import { useViewport, useReactFlow } from "react-flow-renderer";
 
 interface ContextMenuProps {
   nodeTypes: any;
@@ -19,8 +19,9 @@ const ContextMenu: FC<ContextMenuProps> = ({
   onMenuItem,
   onClearEditor,
 }) => {
-  const [isOpen, setisOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const { x, y, zoom } = useViewport();
+  const { project } = useReactFlow();
   const [mousePosition, setMousePosition] = useState<MousePosition>({
     x: 0,
     y: 0,
@@ -30,18 +31,18 @@ const ContextMenu: FC<ContextMenuProps> = ({
   const onContextMenu = (e: MouseEvent) => {
     e.preventDefault();
     setMousePosition({ x: e.clientX, y: e.clientY });
-    setisOpen(true);
+    setIsOpen(true);
   };
 
   const onClick = (e: MouseEvent) => {
     if (e.target !== menuWrapper.current) {
-      setisOpen(false);
+      setIsOpen(false);
     }
   };
 
   const onKeyUp = (e: KeyboardEvent) => {
     if (e.key === "Escape") {
-      setisOpen(false);
+      setIsOpen(false);
     }
   };
 
@@ -59,10 +60,10 @@ const ContextMenu: FC<ContextMenuProps> = ({
 
   const onMenuItemClick = useCallback(
     (node: string) => {
-      onMenuItem(node, { x, y });
-      setisOpen(false);
+      onMenuItem(node, project(mousePosition));
+      setIsOpen(false);
     },
-    [onMenuItem]
+    [onMenuItem, mousePosition, project]
   );
 
   return (
