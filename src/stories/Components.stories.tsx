@@ -643,6 +643,17 @@ export const Keyboard = () => (
           className: "react-flow__node-default",
         },
         {
+          id: "adsr",
+          type: "adsr",
+          data: {
+            label: "Envelope",
+            values: { attack: 0.2, release: 0.3, sustain: 0.5, attackCurve: 1 },
+          },
+          position: { x: spaceWidth * 2 - 80, y: 200 },
+          dragHandle: ".leva-c-hwBXYF",
+          className: "react-flow__node-default",
+        },
+        {
           id: "gain",
           type: "gain",
           data: { label: "Gain" },
@@ -674,9 +685,16 @@ export const Keyboard = () => (
           targetHandle: "frequency",
         },
         {
-          id: "keyboard-to-gain",
+          id: "keyboard-to-envelope",
           source: "keyboard",
-          sourceHandle: "gate",
+          sourceHandle: "trigger",
+          target: "adsr",
+          targetHandle: "trigger",
+        },
+        {
+          id: "envelope-to-gain",
+          source: "adsr",
+          sourceHandle: "gain",
           target: "gain",
           targetHandle: "gain",
         },
@@ -779,7 +797,8 @@ export const Clock = () => (
           sourceHandle: "trigger",
           target: "randomSequencer",
           targetHandle: "trigger",
-        },{
+        },
+        {
           id: "sequencer-to-oscillator",
           source: "randomSequencer",
           sourceHandle: "out",
