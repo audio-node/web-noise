@@ -26,16 +26,26 @@ export class MathProcessor extends AudioWorkletProcessor {
     ];
   }
 
-  constructor() {
+  setExpressionFn(expression: string) {
+    //@ts-ignore
+    this.expressionFn = new Function(
+      "{ A, B, C, INPUT }",
+      `return ${expression || 0}`
+    );
+  }
+
+  constructor(options: AudioWorkletNodeOptions) {
     super();
+
+    const expression = options.processorOptions?.expression;
+
+    if (expression) {
+      this.setExpressionFn(expression);
+    }
 
     this.port.onmessage = ({ data }) => {
       if (data.name === "expression") {
-        //@ts-ignore
-        this.expressionFn = new Function(
-          "{ A, B, C, INPUT }",
-          `return ${data.value || 0}`
-        );
+        this.setExpressionFn(data.value);
       }
     };
   }
