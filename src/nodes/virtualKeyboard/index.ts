@@ -52,7 +52,7 @@ const virtualKeyboard = (audioContext: AudioContext): VirtualKeyboard => {
       gate.offset.setValueAtTime(1, audioContext.currentTime);
 
       trigger.offset.setValueAtTime(1, audioContext.currentTime);
-      trigger.offset.setValueAtTime(0, audioContext.currentTime + 1 / 100000);
+      trigger.offset.setValueAtTime(0, audioContext.currentTime + 1 / 100);
     },
     stop(note) {
       if (note === currentNote) {
