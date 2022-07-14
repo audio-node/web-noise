@@ -14,6 +14,7 @@ import ReactFlow, {
 } from "react-flow-renderer";
 import { contextValue, ModuleContext } from "../ModuleContext";
 import { nodeTypes as baseAudioNodeTypes } from "../nodes";
+import { Node as DefaultNode } from "./Node";
 import AudioGraph from "./AudioGraph";
 import ContextMenu from "./ContextMenu";
 import Destination from "./Destination";
@@ -74,6 +75,7 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
       clock: Clock,
       stepSequencer: StepSequencer,
       adsr: ADSR,
+      midiToFrequency: DefaultNode,
     }),
     []
   );

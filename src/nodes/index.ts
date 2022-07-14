@@ -13,6 +13,7 @@ import { analyser, analyserWorklet } from './analyser';
 import stepSequencer from "./stepSequencer";
 import constantSource from './constantSource';
 import adsr from './adsr';
+import midiToFrequency from './midiToFrequency';
 
 export type { WhiteNoise } from "./whiteNoise";
 export type { ScriptNode } from "./scriptNode";
@@ -77,4 +78,5 @@ export const nodeTypes = {
   clock,
   stepSequencer,
   adsr,
+  midiToFrequency,
 };
