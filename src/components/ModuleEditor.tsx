@@ -27,6 +27,7 @@ import RandomSequencerWorklet from "./RandomSequencerWorklet";
 import ResumeContext from "./ResumeContext";
 import Reverb from "./Reverb";
 import ScriptNode from "./ScriptNode";
+import MathNode from "./MathNode";
 import Spectroscope from "./Spectroscope";
 import Oscilloscope from "./Oscilloscope";
 import Toolbar from "./Toolbar";
@@ -68,6 +69,7 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
       envelope: Envelope,
       randomSequencerWorklet: RandomSequencerWorklet,
       scriptNode: ScriptNode,
+      mathNode: MathNode,
       virtualKeyboard: VirtualKeyboard,
       clock: Clock,
       stepSequencer: StepSequencer,
