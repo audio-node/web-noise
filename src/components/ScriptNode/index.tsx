@@ -4,7 +4,7 @@ import { NodeProps } from "react-flow-renderer";
 import { useNode } from "../../ModuleContext";
 import { ScriptNode as TScriptNode } from "../../nodes";
 import { Node } from "../Node";
-import codeEditor from "./CodeEditorPlugin";
+import { CodeEditor } from "../../levaPlugins";
 
 const ScriptNode = ({ data, id }: NodeProps) => {
   const { node: scriptNode } = useNode<TScriptNode>(id);
@@ -20,7 +20,7 @@ const ScriptNode = ({ data, id }: NodeProps) => {
 
   const values = useControls(
     {
-      script: codeEditor(expressionParameter),
+      script: CodeEditor(expressionParameter),
       set: button((get) => setExpression(get("script"))),
     },
     { store }

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { NodeProps } from "react-flow-renderer";
 import { useNode } from "../ModuleContext";
 import { MathNode as TMathNode } from "../nodes";
-import codeEditor from "./ScriptNode/CodeEditorPlugin";
+import { CodeEditor } from "../levaPlugins";
 import { Node } from "./Node";
 
 const MathNode = ({ data, id }: NodeProps) => {
@@ -20,7 +20,7 @@ const MathNode = ({ data, id }: NodeProps) => {
 
   const values = useControls(
     {
-      expression: codeEditor(expressionParameter),
+      expression: CodeEditor(expressionParameter),
       set: button((get) => setExpression(get("expression"))),
     },
     { store }
