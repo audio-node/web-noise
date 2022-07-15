@@ -17,7 +17,7 @@ import midiToFrequency from './midiToFrequency';
 
 export type { WhiteNoise } from "./whiteNoise";
 export type { ScriptNode } from "./scriptNode";
-export type { MathNode } from "./math";
+export type { MathNode, MathNodeValues } from "./math";
 export type { Reverb } from "./reverb";
 export type { ConstantSource, ConstantSourceValues } from "./constantSource";
 export type { Oscillator, OscillatorValues } from "./oscillator";

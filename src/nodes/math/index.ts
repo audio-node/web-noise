@@ -2,8 +2,13 @@
 import sciptNodeWorklet from "worklet-loader!./worklet.ts"; // eslint-disable-line
 import { Node } from "../../ModuleContext";
 
+export interface MathNodeValues {
+  expression?: string;
+}
+
 export interface MathNode extends Node {
   mathNode: AudioWorkletNode;
+  setValues: (values?: MathNodeValues) => void;
 }
 
 const scriptNode = async (audioContext: AudioContext): Promise<MathNode> => {
@@ -30,10 +35,10 @@ const scriptNode = async (audioContext: AudioContext): Promise<MathNode> => {
         port: mathNode,
       },
     },
-    setExpression: (value: string) =>
-      mathNode.port.postMessage({
+    setValues: ({ expression } = {}) =>
+      expression && mathNode.port.postMessage({
         name: "expression",
-        value,
+        value: expression,
       }),
     mathNode,
   };

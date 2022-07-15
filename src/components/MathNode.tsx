@@ -1,29 +1,36 @@
 import { button, LevaPanel, useControls, useCreateStore } from "leva";
-import { useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import { NodeProps } from "react-flow-renderer";
-import { useNode } from "../ModuleContext";
-import { MathNode as TMathNode } from "../nodes";
+import useFlowNode from "../hooks/useFlowNode";
 import { CodeEditor } from "../levaPlugins";
+import { useNode } from "../ModuleContext";
+import { MathNode as TMathNode, MathNodeValues } from "../nodes";
 import { Node } from "./Node";
 
-const MathNode = ({ data, id }: NodeProps) => {
+interface MathNodeData {
+  label: string;
+  values?: MathNodeValues;
+}
+
+const MathNode: FC<NodeProps<MathNodeData>> = ({ data, id }) => {
   const { node } = useNode<TMathNode>(id);
+  const { updateNodeValues } = useFlowNode(id);
 
-  const expressionParameter = data.value || "";
-  const [expression, setExpression] = useState<string>(expressionParameter);
-
-  useEffect(() => {
-    node?.setExpression(expression);
-  }, [expression, node]);
+  const { expression = "//expression" } = data.values || {};
 
   const store = useCreateStore();
 
+  useEffect(() => {
+    node?.setValues({ expression });
+  }, [expression, node])
+
   const values = useControls(
     {
-      expression: CodeEditor(expressionParameter),
-      set: button((get) => setExpression(get("expression"))),
+      expression: CodeEditor(expression),
+      set: button((get) => updateNodeValues({ expression: get("expression") })),
     },
-    { store }
+    { store },
+    [node, updateNodeValues]
   );
 
   return (
