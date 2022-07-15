@@ -1,29 +1,36 @@
 import { button, LevaPanel, useControls, useCreateStore } from "leva";
-import { useEffect, useState } from "react";
+import { useEffect, useState, FC } from "react";
 import { NodeProps } from "react-flow-renderer";
 import { useNode } from "../../ModuleContext";
-import { ScriptNode as TScriptNode } from "../../nodes";
+import useFlowNode from "../../hooks/useFlowNode";
+import { ScriptNode as TScriptNode, ScriptNodeValues } from "../../nodes";
 import { Node } from "../Node";
 import { CodeEditor } from "../../levaPlugins";
 
-const ScriptNode = ({ data, id }: NodeProps) => {
-  const { node: scriptNode } = useNode<TScriptNode>(id);
+interface ScriptNodeData {
+  label: string;
+  values?: ScriptNodeValues;
+}
 
-  const expressionParameter = data.value || "";
-  const [expression, setExpression] = useState<string>(expressionParameter);
+const ScriptNode: FC<NodeProps<ScriptNodeData>> = ({ data, id }) => {
+  const { node } = useNode<TScriptNode>(id);
+  const { updateNodeValues } = useFlowNode(id);
 
-  useEffect(() => {
-    scriptNode?.setExpression(expression);
-  }, [expression, scriptNode]);
+  const { expression = "" } = data.values || {};
 
   const store = useCreateStore();
 
+  useEffect(() => {
+    node?.setValues({ expression });
+  }, [expression, node])
+
   const values = useControls(
     {
-      script: CodeEditor(expressionParameter),
-      set: button((get) => setExpression(get("script"))),
+      expression: CodeEditor(expression),
+      set: button((get) => updateNodeValues({ expression: get("expression") })),
     },
-    { store }
+    { store },
+    [node, updateNodeValues]
   );
 
   return (
