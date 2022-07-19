@@ -647,7 +647,7 @@ export const Keyboard = () => (
           type: "adsr",
           data: {
             label: "Envelope",
-            values: { attack: 0.2, release: 0.3, sustain: 0.5, attackCurve: 1 },
+            values: { attack: 0.2, decay: 0.2, release: 0.3, sustain: 0.2, attackCurve: 1 },
           },
           position: { x: spaceWidth * 2 - 80, y: 200 },
           dragHandle: ".leva-c-hwBXYF",
@@ -687,7 +687,7 @@ export const Keyboard = () => (
         {
           id: "keyboard-to-envelope",
           source: "keyboard",
-          sourceHandle: "trigger",
+          sourceHandle: "gate",
           target: "adsr",
           targetHandle: "trigger",
         },
