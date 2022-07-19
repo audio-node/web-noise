@@ -11,6 +11,7 @@ import clock, { Clock } from "./clock";
 import { analyser, analyserWorklet } from './analyser';
 import stepSequencer from "./stepSequencer";
 import constantSource from './constantSource';
+import adsr from './adsr';
 
 export type { WhiteNoise } from "./whiteNoise";
 export type { ScriptNode } from "./scriptNode";
@@ -18,6 +19,7 @@ export type { Reverb } from "./reverb";
 export type { ConstantSource, ConstantSourceValues } from "./constantSource";
 export type { Oscillator, OscillatorValues } from "./oscillator";
 export type { Gain, GainValues } from "./gain";
+export type { ADSR, ADSRValues } from "./adsr";
 export type { Filter, FilterValues } from "./filter";
 export type {
   RandomSequencer,
@@ -71,4 +73,5 @@ export const nodeTypes = {
   virtualKeyboard,
   clock,
   stepSequencer,
+  adsr,
 };

@@ -20,6 +20,9 @@ const virtualKeyboard = (audioContext: AudioContext): VirtualKeyboard => {
   const midi = audioContext.createConstantSource();
   midi.start();
 
+  const trigger = audioContext.createConstantSource();
+  trigger.start();
+
   let currentNote: number;
 
   return {
@@ -27,12 +30,15 @@ const virtualKeyboard = (audioContext: AudioContext): VirtualKeyboard => {
       gate: {
         port: gate,
       },
+      trigger: {
+        port: trigger,
+      },
       frequency: {
-        port: frequency
+        port: frequency,
       },
       midi: {
-        port: midi
-      }
+        port: midi,
+      },
     },
     midi,
     gate,
@@ -43,13 +49,14 @@ const virtualKeyboard = (audioContext: AudioContext): VirtualKeyboard => {
 
       frequency.offset.setValueAtTime(frequencyValue, audioContext.currentTime);
       midi.offset.setValueAtTime(note, audioContext.currentTime);
-      gate.offset.setValueAtTime(1, audioContext.currentTime)
+      gate.offset.setValueAtTime(1, audioContext.currentTime);
+
+      trigger.offset.setValueAtTime(1, audioContext.currentTime);
+      trigger.offset.setValueAtTime(0, audioContext.currentTime + 1 / 100000);
     },
     stop(note) {
       if (note === currentNote) {
-        frequency.offset.setValueAtTime(0, audioContext.currentTime);
         gate.offset.setValueAtTime(0, audioContext.currentTime);
-        midi.offset.setValueAtTime(0, audioContext.currentTime);
       }
     },
   };

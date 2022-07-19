@@ -36,6 +36,7 @@ import WhiteNoise from "./WhiteNoise";
 import Clock from "./Clock";
 import Wire from "./Wire";
 import StepSequencer from "./StepSequencer";
+import ADSR from "./ADSR";
 import "../styles/reactflow.ts";
 
 export interface Elements {
@@ -70,6 +71,7 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
       virtualKeyboard: VirtualKeyboard,
       clock: Clock,
       stepSequencer: StepSequencer,
+      adsr: ADSR,
     }),
     []
   );
