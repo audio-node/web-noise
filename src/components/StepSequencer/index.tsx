@@ -39,7 +39,7 @@ const StepSequencer = ({ id, data }: NodeProps) => {
 
   const levaStore = useCreateStore();
   const [stepsNumber] = useState(16);
-  const [sequenceData, setsequenceData] = useState<StepData[]>(
+  const [sequenceData, setSequenceData] = useState<StepData[]>(
     new Array(stepsNumber).fill({ value: DEFAULT_STEP_VALUE, active: false })
   );
   const [isMousePressed, setIsMousePressed] = useState(false);
@@ -50,22 +50,63 @@ const StepSequencer = ({ id, data }: NodeProps) => {
   const [selectedStepValue, setSelectedStepValue] =
     useState<number | null>(null);
 
+  const clearSeq = useCallback(() => {
+    if (!sequencer) {
+      return;
+    }
+    const newSeq = sequenceData.map((step) => {
+      return {
+        ...step,
+        value: 0,
+        active: false,
+      };
+    });
+
+    setSequenceData(newSeq);
+  }, [sequencer, sequenceData]);
+
+  const generateRandomSeq = useCallback(() => {
+    if (!sequencer) {
+      return;
+    }
+    const newSeq = sequenceData.map((step) => {
+      return {
+        ...step,
+        active: Math.random() < 0.5,
+        value: Math.round(Math.random() * 127),
+      };
+    });
+
+    setSequenceData(newSeq);
+  }, [sequenceData, sequencer]);
+
   const controls = useControls(
     "settings",
     {
-      clear: button(() => clearSeq()),
-      "random seq": button(() => generateRandomSeq()),
+      clear: button(clearSeq),
+      "random seq": button(generateRandomSeq),
       mode: {
         options: sequenceModesOptions,
         value: DEFAULT_SEQUENCE_MODE,
       },
     },
     { collapsed: true, color: LEVA_COLOR_ACCENT2_BLUE },
-    { store: levaStore }
+    { store: levaStore },
+    [generateRandomSeq, clearSeq]
   );
+
+  useEffect(() => {
+    if (!sequencer) {
+      return;
+    }
+    sequencer.setValues({ sequenceData });
+  }, [sequenceData]);
 
   const updateStep = useCallback(
     (index: number, value: Record<string, boolean | number>): void => {
+      if (!sequencer) {
+        return;
+      }
       const newSeq = sequenceData.map((step, stepIdx) => {
         if (stepIdx === index) {
           return {
@@ -76,9 +117,9 @@ const StepSequencer = ({ id, data }: NodeProps) => {
         return step;
       });
 
-      setsequenceData(newSeq);
+      setSequenceData(newSeq);
     },
-    [sequenceData]
+    [sequenceData, sequencer]
   );
 
   const onMouseMove = useCallback(
@@ -105,29 +146,6 @@ const StepSequencer = ({ id, data }: NodeProps) => {
     return Midi.midiToNoteName(value);
   };
 
-  function clearSeq() {
-    const newSeq = sequenceData.map((step) => {
-      return {
-        ...step,
-        value: 0,
-        active: false,
-      };
-    });
-
-    setsequenceData(newSeq);
-  }
-
-  function generateRandomSeq() {
-    const newSeq = sequenceData.map((step) => {
-      return {
-        ...step,
-        active: Math.random() < 0.5,
-        value: Math.round(Math.random() * 127),
-      };
-    });
-
-    setsequenceData(newSeq);
-  }
 
   useEffect(() => {
     window.addEventListener("mousedown", onMouseDown);
@@ -139,32 +157,11 @@ const StepSequencer = ({ id, data }: NodeProps) => {
     };
   }, []);
 
-  useEffect(() => {
-    if (sequencer) {
-      let counter = sequenceIndex;
-      sequencer.onTick(() => {
-        if (controls.mode === "forward") {
-          counter++;
-        }
-        if (controls.mode === "random") {
-          counter = Math.round(Math.random() * stepsNumber);
-        }
-        if (controls.mode === "reverse") {
-          if (counter <= 0) {
-            counter = stepsNumber;
-          }
-          counter--;
-        }
-        setSequenceIndex(Math.abs(counter) % stepsNumber);
-      });
-    }
-  }, [sequencer, controls.mode, stepsNumber]);
-
-  useEffect(() => {
-    if (sequencer && sequenceData[sequenceIndex].active) {
-      sequencer.setValues({ midi: sequenceData[sequenceIndex].value });
-    }
-  }, [sequencer, sequenceData, sequenceIndex]);
+  // useEffect(() => {
+  //   if (sequencer && sequenceData[sequenceIndex].active) {
+  //     sequencer.setValues({ midi: sequenceData[sequenceIndex].value });
+  //   }
+  // }, [sequencer, sequenceData, sequenceIndex]);
 
   useEffect(() => {
     if (isMousePressed) {
@@ -176,11 +173,36 @@ const StepSequencer = ({ id, data }: NodeProps) => {
   }, [mouseDownXY, isMousePressed, onMouseMove]);
 
   useEffect(() => {
+    if (!sequencer) {
+      return;
+    }
+    // let counter = sequenceIndex;
+    sequencer.onTick(({ sequenceIndex: sequenceIndexValue }) => {
+      setSequenceIndex(sequenceIndexValue);
+      // if (controls.mode === "forward") {
+      //   counter++;
+      // }
+      // if (controls.mode === "random") {
+      //   counter = Math.round(Math.random() * stepsNumber);
+      // }
+      // if (controls.mode === "reverse") {
+      //   if (counter <= 0) {
+      //     counter = stepsNumber;
+      //   }
+      //   counter--;
+      // }
+      // setSequenceIndex(Math.abs(counter) % stepsNumber);
+    });
+  }, [sequencer, controls.mode, stepsNumber]);
+
+  useEffect(() => {
     if (selectedStep !== null && selectedStepValue !== null) {
       let value = selectedStepValue + delta;
 
       if (value >= 0 && value <= 127) {
-        updateStep(selectedStep, { value });
+      console.log(delta, selectedStep, selectedStepValue)
+        // TODO: find out why it gets triggered on click 
+        // updateStep(selectedStep, { value });
       }
     }
   }, [delta, selectedStep, selectedStepValue, updateStep]);
