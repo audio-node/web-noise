@@ -10,31 +10,33 @@
 
 import { Midi } from "@tonaljs/tonal";
 import { button, LevaPanel, useControls, useCreateStore } from "leva";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, FC } from "react";
 import { NodeProps } from "react-flow-renderer";
 import { useNode } from "../../ModuleContext";
-import { StepSequencer as NodeStepSequencer } from "../../nodes/stepSequencer";
+import {
+  StepSequencer as NodeStepSequencer,
+  StepSequencerValues,
+  StepData,
+  SEQUENCE_MODES,
+  DEFAULT_SEQUENCE_MODE,
+  DEFAULT_STEP_VALUE,
+} from "../../nodes/stepSequencer";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../../styles/consts";
 import { Node } from "../Node";
 import { DebugBlock, Grid, Step } from "./styles";
 
-interface StepData {
-  active: boolean;
-  value: number;
-}
 
-type SequenceMode = "forward" | "reverse" | "random";
-
-const sequenceModesOptions: Record<SequenceMode, SequenceMode> = {
-  forward: "forward",
-  reverse: "reverse",
-  random: "random",
+const sequenceModesOptions: Record<string, SEQUENCE_MODES> = {
+  forward: SEQUENCE_MODES.forward,
+  reverse: SEQUENCE_MODES.reverse,
+  random: SEQUENCE_MODES.random,
 };
 
-const DEFAULT_STEP_VALUE: number = 36;
-const DEFAULT_SEQUENCE_MODE: SequenceMode = "forward";
+const MidiToNote: FC<{ value: number }> = ({ value }) => {
+  return <>{Midi.midiToNoteName(value)}</>;
+};
 
-const StepSequencer = ({ id, data }: NodeProps) => {
+const StepSequencer: FC<NodeProps<StepSequencerValues>> = ({ id, data }) => {
   const { node: sequencer } = useNode<NodeStepSequencer>(id);
 
   const levaStore = useCreateStore();
@@ -99,8 +101,11 @@ const StepSequencer = ({ id, data }: NodeProps) => {
     if (!sequencer) {
       return;
     }
-    sequencer.setValues({ sequenceData });
-  }, [sequenceData]);
+    sequencer.setValues({
+      sequenceData,
+      mode: controls.mode,
+    });
+  }, [sequenceData, controls]);
 
   const updateStep = useCallback(
     (index: number, value: Record<string, boolean | number>): void => {
@@ -130,22 +135,19 @@ const StepSequencer = ({ id, data }: NodeProps) => {
     [mouseDownXY.y]
   );
 
-  const onMouseDown = (e: MouseEvent): void => {
-    setIsMousePressed(true);
-    setMouseDownXY({ x: e.clientX, y: e.clientY });
-  };
+  const onMouseDown = useCallback(
+    (e: MouseEvent): void => {
+      setIsMousePressed(true);
+      setMouseDownXY({ x: e.clientX, y: e.clientY });
+    },
+    [setIsMousePressed, setMouseDownXY]
+  );
 
-  const onMouseUp = (): void => {
+  const onMouseUp = useCallback((): void => {
     setIsMousePressed(false);
     setSelectedStep(null);
     setDelta(0);
-  };
-
-  // TODO: convert to component
-  const formatStepValue = (value: number) => {
-    return Midi.midiToNoteName(value);
-  };
-
+  }, [setIsMousePressed, setSelectedStep, setDelta]);
 
   useEffect(() => {
     window.addEventListener("mousedown", onMouseDown);
@@ -157,12 +159,6 @@ const StepSequencer = ({ id, data }: NodeProps) => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   if (sequencer && sequenceData[sequenceIndex].active) {
-  //     sequencer.setValues({ midi: sequenceData[sequenceIndex].value });
-  //   }
-  // }, [sequencer, sequenceData, sequenceIndex]);
-
   useEffect(() => {
     if (isMousePressed) {
       window.addEventListener("mousemove", onMouseMove);
@@ -170,42 +166,26 @@ const StepSequencer = ({ id, data }: NodeProps) => {
     return () => {
       window.removeEventListener("mousemove", onMouseMove);
     };
-  }, [mouseDownXY, isMousePressed, onMouseMove]);
+  }, [isMousePressed, onMouseMove]);
 
   useEffect(() => {
     if (!sequencer) {
       return;
     }
-    // let counter = sequenceIndex;
     sequencer.onTick(({ sequenceIndex: sequenceIndexValue }) => {
       setSequenceIndex(sequenceIndexValue);
-      // if (controls.mode === "forward") {
-      //   counter++;
-      // }
-      // if (controls.mode === "random") {
-      //   counter = Math.round(Math.random() * stepsNumber);
-      // }
-      // if (controls.mode === "reverse") {
-      //   if (counter <= 0) {
-      //     counter = stepsNumber;
-      //   }
-      //   counter--;
-      // }
-      // setSequenceIndex(Math.abs(counter) % stepsNumber);
     });
-  }, [sequencer, controls.mode, stepsNumber]);
+  }, [sequencer, controls.mode]);
 
   useEffect(() => {
     if (selectedStep !== null && selectedStepValue !== null) {
       let value = selectedStepValue + delta;
 
       if (value >= 0 && value <= 127) {
-      console.log(delta, selectedStep, selectedStepValue)
-        // TODO: find out why it gets triggered on click 
-        // updateStep(selectedStep, { value });
+        updateStep(selectedStep, { value });
       }
     }
-  }, [delta, selectedStep, selectedStepValue, updateStep]);
+  }, [delta, selectedStep, selectedStepValue]);
 
   return (
     <Node id={id}>
@@ -224,7 +204,7 @@ const StepSequencer = ({ id, data }: NodeProps) => {
               isActive={sequenceData[index].active}
               isSequenceIndex={index === sequenceIndex}
               key={`step-${index}`}
-              onClick={() =>
+              onMouseUp={() =>
                 updateStep(index, { active: !sequenceData[index].active })
               }
               onMouseDown={() => {
@@ -232,7 +212,7 @@ const StepSequencer = ({ id, data }: NodeProps) => {
                 setSelectedStepValue(sequenceData[index].value);
               }}
             >
-              {formatStepValue(step.value)}
+              <MidiToNote value={step.value} />
             </Step>
           );
         })}

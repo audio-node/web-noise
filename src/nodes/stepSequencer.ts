@@ -5,19 +5,18 @@ import clockCounterProcessor from "worklet-loader!./clockCounter/worklet.ts"; //
 
 type TickHandler = (args: Record<string, any | never>) => void;
 
-interface StepData {
+export interface StepData {
   active: boolean;
   value: number;
 }
 
-enum SEQUENCE_MODES {
+export enum SEQUENCE_MODES {
   forward,
   reverse,
   random,
 }
 
-interface StepSequencerValues {
-  midi?: number;
+export interface StepSequencerValues {
   sequenceData?: Array<StepData>;
   mode?: SEQUENCE_MODES;
 }
@@ -30,8 +29,8 @@ export interface StepSequencer extends Node {
   onTick: (fn: TickHandler) => void;
 }
 
-const DEFAULT_STEP_VALUE: number = 36;
-const DEFAULT_SEQUENCE_MODE: SEQUENCE_MODES = SEQUENCE_MODES.forward;
+export const DEFAULT_STEP_VALUE: number = 36;
+export const DEFAULT_SEQUENCE_MODE: SEQUENCE_MODES = SEQUENCE_MODES.forward;
 
 const stepSequencer = async (
   audioContext: AudioContext
@@ -98,14 +97,9 @@ const stepSequencer = async (
       ctrlSource.stop();
     },
     setValues: ({
-      midi,
       sequenceData: sequenceDataValue,
       mode: modeValue,
     } = {}) => {
-      if (typeof midi !== "undefined") {
-        freqSource.offset.value = Midi.midiToFreq(midi);
-        ctrlSource.offset.value = midi;
-      }
       if (typeof sequenceDataValue !== "undefined") {
         sequenceData = sequenceDataValue;
       }

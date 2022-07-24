@@ -24,6 +24,7 @@ export type { Oscillator, OscillatorValues } from "./oscillator";
 export type { Gain, GainValues } from "./gain";
 export type { ADSR, ADSRValues } from "./adsr";
 export type { Filter, FilterValues } from "./filter";
+export type { StepSequencer, StepSequencerValues } from "./stepSequencer";
 export type {
   RandomSequencer,
   RandomSequencerWorklet,
