@@ -117,7 +117,9 @@ const StepSequencer: FC<NodeProps<StepSequencerValues>> = ({ id, data }) => {
       <Sequencer
         sequence={sequenceData}
         activeStep={sequenceIndex}
-        onChange={(data) => setSequenceData(data)}
+        onChange={(data) => {
+          setSequenceData(data);
+        }}
       />
     </Node>
   );
