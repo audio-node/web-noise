@@ -26,6 +26,7 @@ export interface StepSequencer extends Node {
   freqSource: ConstantSourceNode;
   ctrlSource: ConstantSourceNode;
   setValues: (values: StepSequencerValues) => void;
+  resetCounter: () => void;
   onTick: (fn: TickHandler) => void;
 }
 
@@ -40,12 +41,12 @@ const stepSequencer = async (
 
   const freqSource = audioContext.createConstantSource();
   const ctrlSource = audioContext.createConstantSource();
-  
+
   const trigger = audioContext.createConstantSource();
-  trigger.offset.value = 0
+  trigger.offset.value = 0;
 
   const gate = audioContext.createConstantSource();
-  gate.offset.value = 0
+  gate.offset.value = 0;
 
   let mode = SEQUENCE_MODES.forward;
   let stepsNumber = 16;
@@ -126,6 +127,10 @@ const stepSequencer = async (
       }
     },
     onTick: (fn) => (tickHandler = fn),
+    resetCounter: () => {
+      counter = 0;
+      tickHandler({ sequenceIndex: counter });
+    },
     freqSource,
     ctrlSource,
   };

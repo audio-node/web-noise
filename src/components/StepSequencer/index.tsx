@@ -80,6 +80,7 @@ const StepSequencer: FC<NodeProps<StepSequencerValues>> = ({ id, data }) => {
     {
       clear: button(clearSeq),
       "random seq": button(generateRandomSeq),
+      "reset counter": button(() => sequencer?.resetCounter()),
       mode: {
         options: sequenceModesOptions,
         value: DEFAULT_SEQUENCE_MODE,
@@ -88,7 +89,7 @@ const StepSequencer: FC<NodeProps<StepSequencerValues>> = ({ id, data }) => {
     },
     { collapsed: true, color: LEVA_COLOR_ACCENT2_BLUE },
     { store: levaStore },
-    [generateRandomSeq, clearSeq]
+    [generateRandomSeq, clearSeq, sequencer]
   );
 
   useEffect(() => {
@@ -121,7 +122,7 @@ const StepSequencer: FC<NodeProps<StepSequencerValues>> = ({ id, data }) => {
         oneLineLabels
       />
       <Sequencer
-        options={Array.from({length: 128}, (_, i) => i)}
+        options={Array.from({ length: 128 }, (_, i) => i)}
         sequence={sequenceData}
         activeStep={sequenceIndex}
         format={(value) =>
