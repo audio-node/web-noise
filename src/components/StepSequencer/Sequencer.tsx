@@ -10,7 +10,7 @@ type SequenceData = Array<{
 export type FormatNote<T = unknown, K = unknown> = (value: T) => K;
 
 export interface SequencerProps {
-  options: Array<unknown>;
+  options?: Array<unknown>;
   sequence: SequenceData;
   activeStep?: number | null;
   onChange?: (sequence: SequenceData) => void;
@@ -27,7 +27,7 @@ const Sequencer: FC<SequencerProps> = ({
   const [selectedStep, setSelectedStep] = useState<number | null>(null);
 
   const selectedStepOption = useMemo(() => {
-    if (!selectedStep) {
+    if (!selectedStep || !options || options.length === 0) {
       return null;
     }
     const { value } = sequence[selectedStep];
@@ -52,7 +52,7 @@ const Sequencer: FC<SequencerProps> = ({
   const stepRef = useRef<HTMLDivElement>(null);
 
   const updateStepNote = useThrottledCallback((event: WheelEvent) => {
-    if (selectedStep === null || selectedStepOption === null) {
+    if (selectedStep === null || selectedStepOption === null || !options || options.length === 0) {
       return;
     }
     let nextIndex = selectedStepOption + Math.round(event.deltaY / 2);
