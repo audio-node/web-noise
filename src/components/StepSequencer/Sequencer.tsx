@@ -27,7 +27,7 @@ const Sequencer: FC<SequencerProps> = ({
   const [selectedStep, setSelectedStep] = useState<number | null>(null);
 
   const selectedStepOption = useMemo(() => {
-    if (!selectedStep || !options || options.length === 0) {
+    if (selectedStep === null || !options || options.length === 0) {
       return null;
     }
     const { value } = sequence[selectedStep];

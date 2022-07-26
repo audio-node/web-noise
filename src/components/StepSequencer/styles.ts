@@ -27,6 +27,7 @@ const inSequence = css`
 `;
 
 export const Step = styled.div<StepProps>`
+  font-family: var(--leva-fonts-mono);
   display: flex;
   justify-content: center;
   font-size: 0.8em;
@@ -35,6 +36,8 @@ export const Step = styled.div<StepProps>`
   border: 1px solid transparent;
   min-width: 25px;
   min-height: 25px;
+  width: 2rem;
+  height: 2rem;
   align-items: center;
   opacity: ${({ isActive }) => (isActive ? 1 : 0.3)};
 
