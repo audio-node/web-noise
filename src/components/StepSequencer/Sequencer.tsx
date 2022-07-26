@@ -1,22 +1,26 @@
 import { Midi } from "@tonaljs/tonal";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
-import { useThrottledCallback } from 'use-debounce';
+import { useThrottledCallback } from "use-debounce";
 import { StepData } from "../../nodes/stepSequencer";
 import { DebugBlock, Grid, Step } from "./styles";
 
 type SequenceData = Array<StepData>;
 
-interface SequencerProps {
+export type FormatNote<T = unknown, K = unknown> = (value: T) => K;
+
+export interface SequencerProps {
   sequence: SequenceData;
   activeStep?: number | null;
   onChange?: (sequence: SequenceData) => void;
+  format?: FormatNote;
 }
 
-const MidiToNote: FC<{ value: number }> = ({ value }) => {
-  return <>{Midi.midiToNoteName(value)}</>;
-};
-
-const Sequencer: FC<SequencerProps> = ({ sequence, activeStep, onChange }) => {
+const Sequencer: FC<SequencerProps> = ({
+  sequence,
+  activeStep,
+  onChange,
+  format,
+}) => {
   const [selectedStep, setSelectedStep] = useState<number | null>(null);
 
   const updateStep = (
@@ -39,14 +43,14 @@ const Sequencer: FC<SequencerProps> = ({ sequence, activeStep, onChange }) => {
   const stepRef = useRef<HTMLDivElement>(null);
 
   const updateStepNote = useThrottledCallback((event: WheelEvent) => {
-      if(selectedStep === null){
-        return;
-      }
-      let value = sequence[selectedStep].value + event.deltaY;
+    if (selectedStep === null) {
+      return;
+    }
+    let value = sequence[selectedStep].value + event.deltaY;
 
-      if (value >= 0 && value <= 127) {
-        updateStep(selectedStep, { value });
-      }
+    if (value >= 0 && value <= 127) {
+      updateStep(selectedStep, { value });
+    }
   }, 50);
 
   const mouseWheelHandler = useCallback(
@@ -71,9 +75,7 @@ const Sequencer: FC<SequencerProps> = ({ sequence, activeStep, onChange }) => {
 
   return (
     <>
-      <Grid
-        ref={stepRef}
-      >
+      <Grid ref={stepRef}>
         {sequence.map((step, index) => {
           return (
             <Step
@@ -87,7 +89,7 @@ const Sequencer: FC<SequencerProps> = ({ sequence, activeStep, onChange }) => {
                 setSelectedStep(index);
               }}
             >
-              <MidiToNote value={step.value} />
+              <>{format ? format(step.value) : step.value}</>
             </Step>
           );
         })}

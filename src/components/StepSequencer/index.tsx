@@ -8,6 +8,7 @@
  *  - implement additional sequence mode: e.g. 'vertical', 'snake', etc..
  */
 
+import { Midi } from "@tonaljs/tonal";
 import { button, LevaPanel, useControls, useCreateStore } from "leva";
 import { FC, useCallback, useEffect, useState } from "react";
 import { NodeProps } from "react-flow-renderer";
@@ -22,12 +23,16 @@ import {
 } from "../../nodes/stepSequencer";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../../styles/consts";
 import { Node } from "../Node";
-import Sequencer from "./Sequencer";
+import Sequencer, { SequencerProps, FormatNote } from "./Sequencer";
 
 const sequenceModesOptions: Record<string, SEQUENCE_MODES> = {
   forward: SEQUENCE_MODES.forward,
   reverse: SEQUENCE_MODES.reverse,
   random: SEQUENCE_MODES.random,
+};
+
+const midiToNote: FormatNote<number, string> = (value) => {
+  return Midi.midiToNoteName(value);
 };
 
 const StepSequencer: FC<NodeProps<StepSequencerValues>> = ({ id, data }) => {
@@ -79,6 +84,7 @@ const StepSequencer: FC<NodeProps<StepSequencerValues>> = ({ id, data }) => {
         options: sequenceModesOptions,
         value: DEFAULT_SEQUENCE_MODE,
       },
+      showMidiNumbers: false,
     },
     { collapsed: true, color: LEVA_COLOR_ACCENT2_BLUE },
     { store: levaStore },
@@ -117,6 +123,9 @@ const StepSequencer: FC<NodeProps<StepSequencerValues>> = ({ id, data }) => {
       <Sequencer
         sequence={sequenceData}
         activeStep={sequenceIndex}
+        format={(value) =>
+          controls.showMidiNumbers ? value : midiToNote(value as number)
+        }
         onChange={(data) => {
           setSequenceData(data);
         }}
