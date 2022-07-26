@@ -121,13 +121,14 @@ const StepSequencer: FC<NodeProps<StepSequencerValues>> = ({ id, data }) => {
         oneLineLabels
       />
       <Sequencer
+        options={Array.from({length: 128}, (_, i) => i)}
         sequence={sequenceData}
         activeStep={sequenceIndex}
         format={(value) =>
           controls.showMidiNumbers ? value : midiToNote(value as number)
         }
         onChange={(data) => {
-          setSequenceData(data);
+          setSequenceData(data as Array<StepData>);
         }}
       />
     </Node>

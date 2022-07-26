@@ -1,14 +1,16 @@
-import { Midi } from "@tonaljs/tonal";
-import { FC, useCallback, useEffect, useRef, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useThrottledCallback } from "use-debounce";
-import { StepData } from "../../nodes/stepSequencer";
 import { DebugBlock, Grid, Step } from "./styles";
 
-type SequenceData = Array<StepData>;
+type SequenceData = Array<{
+  active: boolean;
+  value?: unknown;
+}>;
 
 export type FormatNote<T = unknown, K = unknown> = (value: T) => K;
 
 export interface SequencerProps {
+  options: Array<unknown>;
   sequence: SequenceData;
   activeStep?: number | null;
   onChange?: (sequence: SequenceData) => void;
@@ -16,6 +18,7 @@ export interface SequencerProps {
 }
 
 const Sequencer: FC<SequencerProps> = ({
+  options,
   sequence,
   activeStep,
   onChange,
@@ -23,10 +26,16 @@ const Sequencer: FC<SequencerProps> = ({
 }) => {
   const [selectedStep, setSelectedStep] = useState<number | null>(null);
 
-  const updateStep = (
-    index: number,
-    value: Record<string, boolean | number>
-  ): void => {
+  const selectedStepOption = useMemo(() => {
+    if (!selectedStep) {
+      return null;
+    }
+    const { value } = sequence[selectedStep];
+    const index = options.indexOf(value);
+    return index !== -1 ? index : null;
+  }, [selectedStep, sequence, options]);
+
+  const updateStep = (index: number, value: Record<string, unknown>): void => {
     const newSeq = sequence.map((step, stepIdx) => {
       if (stepIdx === index) {
         return {
@@ -43,12 +52,13 @@ const Sequencer: FC<SequencerProps> = ({
   const stepRef = useRef<HTMLDivElement>(null);
 
   const updateStepNote = useThrottledCallback((event: WheelEvent) => {
-    if (selectedStep === null) {
+    if (selectedStep === null || selectedStepOption === null) {
       return;
     }
-    let value = sequence[selectedStep].value + Math.round(event.deltaY / 2);
+    let nextIndex = selectedStepOption + Math.round(event.deltaY / 2);
 
-    if (value >= 0 && value <= 127) {
+    if (nextIndex >= 0 && nextIndex <= 127) {
+      const value = options[nextIndex];
       updateStep(selectedStep, { value });
     }
   }, 50);
