@@ -1,6 +1,6 @@
 import { Midi } from "@tonaljs/tonal";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
-import { useDebouncedCallback } from 'use-debounce';
+import { useThrottledCallback } from 'use-debounce';
 import { StepData } from "../../nodes/stepSequencer";
 import { DebugBlock, Grid, Step } from "./styles";
 
@@ -38,7 +38,7 @@ const Sequencer: FC<SequencerProps> = ({ sequence, activeStep, onChange }) => {
 
   const stepRef = useRef<HTMLDivElement>(null);
 
-  const updateStepNote = useDebouncedCallback((event: WheelEvent) => {
+  const updateStepNote = useThrottledCallback((event: WheelEvent) => {
       if(selectedStep === null){
         return;
       }
@@ -47,7 +47,7 @@ const Sequencer: FC<SequencerProps> = ({ sequence, activeStep, onChange }) => {
       if (value >= 0 && value <= 127) {
         updateStep(selectedStep, { value });
       }
-  }, 10);
+  }, 50);
 
   const mouseWheelHandler = useCallback(
     (event: WheelEvent) => {
