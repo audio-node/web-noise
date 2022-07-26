@@ -40,6 +40,12 @@ const stepSequencer = async (
 
   const freqSource = audioContext.createConstantSource();
   const ctrlSource = audioContext.createConstantSource();
+  
+  const trigger = audioContext.createConstantSource();
+  trigger.offset.value = 0
+
+  const gate = audioContext.createConstantSource();
+  gate.offset.value = 0
 
   let mode = SEQUENCE_MODES.forward;
   let stepsNumber = 16;
@@ -70,6 +76,11 @@ const stepSequencer = async (
         const midi = sequenceData[sequenceIndex].value;
         freqSource.offset.value = Midi.midiToFreq(midi);
         ctrlSource.offset.value = midi;
+        gate.offset.setValueAtTime(1, audioContext.currentTime);
+        trigger.offset.setValueAtTime(1, audioContext.currentTime);
+        trigger.offset.setValueAtTime(0, audioContext.currentTime + 1 / 100000);
+      } else {
+        gate.offset.value = 0;
       }
       tickHandler({ sequenceIndex });
     }
@@ -77,6 +88,8 @@ const stepSequencer = async (
 
   freqSource.start();
   ctrlSource.start();
+  trigger.start();
+  gate.start();
 
   return {
     inputs: {
@@ -91,15 +104,20 @@ const stepSequencer = async (
       ctrl: {
         port: ctrlSource,
       },
+      gate: {
+        port: gate,
+      },
+      trigger: {
+        port: trigger,
+      },
     },
     destroy: () => {
       freqSource.stop();
       ctrlSource.stop();
+      trigger.stop();
+      gate.stop();
     },
-    setValues: ({
-      sequenceData: sequenceDataValue,
-      mode: modeValue,
-    } = {}) => {
+    setValues: ({ sequenceData: sequenceDataValue, mode: modeValue } = {}) => {
       if (typeof sequenceDataValue !== "undefined") {
         sequenceData = sequenceDataValue;
       }

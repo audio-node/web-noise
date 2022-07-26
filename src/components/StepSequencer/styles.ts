@@ -7,6 +7,7 @@ export const Grid = styled.div`
 `;
 
 export const DebugBlock = styled.div`
+  color: white;
   background: #181c20;
   font-size: 6px;
   text-align: left;
@@ -23,10 +24,10 @@ interface StepProps {
 
 const inSequence = css`
   background: #3684f3;
-  color: white;
 `;
 
 export const Step = styled.div<StepProps>`
+  color: white;
   font-family: var(--leva-fonts-mono);
   display: flex;
   justify-content: center;
