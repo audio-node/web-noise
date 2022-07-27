@@ -1,9 +1,10 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 
-export const Grid = styled.div`
+export const Grid = styled.div<{ columns?: number }>`
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: ${({ columns = 4 }) =>
+    Array.from({ length: columns }, (_, i) => `1fr`).join(' ')};
 `;
 
 export const DebugBlock = styled.div`

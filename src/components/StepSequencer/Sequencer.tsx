@@ -15,6 +15,7 @@ export interface SequencerProps {
   activeStep?: number | null;
   onChange?: (sequence: SequenceData) => void;
   format?: FormatNote;
+  columns?: number;
 }
 
 const Sequencer: FC<SequencerProps> = ({
@@ -23,6 +24,7 @@ const Sequencer: FC<SequencerProps> = ({
   activeStep,
   onChange,
   format,
+  columns,
 }) => {
   const [selectedStep, setSelectedStep] = useState<number | null>(null);
 
@@ -85,7 +87,7 @@ const Sequencer: FC<SequencerProps> = ({
 
   return (
     <>
-      <Grid ref={stepRef}>
+      <Grid ref={stepRef} columns={columns}>
         {sequence.map((step, index) => {
           return (
             <Step
