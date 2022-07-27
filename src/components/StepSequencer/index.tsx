@@ -2,9 +2,6 @@
  * Step Sequencer
  *
  * TODO:
- *  - implement gate output
- *  - implement clock input
- *  - toggle to display midi/values
  *  - implement additional sequence mode: e.g. 'vertical', 'snake', etc..
  */
 
@@ -23,7 +20,7 @@ import {
 } from "../../nodes/stepSequencer";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../../styles/consts";
 import { Node } from "../Node";
-import Sequencer, { SequencerProps, FormatNote } from "./Sequencer";
+import Sequencer, { FormatNote } from "./Sequencer";
 
 const sequenceModesOptions: Record<string, SEQUENCE_MODES> = {
   forward: SEQUENCE_MODES.forward,
@@ -38,7 +35,7 @@ const midiToNote: FormatNote<number, string> = (value) => {
 const StepSequencer: FC<NodeProps<StepSequencerValues>> = ({ id, data }) => {
   const { node: sequencer } = useNode<NodeStepSequencer>(id);
 
-  const levaStore = useCreateStore();
+  const store = useCreateStore();
   const [stepsNumber] = useState(16);
   const [sequenceData, setSequenceData] = useState<StepData[]>(
     new Array(stepsNumber).fill({ value: DEFAULT_STEP_VALUE, active: false })
@@ -88,7 +85,7 @@ const StepSequencer: FC<NodeProps<StepSequencerValues>> = ({ id, data }) => {
       showMidiNumbers: false,
     },
     { collapsed: true, color: LEVA_COLOR_ACCENT2_BLUE },
-    { store: levaStore },
+    { store },
     [generateRandomSeq, clearSeq, sequencer]
   );
 
@@ -114,7 +111,7 @@ const StepSequencer: FC<NodeProps<StepSequencerValues>> = ({ id, data }) => {
   return (
     <Node id={id}>
       <LevaPanel
-        store={levaStore}
+        store={store}
         fill
         flat
         hideCopyButton

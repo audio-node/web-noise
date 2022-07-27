@@ -1,6 +1,13 @@
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useThrottledCallback } from "use-debounce";
-import { DebugBlock, Grid, Step } from "./styles";
+import {
+  DebugBlock,
+  Grid,
+  Step,
+  StepWrapper,
+  TriangleUp,
+  TriangleDown,
+} from "./styles";
 
 type SequenceData = Array<{
   active: boolean;
@@ -53,8 +60,13 @@ const Sequencer: FC<SequencerProps> = ({
 
   const stepRef = useRef<HTMLDivElement>(null);
 
-  const updateStepNote = useThrottledCallback((event: WheelEvent) => {
-    if (selectedStep === null || selectedStepOption === null || !options || options.length === 0) {
+  const updateStepNote = useThrottledCallback((event: Pick<WheelEvent, 'deltaY'>) => {
+    if (
+      selectedStep === null ||
+      selectedStepOption === null ||
+      !options ||
+      options.length === 0
+    ) {
       return;
     }
     let nextIndex = selectedStepOption + Math.round(event.deltaY / 2);
@@ -90,19 +102,28 @@ const Sequencer: FC<SequencerProps> = ({
       <Grid ref={stepRef} columns={columns}>
         {sequence.map((step, index) => {
           return (
-            <Step
-              isActive={sequence[index].active}
-              isSequenceIndex={index === activeStep}
-              key={`step-${index}`}
-              onClick={() =>
-                updateStep(index, { active: !sequence[index].active })
-              }
-              onMouseOver={() => {
-                setSelectedStep(index);
-              }}
-            >
-              <>{format ? format(step.value) : step.value}</>
-            </Step>
+            <StepWrapper key={`step-${index}`}>
+              <Step
+                isActive={sequence[index].active}
+                isSequenceIndex={index === activeStep}
+                onClick={() =>
+                  updateStep(index, { active: !sequence[index].active })
+                }
+                onMouseOver={() => {
+                  setSelectedStep(index);
+                }}
+              >
+                <>{format ? format(step.value) : step.value}</>
+              </Step>
+              <TriangleUp
+                onClick={() => updateStepNote({ deltaY: 1 })}
+                className={"show-on-parent-hover"}
+              />
+              <TriangleDown
+                onClick={() => updateStepNote({ deltaY: -2 })}
+                className={"show-on-parent-hover"}
+              />
+            </StepWrapper>
           );
         })}
       </Grid>
