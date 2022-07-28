@@ -71,7 +71,7 @@ const Sequencer: FC<SequencerProps> = ({
     }
     let nextIndex = selectedStepOption + Math.round(event.deltaY / 2);
 
-    if (nextIndex >= 0 && nextIndex <= 127) {
+    if (nextIndex >= 0 && nextIndex <= (options.length - 1)) {
       const value = options[nextIndex];
       updateStep(selectedStep, { value });
     }
