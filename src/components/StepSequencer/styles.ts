@@ -22,10 +22,15 @@ export const TriangleDown = styled(VscTriangleDown)`
   bottom: 0;
 `;
 
+export const GridWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 export const Grid = styled.div<{ columns?: number }>`
   display: grid;
-  grid-template-columns: ${({ columns = 4 }) =>
-    Array.from({ length: columns }, (_, i) => `1fr`).join(" ")};
+  grid-template-columns: ${({ columns = 4 }) => `repeat(${columns}, 1fr)`};
 `;
 
 export const DebugBlock = styled.div`
@@ -51,6 +56,10 @@ const inSequence = css`
 export const StepWrapper = styled.div`
   position: relative;
   font-size: 0.8em;
+  min-width: 25px;
+  min-height: 25px;
+  width: 2rem;
+  height: 2rem;
   .show-on-parent-hover {
     display: none;
   }
@@ -67,12 +76,10 @@ export const Step = styled.div<StepProps>`
   box-sizing: border-box;
   font-size: 8px;
   border: 1px solid transparent;
-  min-width: 25px;
-  min-height: 25px;
-  width: 2rem;
-  height: 2rem;
   align-items: center;
   cursor: pointer;
+  width: 100%;
+  height: 100%;
   opacity: ${({ isActive }) => (isActive ? 1 : 0.3)};
 
   &:hover {

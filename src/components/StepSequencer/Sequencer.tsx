@@ -2,6 +2,7 @@ import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useThrottledCallback } from "use-debounce";
 import {
   DebugBlock,
+  GridWrapper,
   Grid,
   Step,
   StepWrapper,
@@ -60,22 +61,25 @@ const Sequencer: FC<SequencerProps> = ({
 
   const stepRef = useRef<HTMLDivElement>(null);
 
-  const updateStepNote = useThrottledCallback((event: Pick<WheelEvent, 'deltaY'>) => {
-    if (
-      selectedStep === null ||
-      selectedStepOption === null ||
-      !options ||
-      options.length === 0
-    ) {
-      return;
-    }
-    let nextIndex = selectedStepOption + Math.round(event.deltaY / 2);
+  const updateStepNote = useThrottledCallback(
+    (event: Pick<WheelEvent, "deltaY">) => {
+      if (
+        selectedStep === null ||
+        selectedStepOption === null ||
+        !options ||
+        options.length === 0
+      ) {
+        return;
+      }
+      let nextIndex = selectedStepOption + Math.round(event.deltaY / 2);
 
-    if (nextIndex >= 0 && nextIndex <= (options.length - 1)) {
-      const value = options[nextIndex];
-      updateStep(selectedStep, { value });
-    }
-  }, 50);
+      if (nextIndex >= 0 && nextIndex <= options.length - 1) {
+        const value = options[nextIndex];
+        updateStep(selectedStep, { value });
+      }
+    },
+    50
+  );
 
   const mouseWheelHandler = useCallback(
     (event: WheelEvent) => {
@@ -99,34 +103,36 @@ const Sequencer: FC<SequencerProps> = ({
 
   return (
     <>
-      <Grid ref={stepRef} columns={columns}>
-        {sequence.map((step, index) => {
-          return (
-            <StepWrapper key={`step-${index}`}>
-              <Step
-                isActive={sequence[index].active}
-                isSequenceIndex={index === activeStep}
-                onClick={() =>
-                  updateStep(index, { active: !sequence[index].active })
-                }
-                onMouseOver={() => {
-                  setSelectedStep(index);
-                }}
-              >
-                <>{format ? format(step.value) : step.value}</>
-              </Step>
-              <TriangleUp
-                onClick={() => updateStepNote({ deltaY: 1 })}
-                className={"show-on-parent-hover"}
-              />
-              <TriangleDown
-                onClick={() => updateStepNote({ deltaY: -2 })}
-                className={"show-on-parent-hover"}
-              />
-            </StepWrapper>
-          );
-        })}
-      </Grid>
+      <GridWrapper>
+        <Grid ref={stepRef} columns={columns}>
+          {sequence.map((step, index) => {
+            return (
+              <StepWrapper key={`step-${index}`}>
+                <Step
+                  isActive={sequence[index].active}
+                  isSequenceIndex={index === activeStep}
+                  onClick={() =>
+                    updateStep(index, { active: !sequence[index].active })
+                  }
+                  onMouseOver={() => {
+                    setSelectedStep(index);
+                  }}
+                >
+                  <>{format ? format(step.value) : step.value}</>
+                </Step>
+                <TriangleUp
+                  onClick={() => updateStepNote({ deltaY: 1 })}
+                  className={"show-on-parent-hover"}
+                />
+                <TriangleDown
+                  onClick={() => updateStepNote({ deltaY: -2 })}
+                  className={"show-on-parent-hover"}
+                />
+              </StepWrapper>
+            );
+          })}
+        </Grid>
+      </GridWrapper>
       <DebugBlock>
         <p>output: {currentStep}</p>
         <p>sequence Index: {activeStep}</p>
