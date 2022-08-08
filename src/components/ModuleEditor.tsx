@@ -74,6 +74,7 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
       virtualKeyboard: VirtualKeyboard,
       clock: Clock,
       stepSequencer: StepSequencer,
+      stepSequencerWorklet: StepSequencer,
       adsr: ADSR,
       midiToFrequency: DefaultNode,
     }),

@@ -10,10 +10,8 @@ import randomSequencer, { randomSequencerWorklet } from "./randomSequencer";
 import virtualKeyboard from "./virtualKeyboard";
 import clock, { Clock } from "./clock";
 import { analyser, analyserWorklet } from './analyser';
-import stepSequencer from "./stepSequencer";
-import constantSource from './constantSource';
-import adsr from './adsr';
 import midiToFrequency from './midiToFrequency';
+import { stepSequencer, stepSequencerWorklet } from "./stepSequencer";
 
 export type { WhiteNoise } from "./whiteNoise";
 export type { ScriptNode, ScriptNodeValues } from "./scriptNode";
@@ -31,7 +29,7 @@ export type {
 } from "./randomSequencer";
 export type { VirtualKeyboard } from "./virtualKeyboard";
 export type { Clock } from "./clock";
-export type { Analyser, AnalyserWorklet } from './analyser';
+export type { Analyser, AnalyserWorklet } from "./analyser";
 
 const clockMap = new Map<AudioContext, Promise<Clock>>();
 export const getClock = async (audioContext: AudioContext): Promise<Clock> => {
@@ -60,7 +58,6 @@ export const destination = (audioContext: AudioContext): Destination => {
   };
 };
 
-
 export const nodeTypes = {
   oscillator,
   analyser,
@@ -78,6 +75,7 @@ export const nodeTypes = {
   virtualKeyboard,
   clock,
   stepSequencer,
+  stepSequencerWorklet,
   adsr,
   midiToFrequency,
 };
