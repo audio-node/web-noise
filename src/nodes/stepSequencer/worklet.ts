@@ -20,7 +20,7 @@ export class StepSequencerProcessor extends AudioWorkletProcessor {
         name: "mode",
         defaultValue: DEFAULT_SEQUENCE_MODE,
         minValue: SEQUENCE_MODES.forward,
-        maxValue: SEQUENCE_MODES.reverse,
+        maxValue: SEQUENCE_MODES.random,
         automationRate: "a-rate",
       },
     ];
