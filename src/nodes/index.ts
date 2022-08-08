@@ -12,6 +12,8 @@ import clock, { Clock } from "./clock";
 import { analyser, analyserWorklet } from './analyser';
 import midiToFrequency from './midiToFrequency';
 import { stepSequencer, stepSequencerWorklet } from "./stepSequencer";
+import adsr from './adsr';
+import constantSource from './constantSource';
 
 export type { WhiteNoise } from "./whiteNoise";
 export type { ScriptNode, ScriptNodeValues } from "./scriptNode";
