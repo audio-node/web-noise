@@ -562,7 +562,8 @@ export const ScriptNode = () => (
           type: "scriptNode",
           data: {
             label: "Script Node",
-            value: `
+            values: {
+              expression: `
 const output = outputs[0];
 const input = inputs[0];
 output.forEach((outputChannel, channelIndex) => {
@@ -575,6 +576,7 @@ output.forEach((outputChannel, channelIndex) => {
   }
 });
           `,
+            },
           },
           position: { x: spaceWidth, y: 50 },
           className: "react-flow__node-default",

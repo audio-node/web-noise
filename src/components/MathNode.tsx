@@ -1,22 +1,22 @@
 import { button, LevaPanel, useControls, useCreateStore } from "leva";
-import { useEffect, useState, FC } from "react";
+import { FC, useEffect } from "react";
 import { NodeProps } from "react-flow-renderer";
-import { useNode } from "../../ModuleContext";
-import useFlowNode from "../../hooks/useFlowNode";
-import { ScriptNode as TScriptNode, ScriptNodeValues } from "../../nodes";
-import { Node } from "../Node";
-import { CodeEditor } from "../../levaPlugins";
+import useFlowNode from "../hooks/useFlowNode";
+import { CodeEditor } from "../levaPlugins";
+import { useNode } from "../ModuleContext";
+import { MathNode as TMathNode, MathNodeValues } from "../nodes";
+import { Node } from "./Node";
 
-interface ScriptNodeData {
+interface MathNodeData {
   label: string;
-  values?: ScriptNodeValues;
+  values?: MathNodeValues;
 }
 
-const ScriptNode: FC<NodeProps<ScriptNodeData>> = ({ data, id }) => {
-  const { node } = useNode<TScriptNode>(id);
+const MathNode: FC<NodeProps<MathNodeData>> = ({ data, id }) => {
+  const { node } = useNode<TMathNode>(id);
   const { updateNodeValues } = useFlowNode(id);
 
-  const { expression = "" } = data.values || {};
+  const { expression = "//expression" } = data.values || {};
 
   const store = useCreateStore();
 
@@ -40,4 +40,4 @@ const ScriptNode: FC<NodeProps<ScriptNodeData>> = ({ data, id }) => {
   );
 };
 
-export default ScriptNode;
+export default MathNode;

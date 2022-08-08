@@ -1,6 +1,7 @@
 import { Node } from "../ModuleContext";
 import whiteNoise from "./whiteNoise";
 import scriptNode from "./scriptNode";
+import mathNode from "./math";
 import reverb from "./reverb";
 import oscillator from "./oscillator";
 import gain from "./gain";
@@ -12,9 +13,11 @@ import { analyser, analyserWorklet } from './analyser';
 import stepSequencer from "./stepSequencer";
 import constantSource from './constantSource';
 import adsr from './adsr';
+import midiToFrequency from './midiToFrequency';
 
 export type { WhiteNoise } from "./whiteNoise";
-export type { ScriptNode } from "./scriptNode";
+export type { ScriptNode, ScriptNodeValues } from "./scriptNode";
+export type { MathNode, MathNodeValues } from "./math";
 export type { Reverb } from "./reverb";
 export type { ConstantSource, ConstantSourceValues } from "./constantSource";
 export type { Oscillator, OscillatorValues } from "./oscillator";
@@ -70,8 +73,10 @@ export const nodeTypes = {
   randomSequencer,
   randomSequencerWorklet,
   scriptNode,
+  mathNode,
   virtualKeyboard,
   clock,
   stepSequencer,
   adsr,
+  midiToFrequency,
 };

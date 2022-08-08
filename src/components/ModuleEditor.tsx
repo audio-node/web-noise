@@ -14,6 +14,7 @@ import ReactFlow, {
 } from "react-flow-renderer";
 import { contextValue, ModuleContext } from "../ModuleContext";
 import { nodeTypes as baseAudioNodeTypes } from "../nodes";
+import { Node as DefaultNode } from "./Node";
 import AudioGraph from "./AudioGraph";
 import ContextMenu from "./ContextMenu";
 import Destination from "./Destination";
@@ -27,6 +28,7 @@ import RandomSequencerWorklet from "./RandomSequencerWorklet";
 import ResumeContext from "./ResumeContext";
 import Reverb from "./Reverb";
 import ScriptNode from "./ScriptNode";
+import MathNode from "./MathNode";
 import Spectroscope from "./Spectroscope";
 import Oscilloscope from "./Oscilloscope";
 import Toolbar from "./Toolbar";
@@ -68,10 +70,12 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
       envelope: Envelope,
       randomSequencerWorklet: RandomSequencerWorklet,
       scriptNode: ScriptNode,
+      mathNode: MathNode,
       virtualKeyboard: VirtualKeyboard,
       clock: Clock,
       stepSequencer: StepSequencer,
       adsr: ADSR,
+      midiToFrequency: DefaultNode,
     }),
     []
   );
