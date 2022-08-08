@@ -10,6 +10,7 @@ import { button, LevaPanel, useControls, useCreateStore } from "leva";
 import { FC, useCallback, useEffect, useState } from "react";
 import { NodeProps } from "react-flow-renderer";
 import { useNode } from "../../ModuleContext";
+import useFlowNode from "../../hooks/useFlowNode";
 import {
   DEFAULT_SEQUENCE_MODE,
   DEFAULT_STEP_VALUE,
@@ -28,22 +29,48 @@ const sequenceModesOptions: Record<string, SEQUENCE_MODES> = {
   random: SEQUENCE_MODES.random,
 };
 
+const DEFAULT_STEPS_COUNT = 16;
+const DEFAULT_SEQUENCE_DATA = new Array(DEFAULT_STEPS_COUNT).fill({
+  value: DEFAULT_STEP_VALUE,
+  active: false,
+});
+
+interface StepSequencerData {
+  label: string;
+  values?: StepSequencerValues;
+  config?: {
+    rows?: number;
+    cols?: number;
+    steps?: number;
+    showMidiNumbers?: boolean;
+  };
+}
+
 const midiToNote: FormatNote<number, string> = (value) => {
   return Midi.midiToNoteName(value);
 };
 
-const StepSequencer: FC<NodeProps<StepSequencerValues>> = ({ id, data }) => {
-  const { node: sequencer } = useNode<NodeStepSequencer>(id);
+const StepSequencer: FC<NodeProps<StepSequencerData>> = ({ id, data }) => {
+  const { node } = useNode<NodeStepSequencer>(id);
+  const { updateNodeValues, updateNodeConfig } = useFlowNode(id);
+
+  const { steps = DEFAULT_STEPS_COUNT, showMidiNumbers = false } =
+    data.config || {};
+  const { sequenceData = DEFAULT_SEQUENCE_DATA, mode = DEFAULT_SEQUENCE_MODE } =
+    data.values || {};
+
+  const setSequenceData = useCallback(
+    (data) => {
+      updateNodeValues({ sequenceData: data });
+    },
+    [updateNodeValues]
+  );
 
   const store = useCreateStore();
-  const [stepsNumber] = useState(16);
-  const [sequenceData, setSequenceData] = useState<StepData[]>(
-    new Array(stepsNumber).fill({ value: DEFAULT_STEP_VALUE, active: false })
-  );
   const [sequenceIndex, setSequenceIndex] = useState(0);
 
   const clearSeq = useCallback(() => {
-    if (!sequencer) {
+    if (!node) {
       return;
     }
     const newSeq = sequenceData.map((step) => {
@@ -55,10 +82,10 @@ const StepSequencer: FC<NodeProps<StepSequencerValues>> = ({ id, data }) => {
     });
 
     setSequenceData(newSeq);
-  }, [sequencer, sequenceData]);
+  }, [node, sequenceData, setSequenceData]);
 
   const generateRandomSeq = useCallback(() => {
-    if (!sequencer) {
+    if (!node) {
       return;
     }
     const newSeq = sequenceData.map((step) => {
@@ -70,43 +97,44 @@ const StepSequencer: FC<NodeProps<StepSequencerValues>> = ({ id, data }) => {
     });
 
     setSequenceData(newSeq);
-  }, [sequenceData, sequencer]);
+  }, [sequenceData, node, setSequenceData]);
 
   const controls = useControls(
     "settings",
     {
       clear: button(clearSeq),
       "random seq": button(generateRandomSeq),
-      "reset counter": button(() => sequencer?.resetCounter()),
+      "reset counter": button(() => node?.resetCounter()),
       mode: {
         options: sequenceModesOptions,
-        value: DEFAULT_SEQUENCE_MODE,
+        value: mode,
       },
-      showMidiNumbers: false,
+      showMidiNumbers,
     },
     { collapsed: true, color: LEVA_COLOR_ACCENT2_BLUE },
     { store },
-    [generateRandomSeq, clearSeq, sequencer]
+    [generateRandomSeq, clearSeq, node]
   );
 
-  useEffect(() => {
-    if (!sequencer) {
-      return;
-    }
-    sequencer.setValues({
-      sequenceData,
-      mode: controls.mode,
-    });
-  }, [sequenceData, controls.mode]);
+  useEffect(
+    () => updateNodeConfig({ showMidiNumbers: controls.showMidiNumbers }),
+    [updateNodeConfig, controls.showMidiNumbers]
+  );
+
+  useEffect(
+    () => updateNodeValues({ mode: controls.mode }),
+    [updateNodeValues, controls.mode]
+  );
+  useEffect(() => node?.setValues(data.values), [data, node]);
 
   useEffect(() => {
-    if (!sequencer) {
+    if (!node) {
       return;
     }
-    sequencer.onTick(({ sequenceIndex: sequenceIndexValue }) => {
+    node.onTick(({ sequenceIndex: sequenceIndexValue }) => {
       setSequenceIndex(sequenceIndexValue);
     });
-  }, [sequencer, controls.mode]);
+  }, [node, controls.mode]);
 
   return (
     <Node id={id}>

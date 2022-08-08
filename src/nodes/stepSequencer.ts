@@ -25,7 +25,7 @@ export interface StepSequencer extends Node {
   // gateSource: ConstantSourceNode; //TODO: to implement
   freqSource: ConstantSourceNode;
   ctrlSource: ConstantSourceNode;
-  setValues: (values: StepSequencerValues) => void;
+  setValues: (values?: StepSequencerValues) => void;
   resetCounter: () => void;
   onTick: (fn: TickHandler) => void;
 }
