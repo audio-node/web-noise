@@ -24,7 +24,6 @@ import Gain from "./Gain";
 import Oscillator from "./Oscillator";
 import Parameter from "./Parameter";
 import RandomSequencer from "./RandomSequencer";
-import RandomSequencerWorklet from "./RandomSequencerWorklet";
 import ResumeContext from "./ResumeContext";
 import Reverb from "./Reverb";
 import ScriptNode from "./ScriptNode";
@@ -67,8 +66,8 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
       parameter: Parameter,
       reverb: Reverb,
       randomSequencer: RandomSequencer,
+      randomSequencerWorklet: RandomSequencer,
       envelope: Envelope,
-      randomSequencerWorklet: RandomSequencerWorklet,
       scriptNode: ScriptNode,
       mathNode: MathNode,
       virtualKeyboard: VirtualKeyboard,

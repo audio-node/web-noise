@@ -9,11 +9,11 @@ import filter from "./filter";
 import randomSequencer, { randomSequencerWorklet } from "./randomSequencer";
 import virtualKeyboard from "./virtualKeyboard";
 import clock, { Clock } from "./clock";
-import { analyser, analyserWorklet } from './analyser';
-import midiToFrequency from './midiToFrequency';
+import { analyser, analyserWorklet } from "./analyser";
+import midiToFrequency from "./midiToFrequency";
 import { stepSequencer, stepSequencerWorklet } from "./stepSequencer";
-import adsr from './adsr';
-import constantSource from './constantSource';
+import adsr from "./adsr";
+import constantSource from "./constantSource";
 
 export type { WhiteNoise } from "./whiteNoise";
 export type { ScriptNode, ScriptNodeValues } from "./scriptNode";
@@ -25,10 +25,7 @@ export type { Gain, GainValues } from "./gain";
 export type { ADSR, ADSRValues } from "./adsr";
 export type { Filter, FilterValues } from "./filter";
 export type { StepSequencer, StepSequencerValues } from "./stepSequencer";
-export type {
-  RandomSequencer,
-  RandomSequencerWorklet,
-} from "./randomSequencer";
+export type { RandomSequencer } from "./randomSequencer";
 export type { VirtualKeyboard } from "./virtualKeyboard";
 export type { Clock } from "./clock";
 export type { Analyser, AnalyserWorklet } from "./analyser";

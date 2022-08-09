@@ -26,7 +26,7 @@ const RandomSequencer: FC<NodeProps> = ({ id }) => {
       return;
     }
     node.onNoteChange(({ note }) => set({ note }));
-  }, [node]);
+  }, [node, set]);
 
   return (
     <Node id={id}>
