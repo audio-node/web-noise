@@ -4,6 +4,7 @@ export class ScriptNodeProcessor extends AudioWorkletProcessor {
     outputs: Float32Array[][],
     parameters: Record<string, Float32Array>
   ) => void = () => {};
+  hasError = false;
 
   static get parameterDescriptors() {
     return [
@@ -18,6 +19,18 @@ export class ScriptNodeProcessor extends AudioWorkletProcessor {
       {
         name: "C",
         automationRate: "a-rate",
+      },
+      {
+        name: "X",
+        automationRate: "k-rate",
+      },
+      {
+        name: "Y",
+        automationRate: "k-rate",
+      },
+      {
+        name: "Z",
+        automationRate: "k-rate",
       },
     ];
   }
@@ -45,8 +58,10 @@ export class ScriptNodeProcessor extends AudioWorkletProcessor {
   ) {
     try {
       this.expressionFn(inputs, outputs, parameters);
+      this.hasError = false;
     } catch (e) {
-      console.error(e);
+      !this.hasError && console.error(e);
+      this.hasError = true;
     }
     return true;
   }

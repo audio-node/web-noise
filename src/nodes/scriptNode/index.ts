@@ -34,6 +34,15 @@ const scriptNode = async (audioContext: AudioContext): Promise<ScriptNode> => {
       C: {
         port: scriptNode.parameters.get('C')!,
       },
+      X: {
+        port: scriptNode.parameters.get('X')!,
+      },
+      Y: {
+        port: scriptNode.parameters.get('Y')!,
+      },
+      Z: {
+        port: scriptNode.parameters.get('Z')!,
+      },
       in: {
         port: scriptNode,
       },

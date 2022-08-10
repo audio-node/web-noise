@@ -23,13 +23,25 @@ export class MathProcessor extends AudioWorkletProcessor {
         name: "C",
         automationRate: "a-rate",
       },
+      {
+        name: "X",
+        automationRate: "k-rate",
+      },
+      {
+        name: "Y",
+        automationRate: "k-rate",
+      },
+      {
+        name: "Z",
+        automationRate: "k-rate",
+      },
     ];
   }
 
   setExpressionFn(expression: string) {
     //@ts-ignore
     this.expressionFn = new Function(
-      "{ A, B, C, INPUT }",
+      "{ A, B, C, X, Y, Z, INPUT }",
       `return ${expression || 0}`
     );
   }
@@ -68,6 +80,9 @@ export class MathProcessor extends AudioWorkletProcessor {
             A: parameters.A[0],
             B: parameters.B[0],
             C: parameters.C[0],
+            X: parameters.X[sampleIndex],
+            Y: parameters.Y[sampleIndex],
+            Z: parameters.Z[sampleIndex],
             INPUT: input[channelIndex]?.[sampleIndex],
           };
           outputChannel[sampleIndex] = this.expressionFn(args);
