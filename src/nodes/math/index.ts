@@ -32,20 +32,21 @@ const scriptNode = async (audioContext: AudioContext): Promise<MathNode> => {
         port: mathNode.parameters.get("C")!,
       },
       X: {
-        port: mathNode.parameters.get('X')!,
+        port: mathNode.parameters.get("X")!,
       },
       Y: {
-        port: mathNode.parameters.get('Y')!,
+        port: mathNode.parameters.get("Y")!,
       },
       Z: {
-        port: mathNode.parameters.get('Z')!,
+        port: mathNode.parameters.get("Z")!,
       },
       INPUT: {
         port: mathNode,
       },
     },
     setValues: ({ expression } = {}) =>
-      expression && mathNode.port.postMessage({
+      expression &&
+      mathNode.port.postMessage({
         name: "expression",
         value: expression,
       }),
