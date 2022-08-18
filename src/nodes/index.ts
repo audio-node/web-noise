@@ -9,11 +9,11 @@ import filter from "./filter";
 import randomSequencer, { randomSequencerWorklet } from "./randomSequencer";
 import virtualKeyboard from "./virtualKeyboard";
 import clock, { Clock } from "./clock";
-import { analyser, analyserWorklet } from './analyser';
-import stepSequencer from "./stepSequencer";
-import constantSource from './constantSource';
-import adsr from './adsr';
-import midiToFrequency from './midiToFrequency';
+import { analyser, analyserWorklet } from "./analyser";
+import midiToFrequency from "./midiToFrequency";
+import { stepSequencer, stepSequencerWorklet } from "./stepSequencer";
+import adsr from "./adsr";
+import constantSource from "./constantSource";
 
 export type { WhiteNoise } from "./whiteNoise";
 export type { ScriptNode, ScriptNodeValues } from "./scriptNode";
@@ -24,13 +24,11 @@ export type { Oscillator, OscillatorValues } from "./oscillator";
 export type { Gain, GainValues } from "./gain";
 export type { ADSR, ADSRValues } from "./adsr";
 export type { Filter, FilterValues } from "./filter";
-export type {
-  RandomSequencer,
-  RandomSequencerWorklet,
-} from "./randomSequencer";
+export type { StepSequencer, StepSequencerValues } from "./stepSequencer";
+export type { RandomSequencer } from "./randomSequencer";
 export type { VirtualKeyboard } from "./virtualKeyboard";
 export type { Clock } from "./clock";
-export type { Analyser, AnalyserWorklet } from './analyser';
+export type { Analyser, AnalyserWorklet } from "./analyser";
 
 const clockMap = new Map<AudioContext, Promise<Clock>>();
 export const getClock = async (audioContext: AudioContext): Promise<Clock> => {
@@ -59,7 +57,6 @@ export const destination = (audioContext: AudioContext): Destination => {
   };
 };
 
-
 export const nodeTypes = {
   oscillator,
   analyser,
@@ -77,6 +74,7 @@ export const nodeTypes = {
   virtualKeyboard,
   clock,
   stepSequencer,
+  stepSequencerWorklet,
   adsr,
   midiToFrequency,
 };

@@ -2,110 +2,77 @@
  * Step Sequencer
  *
  * TODO:
- *  - implement gate output
- *  - implement clock input
- *  - toggle to display midi/values
  *  - implement additional sequence mode: e.g. 'vertical', 'snake', etc..
  */
 
 import { Midi } from "@tonaljs/tonal";
 import { button, LevaPanel, useControls, useCreateStore } from "leva";
-import { useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import { NodeProps } from "react-flow-renderer";
 import { useNode } from "../../ModuleContext";
-import { StepSequencer as NodeStepSequencer } from "../../nodes/stepSequencer";
+import useFlowNode from "../../hooks/useFlowNode";
+import {
+  DEFAULT_SEQUENCE_MODE,
+  DEFAULT_STEP_VALUE,
+  SEQUENCE_MODES,
+  StepData,
+  StepSequencer as NodeStepSequencer,
+  StepSequencerValues,
+} from "../../nodes/stepSequencer";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../../styles/consts";
 import { Node } from "../Node";
-import { DebugBlock, Grid, Step } from "./styles";
+import Sequencer, { FormatNote } from "./Sequencer";
 
-interface StepData {
-  active: boolean;
-  value: number;
-}
-
-type SequenceMode = "forward" | "reverse" | "random";
-
-const sequenceModesOptions: Record<SequenceMode, SequenceMode> = {
-  forward: "forward",
-  reverse: "reverse",
-  random: "random",
+const sequenceModesOptions: Record<string, SEQUENCE_MODES> = {
+  forward: SEQUENCE_MODES.forward,
+  reverse: SEQUENCE_MODES.reverse,
+  random: SEQUENCE_MODES.random,
 };
 
-const DEFAULT_STEP_VALUE: number = 36;
-const DEFAULT_SEQUENCE_MODE: SequenceMode = "forward";
+const DEFAULT_STEPS_COUNT = 16;
+const DEFAULT_SEQUENCE_DATA = new Array(DEFAULT_STEPS_COUNT).fill({
+  value: DEFAULT_STEP_VALUE,
+  active: false,
+});
 
-const StepSequencer = ({ id, data }: NodeProps) => {
-  const { node: sequencer } = useNode<NodeStepSequencer>(id);
+interface StepSequencerData {
+  label: string;
+  values?: StepSequencerValues;
+  config?: {
+    rows?: number;
+    cols?: number;
+    steps?: number;
+    showMidiNumbers?: boolean;
+  };
+}
 
-  const levaStore = useCreateStore();
-  const [stepsNumber] = useState(16);
-  const [sequenceData, setsequenceData] = useState<StepData[]>(
-    new Array(stepsNumber).fill({ value: DEFAULT_STEP_VALUE, active: false })
+const midiToNote: FormatNote<number, string> = (value) => {
+  return Midi.midiToNoteName(value);
+};
+
+const StepSequencer: FC<NodeProps<StepSequencerData>> = ({ id, data }) => {
+  const { node } = useNode<NodeStepSequencer>(id);
+  const { updateNodeValues, updateNodeConfig } = useFlowNode(id);
+
+  const { steps = DEFAULT_STEPS_COUNT, showMidiNumbers = false } =
+    data.config || {};
+  const { sequenceData = DEFAULT_SEQUENCE_DATA, mode = DEFAULT_SEQUENCE_MODE } =
+    data.values || {};
+
+  const setSequenceData = useCallback(
+    (data) => {
+      updateNodeValues({ sequenceData: data });
+    },
+    [updateNodeValues]
   );
-  const [isMousePressed, setIsMousePressed] = useState(false);
-  const [mouseDownXY, setMouseDownXY] = useState({ x: 0, y: 0 });
-  const [delta, setDelta] = useState(0);
-  const [selectedStep, setSelectedStep] = useState<number | null>(null);
+
+  const store = useCreateStore();
   const [sequenceIndex, setSequenceIndex] = useState(0);
-  const [selectedStepValue, setSelectedStepValue] =
-    useState<number | null>(null);
 
-  const controls = useControls(
-    "settings",
-    {
-      clear: button(() => clearSeq()),
-      "random seq": button(() => generateRandomSeq()),
-      mode: {
-        options: sequenceModesOptions,
-        value: DEFAULT_SEQUENCE_MODE,
-      },
-    },
-    { collapsed: true, color: LEVA_COLOR_ACCENT2_BLUE },
-    { store: levaStore }
-  );
-
-  const updateStep = useCallback(
-    (index: number, value: Record<string, boolean | number>): void => {
-      const newSeq = sequenceData.map((step, stepIdx) => {
-        if (stepIdx === index) {
-          return {
-            ...step,
-            ...value,
-          };
-        }
-        return step;
-      });
-
-      setsequenceData(newSeq);
-    },
-    [sequenceData]
-  );
-
-  const onMouseMove = useCallback(
-    (e: MouseEvent): void => {
-      const delta = mouseDownXY.y - e.clientY;
-      setDelta(delta);
-    },
-    [mouseDownXY.y]
-  );
-
-  const onMouseDown = (e: MouseEvent): void => {
-    setIsMousePressed(true);
-    setMouseDownXY({ x: e.clientX, y: e.clientY });
-  };
-
-  const onMouseUp = (): void => {
-    setIsMousePressed(false);
-    setSelectedStep(null);
-    setDelta(0);
-  };
-
-  // TODO: convert to component
-  const formatStepValue = (value: number) => {
-    return Midi.midiToNoteName(value);
-  };
-
-  function clearSeq() {
+  const clearSeq = useCallback(() => {
+    if (!node) {
+      return;
+    }
     const newSeq = sequenceData.map((step) => {
       return {
         ...step,
@@ -114,10 +81,13 @@ const StepSequencer = ({ id, data }: NodeProps) => {
       };
     });
 
-    setsequenceData(newSeq);
-  }
+    setSequenceData(newSeq);
+  }, [node, sequenceData, setSequenceData]);
 
-  function generateRandomSeq() {
+  const generateRandomSeq = useCallback(() => {
+    if (!node) {
+      return;
+    }
     const newSeq = sequenceData.map((step) => {
       return {
         ...step,
@@ -126,106 +96,71 @@ const StepSequencer = ({ id, data }: NodeProps) => {
       };
     });
 
-    setsequenceData(newSeq);
-  }
+    setSequenceData(newSeq);
+  }, [sequenceData, node, setSequenceData]);
+
+  const controls = useControls(
+    "settings",
+    {
+      clear: button(clearSeq),
+      "random seq": button(generateRandomSeq),
+      "reset counter": button(() => node?.resetCounter()),
+      mode: {
+        options: sequenceModesOptions,
+        value: mode,
+      },
+      showMidiNumbers,
+    },
+    { collapsed: true, color: LEVA_COLOR_ACCENT2_BLUE },
+    { store },
+    [generateRandomSeq, clearSeq, node]
+  );
+
+  useEffect(
+    () => updateNodeConfig({ showMidiNumbers: controls.showMidiNumbers }),
+    [updateNodeConfig, controls.showMidiNumbers]
+  );
+
+  useEffect(
+    () => updateNodeValues({ mode: controls.mode }),
+    [updateNodeValues, controls.mode]
+  );
+  useEffect(
+    () => node?.setValues({ sequenceData, mode }),
+    [sequenceData, mode, node]
+  );
 
   useEffect(() => {
-    window.addEventListener("mousedown", onMouseDown);
-    window.addEventListener("mouseup", onMouseUp);
-
-    return () => {
-      window.removeEventListener("mousedown", onMouseDown);
-      window.removeEventListener("mouseup", onMouseUp);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (sequencer) {
-      let counter = sequenceIndex;
-      sequencer.onTick(() => {
-        if (controls.mode === "forward") {
-          counter++;
-        }
-        if (controls.mode === "random") {
-          counter = Math.round(Math.random() * stepsNumber);
-        }
-        if (controls.mode === "reverse") {
-          if (counter <= 0) {
-            counter = stepsNumber;
-          }
-          counter--;
-        }
-        setSequenceIndex(Math.abs(counter) % stepsNumber);
-      });
+    if (!node) {
+      return;
     }
-  }, [sequencer, controls.mode, stepsNumber]);
-
-  useEffect(() => {
-    if (sequencer && sequenceData[sequenceIndex].active) {
-      sequencer.setValues({ midi: sequenceData[sequenceIndex].value });
-    }
-  }, [sequencer, sequenceData, sequenceIndex]);
-
-  useEffect(() => {
-    if (isMousePressed) {
-      window.addEventListener("mousemove", onMouseMove);
-    }
-    return () => {
-      window.removeEventListener("mousemove", onMouseMove);
-    };
-  }, [mouseDownXY, isMousePressed, onMouseMove]);
-
-  useEffect(() => {
-    if (selectedStep !== null && selectedStepValue !== null) {
-      let value = selectedStepValue + delta;
-
-      if (value >= 0 && value <= 127) {
-        updateStep(selectedStep, { value });
-      }
-    }
-  }, [delta, selectedStep, selectedStepValue, updateStep]);
+    node.onTick(({ sequenceIndex: sequenceIndexValue }) => {
+      setSequenceIndex(sequenceIndexValue);
+    });
+  }, [node, controls.mode]);
 
   return (
     <Node id={id}>
       <LevaPanel
-        store={levaStore}
+        store={store}
         fill
         flat
         hideCopyButton
         titleBar={false}
         oneLineLabels
       />
-      <Grid>
-        {sequenceData.map((step, index) => {
-          return (
-            <Step
-              isActive={sequenceData[index].active}
-              isSequenceIndex={index === sequenceIndex}
-              key={`step-${index}`}
-              onClick={() =>
-                updateStep(index, { active: !sequenceData[index].active })
-              }
-              onMouseDown={() => {
-                setSelectedStep(index);
-                setSelectedStepValue(sequenceData[index].value);
-              }}
-            >
-              {formatStepValue(step.value)}
-            </Step>
-          );
-        })}
-      </Grid>
-      <DebugBlock>
-        <p>
-          output:
-          {sequenceData[sequenceIndex].active &&
-            sequenceData[sequenceIndex].value}
-        </p>
-        <p>sequence Index: {sequenceIndex + 1}</p>
-        <p>selected step: {selectedStep}</p>
-        <p>mouse delta: {delta}</p>
-        <p>mouse: {isMousePressed ? "pressed" : "not pressed"}</p>
-      </DebugBlock>
+      <Sequencer
+        options={Array.from({ length: 128 }, (_, i) => i)}
+        sequence={sequenceData}
+        activeStep={sequenceIndex}
+        format={(value) =>
+          controls.showMidiNumbers ? value : midiToNote(value as number)
+        }
+        onChange={(data) => {
+          setSequenceData(data as Array<StepData>);
+        }}
+        columns={4}
+      />
     </Node>
   );
 };

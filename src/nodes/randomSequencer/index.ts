@@ -8,7 +8,6 @@ import { Node } from "../../ModuleContext";
 type NoteChangeHandler = (args: { note: string }) => void;
 
 export interface RandomSequencer extends Node {
-  constantSource: ConstantSourceNode;
   onNoteChange: (fn: NoteChangeHandler) => void;
 }
 
@@ -71,13 +70,9 @@ const randomSequencer = async (
   };
 };
 
-export interface RandomSequencerWorklet extends Node {
-  randomSequencer: AudioWorkletNode;
-}
-
 export const randomSequencerWorklet = async (
   audioContext: AudioContext
-): Promise<RandomSequencerWorklet> => {
+): Promise<RandomSequencer> => {
   await audioContext.audioWorklet.addModule(randomSequencerWorkletProcessor);
   const randomSequencer = new AudioWorkletNode(
     audioContext,
@@ -86,6 +81,16 @@ export const randomSequencerWorklet = async (
       numberOfOutputs: 2,
     }
   );
+
+  let noteChangeHandler: NoteChangeHandler = () => {};
+
+  randomSequencer.port.onmessage = ({
+    data: { name, note },
+  }: MessageEvent<{ name: string; note?: string }>) => {
+    if (name === "noteChange" && note) {
+      noteChangeHandler({ note });
+    }
+  };
 
   return {
     inputs: {
@@ -101,7 +106,7 @@ export const randomSequencerWorklet = async (
         port: [randomSequencer, 1],
       },
     },
-    randomSequencer,
+    onNoteChange: (fn) => (noteChangeHandler = fn),
   };
 };
 
