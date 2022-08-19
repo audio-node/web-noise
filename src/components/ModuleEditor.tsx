@@ -30,7 +30,6 @@ import ScriptNode from "./ScriptNode";
 import MathNode from "./MathNode";
 import Spectroscope from "./Spectroscope";
 import Oscilloscope from "./Oscilloscope";
-import Toolbar from "./Toolbar";
 import VirtualKeyboard from "./VirtualKeyboard";
 import Visualiser from "./Visualiser";
 import WhiteNoise from "./WhiteNoise";
@@ -152,7 +151,6 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
   return (
     <ModuleContext.Provider value={contextValue}>
       <ReactFlowProvider>
-        <Toolbar />
         <AudioGraph nodes={nodes} edges={edges} nodeTypes={audioNodeTypes} />
         <ReactFlow
           nodes={nodes}
