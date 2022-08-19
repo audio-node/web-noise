@@ -12351,6 +12351,13 @@ react-element-to-jsx-string@^14.3.4:
     is-plain-object "5.0.0"
     react-is "17.0.2"
 
+react-envelope-graph@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/react-envelope-graph/-/react-envelope-graph-0.1.4.tgz#5e8f6cfb9c618c67a96eedb3ccd5741d82fb151a"
+  integrity sha512-nMaxcYv68NJ8fOM80T/MZlSMvgqx/4T7FduBUbKY2wUdkEvc0/K0fjfnwGuOxanXKc4boglwBbSMt2l4Hyv79A==
+  dependencies:
+    prop-types "^15.7.2"
+
 react-error-overlay@^6.0.10:
   version "6.0.10"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.10.tgz#0fe26db4fa85d9dbb8624729580e90e7159a59a6"
