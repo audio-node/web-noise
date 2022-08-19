@@ -18,7 +18,6 @@ const MAX_ATTACK_VALUE = 10;
 const MAX_DECAY_VALUE = 10;
 const MAX_RELEASE_VALUE = 10;
 
-
 const ADSR: FC<NodeProps<ADSRData>> = ({ data, id }) => {
   const { updateNodeValues } = useFlowNode(id);
   const { node } = useNode<TADSR>(id);
@@ -103,6 +102,8 @@ const ADSR: FC<NodeProps<ADSRData>> = ({ data, id }) => {
           },
           dndBox: {
             stroke: "none",
+            height: 0,
+            width: 0,
           },
           dndBoxActive: {
             fill: "blue",
