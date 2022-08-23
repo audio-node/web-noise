@@ -24,7 +24,7 @@ import Gain from "./Gain";
 import Oscillator from "./Oscillator";
 import Parameter from "./Parameter";
 import RandomSequencer from "./RandomSequencer";
-import ResumeContext from "./ResumeContext";
+import { ResumeContext } from "@web-noise/core";
 import Reverb from "./Reverb";
 import ScriptNode from "./ScriptNode";
 import MathNode from "./MathNode";
