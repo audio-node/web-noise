@@ -1,4 +1,4 @@
-import { Node } from "../ModuleContext";
+import { WNAudioNode } from "@web-noise/core";
 import whiteNoise from "./whiteNoise";
 import scriptNode from "./scriptNode";
 import mathNode from "./math";
@@ -41,7 +41,7 @@ export const getClock = async (audioContext: AudioContext): Promise<Clock> => {
   return contextClock;
 };
 
-export interface Destination extends Node {
+export interface Destination extends WNAudioNode {
   destination: AudioDestinationNode;
 }
 

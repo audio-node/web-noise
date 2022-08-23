@@ -1,5 +1,5 @@
 /* A convolution reverb */
-import { Node } from "../../ModuleContext";
+import { WNAudioNode } from "@web-noise/core";
 // @ts-expect-error
 import reverbImpulse from "./impulse.wav";
 
@@ -7,7 +7,7 @@ export interface ReverbValues {
   wetDry?: number;
 }
 
-export interface Reverb extends Node {
+export interface Reverb extends WNAudioNode {
   convolver: ConvolverNode;
   wetGain: GainNode;
   dryGain: GainNode;

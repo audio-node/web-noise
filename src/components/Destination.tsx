@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { FC } from "react";
 import { Handle, NodeProps, Position } from "react-flow-renderer";
 import { MdSpeaker } from "react-icons/md";
-import { useNode } from "../ModuleContext";
+ import { useAudioNode } from "@web-noise/core";
 import { Destination as TDestination } from "../nodes";
 import { TitleBar } from "./Node";
 
@@ -18,7 +18,7 @@ const SpeakerIcon = styled(MdSpeaker)`
 `;
 
 const Destination: FC<NodeProps> = ({ targetPosition, id }) => {
-  useNode<TDestination>(id);
+  useAudioNode<TDestination>(id);
 
   return (
     <>

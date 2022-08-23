@@ -9,7 +9,7 @@ import { Midi } from "@tonaljs/tonal";
 import { button, LevaPanel, useControls, useCreateStore } from "leva";
 import { FC, useCallback, useEffect, useState } from "react";
 import { NodeProps } from "react-flow-renderer";
-import { useNode } from "../../ModuleContext";
+ import { useAudioNode } from "@web-noise/core";
 import useFlowNode from "../../hooks/useFlowNode";
 import {
   DEFAULT_SEQUENCE_MODE,
@@ -51,7 +51,7 @@ const midiToNote: FormatNote<number, string> = (value) => {
 };
 
 const StepSequencer: FC<NodeProps<StepSequencerData>> = ({ id, data }) => {
-  const { node } = useNode<NodeStepSequencer>(id);
+  const { node } = useAudioNode<NodeStepSequencer>(id);
   const { updateNodeValues, updateNodeConfig } = useFlowNode(id);
 
   const { steps = DEFAULT_STEPS_COUNT, showMidiNumbers = false } =

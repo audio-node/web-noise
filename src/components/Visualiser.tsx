@@ -3,13 +3,13 @@ import { useCallback, useMemo, useRef } from "react";
 import { Handle, NodeProps, Position } from "react-flow-renderer";
 //@ts-ignore
 import useAnimationFrame from "use-animation-frame";
-import { useNode } from "../ModuleContext";
+ import { useAudioNode } from "@web-noise/core";
 import { Analyser } from "../nodes";
 import { Node } from "./Node";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../styles/consts";
 
 const Visualiser = ({ data, id }: NodeProps) => {
-  const analyserNode = useNode<Analyser>(id);
+  const analyserNode = useAudioNode<Analyser>(id);
   const { node } = analyserNode;
   const { analyser } = node || {};
 

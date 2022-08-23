@@ -7,7 +7,7 @@ import {
   FaVolumeOff as IconUnmute,
 } from "react-icons/fa";
 
-import { useModule } from "../ModuleContext";
+import { useModule } from "@web-noise/core";
 
 const ResumeContext: FC = () => {
   const { audioContext } = useModule();

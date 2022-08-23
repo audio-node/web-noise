@@ -2,7 +2,7 @@ import { LevaPanel, useControls, useCreateStore } from "leva";
 import { useEffect } from "react";
 import { NodeProps } from "react-flow-renderer";
 import useFlowNode from "../../hooks/useFlowNode";
-import { useNode } from "../../ModuleContext";
+ import { useAudioNode } from "@web-noise/core";
 import { Oscillator as TOscillator, OscillatorValues } from "../../nodes";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../../styles/consts";
 import { Node } from "../Node";
@@ -22,7 +22,7 @@ const DEFAULT_FREQUENCY = 440;
 const DEFAULT_TYPE = "sine";
 
 const Oscillator = ({ id, data }: NodeProps<OscillatorData>) => {
-  const { node } = useNode<TOscillator>(id);
+  const { node } = useAudioNode<TOscillator>(id);
   const { updateNodeValues } = useFlowNode(id);
   const store = useCreateStore();
 

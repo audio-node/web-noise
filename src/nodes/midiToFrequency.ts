@@ -1,8 +1,8 @@
 //@ts-ignore
 import sciptNodeWorklet from "worklet-loader!./math/worklet.ts"; // eslint-disable-line
-import { Node } from "../ModuleContext";
+import { WNAudioNode } from "@web-noise/core";
 
-const MidiToFrequency = async (audioContext: AudioContext): Promise<Node> => {
+const MidiToFrequency = async (audioContext: AudioContext): Promise<WNAudioNode> => {
   await audioContext.audioWorklet.addModule(sciptNodeWorklet);
   const mathNode = new AudioWorkletNode(audioContext, "math-processor", {
     processorOptions: {

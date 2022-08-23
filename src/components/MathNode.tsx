@@ -3,7 +3,7 @@ import { button, LevaPanel, useControls, useCreateStore } from "leva";
 import { FC, useEffect } from "react";
 import { NodeProps } from "react-flow-renderer";
 import useFlowNode from "../hooks/useFlowNode";
-import { useNode } from "../ModuleContext";
+ import { useAudioNode } from "@web-noise/core";
 import { MathNode as TMathNode, MathNodeValues } from "../nodes";
 import { Node } from "./Node";
 
@@ -15,7 +15,7 @@ interface MathNodeData {
 const { CodeEditor } = plugins;
 
 const MathNode: FC<NodeProps<MathNodeData>> = ({ data, id }) => {
-  const { node } = useNode<TMathNode>(id);
+  const { node } = useAudioNode<TMathNode>(id);
   const { updateNodeValues } = useFlowNode(id);
 
   const { expression = "//expression" } = data.values || {};

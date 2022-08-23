@@ -1,6 +1,4 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { getClock } from "./nodes";
-
 type AudioNodeChannel = [AudioNode, number];
 
 interface InputPort {
@@ -32,8 +30,6 @@ export const ModuleContext = createContext(contextValue);
 
 export const useModule = () => {
   const { module, audioContext } = useContext(ModuleContext);
-
-  const clock = getClock(audioContext);
 
   const registerNode = (id: string, node: Node) => {
     module.set(id, node);
@@ -196,7 +192,6 @@ export const useModule = () => {
     connect,
     disconnect,
     destroy,
-    clock,
   };
 };
 

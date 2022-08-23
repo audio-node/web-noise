@@ -1,6 +1,6 @@
 //@ts-ignore
 import adsrWorklet from "worklet-loader!./worklet.ts"; // eslint-disable-line
-import { Node } from "../../ModuleContext";
+import { WNAudioNode } from "@web-noise/core";
 import { setParameterValue } from "../helpers";
 
 export interface ADSRValues {
@@ -11,7 +11,7 @@ export interface ADSRValues {
   release: number;
 }
 
-export interface ADSR extends Node {
+export interface ADSR extends WNAudioNode {
   adsr: AudioWorkletNode;
   setValues: (values?: Partial<ADSRValues>) => void;
 }

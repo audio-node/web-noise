@@ -1,7 +1,7 @@
 import { Midi } from "@tonaljs/tonal";
-import { Node } from "../../ModuleContext";
+import { WNAudioNode } from "@web-noise/core";
 
-export interface VirtualKeyboard extends Node {
+export interface VirtualKeyboard extends WNAudioNode {
   gate: ConstantSourceNode;
   frequency: ConstantSourceNode;
   midi: ConstantSourceNode;

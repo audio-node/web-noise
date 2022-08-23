@@ -1,12 +1,12 @@
 //@ts-ignore
 import sciptNodeWorklet from "worklet-loader!./worklet.ts"; // eslint-disable-line
-import { Node } from "../../ModuleContext";
+import { WNAudioNode } from "@web-noise/core";
 
 export interface MathNodeValues {
   expression?: string;
 }
 
-export interface MathNode extends Node {
+export interface MathNode extends WNAudioNode {
   mathNode: AudioWorkletNode;
   setValues: (values?: MathNodeValues) => void;
 }

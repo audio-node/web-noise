@@ -2,7 +2,7 @@ import { LevaPanel, useControls, useCreateStore } from "leva";
 import { FC, useEffect, useState } from "react";
 import { NodeProps } from "react-flow-renderer";
 import useFlowNode from "../../hooks/useFlowNode";
-import { useNode } from "../../ModuleContext";
+ import { useAudioNode } from "@web-noise/core";
 import { Reverb as TReverb, ReverbValues } from "../../nodes/reverb";
 import { Node } from "../Node";
 
@@ -12,7 +12,7 @@ interface ReverbData {
 }
 
 const Reverb: FC<NodeProps<ReverbData>> = ({ id, data }) => {
-  const { node: reverb } = useNode<TReverb>(id);
+  const { node: reverb } = useAudioNode<TReverb>(id);
   const { updateNodeValues } = useFlowNode(id);
   const store = useCreateStore();
 

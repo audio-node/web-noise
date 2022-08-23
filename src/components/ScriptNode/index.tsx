@@ -3,7 +3,7 @@ import { button, LevaPanel, useControls, useCreateStore } from "leva";
 import { FC, useEffect } from "react";
 import { NodeProps } from "react-flow-renderer";
 import useFlowNode from "../../hooks/useFlowNode";
-import { useNode } from "../../ModuleContext";
+ import { useAudioNode } from "@web-noise/core";
 import { ScriptNode as TScriptNode, ScriptNodeValues } from "../../nodes";
 import { Node } from "../Node";
 
@@ -15,7 +15,7 @@ interface ScriptNodeData {
 const { CodeEditor } = plugins;
 
 const ScriptNode: FC<NodeProps<ScriptNodeData>> = ({ data, id }) => {
-  const { node } = useNode<TScriptNode>(id);
+  const { node } = useAudioNode<TScriptNode>(id);
   const { updateNodeValues } = useFlowNode(id);
 
   const { expression = "" } = data.values || {};

@@ -3,13 +3,13 @@ import { useCallback, useMemo, useRef } from "react";
 import { NodeProps } from "react-flow-renderer";
 //@ts-ignore
 import useAnimationFrame from "use-animation-frame";
-import { useNode } from "../ModuleContext";
+ import { useAudioNode } from "@web-noise/core";
 import { Analyser } from "../nodes";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../styles/consts";
 import { Node } from "./Node";
 
 const Spectroscope = ({ data, id }: NodeProps) => {
-  const { node } = useNode<Analyser>(id);
+  const { node } = useAudioNode<Analyser>(id);
   const { analyser } = node || {};
 
   const canvasRef = useRef<HTMLCanvasElement>(null);

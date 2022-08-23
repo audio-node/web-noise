@@ -2,7 +2,7 @@ import { LevaPanel, useControls, useCreateStore, folder, button } from "leva";
 import { useEffect, useState, useCallback, FC } from "react";
 import { NodeProps } from "react-flow-renderer";
 import useFlowNode from "../../hooks/useFlowNode";
-import { useNode } from "../../ModuleContext";
+ import { useAudioNode } from "@web-noise/core";
 import { Clock as TClock } from "../../nodes";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../../styles/consts";
 import { Node } from "../Node";
@@ -21,7 +21,7 @@ interface ClockData {
 const DEFAULT_BPM = 120;
 
 const Clock: FC<NodeProps<ClockData>> = ({ data, id }) => {
-  const { node } = useNode<TClock>(id);
+  const { node } = useAudioNode<TClock>(id);
   const { updateNodeValues } = useFlowNode(id);
   const [isActive, setActive] = useState(false);
 

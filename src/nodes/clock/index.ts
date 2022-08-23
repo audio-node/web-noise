@@ -1,12 +1,12 @@
 //@ts-ignore
 import clockWorklet from "worklet-loader!./worklet.ts"; // eslint-disable-line
-import { Node } from "../../ModuleContext";
+import { WNAudioNode } from "@web-noise/core";
 
 export interface ClockValues {
   bpm: number;
 }
 
-export interface Clock extends Node {
+export interface Clock extends WNAudioNode {
   clock: AudioWorkletNode;
   bpm: AudioParam;
   onTick: (fn: (data: MessageEvent<any>["data"]) => void) => void;

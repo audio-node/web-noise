@@ -1,8 +1,8 @@
 //@ts-ignore
 import analyserWorkletUrl from "worklet-loader!./worklet.ts"; // eslint-disable-line
-import { Node } from "../../ModuleContext";
+import { WNAudioNode } from "@web-noise/core";
 
-export interface Analyser extends Node {
+export interface Analyser extends WNAudioNode {
   analyser: AnalyserNode;
 }
 
@@ -24,7 +24,7 @@ export const analyser = (audioContext: AudioContext): Analyser => {
   };
 };
 
-export interface AnalyserWorklet extends Node {
+export interface AnalyserWorklet extends WNAudioNode {
   input1Analyser: AudioWorkletNode;
   input2Analyser: AudioWorkletNode;
 }

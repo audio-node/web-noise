@@ -3,7 +3,7 @@ import { useEffect, useState, VoidFunctionComponent, useMemo } from "react";
 import { Handle, NodeProps, Position } from "react-flow-renderer";
 import { LevaPanel, useControls, useCreateStore } from "leva";
 
-import { useModule } from "../ModuleContext";
+import { useModule } from "@web-noise/core";
 
 const useParameter = (audioContext: AudioContext) =>
   useMemo(() => {

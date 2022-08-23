@@ -1,11 +1,11 @@
-import { Node } from "../ModuleContext";
+import { WNAudioNode } from "@web-noise/core";
 
 export interface OscillatorValues {
   frequency?: number;
   type?: OscillatorType;
 }
 
-export interface Oscillator extends Node {
+export interface Oscillator extends WNAudioNode {
   oscillator: OscillatorNode;
   setValues: (values?: OscillatorValues) => void;
 }

@@ -2,7 +2,7 @@ import { LevaPanel, useControls, useCreateStore } from "leva";
 import { FC, useEffect } from "react";
 import { NodeProps } from "react-flow-renderer";
 import useFlowNode from "../hooks/useFlowNode";
-import { useNode } from "../ModuleContext";
+ import { useAudioNode } from "@web-noise/core";
 import { Filter as TFilter, FilterValues } from "../nodes";
 import { Node } from "./Node";
 
@@ -27,7 +27,7 @@ const DEFAULT_Q = 0;
 const DEFAULT_FILTER_TYPE: BiquadFilterType = "lowpass";
 
 const Filter: FC<NodeProps<FilterData>> = ({ data, id }) => {
-  const { node } = useNode<TFilter>(id);
+  const { node } = useAudioNode<TFilter>(id);
   const { updateNodeValues } = useFlowNode(id);
   const store = useCreateStore();
 

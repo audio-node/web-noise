@@ -1,12 +1,12 @@
 import { LevaPanel, useControls, useCreateStore } from "leva";
 import { useEffect, FC } from "react";
 import { NodeProps } from "react-flow-renderer";
-import { useNode } from "../ModuleContext";
+ import { useAudioNode } from "@web-noise/core";
 import { RandomSequencer as TRandomSequencer } from "../nodes";
 import { Node } from "./Node";
 
 const RandomSequencer: FC<NodeProps> = ({ id }) => {
-  const { node } = useNode<TRandomSequencer>(id);
+  const { node } = useAudioNode<TRandomSequencer>(id);
 
   const store = useCreateStore();
 

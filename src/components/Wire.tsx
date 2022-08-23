@@ -6,7 +6,7 @@ import {
   EdgeProps,
   MarkerType,
 } from "react-flow-renderer";
-import { useModule } from "../ModuleContext";
+import { useModule } from "@web-noise/core";
 
 const Wire = ({
   id,
@@ -26,15 +26,12 @@ const Wire = ({
   targetHandleId,
   ...rest
 }: EdgeProps) => {
-  const { connect, disconnect } = useModule();
   useEffect(() => {
     if (!sourceHandleId || !targetHandleId) {
       return;
     }
-    // connect([source, sourceHandleId], [target, targetHandleId]);
     console.log(`connected ${source} to ${target}`);
     return () => {
-      // disconnect([source, sourceHandleId], [target, targetHandleId]);
       console.log(`disconnected ${source} from ${target}`);
     };
   }, [source, target]);

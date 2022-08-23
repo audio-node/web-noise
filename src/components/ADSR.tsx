@@ -5,7 +5,7 @@ import { NodeProps } from "react-flow-renderer";
 import EnvelopeGraph from "react-envelope-graph";
 import useFlowNode from "../hooks/useFlowNode";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../styles/consts";
-import { useNode } from "../ModuleContext";
+ import { useAudioNode } from "@web-noise/core";
 import { ADSR as TADSR, ADSRValues } from "../nodes";
 import { Node } from "./Node";
 
@@ -20,7 +20,7 @@ const MAX_RELEASE_VALUE = 10;
 
 const ADSR: FC<NodeProps<ADSRData>> = ({ data, id }) => {
   const { updateNodeValues } = useFlowNode(id);
-  const { node } = useNode<TADSR>(id);
+  const { node } = useAudioNode<TADSR>(id);
   const store = useCreateStore();
 
   const {

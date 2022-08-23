@@ -1,8 +1,8 @@
 //@ts-ignore
 import whiteNoiseWorklet from "worklet-loader!./worklet.ts"; // eslint-disable-line
-import { Node } from "../../ModuleContext";
+import { WNAudioNode } from "@web-noise/core";
 
-export interface WhiteNoise extends Node {
+export interface WhiteNoise extends WNAudioNode {
   whiteNoise: AudioWorkletNode;
 }
 

@@ -1,5 +1,5 @@
 import { Midi } from "@tonaljs/tonal";
-import { Node } from "../../ModuleContext";
+import { WNAudioNode } from "@web-noise/core";
 //@ts-ignore
 import clockCounterProcessor from "worklet-loader!../clockCounter/worklet.ts"; // eslint-disable-line
 //@ts-ignore
@@ -22,7 +22,7 @@ export interface StepSequencerValues {
   mode?: SEQUENCE_MODES;
 }
 
-export interface StepSequencer extends Node {
+export interface StepSequencer extends WNAudioNode {
   setValues: (values?: StepSequencerValues) => void;
   resetCounter: () => void;
   onTick: (fn: TickHandler) => void;

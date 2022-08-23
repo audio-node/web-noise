@@ -1,10 +1,10 @@
-import { Node } from "../ModuleContext";
+import { WNAudioNode } from "@web-noise/core";
 
 export interface ConstantSourceValues {
   value?: number;
 }
 
-export interface ConstantSource extends Node {
+export interface ConstantSource extends WNAudioNode {
   constantSource: ConstantSourceNode;
   setValues: (values?: ConstantSourceValues) => void;
 }

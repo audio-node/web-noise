@@ -3,7 +3,7 @@ import { useEffect, FC } from "react";
 import { NodeProps } from "react-flow-renderer";
 import useFlowNode from "../hooks/useFlowNode";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../styles/consts";
-import { useNode } from "../ModuleContext";
+ import { useAudioNode } from "@web-noise/core";
 import { Gain as TGain, GainValues } from "../nodes";
 import { Node } from "./Node";
 
@@ -14,7 +14,7 @@ interface GainData {
 
 const Gain: FC<NodeProps<GainData>> = ({ data, id }) => {
   const { updateNodeValues } = useFlowNode(id);
-  const { node } = useNode<TGain>(id);
+  const { node } = useAudioNode<TGain>(id);
   const store = useCreateStore();
 
   const { gain = 0 } = data.values || {};

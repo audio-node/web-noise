@@ -1,10 +1,10 @@
-import { Node } from "../ModuleContext";
+import { WNAudioNode } from "@web-noise/core";
 
 export interface GainValues {
   gain?: number;
 }
 
-export interface Gain extends Node {
+export interface Gain extends WNAudioNode {
   gain: GainNode;
   setValues: (values?: GainValues) => void;
 }

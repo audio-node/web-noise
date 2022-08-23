@@ -3,11 +3,11 @@ import { Note, Scale } from "@tonaljs/tonal";
 import clockCounterProcessor from "worklet-loader!../clockCounter/worklet.ts"; // eslint-disable-line
 //@ts-ignore
 import randomSequencerWorkletProcessor from "worklet-loader!./worklet.ts"; // eslint-disable-line
-import { Node } from "../../ModuleContext";
+import { WNAudioNode } from "@web-noise/core";
 
 type NoteChangeHandler = (args: { note: string }) => void;
 
-export interface RandomSequencer extends Node {
+export interface RandomSequencer extends WNAudioNode {
   onNoteChange: (fn: NoteChangeHandler) => void;
 }
 

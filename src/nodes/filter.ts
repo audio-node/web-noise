@@ -1,4 +1,4 @@
-import { Node } from "../ModuleContext";
+import { WNAudioNode } from "@web-noise/core";
 
 export interface FilterValues {
   frequency?: number;
@@ -6,7 +6,7 @@ export interface FilterValues {
   type?: BiquadFilterType;
 }
 
-export interface Filter extends Node {
+export interface Filter extends WNAudioNode {
   filter: BiquadFilterNode;
   setValues: (values?: FilterValues) => void;
 }

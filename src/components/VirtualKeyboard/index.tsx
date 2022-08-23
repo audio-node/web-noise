@@ -7,7 +7,7 @@ import { NodeProps } from "react-flow-renderer";
 //@ts-ignore
 import { KeyboardShortcuts, MidiNumbers, Piano } from "react-piano";
 import "react-piano/dist/styles.css";
-import { useNode } from "../../ModuleContext";
+ import { useAudioNode } from "@web-noise/core";
 import { VirtualKeyboard as TVirtualKeyboard } from "../../nodes";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../../styles/consts";
 import { Node } from "../Node";
@@ -23,7 +23,7 @@ const Keyboard = styled(Piano)`
 `;
 
 const VirtualKeyboard: FC<NodeProps> = ({ id }) => {
-  const { node } = useNode<TVirtualKeyboard>(id);
+  const { node } = useAudioNode<TVirtualKeyboard>(id);
 
   const store = useCreateStore();
 

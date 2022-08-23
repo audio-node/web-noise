@@ -1,7 +1,6 @@
 import { FC, useEffect, useRef } from "react";
 import { Edge, Node } from "react-flow-renderer";
-import { Node as TAudioNode } from "../../ModuleContext";
-import { useModule } from "../../ModuleContext";
+import { WNAudioNode, useModule } from "@web-noise/core";
 import { nodeTypes as baseNodeTypes } from "../../nodes";
 
 type BaseNodeTypes = typeof baseNodeTypes;
@@ -10,7 +9,7 @@ interface NodeTypes
   extends BaseNodeTypes,
     Record<
       string,
-      (audioContext: AudioContext) => TAudioNode | Promise<TAudioNode>
+      (audioContext: AudioContext) => WNAudioNode | Promise<WNAudioNode>
     > {}
 
 const diff = <T extends Array<any>>(

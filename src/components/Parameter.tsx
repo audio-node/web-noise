@@ -2,7 +2,7 @@ import { LevaPanel, useControls, useCreateStore } from "leva";
 import { FC, useEffect } from "react";
 import { NodeProps } from "react-flow-renderer";
 import useFlowNode from "../hooks/useFlowNode";
-import { useNode } from "../ModuleContext";
+ import { useAudioNode } from "@web-noise/core";
 import { ConstantSource, ConstantSourceValues } from "../nodes";
 import { Node } from "./Node";
 
@@ -12,7 +12,7 @@ interface ParameterData {
 }
 
 const Parameter: FC<NodeProps<ParameterData>> = ({ data, id }) => {
-  const { node } = useNode<ConstantSource>(id);
+  const { node } = useAudioNode<ConstantSource>(id);
 
   const { updateNodeValues } = useFlowNode(id);
   const store = useCreateStore();

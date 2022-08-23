@@ -12,7 +12,7 @@ import ReactFlow, {
   useEdgesState,
   useNodesState,
 } from "react-flow-renderer";
-import { contextValue, ModuleContext } from "../ModuleContext";
+import { contextValue, ModuleContext } from "@web-noise/core";
 import { nodeTypes as baseAudioNodeTypes } from "../nodes";
 import { Node as DefaultNode } from "./Node";
 import AudioGraph from "./AudioGraph";
