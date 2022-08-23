@@ -34,7 +34,7 @@ import VirtualKeyboard from "./VirtualKeyboard";
 import Visualiser from "./Visualiser";
 import WhiteNoise from "./WhiteNoise";
 import Clock from "./Clock";
-import Wire from "./Wire";
+import { Wire } from "@web-noise/core";
 import StepSequencer from "./StepSequencer";
 import ADSR from "./ADSR";
 import "../styles/reactflow.ts";
