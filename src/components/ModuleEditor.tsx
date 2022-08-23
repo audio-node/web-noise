@@ -12,11 +12,12 @@ import ReactFlow, {
   useEdgesState,
   useNodesState,
 } from "react-flow-renderer";
+import { ThemeProvider } from "@emotion/react";
 import { contextValue, ModuleContext } from "@web-noise/core";
 import { nodeTypes as baseAudioNodeTypes } from "../nodes";
 import { Node as DefaultNode } from "./Node";
 import { AudioGraph } from "@web-noise/core";
-import ContextMenu from "./ContextMenu";
+import { ContextMenu } from "@web-noise/core";
 import Destination from "./Destination";
 import Envelope from "./Envelope";
 import Filter from "./Filter";
@@ -37,6 +38,7 @@ import Clock from "./Clock";
 import { Wire } from "@web-noise/core";
 import StepSequencer from "./StepSequencer";
 import ADSR from "./ADSR";
+import { theme as defaultTheme } from "@web-noise/core";
 import "../styles/reactflow.ts";
 
 export interface Elements {
@@ -150,37 +152,41 @@ export const Editor = ({ elements }: { elements?: Elements }) => {
 
   return (
     <ModuleContext.Provider value={contextValue}>
-      <ReactFlowProvider>
-        <AudioGraph nodes={nodes} edges={edges} nodeTypes={audioNodeTypes} />
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          onConnect={onConnect}
-          onNodeDragStop={onNodeDragStop}
-          onInit={onInit}
-          onNodeClick={onNodeClick}
-          nodeTypes={nodeTypes}
-          edgeTypes={edgeTypes}
-          snapGrid={snapGrid}
-          defaultZoom={1.5}
-          defaultEdgeOptions={{ type: "wire" }}
-          snapToGrid
-          fitView
-        >
-          <Background variant={BackgroundVariant.Dots} gap={12} />
-          <MiniMap />
-          <Controls>
-            <ResumeContext />
-          </Controls>
-        </ReactFlow>
-        <ContextMenu
-          nodeTypes={nodeTypes}
-          onMenuItem={(nodeType, nodePosition) => onAdd(nodeType, nodePosition)}
-          onClearEditor={() => setNodes([])}
-        />
-      </ReactFlowProvider>
+      <ThemeProvider theme={defaultTheme}>
+        <ReactFlowProvider>
+          <AudioGraph nodes={nodes} edges={edges} nodeTypes={audioNodeTypes} />
+          <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onConnect={onConnect}
+            onNodeDragStop={onNodeDragStop}
+            onInit={onInit}
+            onNodeClick={onNodeClick}
+            nodeTypes={nodeTypes}
+            edgeTypes={edgeTypes}
+            snapGrid={snapGrid}
+            defaultZoom={1.5}
+            defaultEdgeOptions={{ type: "wire" }}
+            snapToGrid
+            fitView
+          >
+            <Background variant={BackgroundVariant.Dots} gap={12} />
+            <MiniMap />
+            <Controls>
+              <ResumeContext />
+            </Controls>
+          </ReactFlow>
+          <ContextMenu
+            nodeTypes={nodeTypes}
+            onMenuItem={(nodeType, nodePosition) =>
+              onAdd(nodeType, nodePosition)
+            }
+            onClearEditor={() => setNodes([])}
+          />
+        </ReactFlowProvider>
+      </ThemeProvider>
     </ModuleContext.Provider>
   );
 };

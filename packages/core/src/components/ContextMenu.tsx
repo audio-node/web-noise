@@ -1,7 +1,8 @@
-import { FC, useState, useEffect, useCallback, useRef } from "react";
 import styled from "@emotion/styled";
-import { LEVA_COLORS } from "../styles/consts";
-import { useViewport, useReactFlow } from "react-flow-renderer";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
+import { useReactFlow, useViewport } from "react-flow-renderer";
+import { Theme } from "../theme";
+import useTheme from "../hooks/useTheme";
 
 interface ContextMenuProps {
   nodeTypes: any;
@@ -19,6 +20,7 @@ const ContextMenu: FC<ContextMenuProps> = ({
   onMenuItem,
   onClearEditor,
 }) => {
+  const theme = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const { x, y, zoom } = useViewport();
   const { project } = useReactFlow();
@@ -73,6 +75,7 @@ const ContextMenu: FC<ContextMenuProps> = ({
           className="context-menu__wrapper"
           mousePosition={mousePosition}
           ref={menuWrapper}
+          theme={theme}
         >
           <ul>
             {Object.keys(nodeTypes).map((node, idx) => (
@@ -90,7 +93,7 @@ const ContextMenu: FC<ContextMenuProps> = ({
   );
 };
 
-const MenuWrapper = styled.div<{ mousePosition: MousePosition }>`
+const MenuWrapper = styled.div<{ mousePosition: MousePosition; theme: Theme }>`
   position: absolute;
   top: ${({ mousePosition }) => mousePosition.y}px;
   left: ${({ mousePosition }) => mousePosition.x}px;
@@ -112,7 +115,9 @@ const MenuWrapper = styled.div<{ mousePosition: MousePosition }>`
   li {
     padding: 4px;
     &:hover {
-      color: ${LEVA_COLORS.accent2};
+      color: ${({ theme }) => {
+        return theme.colors.accent2;
+      }};
       cursor: pointer;
       background: rgb(0 0 0 / 32%);
     }
