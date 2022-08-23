@@ -1,5 +1,4 @@
 import { FC } from "react";
-import { RecoilRoot } from "recoil";
 import Editor from "../components/ModuleEditor";
 
 export default {
@@ -11,11 +10,9 @@ export default {
   component: Editor,
   decorators: [
     (Story: FC) => (
-      <RecoilRoot>
-        <div style={{ height: "100vh" }}>
-          <Story />
-        </div>
-      </RecoilRoot>
+      <div style={{ height: "100vh" }}>
+        <Story />
+      </div>
     ),
   ],
 };
@@ -649,7 +646,13 @@ export const Keyboard = () => (
           type: "adsr",
           data: {
             label: "Envelope",
-            values: { attack: 0.2, decay: 0.2, release: 0.3, sustain: 0.2, attackCurve: 1 },
+            values: {
+              attack: 0.2,
+              decay: 0.2,
+              release: 0.3,
+              sustain: 0.2,
+              attackCurve: 1,
+            },
           },
           position: { x: spaceWidth * 2 - 80, y: 200 },
           dragHandle: ".leva-c-hwBXYF",
