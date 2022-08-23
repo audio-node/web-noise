@@ -15,7 +15,7 @@ import ReactFlow, {
 import { contextValue, ModuleContext } from "@web-noise/core";
 import { nodeTypes as baseAudioNodeTypes } from "../nodes";
 import { Node as DefaultNode } from "./Node";
-import AudioGraph from "./AudioGraph";
+import { AudioGraph } from "@web-noise/core";
 import ContextMenu from "./ContextMenu";
 import Destination from "./Destination";
 import Envelope from "./Envelope";

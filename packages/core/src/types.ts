@@ -14,3 +14,7 @@ export interface WNAudioNode extends Record<string, any> {
   destroy?: () => void;
   setValues?: (values?: any) => void;
 }
+
+export type CreateWNAudioNode = (
+  audioContext: AudioContext
+) => WNAudioNode | Promise<WNAudioNode>;
