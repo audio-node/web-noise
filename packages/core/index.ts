@@ -1,11 +1,8 @@
 import { CodeEditor } from "./src/levaPlugins";
-import {
-  Node as WNAudioNode,
-  ModuleContext,
-  contextValue,
-  useNode as useAudioNode,
-  useModule,
-} from "./src/Context";
+import { ModuleContext, contextValue } from "./src/Context";
+import useAudioNode from "./src/hooks/useAudioNode";
+import useModule from "./src/hooks/useModule";
+import type { WNAudioNode } from "./src/types";
 
 const plugins = {
   CodeEditor,
