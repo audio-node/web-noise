@@ -2,7 +2,7 @@ import { LevaPanel, useControls, useCreateStore } from "leva";
 import { useEffect, useState, useRef, FC } from "react";
 import { NodeProps } from "react-flow-renderer";
 import styled from "@emotion/styled";
-import useFlowNode from "../../hooks/useFlowNode";
+ import { useNode } from "@web-noise/core";
  import { useAudioNode } from "@web-noise/core";
 import { AnalyserWorklet as Analyser } from "../../nodes";
 import {
@@ -39,7 +39,7 @@ const Stage = styled.div`
 
 const Oscilloscope = ({ data, id }: NodeProps<OscilloscopeData>) => {
   const { node } = useAudioNode<Analyser>(id);
-  const { updateNodeConfig } = useFlowNode(id);
+  const { updateNodeConfig } =  useNode(id);
 
   const store = useCreateStore();
 

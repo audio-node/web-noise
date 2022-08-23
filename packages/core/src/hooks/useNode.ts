@@ -5,7 +5,7 @@ interface BaseNodeProps {
   label: string;
 }
 
-const useFlowNode = <T extends BaseNodeProps>(id: string) => {
+const  useNode = <T extends BaseNodeProps>(id: string) => {
   const { setNodes, getNode } = useReactFlow();
   const node: Node<T> | undefined = getNode(id);
   const data = node?.data;
@@ -50,4 +50,4 @@ const useFlowNode = <T extends BaseNodeProps>(id: string) => {
   };
 };
 
-export default useFlowNode;
+export default  useNode;

@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { FC } from "react";
 import { Handle, HandleProps, Position } from "react-flow-renderer";
-import useFlowNode from "../../hooks/useFlowNode";
+ import { useNode } from "@web-noise/core";
  import { useAudioNode } from "@web-noise/core";
 import { LEVA_COLORS } from "../../styles/consts";
 
@@ -76,7 +76,7 @@ const OutputHandle: FC<Partial<HandleProps>> = (props) => (
 );
 
 export const Node: FC<{ id: string }> = ({ id, children }) => {
-  const { data } = useFlowNode(id);
+  const { data } =  useNode(id);
   const audioNode = useAudioNode(id);
 
   if (audioNode.loading) {

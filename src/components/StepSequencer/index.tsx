@@ -10,7 +10,7 @@ import { button, LevaPanel, useControls, useCreateStore } from "leva";
 import { FC, useCallback, useEffect, useState } from "react";
 import { NodeProps } from "react-flow-renderer";
  import { useAudioNode } from "@web-noise/core";
-import useFlowNode from "../../hooks/useFlowNode";
+ import { useNode } from "@web-noise/core";
 import {
   DEFAULT_SEQUENCE_MODE,
   DEFAULT_STEP_VALUE,
@@ -52,7 +52,7 @@ const midiToNote: FormatNote<number, string> = (value) => {
 
 const StepSequencer: FC<NodeProps<StepSequencerData>> = ({ id, data }) => {
   const { node } = useAudioNode<NodeStepSequencer>(id);
-  const { updateNodeValues, updateNodeConfig } = useFlowNode(id);
+  const { updateNodeValues, updateNodeConfig } =  useNode(id);
 
   const { steps = DEFAULT_STEPS_COUNT, showMidiNumbers = false } =
     data.config || {};

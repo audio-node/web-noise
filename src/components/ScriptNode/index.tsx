@@ -2,7 +2,7 @@ import { plugins } from "@web-noise/core";
 import { button, LevaPanel, useControls, useCreateStore } from "leva";
 import { FC, useEffect } from "react";
 import { NodeProps } from "react-flow-renderer";
-import useFlowNode from "../../hooks/useFlowNode";
+ import { useNode } from "@web-noise/core";
  import { useAudioNode } from "@web-noise/core";
 import { ScriptNode as TScriptNode, ScriptNodeValues } from "../../nodes";
 import { Node } from "../Node";
@@ -16,7 +16,7 @@ const { CodeEditor } = plugins;
 
 const ScriptNode: FC<NodeProps<ScriptNodeData>> = ({ data, id }) => {
   const { node } = useAudioNode<TScriptNode>(id);
-  const { updateNodeValues } = useFlowNode(id);
+  const { updateNodeValues } =  useNode(id);
 
   const { expression = "" } = data.values || {};
 
