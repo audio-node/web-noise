@@ -1,16 +1,18 @@
+import { plugins } from "@web-noise/core";
 import { button, LevaPanel, useControls, useCreateStore } from "leva";
-import { useEffect, useState, FC } from "react";
+import { FC, useEffect } from "react";
 import { NodeProps } from "react-flow-renderer";
-import { useNode } from "../../ModuleContext";
 import useFlowNode from "../../hooks/useFlowNode";
+import { useNode } from "../../ModuleContext";
 import { ScriptNode as TScriptNode, ScriptNodeValues } from "../../nodes";
 import { Node } from "../Node";
-import { CodeEditor } from "../../levaPlugins";
 
 interface ScriptNodeData {
   label: string;
   values?: ScriptNodeValues;
 }
+
+const { CodeEditor } = plugins;
 
 const ScriptNode: FC<NodeProps<ScriptNodeData>> = ({ data, id }) => {
   const { node } = useNode<TScriptNode>(id);

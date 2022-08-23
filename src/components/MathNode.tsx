@@ -1,8 +1,8 @@
+import { plugins } from "@web-noise/core";
 import { button, LevaPanel, useControls, useCreateStore } from "leva";
 import { FC, useEffect } from "react";
 import { NodeProps } from "react-flow-renderer";
 import useFlowNode from "../hooks/useFlowNode";
-import { CodeEditor } from "../levaPlugins";
 import { useNode } from "../ModuleContext";
 import { MathNode as TMathNode, MathNodeValues } from "../nodes";
 import { Node } from "./Node";
@@ -11,6 +11,8 @@ interface MathNodeData {
   label: string;
   values?: MathNodeValues;
 }
+
+const { CodeEditor } = plugins;
 
 const MathNode: FC<NodeProps<MathNodeData>> = ({ data, id }) => {
   const { node } = useNode<TMathNode>(id);
@@ -22,7 +24,7 @@ const MathNode: FC<NodeProps<MathNodeData>> = ({ data, id }) => {
 
   useEffect(() => {
     node?.setValues({ expression });
-  }, [expression, node])
+  }, [expression, node]);
 
   const values = useControls(
     {
