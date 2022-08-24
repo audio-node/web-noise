@@ -1,9 +1,10 @@
 import styled from "@emotion/styled";
 import { FC } from "react";
 import { Handle, HandleProps, Position } from "react-flow-renderer";
- import { useNode } from "@web-noise/core";
- import { useAudioNode } from "@web-noise/core";
-import { LEVA_COLORS } from "../../styles/consts";
+ import useNode from "../../hooks/useNode";
+ import useAudioNode from "../../hooks/useAudioNode";
+import useTheme from "../../hooks/useTheme";
+import { Theme } from "../../theme";
 
 const NodeWrapper = styled.div`
   background-color: var(--leva-colors-elevation1);
@@ -35,14 +36,14 @@ export const TitleBar = styled(Section)`
   padding: 0 1rem;
 `;
 
-export const PortsPanel = styled(Section)`
+export const PortsPanel = styled(Section)<{ theme: Theme }>(({ theme }) => `
   display: grid;
   grid-template-areas: "inputs outputs";
-  background: ${LEVA_COLORS.elevation2};
-  border-bottom: 1px solid ${LEVA_COLORS.elevation1};
-  color: ${LEVA_COLORS.highlight3};
+  background: ${theme.colors.elevation2};
+  border-bottom: 1px solid ${theme.colors.elevation1};
+  color: ${theme.colors.highlight3};
   font-size: 0.6rem;
-`;
+`);
 
 export const InputPorts = styled.div`
   grid-area: inputs;
@@ -76,6 +77,7 @@ const OutputHandle: FC<Partial<HandleProps>> = (props) => (
 );
 
 export const Node: FC<{ id: string }> = ({ id, children }) => {
+  const theme = useTheme();
   const { data } =  useNode(id);
   const audioNode = useAudioNode(id);
 
@@ -92,7 +94,7 @@ export const Node: FC<{ id: string }> = ({ id, children }) => {
   return (
     <NodeWrapper>
       <TitleBar className="leva-c-hwBXYF">{data?.label || "No Name"}</TitleBar>
-      <PortsPanel>
+      <PortsPanel theme={theme}>
         <InputPorts>
           {inputs
             ? Object.keys(inputs).map((key, index) => (

@@ -5,7 +5,7 @@ import { NodeProps } from "react-flow-renderer";
  import { useAudioNode } from "@web-noise/core";
 import { Clock as TClock } from "../../nodes";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../../styles/consts";
-import { Node } from "../Node";
+import { Node } from "@web-noise/core";
 
 interface ClockData {
   label: string;

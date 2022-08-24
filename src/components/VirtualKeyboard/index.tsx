@@ -10,7 +10,7 @@ import "react-piano/dist/styles.css";
  import { useAudioNode } from "@web-noise/core";
 import { VirtualKeyboard as TVirtualKeyboard } from "../../nodes";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../../styles/consts";
-import { Node } from "../Node";
+import { Node } from "@web-noise/core";
 
 const Keyboard = styled(Piano)`
   .ReactPiano__Key--natural {

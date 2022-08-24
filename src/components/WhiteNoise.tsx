@@ -1,5 +1,5 @@
 import { NodeProps } from "react-flow-renderer";
-import { Node } from "./Node";
+import { Node } from "@web-noise/core";
 
 const WhiteNoise = ({ id }: NodeProps) => <Node id={id} />;
 

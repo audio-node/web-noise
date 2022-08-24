@@ -5,7 +5,7 @@ import { NodeProps } from "react-flow-renderer";
  import { useNode } from "@web-noise/core";
  import { useAudioNode } from "@web-noise/core";
 import { ScriptNode as TScriptNode, ScriptNodeValues } from "../../nodes";
-import { Node } from "../Node";
+import { Node } from "@web-noise/core";
 
 interface ScriptNodeData {
   label: string;

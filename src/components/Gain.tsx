@@ -5,7 +5,7 @@ import { NodeProps } from "react-flow-renderer";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../styles/consts";
  import { useAudioNode } from "@web-noise/core";
 import { Gain as TGain, GainValues } from "../nodes";
-import { Node } from "./Node";
+import { Node } from "@web-noise/core";
 
 interface GainData {
   label: string;

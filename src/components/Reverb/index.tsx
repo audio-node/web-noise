@@ -4,7 +4,7 @@ import { NodeProps } from "react-flow-renderer";
  import { useNode } from "@web-noise/core";
  import { useAudioNode } from "@web-noise/core";
 import { Reverb as TReverb, ReverbValues } from "../../nodes/reverb";
-import { Node } from "../Node";
+import { Node } from "@web-noise/core";
 
 interface ReverbData {
   label: string;

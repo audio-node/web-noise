@@ -4,7 +4,7 @@ import { Handle, NodeProps, Position } from "react-flow-renderer";
 import { MdSpeaker } from "react-icons/md";
  import { useAudioNode } from "@web-noise/core";
 import { Destination as TDestination } from "../nodes";
-import { TitleBar } from "./Node";
+import { TitleBar } from "@web-noise/core";
 
 const TitleBarWrapper = styled(TitleBar)`
   width: auto;

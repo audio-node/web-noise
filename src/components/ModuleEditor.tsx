@@ -15,7 +15,7 @@ import ReactFlow, {
 import { ThemeProvider } from "@emotion/react";
 import { contextValue, ModuleContext } from "@web-noise/core";
 import { nodeTypes as baseAudioNodeTypes } from "../nodes";
-import { Node as DefaultNode } from "./Node";
+import { Node as DefaultNode } from "@web-noise/core";
 import { AudioGraph } from "@web-noise/core";
 import { ContextMenu } from "@web-noise/core";
 import Destination from "./Destination";

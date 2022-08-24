@@ -7,7 +7,7 @@ import EnvelopeGraph from "react-envelope-graph";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../styles/consts";
  import { useAudioNode } from "@web-noise/core";
 import { ADSR as TADSR, ADSRValues } from "../nodes";
-import { Node } from "./Node";
+import { Node } from "@web-noise/core";
 
 interface ADSRData {
   label: string;

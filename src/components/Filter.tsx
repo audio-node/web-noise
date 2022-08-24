@@ -4,7 +4,7 @@ import { NodeProps } from "react-flow-renderer";
  import { useNode } from "@web-noise/core";
  import { useAudioNode } from "@web-noise/core";
 import { Filter as TFilter, FilterValues } from "../nodes";
-import { Node } from "./Node";
+import { Node } from "@web-noise/core";
 
 const FilterTypes: Record<BiquadFilterType, BiquadFilterType> = {
   lowpass: "lowpass",

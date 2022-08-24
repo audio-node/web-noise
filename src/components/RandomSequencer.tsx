@@ -3,7 +3,7 @@ import { useEffect, FC } from "react";
 import { NodeProps } from "react-flow-renderer";
  import { useAudioNode } from "@web-noise/core";
 import { RandomSequencer as TRandomSequencer } from "../nodes";
-import { Node } from "./Node";
+import { Node } from "@web-noise/core";
 
 const RandomSequencer: FC<NodeProps> = ({ id }) => {
   const { node } = useAudioNode<TRandomSequencer>(id);

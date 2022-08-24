@@ -10,7 +10,7 @@ import {
   COLOR_GREEN_PRIMARY,
   COLOR_WHITE_PRIMARY,
 } from "../../styles/consts";
-import { Node } from "../Node";
+import { Node } from "@web-noise/core";
 import Scope from "./Scope";
 import Grid from "./Grid";
 

@@ -6,7 +6,7 @@ import useAnimationFrame from "use-animation-frame";
  import { useAudioNode } from "@web-noise/core";
 import { Analyser } from "../nodes";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../styles/consts";
-import { Node } from "./Node";
+import { Node } from "@web-noise/core";
 
 const Spectroscope = ({ data, id }: NodeProps) => {
   const { node } = useAudioNode<Analyser>(id);

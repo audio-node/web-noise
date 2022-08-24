@@ -5,7 +5,7 @@ import { Handle, NodeProps, Position } from "react-flow-renderer";
 import useAnimationFrame from "use-animation-frame";
  import { useAudioNode } from "@web-noise/core";
 import { Analyser } from "../nodes";
-import { Node } from "./Node";
+import { Node } from "@web-noise/core";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../styles/consts";
 
 const Visualiser = ({ data, id }: NodeProps) => {

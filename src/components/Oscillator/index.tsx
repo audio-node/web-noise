@@ -5,7 +5,7 @@ import { NodeProps } from "react-flow-renderer";
  import { useAudioNode } from "@web-noise/core";
 import { Oscillator as TOscillator, OscillatorValues } from "../../nodes";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../../styles/consts";
-import { Node } from "../Node";
+import { Node } from "@web-noise/core";
 import { SawToothIcon, SineIcon, SquareIcon, TriangleIcon } from "./icons";
 import iconsGroup from "./iconsGroup";
 

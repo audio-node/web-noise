@@ -20,7 +20,7 @@ import {
   StepSequencerValues,
 } from "../../nodes/stepSequencer";
 import { LEVA_COLOR_ACCENT2_BLUE } from "../../styles/consts";
-import { Node } from "../Node";
+import { Node } from "@web-noise/core";
 import Sequencer, { FormatNote } from "./Sequencer";
 
 const sequenceModesOptions: Record<string, SEQUENCE_MODES> = {
