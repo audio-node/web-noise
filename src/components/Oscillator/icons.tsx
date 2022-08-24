@@ -1,6 +1,6 @@
 import { FC } from "react";
 import styled from "@emotion/styled";
-import { LEVA_COLORS } from "../../styles/consts";
+import { theme } from "@web-noise/core";
 
 interface IconProps {
   selected: boolean;
@@ -11,10 +11,10 @@ const Icon = styled.div<IconProps>`
   cursor: pointer;
   svg {
     fill: ${({ selected }) =>
-      selected ? LEVA_COLORS.accent2 : LEVA_COLORS.highlight1};
+      selected ? theme.colors.accent2 : theme.colors.highlight1};
   }
   &:hover svg {
-    fill: ${LEVA_COLORS.accent3};
+    fill: ${theme.colors.accent3};
   }
 `;
 

@@ -19,7 +19,7 @@ import {
   StepSequencer as NodeStepSequencer,
   StepSequencerValues,
 } from "../../nodes/stepSequencer";
-import { LEVA_COLOR_ACCENT2_BLUE } from "../../styles/consts";
+import { useTheme } from "@web-noise/core";
 import { Node } from "@web-noise/core";
 import Sequencer, { FormatNote } from "./Sequencer";
 
@@ -53,6 +53,8 @@ const midiToNote: FormatNote<number, string> = (value) => {
 const StepSequencer: FC<NodeProps<StepSequencerData>> = ({ id, data }) => {
   const { node } = useAudioNode<NodeStepSequencer>(id);
   const { updateNodeValues, updateNodeConfig } =  useNode(id);
+
+  const theme = useTheme();
 
   const { steps = DEFAULT_STEPS_COUNT, showMidiNumbers = false } =
     data.config || {};
@@ -111,7 +113,7 @@ const StepSequencer: FC<NodeProps<StepSequencerData>> = ({ id, data }) => {
       },
       showMidiNumbers,
     },
-    { collapsed: true, color: LEVA_COLOR_ACCENT2_BLUE },
+    { collapsed: true, color: theme.colors.accent2 },
     { store },
     [generateRandomSeq, clearSeq, node]
   );

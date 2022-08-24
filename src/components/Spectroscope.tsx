@@ -5,18 +5,20 @@ import { NodeProps } from "react-flow-renderer";
 import useAnimationFrame from "use-animation-frame";
  import { useAudioNode } from "@web-noise/core";
 import { Analyser } from "../nodes";
-import { LEVA_COLOR_ACCENT2_BLUE } from "../styles/consts";
+import { useTheme } from "@web-noise/core";
 import { Node } from "@web-noise/core";
 
 const Spectroscope = ({ data, id }: NodeProps) => {
   const { node } = useAudioNode<Analyser>(id);
   const { analyser } = node || {};
 
+  const theme = useTheme();
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvas = canvasRef.current;
   const store = useCreateStore();
   const controls = useControls(
-    { color: { value: LEVA_COLOR_ACCENT2_BLUE } },
+    { color: { value: theme.colors.accent2 } },
     { store }
   );
 

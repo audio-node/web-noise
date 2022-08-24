@@ -1,11 +1,11 @@
-import { FC, useEffect, useMemo, useRef, useState } from "react";
-import { LEVA_COLOR_ACCENT2_BLUE } from "../../styles/consts";
+import { theme } from "@web-noise/core";
+import { FC, useEffect, useMemo, useRef } from "react";
 
 const rendererWorkerUrl = new URL("./renderer.worker.js", import.meta.url);
 
 const Scope: FC<{ analyser: AudioWorkletNode; color?: string }> = ({
   analyser,
-  color = LEVA_COLOR_ACCENT2_BLUE,
+  color = theme.colors.accent2,
 }) => {
   const worker = useMemo(() => {
     return new Worker(rendererWorkerUrl);

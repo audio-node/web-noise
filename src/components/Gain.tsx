@@ -2,7 +2,7 @@ import { LevaPanel, useControls, useCreateStore } from "leva";
 import { useEffect, FC } from "react";
 import { NodeProps } from "react-flow-renderer";
  import { useNode } from "@web-noise/core";
-import { LEVA_COLOR_ACCENT2_BLUE } from "../styles/consts";
+import { useTheme } from "@web-noise/core";
  import { useAudioNode } from "@web-noise/core";
 import { Gain as TGain, GainValues } from "../nodes";
 import { Node } from "@web-noise/core";
@@ -15,6 +15,9 @@ interface GainData {
 const Gain: FC<NodeProps<GainData>> = ({ data, id }) => {
   const { updateNodeValues } =  useNode(id);
   const { node } = useAudioNode<TGain>(id);
+
+  const theme = useTheme();
+
   const store = useCreateStore();
 
   const { gain = 0 } = data.values || {};
@@ -29,7 +32,7 @@ const Gain: FC<NodeProps<GainData>> = ({ data, id }) => {
         label: "lvl",
       },
     },
-    { collapsed: true, color: LEVA_COLOR_ACCENT2_BLUE },
+    { collapsed: true, color: theme.colors.accent2 },
     { store }
   );
 

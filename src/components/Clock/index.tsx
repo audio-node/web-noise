@@ -4,7 +4,7 @@ import { NodeProps } from "react-flow-renderer";
  import { useNode } from "@web-noise/core";
  import { useAudioNode } from "@web-noise/core";
 import { Clock as TClock } from "../../nodes";
-import { LEVA_COLOR_ACCENT2_BLUE } from "../../styles/consts";
+import { useTheme } from "@web-noise/core";
 import { Node } from "@web-noise/core";
 
 interface ClockData {
@@ -24,6 +24,8 @@ const Clock: FC<NodeProps<ClockData>> = ({ data, id }) => {
   const { node } = useAudioNode<TClock>(id);
   const { updateNodeValues } =  useNode(id);
   const [isActive, setActive] = useState(false);
+
+  const theme = useTheme();
 
   const store = useCreateStore();
 
@@ -49,7 +51,7 @@ const Clock: FC<NodeProps<ClockData>> = ({ data, id }) => {
             max: 500,
           },
         },
-        { collapsed: true, color: LEVA_COLOR_ACCENT2_BLUE }
+        { collapsed: true, color: theme.colors.accent2 }
       ),
       ...(isActive
         ? {

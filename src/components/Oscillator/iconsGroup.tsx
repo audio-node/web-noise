@@ -1,6 +1,6 @@
 import { createPlugin, useInputContext } from "leva/plugin";
 import styled from "@emotion/styled";
-import { LEVA_COLORS } from '../../styles/consts'
+import { theme } from '@web-noise/core'
 
 
 const IconsGroupWrapper = styled.div`
@@ -10,7 +10,7 @@ const IconsGroupWrapper = styled.div`
   row-gap: var(--leva-space-rowGap);
   grid-template-rows: minmax(var(--leva-sizes-rowHeight), max-content);
   align-items: center;
-  color: ${LEVA_COLORS.highlight2};
+  color: ${theme.colors.highlight2};
   grid-template-columns: auto var(--leva-sizes-controlWidth);
   column-gap: var(--leva-space-colGap);
 `;

@@ -1,5 +1,5 @@
 import { injectGlobal } from "@emotion/css";
-import { LEVA_COLORS } from "./consts";
+import { theme } from "@web-noise/core";
 
 injectGlobal`
   .react-flow {
@@ -7,7 +7,7 @@ injectGlobal`
     /* background: rgb(106 106 106); */
     /* background: "white"; */
     // background: #292d39;
-      background: ${LEVA_COLORS.elevation3};
+      background: ${theme.colors.elevation3};
     }
 
     .react-flow__background {
@@ -28,16 +28,16 @@ injectGlobal`
     }
 
     .react-flow__edge-path {
-      stroke:  ${LEVA_COLORS.accent2};
+      stroke:  ${theme.colors.accent2};
     }
 
     .react-flow__node.selected {
-      border: 1px solid ${LEVA_COLORS.accent2};
-      box-shadow: 0 0 0 0.5px #${LEVA_COLORS.accent2};
+      border: 1px solid ${theme.colors.accent2};
+      box-shadow: 0 0 0 0.5px #${theme.colors.accent2};
     }
 
     .react-flow__node-default.selected, .react-flow__node-default.selected:hover {
-      box-shadow: 0 0 0 0.5px #${LEVA_COLORS.accent2};
+      box-shadow: 0 0 0 0.5px #${theme.colors.accent2};
     }
 
     .react-flow__edge-path {
@@ -49,11 +49,11 @@ injectGlobal`
     }
 
     /* .react-flow__minimap-mask {
-      fill: ${LEVA_COLORS.elevation1}
+      fill: ${theme.colors.elevation1}
     }
 
     .react-flow__minimap-node {
-      fill:${LEVA_COLORS.accent2}
+      fill:${theme.colors.accent2}
     } */
   }
 

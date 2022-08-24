@@ -1,13 +1,10 @@
 import { LevaPanel, useControls, useCreateStore } from "leva";
-import { useEffect, FC } from "react";
+import { FC, useEffect } from "react";
 import { NodeProps } from "react-flow-renderer";
+import { Node, useAudioNode, useNode, useTheme } from "@web-noise/core";
 // @ts-ignore
 import EnvelopeGraph from "react-envelope-graph";
- import { useNode } from "@web-noise/core";
-import { LEVA_COLOR_ACCENT2_BLUE } from "../styles/consts";
- import { useAudioNode } from "@web-noise/core";
 import { ADSR as TADSR, ADSRValues } from "../nodes";
-import { Node } from "@web-noise/core";
 
 interface ADSRData {
   label: string;
@@ -19,8 +16,11 @@ const MAX_DECAY_VALUE = 10;
 const MAX_RELEASE_VALUE = 10;
 
 const ADSR: FC<NodeProps<ADSRData>> = ({ data, id }) => {
-  const { updateNodeValues } =  useNode(id);
+  const { updateNodeValues } = useNode(id);
   const { node } = useAudioNode<TADSR>(id);
+
+  const theme = useTheme();
+
   const store = useCreateStore();
 
   const {
@@ -69,7 +69,7 @@ const ADSR: FC<NodeProps<ADSRData>> = ({ data, id }) => {
         label: "release",
       },
     },
-    { collapsed: true, color: LEVA_COLOR_ACCENT2_BLUE },
+    { collapsed: true, color: theme.colors.accent2 },
     { store }
   );
 

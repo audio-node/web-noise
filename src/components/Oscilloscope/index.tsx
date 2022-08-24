@@ -1,18 +1,11 @@
-import { LevaPanel, useControls, useCreateStore } from "leva";
-import { useEffect, useState, useRef, FC } from "react";
-import { NodeProps } from "react-flow-renderer";
 import styled from "@emotion/styled";
- import { useNode } from "@web-noise/core";
- import { useAudioNode } from "@web-noise/core";
+import { Node, useAudioNode, useNode, useTheme } from "@web-noise/core";
+import { LevaPanel, useControls, useCreateStore } from "leva";
+import { useEffect } from "react";
+import { NodeProps } from "react-flow-renderer";
 import { AnalyserWorklet as Analyser } from "../../nodes";
-import {
-  LEVA_COLOR_ACCENT2_BLUE,
-  COLOR_GREEN_PRIMARY,
-  COLOR_WHITE_PRIMARY,
-} from "../../styles/consts";
-import { Node } from "@web-noise/core";
-import Scope from "./Scope";
 import Grid from "./Grid";
+import Scope from "./Scope";
 
 interface OscilloscopeData {
   label: string;
@@ -39,15 +32,17 @@ const Stage = styled.div`
 
 const Oscilloscope = ({ data, id }: NodeProps<OscilloscopeData>) => {
   const { node } = useAudioNode<Analyser>(id);
-  const { updateNodeConfig } =  useNode(id);
+  const { updateNodeConfig } = useNode(id);
+
+  const theme = useTheme();
 
   const store = useCreateStore();
 
   const {
-    input1Color = LEVA_COLOR_ACCENT2_BLUE,
-    input2Color = COLOR_GREEN_PRIMARY,
+    input1Color = theme.colors.accent2,
+    input2Color = theme.colors.vivid1,
     showGrid = false,
-    gridColor = COLOR_WHITE_PRIMARY,
+    gridColor = theme.colors.whitePrimary,
   } = data.config || {};
 
   const config = useControls(
@@ -65,7 +60,7 @@ const Oscilloscope = ({ data, id }: NodeProps<OscilloscopeData>) => {
         render: (get) => get("settings.showGrid"),
       },
     },
-    { collapsed: true, color: LEVA_COLOR_ACCENT2_BLUE },
+    { collapsed: true, color: theme.colors.accent2 },
     { store: store }
   );
 
