@@ -14,7 +14,7 @@ import {
 import nodesPack from "../nodesPack";
 
 const Editor: typeof DefaultEditor = (...props) => (
-  <DefaultEditor config={nodesPack} {...props} />
+  <DefaultEditor plugins={nodesPack} {...props} />
 );
 
 export default {

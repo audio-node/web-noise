@@ -41,14 +41,14 @@ const snapGrid: [number, number] = [20, 20];
 
 export const Editor = ({
   elements,
-  config = { nodes: {}, audioNodes: {} },
+  plugins = { nodes: {}, audioNodes: {} },
 }: {
   elements?: Elements;
-  config?: EditorConfig;
+  plugins?: EditorConfig;
 }) => {
-  const nodeTypes = useMemo(() => config.nodes, [config]);
+  const nodeTypes = useMemo(() => plugins.nodes, [plugins]);
 
-  const audioNodeTypes = useMemo(() => config.audioNodes, [config]);
+  const audioNodeTypes = useMemo(() => plugins.audioNodes, [plugins]);
 
   const edgeTypes = useMemo(
     () => ({

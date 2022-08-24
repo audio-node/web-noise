@@ -2,7 +2,7 @@ import { Editor as DefaultEditor } from "@web-noise/core";
 import { FC } from "react";
 import nodesPack from "../nodesPack";
 
-const Editor: typeof DefaultEditor = (props) => <DefaultEditor config={nodesPack} {...props} />;
+const Editor: typeof DefaultEditor = (props) => <DefaultEditor plugins={nodesPack} {...props} />;
 
 export default {
   /* 👇 The title prop is optional.
