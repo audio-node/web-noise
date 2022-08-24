@@ -1,16 +1,21 @@
 // Button.stories.js|jsx
 
+import { Editor as DefaultEditor } from "@web-noise/core";
 import { FC } from "react";
 import { RecoilRoot } from "recoil";
 import {
-  filterExample,
   defaultExample,
+  demoExample,
+  filterExample,
+  hackdaysDemo,
   parameterExample,
   reverbExample,
-  demoExample,
-  hackdaysDemo,
 } from "../editorExamples";
-import Editor from "../components/ModuleEditor";
+import nodesPack from "../nodesPack";
+
+const Editor: typeof DefaultEditor = (...props) => (
+  <DefaultEditor config={nodesPack} {...props} />
+);
 
 export default {
   /* 👇 The title prop is optional.

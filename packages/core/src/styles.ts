@@ -1,5 +1,5 @@
 import { injectGlobal } from "@emotion/css";
-import { theme } from "@web-noise/core";
+import theme from "./theme";
 
 injectGlobal`
   .react-flow {

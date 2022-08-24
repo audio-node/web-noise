@@ -1,4 +1,4 @@
-import { Elements } from "./components/ModuleEditor";
+import { Elements } from "@web-noise/core";
 
 export const spaceWidth = 340;
 

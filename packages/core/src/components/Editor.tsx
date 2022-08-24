@@ -1,3 +1,4 @@
+import { ThemeProvider } from "@emotion/react";
 import { useCallback, useMemo, useState } from "react";
 import ReactFlow, {
   addEdge,
@@ -12,38 +13,23 @@ import ReactFlow, {
   useEdgesState,
   useNodesState,
 } from "react-flow-renderer";
-import { ThemeProvider } from "@emotion/react";
-import { contextValue, ModuleContext } from "@web-noise/core";
-import { nodeTypes as baseAudioNodeTypes } from "../nodes";
-import { Node as DefaultNode } from "@web-noise/core";
-import { AudioGraph } from "@web-noise/core";
-import { ContextMenu } from "@web-noise/core";
-import Destination from "./Destination";
-import Envelope from "./Envelope";
-import Filter from "./Filter";
-import Gain from "./Gain";
-import Oscillator from "./Oscillator";
-import Parameter from "./Parameter";
-import RandomSequencer from "./RandomSequencer";
-import { ResumeContext } from "@web-noise/core";
-import Reverb from "./Reverb";
-import ScriptNode from "./ScriptNode";
-import MathNode from "./MathNode";
-import Spectroscope from "./Spectroscope";
-import Oscilloscope from "./Oscilloscope";
-import VirtualKeyboard from "./VirtualKeyboard";
-import Visualiser from "./Visualiser";
-import WhiteNoise from "./WhiteNoise";
-import Clock from "./Clock";
-import { Wire } from "@web-noise/core";
-import StepSequencer from "./StepSequencer";
-import ADSR from "./ADSR";
-import { theme as defaultTheme } from "@web-noise/core";
-import "../styles/reactflow.ts";
+import "../styles";
+import AudioGraph from "./AudioGraph";
+import ContextMenu from "./ContextMenu";
+import ResumeContext from "./ResumeContext";
+import Wire from "./Wire";
+import { contextValue, ModuleContext } from "../Context";
+import defaultTheme from '../theme';
+import type { CreateWNAudioNode } from "../types";
 
 export interface Elements {
   nodes: Array<Node>;
   edges: Array<Edge>;
+}
+
+export interface EditorConfig {
+  nodes: Record<string, any>;
+  audioNodes: Record<string, CreateWNAudioNode>;
 }
 
 const onNodeDragStop = (_event: any, node: any) =>
@@ -53,44 +39,16 @@ const onNodeClick = (_event: any, element: any) =>
 
 const snapGrid: [number, number] = [20, 20];
 
-export const Editor = ({ elements }: { elements?: Elements }) => {
-  const nodeTypes = useMemo(
-    () => ({
-      oscillator: Oscillator,
-      gain: Gain,
-      visualiser: Visualiser,
-      spectroscope: Spectroscope,
-      oscilloscope: Oscilloscope,
-      destination: Destination,
-      whiteNoise: WhiteNoise,
-      filter: Filter,
-      parameter: Parameter,
-      reverb: Reverb,
-      randomSequencer: RandomSequencer,
-      randomSequencerWorklet: RandomSequencer,
-      envelope: Envelope,
-      scriptNode: ScriptNode,
-      mathNode: MathNode,
-      virtualKeyboard: VirtualKeyboard,
-      clock: Clock,
-      stepSequencer: StepSequencer,
-      stepSequencerWorklet: StepSequencer,
-      adsr: ADSR,
-      midiToFrequency: DefaultNode,
-    }),
-    []
-  );
+export const Editor = ({
+  elements,
+  config = { nodes: {}, audioNodes: {} },
+}: {
+  elements?: Elements;
+  config?: EditorConfig;
+}) => {
+  const nodeTypes = useMemo(() => config.nodes, [config]);
 
-  const audioNodeTypes = useMemo(
-    () => ({
-      ...baseAudioNodeTypes,
-      visualiser: baseAudioNodeTypes.analyser,
-      spectroscope: baseAudioNodeTypes.analyser,
-      oscilloscope: baseAudioNodeTypes.analyserWorklet,
-      parameter: baseAudioNodeTypes.constantSource,
-    }),
-    []
-  );
+  const audioNodeTypes = useMemo(() => config.audioNodes, [config]);
 
   const edgeTypes = useMemo(
     () => ({
