@@ -8,18 +8,19 @@ import ReactFlow, {
   Edge,
   MiniMap,
   Node,
+  NodeTypes,
   Position,
   ReactFlowProvider,
   useEdgesState,
   useNodesState,
 } from "react-flow-renderer";
 import "../styles";
-import AudioGraph from "./AudioGraph";
+import AudioGraph, { NodeTypes as AudioNodeTypes } from "./AudioGraph";
 import ContextMenu from "./ContextMenu";
 import ResumeContext from "./ResumeContext";
 import Wire from "./Wire";
 import { contextValue, ModuleContext } from "../Context";
-import defaultTheme from '../theme';
+import defaultTheme from "../theme";
 import type { CreateWNAudioNode } from "../types";
 
 export interface Elements {
@@ -27,9 +28,19 @@ export interface Elements {
   edges: Array<Edge>;
 }
 
-export interface EditorConfig {
-  nodes: Record<string, any>;
-  audioNodes: Record<string, CreateWNAudioNode>;
+export interface PluginComponent {
+  id?: string;
+  type: string;
+  node: any;
+  audioNode: CreateWNAudioNode;
+  description?: string;
+  name?: string;
+}
+
+export interface PluginConfig {
+  components: Array<PluginComponent>;
+  name?: string;
+  description?: string;
 }
 
 const onNodeDragStop = (_event: any, node: any) =>
@@ -41,14 +52,45 @@ const snapGrid: [number, number] = [20, 20];
 
 export const Editor = ({
   elements,
-  plugins = { nodes: {}, audioNodes: {} },
+  plugins = [],
 }: {
   elements?: Elements;
-  plugins?: EditorConfig;
+  plugins?: Array<PluginConfig>;
 }) => {
-  const nodeTypes = useMemo(() => plugins.nodes, [plugins]);
-
-  const audioNodeTypes = useMemo(() => plugins.audioNodes, [plugins]);
+  const [nodeTypes, audioNodeTypes] = useMemo(() => {
+    return plugins.reduce<[NodeTypes, AudioNodeTypes]>(
+      ([accNodes, accAudioNodes], plugin) => {
+        const [nodes, audioNodes] = plugin.components.reduce<
+          [NodeTypes, AudioNodeTypes]
+        >(
+          ([pluginNodes, pluginAudioNodes], component) => {
+            return [
+              {
+                ...pluginNodes,
+                [component.type]: component.node,
+              },
+              {
+                ...pluginAudioNodes,
+                [component.type]: component.audioNode,
+              },
+            ];
+          },
+          [{}, {}]
+        );
+        return [
+          {
+            ...accNodes,
+            ...nodes,
+          },
+          {
+            ...accAudioNodes,
+            ...audioNodes,
+          },
+        ];
+      },
+      [{}, {}]
+    );
+  }, [plugins]);
 
   const edgeTypes = useMemo(
     () => ({

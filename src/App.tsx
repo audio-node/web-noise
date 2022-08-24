@@ -8,7 +8,7 @@ function App() {
   return (
     <div className="App">
       <main className="Editor">
-        <Editor elements={defaultExample} plugins={plugins} />
+        <Editor elements={defaultExample} plugins={[plugins]} />
       </main>
     </div>
   );

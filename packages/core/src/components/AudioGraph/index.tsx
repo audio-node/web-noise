@@ -4,7 +4,7 @@ import useModule from "../../hooks/useModule";
 import { CreateWNAudioNode } from "../../types";
 import { diff } from "./helpers";
 
-interface NodeTypes extends Record<string, CreateWNAudioNode> {}
+export interface NodeTypes extends Record<string, CreateWNAudioNode> {}
 
 const AudioGraph: FC<{
   edges: Array<Edge>;

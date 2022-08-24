@@ -1,6 +1,10 @@
 import { CodeEditor } from "./src/levaPlugins";
 import { ModuleContext, contextValue } from "./src/Context";
-import Editor, { EditorConfig, Elements } from "./src/components/Editor";
+import Editor, {
+  PluginConfig,
+  PluginComponent,
+  Elements,
+} from "./src/components/Editor";
 import Wire from "./src/components/Wire";
 import AudioGraph from "./src/components/AudioGraph";
 import ResumeContext from "./src/components/ResumeContext";
@@ -18,7 +22,14 @@ const plugins = {
   CodeEditor,
 };
 
-export type { WNAudioNode, CreateWNAudioNode, Theme, EditorConfig, Elements };
+export type {
+  WNAudioNode,
+  CreateWNAudioNode,
+  Theme,
+  Elements,
+  PluginConfig,
+  PluginComponent,
+};
 
 export {
   plugins,
