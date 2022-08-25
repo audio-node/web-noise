@@ -1,4 +1,4 @@
-import { Node as DefaultNode } from "@web-noise/core";
+import { WNNode } from "@web-noise/core";
 import ADSR from "./components/ADSR";
 import Clock from "./components/Clock";
 import DestinationComponent from "./components/Destination";
@@ -82,7 +82,7 @@ const plugin: PluginConfig = {
     { type: "adsr", node: ADSR, audioNode: audioNodes.adsr },
     {
       type: "midiToFrequency",
-      node: DefaultNode,
+      node: WNNode,
       audioNode: audioNodes.midiToFrequency,
     },
   ],

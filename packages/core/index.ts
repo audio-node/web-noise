@@ -9,7 +9,7 @@ import Wire from "./src/components/Wire";
 import AudioGraph from "./src/components/AudioGraph";
 import ResumeContext from "./src/components/ResumeContext";
 import ContextMenu from "./src/components/ContextMenu";
-import { Node, TitleBar, WNNodeProps, WNNodeData } from "./src/components/Node";
+import { WNNode, TitleBar, WNNodeProps, WNNodeData } from "./src/components/Node";
 import useAudioNode from "./src/hooks/useAudioNode";
 import useModule from "./src/hooks/useModule";
 import useNode from "./src/hooks/useNode";
@@ -43,7 +43,7 @@ export {
   ResumeContext,
   ContextMenu,
   Wire,
-  Node,
+  WNNode,
   TitleBar,
   useAudioNode,
   useModule,

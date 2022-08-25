@@ -4,7 +4,7 @@ import { NodeProps } from "react-flow-renderer";
  import { useNode } from "@web-noise/core";
  import { useAudioNode } from "@web-noise/core";
 import { Reverb as TReverb, ReverbValues } from "../../nodes/reverb";
-import { Node } from "@web-noise/core";
+import { WNNode } from "@web-noise/core";
 
 interface ReverbData {
   label: string;
@@ -34,9 +34,9 @@ const Reverb: FC<NodeProps<ReverbData>> = ({ id, data }) => {
   useEffect(() => updateNodeValues(values), [values]);
 
   return (
-    <Node id={id}>
+    <WNNode id={id}>
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
-    </Node>
+    </WNNode>
   );
 };
 

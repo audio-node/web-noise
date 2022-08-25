@@ -20,7 +20,7 @@ import {
   StepSequencerValues,
 } from "../../nodes/stepSequencer";
 import { useTheme } from "@web-noise/core";
-import { Node } from "@web-noise/core";
+import { WNNode } from "@web-noise/core";
 import Sequencer, { FormatNote } from "./Sequencer";
 
 const sequenceModesOptions: Record<string, SEQUENCE_MODES> = {
@@ -142,7 +142,7 @@ const StepSequencer: FC<NodeProps<StepSequencerData>> = ({ id, data }) => {
   }, [node, controls.mode]);
 
   return (
-    <Node id={id}>
+    <WNNode id={id}>
       <LevaPanel
         store={store}
         fill
@@ -163,7 +163,7 @@ const StepSequencer: FC<NodeProps<StepSequencerData>> = ({ id, data }) => {
         }}
         columns={4}
       />
-    </Node>
+    </WNNode>
   );
 };
 

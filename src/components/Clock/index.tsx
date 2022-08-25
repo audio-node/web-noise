@@ -4,7 +4,7 @@ import { useNode } from "@web-noise/core";
 import { useAudioNode } from "@web-noise/core";
 import { Clock as TClock } from "../../nodes";
 import { useTheme } from "@web-noise/core";
-import { Node } from "@web-noise/core";
+import { WNNode } from "@web-noise/core";
 import { WNNodeProps } from "@web-noise/core";
 
 interface ClockData {
@@ -69,9 +69,9 @@ const Clock: FC<WNNodeProps<ClockData>> = ({ data, id }) => {
   useEffect(() => updateNodeValues(values), [values, updateNodeValues]);
 
   return (
-    <Node id={id}>
+    <WNNode id={id}>
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
-    </Node>
+    </WNNode>
   );
 };
 

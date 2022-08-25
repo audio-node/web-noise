@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Node, useAudioNode, useNode, useTheme } from "@web-noise/core";
+import { WNNode, useAudioNode, useNode, useTheme } from "@web-noise/core";
 import { LevaPanel, useControls, useCreateStore } from "leva";
 import { useEffect } from "react";
 import { NodeProps } from "react-flow-renderer";
@@ -67,7 +67,7 @@ const Oscilloscope = ({ data, id }: NodeProps<OscilloscopeData>) => {
   useEffect(() => updateNodeConfig(config), [config, updateNodeConfig]);
 
   return (
-    <Node id={id}>
+    <WNNode id={id}>
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
       {node && (
         <Stage>
@@ -76,7 +76,7 @@ const Oscilloscope = ({ data, id }: NodeProps<OscilloscopeData>) => {
           <Scope analyser={node.input2Analyser} color={input2Color} />
         </Stage>
       )}
-    </Node>
+    </WNNode>
   );
 };
 

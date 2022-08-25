@@ -4,7 +4,7 @@ import { NodeProps } from "react-flow-renderer";
  import { useNode } from "@web-noise/core";
  import { useAudioNode } from "@web-noise/core";
 import { Filter as TFilter, FilterValues } from "../nodes";
-import { Node } from "@web-noise/core";
+import { WNNode } from "@web-noise/core";
 
 const FilterTypes: Record<BiquadFilterType, BiquadFilterType> = {
   lowpass: "lowpass",
@@ -64,9 +64,9 @@ const Filter: FC<NodeProps<FilterData>> = ({ data, id }) => {
   useEffect(() => updateNodeValues(values), [values]);
 
   return (
-    <Node id={id}>
+    <WNNode id={id}>
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
-    </Node>
+    </WNNode>
   );
 };
 

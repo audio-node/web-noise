@@ -5,7 +5,7 @@ import { NodeProps } from "react-flow-renderer";
 import { useTheme } from "@web-noise/core";
  import { useAudioNode } from "@web-noise/core";
 import { Gain as TGain, GainValues } from "../nodes";
-import { Node } from "@web-noise/core";
+import { WNNode } from "@web-noise/core";
 
 interface GainData {
   label: string;
@@ -40,9 +40,9 @@ const Gain: FC<NodeProps<GainData>> = ({ data, id }) => {
   useEffect(() => updateNodeValues(values), [values]);
 
   return (
-    <Node id={id}>
+    <WNNode id={id}>
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
-    </Node>
+    </WNNode>
   );
 };
 

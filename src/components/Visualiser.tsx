@@ -5,7 +5,7 @@ import { Handle, NodeProps, Position } from "react-flow-renderer";
 import useAnimationFrame from "use-animation-frame";
  import { useAudioNode } from "@web-noise/core";
 import { Analyser } from "../nodes";
-import { Node } from "@web-noise/core";
+import { WNNode } from "@web-noise/core";
 import { useTheme } from "@web-noise/core";
 
 const Visualiser = ({ data, id }: NodeProps) => {
@@ -78,10 +78,10 @@ const Visualiser = ({ data, id }: NodeProps) => {
   useAnimationFrame(tick);
 
   return (
-    <Node id={id}>
+    <WNNode id={id}>
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
       <canvas ref={canvasRef} style={{ display: "block", width: "100%" }} />
-    </Node>
+    </WNNode>
   );
 };
 

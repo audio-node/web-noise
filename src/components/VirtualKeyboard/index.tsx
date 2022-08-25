@@ -10,7 +10,7 @@ import "react-piano/dist/styles.css";
  import { useAudioNode } from "@web-noise/core";
 import { VirtualKeyboard as TVirtualKeyboard } from "../../nodes";
 import { useTheme } from "@web-noise/core";
-import { Node } from "@web-noise/core";
+import { WNNode } from "@web-noise/core";
 
 const Keyboard = styled(Piano)`
   .ReactPiano__Key--natural {
@@ -92,7 +92,7 @@ const VirtualKeyboard: FC<NodeProps> = ({ id }) => {
   );
 
   return (
-    <Node id={id}>
+    <WNNode id={id}>
       <LevaPanel
         store={store}
         fill
@@ -108,7 +108,7 @@ const VirtualKeyboard: FC<NodeProps> = ({ id }) => {
         width={400}
         keyboardShortcuts={keyboardShortcuts}
       />
-    </Node>
+    </WNNode>
   );
 };
 

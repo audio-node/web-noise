@@ -5,7 +5,7 @@ import { NodeProps } from "react-flow-renderer";
  import { useAudioNode } from "@web-noise/core";
 import { Oscillator as TOscillator, OscillatorValues } from "../../nodes";
 import { useTheme } from "@web-noise/core";
-import { Node } from "@web-noise/core";
+import { WNNode } from "@web-noise/core";
 import { SawToothIcon, SineIcon, SquareIcon, TriangleIcon } from "./icons";
 import iconsGroup from "./iconsGroup";
 
@@ -72,9 +72,9 @@ const Oscillator = ({ id, data }: NodeProps<OscillatorData>) => {
   useEffect(() => updateNodeValues(values), [values, updateNodeValues]);
 
   return (
-    <Node id={id}>
+    <WNNode id={id}>
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
-    </Node>
+    </WNNode>
   );
 };
 

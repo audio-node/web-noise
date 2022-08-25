@@ -82,7 +82,7 @@ export interface WNNodeData {
 
 export type WNNodeProps<T = Record<string, unknown>> = NodeProps<T & WNNodeData>;
 
-export const Node: FC<{ id: string }> = ({ id, children }) => {
+export const WNNode: FC<{ id: string }> = ({ id, children }) => {
   const theme = useTheme();
   const { data } =  useNode(id);
   const audioNode = useAudioNode(id);

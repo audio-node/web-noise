@@ -1,7 +1,7 @@
 import { LevaPanel, useControls, useCreateStore } from "leva";
 import { FC, useEffect } from "react";
 import { NodeProps } from "react-flow-renderer";
-import { Node, useAudioNode, useNode, useTheme } from "@web-noise/core";
+import { WNNode, useAudioNode, useNode, useTheme } from "@web-noise/core";
 // @ts-ignore
 import EnvelopeGraph from "react-envelope-graph";
 import { ADSR as TADSR, ADSRValues } from "../nodes";
@@ -77,7 +77,7 @@ const ADSR: FC<NodeProps<ADSRData>> = ({ data, id }) => {
   useEffect(() => updateNodeValues(values), [values]);
 
   return (
-    <Node id={id}>
+    <WNNode id={id}>
       <EnvelopeGraph
         defaultXa={attack / MAX_ATTACK_VALUE}
         defaultXd={decay / MAX_DECAY_VALUE}
@@ -112,7 +112,7 @@ const ADSR: FC<NodeProps<ADSRData>> = ({ data, id }) => {
         corners={false}
       />
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
-    </Node>
+    </WNNode>
   );
 };
 

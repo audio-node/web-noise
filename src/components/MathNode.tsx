@@ -5,7 +5,7 @@ import { NodeProps } from "react-flow-renderer";
  import { useNode } from "@web-noise/core";
  import { useAudioNode } from "@web-noise/core";
 import { MathNode as TMathNode, MathNodeValues } from "../nodes";
-import { Node } from "@web-noise/core";
+import { WNNode } from "@web-noise/core";
 
 interface MathNodeData {
   label: string;
@@ -36,9 +36,9 @@ const MathNode: FC<NodeProps<MathNodeData>> = ({ data, id }) => {
   );
 
   return (
-    <Node id={id}>
+    <WNNode id={id}>
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
-    </Node>
+    </WNNode>
   );
 };
 

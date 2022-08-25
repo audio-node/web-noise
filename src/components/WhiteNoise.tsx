@@ -1,6 +1,6 @@
 import { NodeProps } from "react-flow-renderer";
-import { Node } from "@web-noise/core";
+import { WNNode } from "@web-noise/core";
 
-const WhiteNoise = ({ id }: NodeProps) => <Node id={id} />;
+const WhiteNoise = ({ id }: NodeProps) => <WNNode id={id} />;
 
 export default WhiteNoise;
