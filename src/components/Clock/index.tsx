@@ -1,14 +1,13 @@
 import { LevaPanel, useControls, useCreateStore, folder, button } from "leva";
 import { useEffect, useState, useCallback, FC } from "react";
-import { NodeProps } from "react-flow-renderer";
- import { useNode } from "@web-noise/core";
- import { useAudioNode } from "@web-noise/core";
+import { useNode } from "@web-noise/core";
+import { useAudioNode } from "@web-noise/core";
 import { Clock as TClock } from "../../nodes";
 import { useTheme } from "@web-noise/core";
 import { Node } from "@web-noise/core";
+import { WNNodeProps } from "@web-noise/core";
 
 interface ClockData {
-  label: string;
   values?: {
     bpm?: number;
   };
@@ -20,9 +19,9 @@ interface ClockData {
 
 const DEFAULT_BPM = 120;
 
-const Clock: FC<NodeProps<ClockData>> = ({ data, id }) => {
+const Clock: FC<WNNodeProps<ClockData>> = ({ data, id }) => {
   const { node } = useAudioNode<TClock>(id);
-  const { updateNodeValues } =  useNode(id);
+  const { updateNodeValues } = useNode(id);
   const [isActive, setActive] = useState(false);
 
   const theme = useTheme();

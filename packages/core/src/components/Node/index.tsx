@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
 import { FC } from "react";
-import { Handle, HandleProps, Position } from "react-flow-renderer";
- import useNode from "../../hooks/useNode";
- import useAudioNode from "../../hooks/useAudioNode";
+import { Handle, HandleProps, NodeProps, Position } from "react-flow-renderer";
+import useAudioNode from "../../hooks/useAudioNode";
+import useNode from "../../hooks/useNode";
 import useTheme from "../../hooks/useTheme";
 import { Theme } from "../../theme";
 
@@ -75,6 +75,12 @@ const StyledOutputHandle = styled(Handle)`
 const OutputHandle: FC<Partial<HandleProps>> = (props) => (
   <StyledOutputHandle {...props} type="source" position={Position.Right} />
 );
+
+export interface WNNodeData {
+  label: string;
+}
+
+export type WNNodeProps<T = Record<string, unknown>> = NodeProps<T & WNNodeData>;
 
 export const Node: FC<{ id: string }> = ({ id, children }) => {
   const theme = useTheme();
