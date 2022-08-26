@@ -1,4 +1,3 @@
-import { WNAudioNode } from "@web-noise/core";
 import whiteNoise from "./whiteNoise";
 import scriptNode from "./scriptNode";
 import mathNode from "./math";
@@ -21,7 +20,6 @@ export type { MathNode, MathNodeValues } from "./math";
 export type { Reverb } from "./reverb";
 export type { ConstantSource, ConstantSourceValues } from "./constantSource";
 export type { Oscillator, OscillatorValues } from "./oscillator";
-// export type { Gain, GainValues } from "./gain";
 export type { ADSR, ADSRValues } from "./adsr";
 export type { Filter, FilterValues } from "./filter";
 export type { StepSequencer, StepSequencerValues } from "./stepSequencer";
@@ -41,31 +39,13 @@ export const getClock = async (audioContext: AudioContext): Promise<Clock> => {
   return contextClock;
 };
 
-export interface Destination extends WNAudioNode {
-  destination: AudioDestinationNode;
-}
-
-export const destination = (audioContext: AudioContext): Destination => {
-  const destination = audioContext.destination;
-  return {
-    inputs: {
-      in: {
-        port: destination,
-      },
-    },
-    destination,
-  };
-};
-
 export const nodeTypes = {
   oscillator,
   analyser,
   analyserWorklet,
-  destination,
   whiteNoise,
   reverb,
   constantSource,
-  // gain,
   filter,
   randomSequencer,
   randomSequencerWorklet,

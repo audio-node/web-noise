@@ -1,7 +1,6 @@
 import { WNNode } from "@web-noise/core";
 import ADSR from "./components/ADSR";
 import Clock from "./components/Clock";
-import DestinationComponent from "./components/Destination";
 import Filter from "./components/Filter";
 import MathNodeComponent from "./components/MathNode";
 import { PluginConfig } from "@web-noise/core";
@@ -31,11 +30,6 @@ const plugin: PluginConfig = {
       type: "oscilloscope",
       node: Oscilloscope,
       audioNode: audioNodes.analyserWorklet,
-    },
-    {
-      type: "destination",
-      node: DestinationComponent,
-      audioNode: audioNodes.destination,
     },
     { type: "whiteNoise", node: WhiteNoise, audioNode: audioNodes.whiteNoise },
     { type: "filter", node: Filter, audioNode: audioNodes.filter },

@@ -6,6 +6,8 @@ import { WNNode } from "@web-noise/core";
 // import Filter from "./components/Filter";
 import Gain from "./src/nodes/Gain";
 import { gain } from './src/audioNodes/gain.ts'
+import Destination from './src/nodes/Destination'
+import { destination } from './src/audioNodes/destination'
 // import MathNodeComponent from "./components/MathNode";
 // import Oscillator from "./components/Oscillator";
 // import Oscilloscope from "./components/Oscilloscope";
@@ -21,6 +23,11 @@ import { gain } from './src/audioNodes/gain.ts'
 // import { nodeTypes as audioNodes } from "./nodes";
 export const webAudioNodes: PluginConfig = {
   components: [
+    {
+      type: "destination",
+      node: Destination,
+      audioNode: destination,
+    },
     { type: "gain", node: Gain, audioNode: gain },
   ],
   name: "Web Audio Api base nodes",
@@ -39,11 +46,6 @@ export const baseNodes: PluginConfig = {
     //   type: "oscilloscope",
     //   node: Oscilloscope,
     //   audioNode: audioNodes.analyserWorklet,
-    // },
-    // {
-    //   type: "destination",
-    //   node: DestinationComponent,
-    //   audioNode: audioNodes.destination,
     // },
     // { type: "whiteNoise", node: WhiteNoise, audioNode: audioNodes.whiteNoise },
     // { type: "filter", node: Filter, audioNode: audioNodes.filter },

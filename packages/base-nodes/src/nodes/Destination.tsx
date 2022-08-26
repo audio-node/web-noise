@@ -1,10 +1,9 @@
 import styled from "@emotion/styled";
+import { TitleBar, useAudioNode } from "@web-noise/core";
 import { FC } from "react";
 import { Handle, NodeProps, Position } from "react-flow-renderer";
 import { MdSpeaker } from "react-icons/md";
- import { useAudioNode } from "@web-noise/core";
-import { Destination as TDestination } from "../nodes";
-import { TitleBar } from "@web-noise/core";
+import { Destination as TDestination } from "../audioNodes/destination";
 
 const TitleBarWrapper = styled(TitleBar)`
   width: auto;
