@@ -10,13 +10,11 @@ import { analyser, analyserWorklet } from "./analyser";
 import midiToFrequency from "./midiToFrequency";
 import { stepSequencer, stepSequencerWorklet } from "./stepSequencer";
 import adsr from "./adsr";
-import constantSource from "./constantSource";
 
 export type { WhiteNoise } from "./whiteNoise";
 export type { ScriptNode, ScriptNodeValues } from "./scriptNode";
 export type { MathNode, MathNodeValues } from "./math";
 export type { Reverb } from "./reverb";
-export type { ConstantSource, ConstantSourceValues } from "./constantSource";
 export type { Oscillator, OscillatorValues } from "./oscillator";
 export type { ADSR, ADSRValues } from "./adsr";
 export type { StepSequencer, StepSequencerValues } from "./stepSequencer";
@@ -42,7 +40,6 @@ export const nodeTypes = {
   analyserWorklet,
   whiteNoise,
   reverb,
-  constantSource,
   randomSequencer,
   randomSequencerWorklet,
   scriptNode,

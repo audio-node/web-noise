@@ -1,17 +1,13 @@
+import { useAudioNode, useNode, WNNode, WNNodeProps } from "@web-noise/core";
 import { LevaPanel, useControls, useCreateStore } from "leva";
 import { FC, useEffect } from "react";
-import { NodeProps } from "react-flow-renderer";
- import { useNode } from "@web-noise/core";
- import { useAudioNode } from "@web-noise/core";
-import { ConstantSource, ConstantSourceValues } from "../nodes";
-import { WNNode } from "@web-noise/core";
+import { ConstantSource, ConstantSourceValues } from "../audioNodes/constantSource";
 
 interface ParameterData {
-  label: string;
   values?: ConstantSourceValues;
 }
 
-const Parameter: FC<NodeProps<ParameterData>> = ({ data, id }) => {
+const Parameter: FC<WNNodeProps<ParameterData>> = ({ data, id }) => {
   const { node } = useAudioNode<ConstantSource>(id);
 
   const { updateNodeValues } =  useNode(id);

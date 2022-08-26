@@ -14,6 +14,11 @@ export const constantSource = (audioContext: AudioContext): ConstantSource => {
   constantSource.start();
 
   return {
+    inputs: {
+      offset: {
+        port: constantSource.offset,
+      },
+    },
     outputs: {
       out: {
         port: constantSource,

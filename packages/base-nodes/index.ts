@@ -9,10 +9,11 @@ import Destination from './src/nodes/Destination'
 import { destination } from './src/audioNodes/destination'
 import Filter from './src/nodes/Filter'
 import { filter } from './src/audioNodes/filter'
+import Parameter from './src/nodes/Parameter'
+import { constantSource } from './src/audioNodes/constantSource'
 // import MathNodeComponent from "./components/MathNode";
 // import Oscillator from "./components/Oscillator";
 // import Oscilloscope from "./components/Oscilloscope";
-// import Parameter from "./components/Parameter";
 // import RandomSequencer from "./components/RandomSequencer";
 // import Reverb from "./components/Reverb";
 // import ScriptNode from "./components/ScriptNode";
@@ -31,6 +32,11 @@ export const webAudioNodes: PluginConfig = {
     },
     { type: "gain", node: Gain, audioNode: gain },
     { type: "filter", node: Filter, audioNode: filter },
+    {
+      type: "parameter",
+      node: Parameter,
+      audioNode: constantSource,
+    },
   ],
   name: "Web Audio Api base nodes",
 };
@@ -50,11 +56,6 @@ export const baseNodes: PluginConfig = {
     //   audioNode: audioNodes.analyserWorklet,
     // },
     // { type: "whiteNoise", node: WhiteNoise, audioNode: audioNodes.whiteNoise },
-    // {
-    //   type: "parameter",
-    //   node: Parameter,
-    //   audioNode: audioNodes.constantSource,
-    // },
     // { type: "reverb", node: Reverb, audioNode: audioNodes.reverb },
     // {
     //   type: "randomSequencer",
