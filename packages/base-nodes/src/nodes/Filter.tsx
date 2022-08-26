@@ -1,10 +1,7 @@
+import { useAudioNode, useNode, WNNode, WNNodeProps } from "@web-noise/core";
 import { LevaPanel, useControls, useCreateStore } from "leva";
 import { FC, useEffect } from "react";
-import { NodeProps } from "react-flow-renderer";
- import { useNode } from "@web-noise/core";
- import { useAudioNode } from "@web-noise/core";
-import { Filter as TFilter, FilterValues } from "../nodes";
-import { WNNode } from "@web-noise/core";
+import { Filter as TFilter, FilterValues } from "../audioNodes/filter";
 
 const FilterTypes: Record<BiquadFilterType, BiquadFilterType> = {
   lowpass: "lowpass",
@@ -18,7 +15,6 @@ const FilterTypes: Record<BiquadFilterType, BiquadFilterType> = {
 };
 
 interface FilterData {
-  label: string;
   values?: FilterValues;
 }
 
@@ -26,7 +22,7 @@ const DEFAULT_FREQUENCY = 12000;
 const DEFAULT_Q = 0;
 const DEFAULT_FILTER_TYPE: BiquadFilterType = "lowpass";
 
-const Filter: FC<NodeProps<FilterData>> = ({ data, id }) => {
+const Filter: FC<WNNodeProps<FilterData>> = ({ data, id }) => {
   const { node } = useAudioNode<TFilter>(id);
   const { updateNodeValues } =  useNode(id);
   const store = useCreateStore();
