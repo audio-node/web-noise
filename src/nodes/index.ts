@@ -7,12 +7,10 @@ import clock, { Clock } from "./clock";
 import { analyserWorklet } from "./analyser";
 import midiToFrequency from "./midiToFrequency";
 import { stepSequencer, stepSequencerWorklet } from "./stepSequencer";
-import adsr from "./adsr";
 
 export type { WhiteNoise } from "./whiteNoise";
 export type { ScriptNode, ScriptNodeValues } from "./scriptNode";
 export type { MathNode, MathNodeValues } from "./math";
-export type { ADSR, ADSRValues } from "./adsr";
 export type { StepSequencer, StepSequencerValues } from "./stepSequencer";
 export type { RandomSequencer } from "./randomSequencer";
 export type { VirtualKeyboard } from "./virtualKeyboard";
@@ -41,6 +39,5 @@ export const nodeTypes = {
   clock,
   stepSequencer,
   stepSequencerWorklet,
-  adsr,
   midiToFrequency,
 };

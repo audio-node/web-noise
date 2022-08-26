@@ -1,13 +1,11 @@
+import { useAudioNode, useNode, useTheme, WNNode, WNNodeProps } from "@web-noise/core";
 import { LevaPanel, useControls, useCreateStore } from "leva";
 import { FC, useEffect } from "react";
-import { NodeProps } from "react-flow-renderer";
-import { WNNode, useAudioNode, useNode, useTheme } from "@web-noise/core";
 // @ts-ignore
 import EnvelopeGraph from "react-envelope-graph";
-import { ADSR as TADSR, ADSRValues } from "../nodes";
+import { ADSR as TADSR, ADSRValues } from "../audioNodes/adsr";
 
 interface ADSRData {
-  label: string;
   values?: ADSRValues;
 }
 
@@ -15,7 +13,7 @@ const MAX_ATTACK_VALUE = 10;
 const MAX_DECAY_VALUE = 10;
 const MAX_RELEASE_VALUE = 10;
 
-const ADSR: FC<NodeProps<ADSRData>> = ({ data, id }) => {
+const ADSR: FC<WNNodeProps<ADSRData>> = ({ data, id }) => {
   const { updateNodeValues } = useNode(id);
   const { node } = useAudioNode<TADSR>(id);
 

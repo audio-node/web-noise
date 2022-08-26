@@ -1,5 +1,4 @@
 import { WNNode } from "@web-noise/core";
-import ADSR from "./components/ADSR";
 import Clock from "./components/Clock";
 import MathNodeComponent from "./components/MathNode";
 import { PluginConfig } from "@web-noise/core";
@@ -51,7 +50,6 @@ const plugin: PluginConfig = {
       node: StepSequencer,
       audioNode: audioNodes.stepSequencerWorklet,
     },
-    { type: "adsr", node: ADSR, audioNode: audioNodes.adsr },
     {
       type: "midiToFrequency",
       node: WNNode,

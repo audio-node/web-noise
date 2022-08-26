@@ -16,7 +16,7 @@ export interface ADSR extends WNAudioNode {
   setValues: (values?: Partial<ADSRValues>) => void;
 }
 
-const adsr = async (audioContext: AudioContext): Promise<ADSR> => {
+export const adsr = async (audioContext: AudioContext): Promise<ADSR> => {
   await audioContext.audioWorklet.addModule(adsrWorklet);
   const adsr = new AudioWorkletNode(audioContext, "adsr-processor");
 
@@ -50,4 +50,3 @@ const adsr = async (audioContext: AudioContext): Promise<ADSR> => {
   };
 };
 
-export default adsr;

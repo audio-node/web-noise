@@ -1,6 +1,5 @@
 import { PluginConfig } from "@web-noise/core";
 import { WNNode } from "@web-noise/core";
-// import ADSR from "./components/ADSR";
 // import Clock from "./components/Clock";
 // import DestinationComponent from "./components/Destination";
 import Gain from "./src/nodes/Gain";
@@ -18,6 +17,8 @@ import Spectroscope from "./src/nodes/Spectroscope";
 import { analyser } from "./src/audioNodes/analyser";
 import Reverb from "./src/nodes/Reverb";
 import { reverb } from "./src/audioNodes/reverb";
+import ADSR from "./src/nodes/ADSR";
+import { adsr } from "./src/audioNodes/adsr";
 // import MathNodeComponent from "./components/MathNode";
 // import Oscilloscope from "./components/Oscilloscope";
 // import RandomSequencer from "./components/RandomSequencer";
@@ -54,6 +55,7 @@ export const webAudioNodes: PluginConfig = {
 export const baseNodes: PluginConfig = {
   components: [
     { type: "reverb", node: Reverb, audioNode: reverb },
+    { type: "adsr", node: ADSR, audioNode: adsr },
     // {
     //   type: "oscilloscope",
     //   node: Oscilloscope,
@@ -92,7 +94,6 @@ export const baseNodes: PluginConfig = {
     //   node: StepSequencer,
     //   audioNode: audioNodes.stepSequencerWorklet,
     // },
-    // { type: "adsr", node: ADSR, audioNode: audioNodes.adsr },
     // {
     //   type: "midiToFrequency",
     //   node: WNNode,
