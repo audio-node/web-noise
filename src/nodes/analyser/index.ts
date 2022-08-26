@@ -2,28 +2,6 @@
 import analyserWorkletUrl from "worklet-loader!./worklet.ts"; // eslint-disable-line
 import { WNAudioNode } from "@web-noise/core";
 
-export interface Analyser extends WNAudioNode {
-  analyser: AnalyserNode;
-}
-
-
-export const analyser = (audioContext: AudioContext): Analyser => {
-  const analyser = audioContext.createAnalyser();
-  return {
-    inputs: {
-      in: {
-        port: analyser,
-      },
-    },
-    outputs: {
-      out: {
-        port: analyser,
-      },
-    },
-    analyser,
-  };
-};
-
 export interface AnalyserWorklet extends WNAudioNode {
   input1Analyser: AudioWorkletNode;
   input2Analyser: AudioWorkletNode;
@@ -53,5 +31,3 @@ export const analyserWorklet = async (audioContext: AudioContext): Promise<Analy
     input2Analyser,
   };
 };
-
-export default analyser;

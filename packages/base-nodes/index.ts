@@ -13,15 +13,16 @@ import Parameter from "./src/nodes/Parameter";
 import { constantSource } from "./src/audioNodes/constantSource";
 import Oscillator from "./src/nodes/Oscillator";
 import { oscillator } from "./src/audioNodes/oscillator";
+import Visualiser from "./src/nodes/Visualiser";
+import { analyser } from "./src/audioNodes/analyser";
+import Spectroscope from "./src/nodes/Spectroscope";
 // import MathNodeComponent from "./components/MathNode";
 // import Oscilloscope from "./components/Oscilloscope";
 // import RandomSequencer from "./components/RandomSequencer";
 // import Reverb from "./components/Reverb";
 // import ScriptNode from "./components/ScriptNode";
-// import Spectroscope from "./components/Spectroscope";
 // import StepSequencer from "./components/StepSequencer";
 // import VirtualKeyboard from "./components/VirtualKeyboard";
-// import Visualiser from "./components/Visualiser";
 // import WhiteNoise from "./components/WhiteNoise";
 // import { nodeTypes as audioNodes } from "./nodes";
 export const webAudioNodes: PluginConfig = {
@@ -39,18 +40,18 @@ export const webAudioNodes: PluginConfig = {
       audioNode: constantSource,
     },
     { type: "oscillator", node: Oscillator, audioNode: oscillator },
+    { type: "visualiser", node: Visualiser, audioNode: analyser },
+    {
+      type: "spectroscope",
+      node: Spectroscope,
+      audioNode: analyser,
+    },
   ],
   name: "Web Audio Api base nodes",
 };
 
 export const baseNodes: PluginConfig = {
   components: [
-    // { type: "visualiser", node: Visualiser, audioNode: audioNodes.analyser },
-    // {
-    //   type: "spectroscope",
-    //   node: Spectroscope,
-    //   audioNode: audioNodes.analyser,
-    // },
     // {
     //   type: "oscilloscope",
     //   node: Oscilloscope,

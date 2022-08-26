@@ -7,21 +7,13 @@ import Oscilloscope from "./components/Oscilloscope";
 import RandomSequencer from "./components/RandomSequencer";
 import Reverb from "./components/Reverb";
 import ScriptNode from "./components/ScriptNode";
-import Spectroscope from "./components/Spectroscope";
 import StepSequencer from "./components/StepSequencer";
 import VirtualKeyboard from "./components/VirtualKeyboard";
-import Visualiser from "./components/Visualiser";
 import WhiteNoise from "./components/WhiteNoise";
 import { nodeTypes as audioNodes } from "./nodes";
 
 const plugin: PluginConfig = {
   components: [
-    { type: "visualiser", node: Visualiser, audioNode: audioNodes.analyser },
-    {
-      type: "spectroscope",
-      node: Spectroscope,
-      audioNode: audioNodes.analyser,
-    },
     {
       type: "oscilloscope",
       node: Oscilloscope,

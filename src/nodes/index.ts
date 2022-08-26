@@ -5,7 +5,7 @@ import reverb from "./reverb";
 import randomSequencer, { randomSequencerWorklet } from "./randomSequencer";
 import virtualKeyboard from "./virtualKeyboard";
 import clock, { Clock } from "./clock";
-import { analyser, analyserWorklet } from "./analyser";
+import { analyserWorklet } from "./analyser";
 import midiToFrequency from "./midiToFrequency";
 import { stepSequencer, stepSequencerWorklet } from "./stepSequencer";
 import adsr from "./adsr";
@@ -19,7 +19,7 @@ export type { StepSequencer, StepSequencerValues } from "./stepSequencer";
 export type { RandomSequencer } from "./randomSequencer";
 export type { VirtualKeyboard } from "./virtualKeyboard";
 export type { Clock } from "./clock";
-export type { Analyser, AnalyserWorklet } from "./analyser";
+export type { AnalyserWorklet } from "./analyser";
 
 const clockMap = new Map<AudioContext, Promise<Clock>>();
 export const getClock = async (audioContext: AudioContext): Promise<Clock> => {
@@ -33,7 +33,6 @@ export const getClock = async (audioContext: AudioContext): Promise<Clock> => {
 };
 
 export const nodeTypes = {
-  analyser,
   analyserWorklet,
   whiteNoise,
   reverb,

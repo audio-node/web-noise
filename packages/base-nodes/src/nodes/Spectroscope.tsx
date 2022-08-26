@@ -1,14 +1,11 @@
 import { LevaPanel, useControls, useCreateStore } from "leva";
-import { useCallback, useMemo, useRef } from "react";
-import { NodeProps } from "react-flow-renderer";
+import { useCallback, useMemo, useRef, FC } from "react";
+import { useAudioNode, useTheme, WNNode, WNNodeProps } from "@web-noise/core";
 //@ts-ignore
 import useAnimationFrame from "use-animation-frame";
- import { useAudioNode } from "@web-noise/core";
-import { Analyser } from "../nodes";
-import { useTheme } from "@web-noise/core";
-import { WNNode } from "@web-noise/core";
+import { Analyser } from "../audioNodes/analyser";
 
-const Spectroscope = ({ data, id }: NodeProps) => {
+const Spectroscope: FC<WNNodeProps> = ({ data, id }) => {
   const { node } = useAudioNode<Analyser>(id);
   const { analyser } = node || {};
 
