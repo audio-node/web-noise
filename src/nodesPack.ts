@@ -3,7 +3,6 @@ import ADSR from "./components/ADSR";
 import Clock from "./components/Clock";
 import DestinationComponent from "./components/Destination";
 import Filter from "./components/Filter";
-import Gain from "./components/Gain";
 import MathNodeComponent from "./components/MathNode";
 import { PluginConfig } from "@web-noise/core";
 import Oscillator from "./components/Oscillator";
@@ -22,7 +21,6 @@ import { nodeTypes as audioNodes } from "./nodes";
 const plugin: PluginConfig = {
   components: [
     { type: "oscillator", node: Oscillator, audioNode: audioNodes.oscillator },
-    { type: "gain", node: Gain, audioNode: audioNodes.gain },
     { type: "visualiser", node: Visualiser, audioNode: audioNodes.analyser },
     {
       type: "spectroscope",

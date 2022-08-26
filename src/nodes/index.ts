@@ -4,7 +4,7 @@ import scriptNode from "./scriptNode";
 import mathNode from "./math";
 import reverb from "./reverb";
 import oscillator from "./oscillator";
-import gain from "./gain";
+// import gain from "./gain";
 import filter from "./filter";
 import randomSequencer, { randomSequencerWorklet } from "./randomSequencer";
 import virtualKeyboard from "./virtualKeyboard";
@@ -21,7 +21,7 @@ export type { MathNode, MathNodeValues } from "./math";
 export type { Reverb } from "./reverb";
 export type { ConstantSource, ConstantSourceValues } from "./constantSource";
 export type { Oscillator, OscillatorValues } from "./oscillator";
-export type { Gain, GainValues } from "./gain";
+// export type { Gain, GainValues } from "./gain";
 export type { ADSR, ADSRValues } from "./adsr";
 export type { Filter, FilterValues } from "./filter";
 export type { StepSequencer, StepSequencerValues } from "./stepSequencer";
@@ -65,7 +65,7 @@ export const nodeTypes = {
   whiteNoise,
   reverb,
   constantSource,
-  gain,
+  // gain,
   filter,
   randomSequencer,
   randomSequencerWorklet,

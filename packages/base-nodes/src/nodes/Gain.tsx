@@ -1,18 +1,13 @@
+import { useAudioNode, useNode, useTheme, WNNode, WNNodeProps } from "@web-noise/core";
 import { LevaPanel, useControls, useCreateStore } from "leva";
-import { useEffect, FC } from "react";
-import { NodeProps } from "react-flow-renderer";
- import { useNode } from "@web-noise/core";
-import { useTheme } from "@web-noise/core";
- import { useAudioNode } from "@web-noise/core";
-import { Gain as TGain, GainValues } from "../nodes";
-import { WNNode } from "@web-noise/core";
+import { FC, useEffect } from "react";
+import { Gain as TGain, GainValues } from "../audioNodes/gain";
 
 interface GainData {
-  label: string;
   values?: GainValues;
 }
 
-const Gain: FC<NodeProps<GainData>> = ({ data, id }) => {
+const Gain: FC<WNNodeProps<GainData>> = ({ data, id }) => {
   const { updateNodeValues } =  useNode(id);
   const { node } = useAudioNode<TGain>(id);
 

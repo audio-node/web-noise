@@ -1,8 +1,9 @@
 import { Editor as DefaultEditor } from "@web-noise/core";
 import { FC } from "react";
 import nodesPack from "../nodesPack";
+import { baseNodes, webAudioNodes } from "@web-noise/base-nodes";
 
-const Editor: typeof DefaultEditor = (props) => <DefaultEditor plugins={[nodesPack]} {...props} />;
+const Editor: typeof DefaultEditor = (props) => <DefaultEditor plugins={[baseNodes, webAudioNodes, nodesPack]} {...props} />;
 
 export default {
   /* 👇 The title prop is optional.
