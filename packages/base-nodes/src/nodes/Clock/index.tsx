@@ -1,11 +1,7 @@
-import { LevaPanel, useControls, useCreateStore, folder, button } from "leva";
-import { useEffect, useState, useCallback, FC } from "react";
-import { useNode } from "@web-noise/core";
-import { useAudioNode } from "@web-noise/core";
-import { Clock as TClock } from "../../nodes";
-import { useTheme } from "@web-noise/core";
-import { WNNode } from "@web-noise/core";
-import { WNNodeProps } from "@web-noise/core";
+import { useAudioNode, useNode, useTheme, WNNode, WNNodeProps } from "@web-noise/core";
+import { button, folder, LevaPanel, useControls, useCreateStore } from "leva";
+import { FC, useCallback, useEffect, useState } from "react";
+import { Clock as TClock } from "../../audioNodes/clock";
 
 interface ClockData {
   values?: {

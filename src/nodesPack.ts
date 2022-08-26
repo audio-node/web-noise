@@ -1,5 +1,4 @@
 import { WNNode } from "@web-noise/core";
-import Clock from "./components/Clock";
 import MathNodeComponent from "./components/MathNode";
 import { PluginConfig } from "@web-noise/core";
 import Oscilloscope from "./components/Oscilloscope";
@@ -39,7 +38,6 @@ const plugin: PluginConfig = {
       node: VirtualKeyboard,
       audioNode: audioNodes.virtualKeyboard,
     },
-    { type: "clock", node: Clock, audioNode: audioNodes.clock },
     {
       type: "stepSequencer",
       node: StepSequencer,

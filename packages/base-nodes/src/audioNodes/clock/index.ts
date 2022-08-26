@@ -16,7 +16,7 @@ export interface Clock extends WNAudioNode {
   stop: () => void;
 }
 
-const clock = async (audioContext: AudioContext): Promise<Clock> => {
+export const clock = async (audioContext: AudioContext): Promise<Clock> => {
   await audioContext.audioWorklet.addModule(clockWorklet);
   const clock = new AudioWorkletNode(audioContext, "clock-processor", {
     numberOfOutputs: 2,
@@ -63,5 +63,3 @@ const clock = async (audioContext: AudioContext): Promise<Clock> => {
     bpm,
   };
 };
-
-export default clock;
