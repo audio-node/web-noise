@@ -10,7 +10,7 @@ export interface Oscillator extends WNAudioNode {
   setValues: (values?: OscillatorValues) => void;
 }
 
-const oscillator = (audioContext: AudioContext): Oscillator => {
+export const oscillator = (audioContext: AudioContext): Oscillator => {
   const oscillator = audioContext.createOscillator();
   oscillator.frequency.value = 0;
   oscillator.start();
@@ -42,5 +42,3 @@ const oscillator = (audioContext: AudioContext): Oscillator => {
     oscillator,
   };
 };
-
-export default oscillator;

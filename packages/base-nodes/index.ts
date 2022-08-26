@@ -4,15 +4,16 @@ import { WNNode } from "@web-noise/core";
 // import Clock from "./components/Clock";
 // import DestinationComponent from "./components/Destination";
 import Gain from "./src/nodes/Gain";
-import { gain } from './src/audioNodes/gain.ts'
-import Destination from './src/nodes/Destination'
-import { destination } from './src/audioNodes/destination'
-import Filter from './src/nodes/Filter'
-import { filter } from './src/audioNodes/filter'
-import Parameter from './src/nodes/Parameter'
-import { constantSource } from './src/audioNodes/constantSource'
+import { gain } from "./src/audioNodes/gain.ts";
+import Destination from "./src/nodes/Destination";
+import { destination } from "./src/audioNodes/destination";
+import Filter from "./src/nodes/Filter";
+import { filter } from "./src/audioNodes/filter";
+import Parameter from "./src/nodes/Parameter";
+import { constantSource } from "./src/audioNodes/constantSource";
+import Oscillator from "./src/nodes/Oscillator";
+import { oscillator } from "./src/audioNodes/oscillator";
 // import MathNodeComponent from "./components/MathNode";
-// import Oscillator from "./components/Oscillator";
 // import Oscilloscope from "./components/Oscilloscope";
 // import RandomSequencer from "./components/RandomSequencer";
 // import Reverb from "./components/Reverb";
@@ -37,13 +38,13 @@ export const webAudioNodes: PluginConfig = {
       node: Parameter,
       audioNode: constantSource,
     },
+    { type: "oscillator", node: Oscillator, audioNode: oscillator },
   ],
   name: "Web Audio Api base nodes",
 };
 
 export const baseNodes: PluginConfig = {
   components: [
-    // { type: "oscillator", node: Oscillator, audioNode: audioNodes.oscillator },
     // { type: "visualiser", node: Visualiser, audioNode: audioNodes.analyser },
     // {
     //   type: "spectroscope",

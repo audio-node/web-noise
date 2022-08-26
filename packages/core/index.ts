@@ -1,4 +1,4 @@
-import { CodeEditor } from "./src/levaPlugins";
+import { CodeEditor, iconsGroup } from "./src/levaPlugins";
 import { ModuleContext, contextValue } from "./src/Context";
 import Editor, {
   PluginConfig,
@@ -20,6 +20,7 @@ import type { Theme } from "./src/theme";
 
 const plugins = {
   CodeEditor,
+  iconsGroup,
 };
 
 export type {

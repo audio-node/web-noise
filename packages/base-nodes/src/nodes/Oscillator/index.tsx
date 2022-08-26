@@ -1,16 +1,10 @@
+import { useAudioNode, useNode, useTheme, WNNode, WNNodeProps, plugins } from "@web-noise/core";
 import { LevaPanel, useControls, useCreateStore } from "leva";
-import { useEffect } from "react";
-import { NodeProps } from "react-flow-renderer";
- import { useNode } from "@web-noise/core";
- import { useAudioNode } from "@web-noise/core";
-import { Oscillator as TOscillator, OscillatorValues } from "../../nodes";
-import { useTheme } from "@web-noise/core";
-import { WNNode } from "@web-noise/core";
+import { FC, useEffect } from "react";
+import { Oscillator as TOscillator, OscillatorValues } from "../../audioNodes/oscillator";
 import { SawToothIcon, SineIcon, SquareIcon, TriangleIcon } from "./icons";
-import iconsGroup from "./iconsGroup";
 
 interface OscillatorData {
-  label: string;
   values?: OscillatorValues;
   config?: {
     min?: number;
@@ -21,7 +15,7 @@ interface OscillatorData {
 const DEFAULT_FREQUENCY = 440;
 const DEFAULT_TYPE = "sine";
 
-const Oscillator = ({ id, data }: NodeProps<OscillatorData>) => {
+const Oscillator: FC<WNNodeProps<OscillatorData>> = ({ id, data }) => {
   const { node } = useAudioNode<TOscillator>(id);
   const { updateNodeValues } =  useNode(id);
 
@@ -41,7 +35,7 @@ const Oscillator = ({ id, data }: NodeProps<OscillatorData>) => {
         min: data.config?.min ?? 0,
         label: "freq",
       },
-      type: iconsGroup({
+      type: plugins.iconsGroup({
         label: "type",
         value: type,
         options: [

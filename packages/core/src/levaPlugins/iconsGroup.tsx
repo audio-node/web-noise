@@ -1,7 +1,6 @@
 import { createPlugin, useInputContext } from "leva/plugin";
 import styled from "@emotion/styled";
-import { theme } from '@web-noise/core'
-
+import theme from "../theme";
 
 const IconsGroupWrapper = styled.div`
   position: relative;
@@ -39,7 +38,10 @@ const IconGroup = () => {
       <IconsGroupIcons>
         {(settings as any)?.options.map(
           ({ icon: Icon, value: optionValue }: any, index: number) => (
-            <IconsGroupIconWrapper key={index} onClick={() => onUpdate(optionValue)}>
+            <IconsGroupIconWrapper
+              key={index}
+              onClick={() => onUpdate(optionValue)}
+            >
               <Icon selected={optionValue === value} />
             </IconsGroupIconWrapper>
           )
@@ -49,8 +51,8 @@ const IconGroup = () => {
   );
 };
 
-const iconGroup = createPlugin({
+const iconsGroup = createPlugin({
   component: IconGroup,
 });
 
-export default iconGroup;
+export default iconsGroup;
