@@ -21,19 +21,18 @@ const loadImpulse = async (audioContext: AudioContext) => {
   return audioContext.decodeAudioData(buffer);
 };
 
-const reverb = async (audioContext: AudioContext): Promise<Reverb> => {
-
+export const reverb = async (audioContext: AudioContext): Promise<Reverb> => {
   const convolver = audioContext.createConvolver();
   const impulseBuffer = await loadImpulse(audioContext);
-    convolver.buffer = impulseBuffer ?? null;
+  convolver.buffer = impulseBuffer ?? null;
 
   const wet = audioContext.createGain();
   const dry = audioContext.createGain();
   const inNode = audioContext.createGain();
   const outNode = audioContext.createGain();
 
-    dry.gain.setValueAtTime(0.5, audioContext.currentTime);
-    wet.gain.setValueAtTime(0.5, audioContext.currentTime);
+  dry.gain.setValueAtTime(0.5, audioContext.currentTime);
+  wet.gain.setValueAtTime(0.5, audioContext.currentTime);
 
   inNode.connect(dry);
   inNode.connect(convolver);
@@ -55,5 +54,3 @@ const reverb = async (audioContext: AudioContext): Promise<Reverb> => {
     },
   };
 };
-
-export default reverb;

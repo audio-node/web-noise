@@ -1,7 +1,6 @@
 import whiteNoise from "./whiteNoise";
 import scriptNode from "./scriptNode";
 import mathNode from "./math";
-import reverb from "./reverb";
 import randomSequencer, { randomSequencerWorklet } from "./randomSequencer";
 import virtualKeyboard from "./virtualKeyboard";
 import clock, { Clock } from "./clock";
@@ -13,7 +12,6 @@ import adsr from "./adsr";
 export type { WhiteNoise } from "./whiteNoise";
 export type { ScriptNode, ScriptNodeValues } from "./scriptNode";
 export type { MathNode, MathNodeValues } from "./math";
-export type { Reverb } from "./reverb";
 export type { ADSR, ADSRValues } from "./adsr";
 export type { StepSequencer, StepSequencerValues } from "./stepSequencer";
 export type { RandomSequencer } from "./randomSequencer";
@@ -35,7 +33,6 @@ export const getClock = async (audioContext: AudioContext): Promise<Clock> => {
 export const nodeTypes = {
   analyserWorklet,
   whiteNoise,
-  reverb,
   randomSequencer,
   randomSequencerWorklet,
   scriptNode,

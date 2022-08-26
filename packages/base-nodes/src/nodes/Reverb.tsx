@@ -1,17 +1,14 @@
+import { useAudioNode, useNode, WNNode, WNNodeProps } from "@web-noise/core";
 import { LevaPanel, useControls, useCreateStore } from "leva";
-import { FC, useEffect, useState } from "react";
-import { NodeProps } from "react-flow-renderer";
- import { useNode } from "@web-noise/core";
- import { useAudioNode } from "@web-noise/core";
-import { Reverb as TReverb, ReverbValues } from "../../nodes/reverb";
-import { WNNode } from "@web-noise/core";
+import { FC, useEffect } from "react";
+import { Reverb as TReverb, ReverbValues } from "../audioNodes/reverb";
 
 interface ReverbData {
   label: string;
   values?: ReverbValues;
 }
 
-const Reverb: FC<NodeProps<ReverbData>> = ({ id, data }) => {
+const Reverb: FC<WNNodeProps<ReverbData>> = ({ id, data }) => {
   const { node: reverb } = useAudioNode<TReverb>(id);
   const { updateNodeValues } =  useNode(id);
   const store = useCreateStore();

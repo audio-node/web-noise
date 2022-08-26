@@ -14,12 +14,13 @@ import { constantSource } from "./src/audioNodes/constantSource";
 import Oscillator from "./src/nodes/Oscillator";
 import { oscillator } from "./src/audioNodes/oscillator";
 import Visualiser from "./src/nodes/Visualiser";
-import { analyser } from "./src/audioNodes/analyser";
 import Spectroscope from "./src/nodes/Spectroscope";
+import { analyser } from "./src/audioNodes/analyser";
+import Reverb from "./src/nodes/Reverb";
+import { reverb } from "./src/audioNodes/reverb";
 // import MathNodeComponent from "./components/MathNode";
 // import Oscilloscope from "./components/Oscilloscope";
 // import RandomSequencer from "./components/RandomSequencer";
-// import Reverb from "./components/Reverb";
 // import ScriptNode from "./components/ScriptNode";
 // import StepSequencer from "./components/StepSequencer";
 // import VirtualKeyboard from "./components/VirtualKeyboard";
@@ -52,13 +53,13 @@ export const webAudioNodes: PluginConfig = {
 
 export const baseNodes: PluginConfig = {
   components: [
+    { type: "reverb", node: Reverb, audioNode: reverb },
     // {
     //   type: "oscilloscope",
     //   node: Oscilloscope,
     //   audioNode: audioNodes.analyserWorklet,
     // },
     // { type: "whiteNoise", node: WhiteNoise, audioNode: audioNodes.whiteNoise },
-    // { type: "reverb", node: Reverb, audioNode: audioNodes.reverb },
     // {
     //   type: "randomSequencer",
     //   node: RandomSequencer,

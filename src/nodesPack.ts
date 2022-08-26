@@ -5,7 +5,6 @@ import MathNodeComponent from "./components/MathNode";
 import { PluginConfig } from "@web-noise/core";
 import Oscilloscope from "./components/Oscilloscope";
 import RandomSequencer from "./components/RandomSequencer";
-import Reverb from "./components/Reverb";
 import ScriptNode from "./components/ScriptNode";
 import StepSequencer from "./components/StepSequencer";
 import VirtualKeyboard from "./components/VirtualKeyboard";
@@ -20,7 +19,6 @@ const plugin: PluginConfig = {
       audioNode: audioNodes.analyserWorklet,
     },
     { type: "whiteNoise", node: WhiteNoise, audioNode: audioNodes.whiteNoise },
-    { type: "reverb", node: Reverb, audioNode: audioNodes.reverb },
     {
       type: "randomSequencer",
       node: RandomSequencer,
