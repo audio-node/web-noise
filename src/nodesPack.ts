@@ -6,7 +6,6 @@ import RandomSequencer from "./components/RandomSequencer";
 import ScriptNode from "./components/ScriptNode";
 import StepSequencer from "./components/StepSequencer";
 import VirtualKeyboard from "./components/VirtualKeyboard";
-import WhiteNoise from "./components/WhiteNoise";
 import { nodeTypes as audioNodes } from "./nodes";
 
 const plugin: PluginConfig = {
@@ -16,7 +15,6 @@ const plugin: PluginConfig = {
       node: Oscilloscope,
       audioNode: audioNodes.analyserWorklet,
     },
-    { type: "whiteNoise", node: WhiteNoise, audioNode: audioNodes.whiteNoise },
     {
       type: "randomSequencer",
       node: RandomSequencer,

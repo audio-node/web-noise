@@ -20,13 +20,13 @@ import ADSR from "./src/nodes/ADSR";
 import { adsr } from "./src/audioNodes/adsr";
 import Clock from "./src/nodes/Clock";
 import { clock } from "./src/audioNodes/clock";
+import { whiteNoise } from "./src/audioNodes/whiteNoise";
 // import MathNodeComponent from "./components/MathNode";
 // import Oscilloscope from "./components/Oscilloscope";
 // import RandomSequencer from "./components/RandomSequencer";
 // import ScriptNode from "./components/ScriptNode";
 // import StepSequencer from "./components/StepSequencer";
 // import VirtualKeyboard from "./components/VirtualKeyboard";
-// import WhiteNoise from "./components/WhiteNoise";
 // import { nodeTypes as audioNodes } from "./nodes";
 export const webAudioNodes: PluginConfig = {
   components: [
@@ -58,12 +58,12 @@ export const baseNodes: PluginConfig = {
     { type: "reverb", node: Reverb, audioNode: reverb },
     { type: "adsr", node: ADSR, audioNode: adsr },
     { type: "clock", node: Clock, audioNode: clock },
+    { type: "whiteNoise", node: WNNode, audioNode: whiteNoise },
     // {
     //   type: "oscilloscope",
     //   node: Oscilloscope,
     //   audioNode: audioNodes.analyserWorklet,
     // },
-    // { type: "whiteNoise", node: WhiteNoise, audioNode: audioNodes.whiteNoise },
     // {
     //   type: "randomSequencer",
     //   node: RandomSequencer,
