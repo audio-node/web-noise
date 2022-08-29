@@ -1,9 +1,8 @@
 import { theme } from "@web-noise/core";
 import { FC, useEffect, useMemo, useRef } from "react";
-//@ts-ignore
-// import RendererWorker from './renderer.worker.ts';
 
-const rendererWorkerUrl = new URL("./renderer.worker.js", import.meta.url);
+const rendererWorkerUrl = new URL("./renderer.worker.ts", import.meta.url);
+
 
 const Scope: FC<{ analyser: AudioWorkletNode; color?: string }> = ({
   analyser,
