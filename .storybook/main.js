@@ -37,6 +37,13 @@ module.exports = {
       exclude: [path.resolve(__dirname, "../node_modules")],
     });
 
+    config.module.rules.push({
+      test: /\.(wav)$/,
+      type: "asset/inline",
+      include: [path.resolve(__dirname, "../")],
+      exclude: [path.resolve(__dirname, "../node_modules")],
+    });
+
     // Return the altered config
     return config;
   },

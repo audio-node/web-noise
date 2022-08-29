@@ -1,7 +1,7 @@
 /* A convolution reverb */
 import { WNAudioNode } from "@web-noise/core";
-// @ts-expect-error
-import reverbImpulse from "./impulse.wav";
+
+const reverbImpulse = new URL("./impulse.wav", import.meta.url);
 
 export interface ReverbValues {
   wetDry?: number;
