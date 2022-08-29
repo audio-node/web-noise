@@ -23,6 +23,8 @@ import { clock } from "./src/audioNodes/clock";
 import { whiteNoise } from "./src/audioNodes/whiteNoise";
 import Oscilloscope from "./src/nodes/Oscilloscope";
 import { oscilloscope } from "./src/audioNodes/oscilloscope";
+import VirtualKeyboard from "./src/nodes/VirtualKeyboard";
+import { virtualKeyboard } from "./src/audioNodes/virtualKeyboard";
 // import MathNodeComponent from "./components/MathNode";
 // import Oscilloscope from "./components/Oscilloscope";
 // import RandomSequencer from "./components/RandomSequencer";
@@ -66,6 +68,11 @@ export const baseNodes: PluginConfig = {
       node: Oscilloscope,
       audioNode: oscilloscope,
     },
+    {
+      type: "virtualKeyboard",
+      node: VirtualKeyboard,
+      audioNode: virtualKeyboard,
+    },
     // {
     //   type: "randomSequencer",
     //   node: RandomSequencer,
@@ -81,11 +88,6 @@ export const baseNodes: PluginConfig = {
     //   type: "mathNode",
     //   node: MathNodeComponent,
     //   audioNode: audioNodes.mathNode,
-    // },
-    // {
-    //   type: "virtualKeyboard",
-    //   node: VirtualKeyboard,
-    //   audioNode: audioNodes.virtualKeyboard,
     // },
     // {
     //   type: "stepSequencer",

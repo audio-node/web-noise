@@ -9,7 +9,7 @@ export interface VirtualKeyboard extends WNAudioNode {
   stop: (note: number) => void;
 }
 
-const virtualKeyboard = (audioContext: AudioContext): VirtualKeyboard => {
+export const virtualKeyboard = (audioContext: AudioContext): VirtualKeyboard => {
   const gate = audioContext.createConstantSource();
   gate.offset.value = 0;
   gate.start();
@@ -61,5 +61,3 @@ const virtualKeyboard = (audioContext: AudioContext): VirtualKeyboard => {
     },
   };
 };
-
-export default virtualKeyboard;

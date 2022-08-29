@@ -2,15 +2,12 @@ import styled from "@emotion/styled";
 import Range from "@tonaljs/range";
 import { Midi } from "@tonaljs/tonal";
 import { LevaPanel, useControls, useCreateStore } from "leva";
-import { useCallback, useMemo, FC } from "react";
-import { NodeProps } from "react-flow-renderer";
+import { FC, useCallback, useMemo } from "react";
+import { useAudioNode, useTheme, WNNode, WNNodeProps } from "@web-noise/core";
 //@ts-ignore
 import { KeyboardShortcuts, MidiNumbers, Piano } from "react-piano";
 import "react-piano/dist/styles.css";
- import { useAudioNode } from "@web-noise/core";
-import { VirtualKeyboard as TVirtualKeyboard } from "../../nodes";
-import { useTheme } from "@web-noise/core";
-import { WNNode } from "@web-noise/core";
+import { VirtualKeyboard as TVirtualKeyboard } from "../../audioNodes/virtualKeyboard";
 
 const Keyboard = styled(Piano)`
   .ReactPiano__Key--natural {
@@ -22,7 +19,7 @@ const Keyboard = styled(Piano)`
   }
 `;
 
-const VirtualKeyboard: FC<NodeProps> = ({ id }) => {
+const VirtualKeyboard: FC<WNNodeProps> = ({ id }) => {
   const { node } = useAudioNode<TVirtualKeyboard>(id);
 
   const theme = useTheme();

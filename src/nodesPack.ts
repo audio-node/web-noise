@@ -4,7 +4,6 @@ import { PluginConfig } from "@web-noise/core";
 import RandomSequencer from "./components/RandomSequencer";
 import ScriptNode from "./components/ScriptNode";
 import StepSequencer from "./components/StepSequencer";
-import VirtualKeyboard from "./components/VirtualKeyboard";
 import { nodeTypes as audioNodes } from "./nodes";
 
 const plugin: PluginConfig = {
@@ -24,11 +23,6 @@ const plugin: PluginConfig = {
       type: "mathNode",
       node: MathNodeComponent,
       audioNode: audioNodes.mathNode,
-    },
-    {
-      type: "virtualKeyboard",
-      node: VirtualKeyboard,
-      audioNode: audioNodes.virtualKeyboard,
     },
     {
       type: "stepSequencer",
