@@ -14,7 +14,7 @@ export interface RandomSequencer extends WNAudioNode {
 const range = Scale.rangeOf("C major");
 const notesRange = range("A2", "A6");
 
-const randomSequencer = async (
+export const randomSequencer = async (
   audioContext: AudioContext
 ): Promise<RandomSequencer> => {
   await audioContext.audioWorklet.addModule(clockCounterProcessor);
@@ -109,5 +109,3 @@ export const randomSequencerWorklet = async (
     onNoteChange: (fn) => (noteChangeHandler = fn),
   };
 };
-
-export default randomSequencer;

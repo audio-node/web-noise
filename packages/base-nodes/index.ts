@@ -25,12 +25,14 @@ import Oscilloscope from "./src/nodes/Oscilloscope";
 import { oscilloscope } from "./src/audioNodes/oscilloscope";
 import VirtualKeyboard from "./src/nodes/VirtualKeyboard";
 import { virtualKeyboard } from "./src/audioNodes/virtualKeyboard";
+import RandomSequencer from "./src/nodes/RandomSequencer";
+import { randomSequencer, randomSequencerWorklet } from "./src/audioNodes/randomSequencer";
+import StepSequencer from "./src/nodes/StepSequencer";
+import { stepSequencer, stepSequencerWorklet } from "./src/audioNodes/stepSequencer";
 // import MathNodeComponent from "./components/MathNode";
 // import Oscilloscope from "./components/Oscilloscope";
-// import RandomSequencer from "./components/RandomSequencer";
 // import ScriptNode from "./components/ScriptNode";
 // import StepSequencer from "./components/StepSequencer";
-// import VirtualKeyboard from "./components/VirtualKeyboard";
 // import { nodeTypes as audioNodes } from "./nodes";
 export const webAudioNodes: PluginConfig = {
   components: [
@@ -73,31 +75,31 @@ export const baseNodes: PluginConfig = {
       node: VirtualKeyboard,
       audioNode: virtualKeyboard,
     },
-    // {
-    //   type: "randomSequencer",
-    //   node: RandomSequencer,
-    //   audioNode: audioNodes.randomSequencer,
-    // },
-    // {
-    //   type: "randomSequencerWorklet",
-    //   node: RandomSequencer,
-    //   audioNode: audioNodes.randomSequencerWorklet,
-    // },
+    {
+      type: "randomSequencer",
+      node: RandomSequencer,
+      audioNode: randomSequencer,
+    },
+    {
+      type: "randomSequencerWorklet",
+      node: RandomSequencer,
+      audioNode: randomSequencerWorklet,
+    },
+    {
+      type: "stepSequencer",
+      node: StepSequencer,
+      audioNode: stepSequencer,
+    },
+    {
+      type: "stepSequencerWorklet",
+      node: StepSequencer,
+      audioNode: stepSequencerWorklet,
+    },
     // { type: "scriptNode", node: ScriptNode, audioNode: audioNodes.scriptNode },
     // {
     //   type: "mathNode",
     //   node: MathNodeComponent,
     //   audioNode: audioNodes.mathNode,
-    // },
-    // {
-    //   type: "stepSequencer",
-    //   node: StepSequencer,
-    //   audioNode: audioNodes.stepSequencer,
-    // },
-    // {
-    //   type: "stepSequencerWorklet",
-    //   node: StepSequencer,
-    //   audioNode: audioNodes.stepSequencerWorklet,
     // },
     // {
     //   type: "midiToFrequency",

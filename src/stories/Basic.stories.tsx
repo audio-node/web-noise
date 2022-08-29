@@ -14,7 +14,7 @@ import {
 import nodesPack from "../nodesPack";
 import { baseNodes, webAudioNodes } from "@web-noise/base-nodes";
 
-const Editor: typeof DefaultEditor = (...props) => (
+const Editor: typeof DefaultEditor = (props) => (
   <DefaultEditor plugins={[baseNodes, webAudioNodes, nodesPack]} {...props} />
 );
 

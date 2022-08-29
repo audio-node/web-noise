@@ -18,7 +18,7 @@ import {
   StepData,
   StepSequencer as NodeStepSequencer,
   StepSequencerValues,
-} from "../../nodes/stepSequencer";
+} from "../../audioNodes/stepSequencer";
 import { useTheme } from "@web-noise/core";
 import { WNNode } from "@web-noise/core";
 import Sequencer, { FormatNote } from "./Sequencer";
