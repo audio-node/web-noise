@@ -1,9 +1,8 @@
 import styled from "@emotion/styled";
-import { WNNode, useAudioNode, useNode, useTheme } from "@web-noise/core";
+import { useAudioNode, useNode, useTheme, WNNode, WNNodeProps } from "@web-noise/core";
 import { LevaPanel, useControls, useCreateStore } from "leva";
-import { useEffect } from "react";
-import { NodeProps } from "react-flow-renderer";
-import { AnalyserWorklet as Analyser } from "../../nodes";
+import { useEffect, FC } from "react";
+import { Oscolloscope as TOscilloscope } from "../../audioNodes/oscilloscope";
 import Grid from "./Grid";
 import Scope from "./Scope";
 
@@ -30,8 +29,8 @@ const Stage = styled.div`
   }
 `;
 
-const Oscilloscope = ({ data, id }: NodeProps<OscilloscopeData>) => {
-  const { node } = useAudioNode<Analyser>(id);
+const Oscilloscope: FC<WNNodeProps<OscilloscopeData>> = ({ data, id }) => {
+  const { node } = useAudioNode<TOscilloscope>(id);
   const { updateNodeConfig } = useNode(id);
 
   const theme = useTheme();

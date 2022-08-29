@@ -1,7 +1,7 @@
-let canvas: any;
-let canvasContext: CanvasRenderingContext2D;
-let color = "red";
-let audioData: Float32Array;
+let canvas;
+let canvasContext;
+let color;
+let audioData;
 
 const render = () => {
   if (!canvasContext || !audioData) {
@@ -40,8 +40,8 @@ onmessage = function (evt) {
     canvas = evt.data.canvas;
     canvasContext = canvas.getContext("2d");
     canvasContext.transform(1, 0, 0, -1, 0, canvas.height / 2);
-    evt.data.port.onmessage = ({ data }: { data: { input: Float32Array } }) => {
-      audioData = new Float32Array(data.input);
+    evt.data.port.onmessage = ({ data }) => {
+      audioData = new Float32Array(data);
     };
     requestAnimationFrame(render);
   }
@@ -49,5 +49,3 @@ onmessage = function (evt) {
     color = evt.data.color;
   }
 };
-
-export {};

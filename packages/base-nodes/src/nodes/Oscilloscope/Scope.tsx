@@ -1,5 +1,7 @@
 import { theme } from "@web-noise/core";
 import { FC, useEffect, useMemo, useRef } from "react";
+//@ts-ignore
+// import RendererWorker from './renderer.worker.ts';
 
 const rendererWorkerUrl = new URL("./renderer.worker.js", import.meta.url);
 

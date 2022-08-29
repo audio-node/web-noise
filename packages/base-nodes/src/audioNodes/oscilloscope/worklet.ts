@@ -45,4 +45,4 @@ export class AnalyserProcessor extends AudioWorkletProcessor {
 }
 
 //@ts-ignore
-registerProcessor("analyser-processor", AnalyserProcessor);
+registerProcessor("oscilloscope-processor", AnalyserProcessor);

@@ -2,20 +2,20 @@
 import analyserWorkletUrl from "worklet-loader!./worklet.ts"; // eslint-disable-line
 import { WNAudioNode } from "@web-noise/core";
 
-export interface AnalyserWorklet extends WNAudioNode {
+export interface Oscolloscope extends WNAudioNode {
   input1Analyser: AudioWorkletNode;
   input2Analyser: AudioWorkletNode;
 }
 
-export const analyserWorklet = async (audioContext: AudioContext): Promise<AnalyserWorklet> => {
+export const oscilloscope = async (audioContext: AudioContext): Promise<Oscolloscope> => {
   await audioContext.audioWorklet.addModule(analyserWorkletUrl);
   const input1Analyser = new AudioWorkletNode(
     audioContext,
-    "analyser-processor"
+    "oscilloscope-processor"
   );
   const input2Analyser = new AudioWorkletNode(
     audioContext,
-    "analyser-processor"
+    "oscilloscope-processor"
   );
 
   return {

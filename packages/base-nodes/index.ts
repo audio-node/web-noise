@@ -21,6 +21,8 @@ import { adsr } from "./src/audioNodes/adsr";
 import Clock from "./src/nodes/Clock";
 import { clock } from "./src/audioNodes/clock";
 import { whiteNoise } from "./src/audioNodes/whiteNoise";
+import Oscilloscope from "./src/nodes/Oscilloscope";
+import { oscilloscope } from "./src/audioNodes/oscilloscope";
 // import MathNodeComponent from "./components/MathNode";
 // import Oscilloscope from "./components/Oscilloscope";
 // import RandomSequencer from "./components/RandomSequencer";
@@ -59,11 +61,11 @@ export const baseNodes: PluginConfig = {
     { type: "adsr", node: ADSR, audioNode: adsr },
     { type: "clock", node: Clock, audioNode: clock },
     { type: "whiteNoise", node: WNNode, audioNode: whiteNoise },
-    // {
-    //   type: "oscilloscope",
-    //   node: Oscilloscope,
-    //   audioNode: audioNodes.analyserWorklet,
-    // },
+    {
+      type: "oscilloscope",
+      node: Oscilloscope,
+      audioNode: oscilloscope,
+    },
     // {
     //   type: "randomSequencer",
     //   node: RandomSequencer,

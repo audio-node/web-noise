@@ -1,7 +1,6 @@
 import { WNNode } from "@web-noise/core";
 import MathNodeComponent from "./components/MathNode";
 import { PluginConfig } from "@web-noise/core";
-import Oscilloscope from "./components/Oscilloscope";
 import RandomSequencer from "./components/RandomSequencer";
 import ScriptNode from "./components/ScriptNode";
 import StepSequencer from "./components/StepSequencer";
@@ -10,11 +9,6 @@ import { nodeTypes as audioNodes } from "./nodes";
 
 const plugin: PluginConfig = {
   components: [
-    {
-      type: "oscilloscope",
-      node: Oscilloscope,
-      audioNode: audioNodes.analyserWorklet,
-    },
     {
       type: "randomSequencer",
       node: RandomSequencer,
