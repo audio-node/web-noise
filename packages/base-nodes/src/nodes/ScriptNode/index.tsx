@@ -1,11 +1,7 @@
-import { plugins } from "@web-noise/core";
+import { plugins, useAudioNode, useNode, WNNode, WNNodeProps } from "@web-noise/core";
 import { button, LevaPanel, useControls, useCreateStore } from "leva";
 import { FC, useEffect } from "react";
-import { NodeProps } from "react-flow-renderer";
- import { useNode } from "@web-noise/core";
- import { useAudioNode } from "@web-noise/core";
-import { ScriptNode as TScriptNode, ScriptNodeValues } from "../../nodes";
-import { WNNode } from "@web-noise/core";
+import { ScriptNode as TScriptNode, ScriptNodeValues } from "../../audioNodes/scriptNode";
 
 interface ScriptNodeData {
   label: string;
@@ -14,7 +10,7 @@ interface ScriptNodeData {
 
 const { CodeEditor } = plugins;
 
-const ScriptNode: FC<NodeProps<ScriptNodeData>> = ({ data, id }) => {
+const ScriptNode: FC<WNNodeProps<ScriptNodeData>> = ({ data, id }) => {
   const { node } = useAudioNode<TScriptNode>(id);
   const { updateNodeValues } =  useNode(id);
 

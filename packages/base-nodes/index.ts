@@ -2,7 +2,7 @@ import { PluginConfig } from "@web-noise/core";
 import { WNNode } from "@web-noise/core";
 // import DestinationComponent from "./components/Destination";
 import Gain from "./src/nodes/Gain";
-import { gain } from "./src/audioNodes/gain.ts";
+import { gain } from "./src/audioNodes/gain";
 import Destination from "./src/nodes/Destination";
 import { destination } from "./src/audioNodes/destination";
 import Filter from "./src/nodes/Filter";
@@ -29,11 +29,11 @@ import RandomSequencer from "./src/nodes/RandomSequencer";
 import { randomSequencer, randomSequencerWorklet } from "./src/audioNodes/randomSequencer";
 import StepSequencer from "./src/nodes/StepSequencer";
 import { stepSequencer, stepSequencerWorklet } from "./src/audioNodes/stepSequencer";
-// import MathNodeComponent from "./components/MathNode";
-// import Oscilloscope from "./components/Oscilloscope";
-// import ScriptNode from "./components/ScriptNode";
-// import StepSequencer from "./components/StepSequencer";
-// import { nodeTypes as audioNodes } from "./nodes";
+import ScriptNode from "./src/nodes/ScriptNode";
+import { scriptNode } from "./src/audioNodes/scriptNode";
+import MathNode from "./src/nodes/MathNode";
+import { math } from "./src/audioNodes/math";
+import { midiToFrequency } from "./src/audioNodes/midiToFrequency";
 export const webAudioNodes: PluginConfig = {
   components: [
     {
@@ -95,17 +95,17 @@ export const baseNodes: PluginConfig = {
       node: StepSequencer,
       audioNode: stepSequencerWorklet,
     },
-    // { type: "scriptNode", node: ScriptNode, audioNode: audioNodes.scriptNode },
-    // {
-    //   type: "mathNode",
-    //   node: MathNodeComponent,
-    //   audioNode: audioNodes.mathNode,
-    // },
-    // {
-    //   type: "midiToFrequency",
-    //   node: WNNode,
-    //   audioNode: audioNodes.midiToFrequency,
-    // },
+    { type: "scriptNode", node: ScriptNode, audioNode: scriptNode },
+    {
+      type: "mathNode",
+      node: MathNode,
+      audioNode: math,
+    },
+    {
+      type: "midiToFrequency",
+      node: WNNode,
+      audioNode: midiToFrequency,
+    },
   ],
   name: "Web Noise base nodes",
 };

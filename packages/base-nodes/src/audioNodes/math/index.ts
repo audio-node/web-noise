@@ -11,7 +11,7 @@ export interface MathNode extends WNAudioNode {
   setValues: (values?: MathNodeValues) => void;
 }
 
-const scriptNode = async (audioContext: AudioContext): Promise<MathNode> => {
+export const math = async (audioContext: AudioContext): Promise<MathNode> => {
   await audioContext.audioWorklet.addModule(sciptNodeWorklet);
   const mathNode = new AudioWorkletNode(audioContext, "math-processor");
 
@@ -54,4 +54,4 @@ const scriptNode = async (audioContext: AudioContext): Promise<MathNode> => {
   };
 };
 
-export default scriptNode;
+export default math;

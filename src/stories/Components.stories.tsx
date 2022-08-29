@@ -1,9 +1,8 @@
 import { Editor as DefaultEditor } from "@web-noise/core";
 import { FC } from "react";
-import nodesPack from "../nodesPack";
 import { baseNodes, webAudioNodes } from "@web-noise/base-nodes";
 
-const Editor: typeof DefaultEditor = (props) => <DefaultEditor plugins={[baseNodes, webAudioNodes, nodesPack]} {...props} />;
+const Editor: typeof DefaultEditor = (props) => <DefaultEditor plugins={[baseNodes, webAudioNodes]} {...props} />;
 
 export default {
   /* 👇 The title prop is optional.
@@ -604,12 +603,12 @@ output.forEach((outputChannel, channelIndex) => {
           source: "oscillator",
           sourceHandle: "out",
           target: "script-node",
-          targetHandle: "in",
+          targetHandle: "input0",
         },
         {
           id: "script-node-to-visualiser",
           source: "script-node",
-          sourceHandle: "out",
+          sourceHandle: "output0",
           target: "visualiser",
           targetHandle: "in",
         },
