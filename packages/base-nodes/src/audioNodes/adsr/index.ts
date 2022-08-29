@@ -1,7 +1,7 @@
-//@ts-ignore
-import adsrWorklet from "worklet-loader!./worklet.ts"; // eslint-disable-line
 import { WNAudioNode } from "@web-noise/core";
 import { setParameterValue } from "../helpers";
+
+const adsrWorklet = new URL("./worklet.ts", import.meta.url);
 
 export interface ADSRValues {
   attack: number;
@@ -49,4 +49,3 @@ export const adsr = async (audioContext: AudioContext): Promise<ADSR> => {
     adsr,
   };
 };
-

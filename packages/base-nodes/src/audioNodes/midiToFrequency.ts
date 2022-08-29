@@ -1,13 +1,15 @@
-//@ts-ignore
-import sciptNodeWorklet from "worklet-loader!./math/worklet.ts"; // eslint-disable-line
 import { WNAudioNode } from "@web-noise/core";
 
-export const midiToFrequency = async (audioContext: AudioContext): Promise<WNAudioNode> => {
+const sciptNodeWorklet = new URL("./math/worklet.ts", import.meta.url);
+
+export const midiToFrequency = async (
+  audioContext: AudioContext
+): Promise<WNAudioNode> => {
   await audioContext.audioWorklet.addModule(sciptNodeWorklet);
   const mathNode = new AudioWorkletNode(audioContext, "math-processor", {
     processorOptions: {
-      expression: '(B ? B : 440) * Math.pow(2, (A - 69) / 12)'
-    }
+      expression: "(B ? B : 440) * Math.pow(2, (A - 69) / 12)",
+    },
   });
 
   return {

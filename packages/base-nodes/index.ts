@@ -1,6 +1,5 @@
 import { PluginConfig } from "@web-noise/core";
 import { WNNode } from "@web-noise/core";
-// import DestinationComponent from "./components/Destination";
 import Gain from "./src/nodes/Gain";
 import { gain } from "./src/audioNodes/gain";
 import Destination from "./src/nodes/Destination";
