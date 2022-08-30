@@ -1,16 +1,14 @@
 import { Midi } from "@tonaljs/tonal";
 import { WNAudioNode } from "@web-noise/core";
+//@ts-ignore
+import clockCounterProcessor from "worklet-loader!../clockCounter/worklet.ts"; // eslint-disable-line
+//@ts-ignore
+import stepSequencerWorkletProcessor from "worklet-loader!./worklet.ts"; // eslint-disable-line
 import {
   SEQUENCE_MODES,
   DEFAULT_SEQUENCE_MODE,
   DEFAULT_STEP_VALUE,
 } from "./constants";
-
-const clockCounterProcessor = new URL(
-  "../clockCounter/worklet.ts",
-  import.meta.url
-);
-const stepSequencerWorkletProcessor = new URL("./worklet.ts", import.meta.url);
 
 type TickHandler = (args: Record<string, any | never>) => void;
 
@@ -143,7 +141,7 @@ export const stepSequencerWorklet = async (
     audioContext,
     "step-sequencer-processor",
     {
-      numberOfOutputs: 4,
+      numberOfOutputs: 4
     }
   );
 

@@ -1,6 +1,6 @@
+//@ts-ignore
+import sciptNodeWorklet from "worklet-loader!./worklet.ts"; // eslint-disable-line
 import { WNAudioNode } from "@web-noise/core";
-
-const sciptNodeWorklet = new URL("./worklet.ts", import.meta.url);
 
 export interface ScriptNodeValues {
   expression?: string;
