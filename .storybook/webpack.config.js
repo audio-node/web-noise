@@ -10,6 +10,22 @@ module.exports = async ({ config, mode }) => {
   });
 
   config.module.rules.push({
+    test: /worklet\.(ts|js)$/,
+    use: [
+      {
+        loader: "worklet-loader",
+        options: { name: "[hash].worklet.js" },
+      },
+      {
+        loader: "ts-loader",
+      },
+    ],
+    type: "javascript/auto",
+    include: [path.resolve(__dirname, "../")],
+    exclude: [path.resolve(__dirname, "../node_modules")],
+  });
+
+  config.module.rules.push({
     test: /\.worker\.(ts|js)$/,
     type: "asset/inline",
     generator: {

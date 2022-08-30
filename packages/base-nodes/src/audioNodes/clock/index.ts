@@ -1,6 +1,6 @@
-//@ts-ignore
-import clockWorklet from "worklet-loader!./worklet.ts"; // eslint-disable-line
 import { WNAudioNode } from "@web-noise/core";
+
+const clockWorklet = new URL('./worklet.ts', import.meta.url);
 
 export interface ClockValues {
   bpm: number;

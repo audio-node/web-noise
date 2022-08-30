@@ -1,5 +1,3 @@
-//@ts-ignore
-import analyserWorkletUrl from "worklet-loader!./worklet.ts"; // eslint-disable-line
 import { WNAudioNode } from "@web-noise/core";
 
 export interface Analyser extends WNAudioNode {

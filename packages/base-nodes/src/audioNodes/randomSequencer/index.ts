@@ -1,9 +1,8 @@
 import { Note, Scale } from "@tonaljs/tonal";
-//@ts-ignore
-import clockCounterProcessor from "worklet-loader!../clockCounter/worklet.ts"; // eslint-disable-line
-//@ts-ignore
-import randomSequencerWorkletProcessor from "worklet-loader!./worklet.ts"; // eslint-disable-line
 import { WNAudioNode } from "@web-noise/core";
+
+const clockCounterProcessor = new URL('../clockCounter/worklet.ts', import.meta.url);
+const randomSequencerWorkletProcessor = new URL('./worklet.ts', import.meta.url);
 
 type NoteChangeHandler = (args: { note: string }) => void;
 

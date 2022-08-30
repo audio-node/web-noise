@@ -1,6 +1,6 @@
-//@ts-ignore
-import sciptNodeWorklet from "worklet-loader!./math/worklet.ts"; // eslint-disable-line
 import { WNAudioNode } from "@web-noise/core";
+
+const sciptNodeWorklet = new URL('./math/worklet.ts', import.meta.url);
 
 export const midiToFrequency = async (audioContext: AudioContext): Promise<WNAudioNode> => {
   await audioContext.audioWorklet.addModule(sciptNodeWorklet);
