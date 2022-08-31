@@ -1,7 +1,19 @@
-import { plugins, useAudioNode, useNode, WNNode, WNNodeProps } from "@web-noise/core";
+import {
+  plugins,
+  useTheme,
+  useAudioNode,
+  useNode,
+  WNNode,
+  WNNodeProps,
+  Theme,
+} from "@web-noise/core";
+import styled from "@emotion/styled";
 import { button, LevaPanel, useControls, useCreateStore } from "leva";
-import { FC, useEffect } from "react";
-import { ScriptNode as TScriptNode, ScriptNodeValues } from "../../audioNodes/scriptNode";
+import { FC, useEffect, useState } from "react";
+import {
+  ScriptNode as TScriptNode,
+  ScriptNodeValues,
+} from "../../audioNodes/scriptNode";
 
 interface ScriptNodeData {
   label: string;
@@ -10,17 +22,22 @@ interface ScriptNodeData {
 
 const { CodeEditor } = plugins;
 
+const ErrorWrapper = styled.div<{ theme: Theme }>`
+  font-family: var(--leva-fonts-mono);
+  padding: 1rem;
+  display: flex;
+  color: ${({ theme }) => theme.colors.error};
+`;
+
 const ScriptNode: FC<WNNodeProps<ScriptNodeData>> = ({ data, id }) => {
+  const theme = useTheme();
+
   const { node } = useAudioNode<TScriptNode>(id);
-  const { updateNodeValues } =  useNode(id);
+  const { updateNodeValues } = useNode(id);
 
   const { expression = "" } = data.values || {};
 
   const store = useCreateStore();
-
-  useEffect(() => {
-    node?.setValues({ expression });
-  }, [expression, node])
 
   const values = useControls(
     {
@@ -31,9 +48,30 @@ const ScriptNode: FC<WNNodeProps<ScriptNodeData>> = ({ data, id }) => {
     [node, updateNodeValues]
   );
 
+  useEffect(() => {
+    node?.setValues({ expression });
+  }, [expression, node]);
+
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    node?.onMessage((data) => {
+      const { name } = data;
+      switch (name) {
+        case "error":
+          setError(data.error.toString());
+          break;
+        case "clean-error":
+          setError(null);
+          break;
+      }
+    });
+  }, [node]);
+
   return (
     <WNNode id={id}>
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
+      {error && <ErrorWrapper theme={theme}>{error}</ErrorWrapper>}
     </WNNode>
   );
 };

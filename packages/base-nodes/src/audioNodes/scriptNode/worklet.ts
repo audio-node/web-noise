@@ -4,7 +4,9 @@ export class ScriptNodeProcessor extends AudioWorkletProcessor {
     outputs: Float32Array[][],
     parameters: Record<string, Float32Array>
   ) => void = () => {};
-  hasError = false;
+
+  errorIsSent = false;
+  lastErrorMessage: string;
 
   static get parameterDescriptors() {
     return [
@@ -40,15 +42,46 @@ export class ScriptNodeProcessor extends AudioWorkletProcessor {
 
     this.port.onmessage = ({ data }) => {
       if (data.name === "expression") {
-        //@ts-ignore
-        this.expressionFn = new Function(
-          "inputs",
-          "outputs",
-          "parameters",
-          data.value
-        );
+        try {
+          //@ts-ignore
+          this.expressionFn = new Function(
+            "inputs",
+            "outputs",
+            "parameters",
+            data.value
+          );
+        } catch (error) {
+          this.expressionFn = () => {
+            throw new Error(error);
+          };
+        }
       }
     };
+  }
+
+  onSuccess() {
+    if (this.errorIsSent) {
+      this.port.postMessage({
+        name: "clean-error",
+      });
+    }
+    this.errorIsSent = false;
+  }
+
+  onError(error: Error) {
+    const errorMessage = error.toString();
+    if (errorMessage !== this.lastErrorMessage) {
+      this.errorIsSent = false;
+    }
+    if (!this.errorIsSent) {
+      console.error(error);
+      this.port.postMessage({
+        name: "error",
+        error: error,
+      });
+      this.lastErrorMessage = errorMessage;
+      this.errorIsSent = true;
+    }
   }
 
   process(
@@ -58,10 +91,9 @@ export class ScriptNodeProcessor extends AudioWorkletProcessor {
   ) {
     try {
       this.expressionFn(inputs, outputs, parameters);
-      this.hasError = false;
-    } catch (e) {
-      !this.hasError && console.error(e);
-      this.hasError = true;
+      this.onSuccess();
+    } catch (error) {
+      this.onError(error);
     }
     return true;
   }

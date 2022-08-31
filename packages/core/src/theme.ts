@@ -14,6 +14,7 @@ const colors = {
   highlight3: "#fefefe",
   vivid1: COLOR_GREEN_PRIMARY,
   whitePrimary: COLOR_WHITE_PRIMARY,
+  error: '#db5353',
 };
 
 const theme = {
