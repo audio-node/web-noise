@@ -5,11 +5,7 @@ import { baseNodes, webAudioNodes } from "@web-noise/base-nodes";
 const Editor: typeof DefaultEditor = (props) => <DefaultEditor plugins={[baseNodes, webAudioNodes]} {...props} />;
 
 export default {
-  /* 👇 The title prop is optional.
-   * See https://storybook.js.org/docs/react/configure/overview#configure-story-loading
-   * to learn how to generate automatic titles
-   */
-  title: "Components",
+  title: "WebNoise nodes",
   component: Editor,
   decorators: [
     (Story: FC) => (
@@ -22,52 +18,6 @@ export default {
 
 const spaceWidth = 340;
 
-export const Oscillator = () => (
-  <Editor
-    elements={{
-      nodes: [
-        {
-          id: "oscillator",
-          type: "oscillator",
-          data: { label: "Oscillator" },
-          position: { x: 0, y: 50 },
-          dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
-        },
-        {
-          id: "visualiser",
-          type: "visualiser",
-          data: { label: "Visualiser" },
-          position: { x: spaceWidth, y: 50 },
-          className: "react-flow__node-default",
-        },
-        {
-          id: "destination",
-          type: "destination",
-          data: { label: "Destination" },
-          position: { x: spaceWidth * 2, y: 50 },
-          className: "react-flow__node-default",
-        },
-      ],
-      edges: [
-        {
-          id: "oscillator-to-visualiser",
-          source: "oscillator",
-          sourceHandle: "out",
-          target: "visualiser",
-          targetHandle: "in",
-        },
-        {
-          id: "visualiser-to-destination",
-          source: "visualiser",
-          target: "destination",
-          targetHandle: "in",
-          sourceHandle: "out",
-        },
-      ],
-    }}
-  />
-);
 
 export const WhiteNoise = () => (
   <Editor
@@ -84,14 +34,14 @@ export const WhiteNoise = () => (
           id: "visualiser",
           type: "visualiser",
           data: { label: "Visualiser" },
-          position: { x: spaceWidth, y: 50 },
+          position: { x: spaceWidth, y: 150 },
           className: "react-flow__node-default",
         },
         {
           id: "destination",
           type: "destination",
           data: { label: "Destination" },
-          position: { x: spaceWidth * 2, y: 50 },
+          position: { x: spaceWidth, y: 50 },
           className: "react-flow__node-default",
         },
       ],
@@ -102,13 +52,6 @@ export const WhiteNoise = () => (
           sourceHandle: "out",
           target: "visualiser",
           targetHandle: "in",
-        },
-        {
-          id: "visualiser-to-destination",
-          source: "visualiser",
-          target: "destination",
-          targetHandle: "in",
-          sourceHandle: "out",
         },
       ],
     }}
@@ -122,8 +65,24 @@ export const Reverb = () => (
         {
           id: "oscillator",
           type: "oscillator",
-          data: { label: "Oscillator" },
+          data: { label: "Oscillator", values: { frequency: 340 } },
           position: { x: 0, y: 50 },
+          dragHandle: ".leva-c-hwBXYF",
+          className: "react-flow__node-default",
+        },
+        {
+          id: "lfo",
+          type: "oscillator",
+          data: { label: "LFO", values: { frequency: 1, type: 'sawtooth' } },
+          position: { x: 0, y: 250 },
+          dragHandle: ".leva-c-hwBXYF",
+          className: "react-flow__node-default",
+        },
+        {
+          id: "gain",
+          type: "gain",
+          data: { label: "Gain" },
+          position: { x: spaceWidth - 80, y: 50 },
           dragHandle: ".leva-c-hwBXYF",
           className: "react-flow__node-default",
         },
@@ -131,119 +90,66 @@ export const Reverb = () => (
           id: "reverb",
           type: "reverb",
           data: { label: "Reverb" },
-          position: { x: spaceWidth, y: 50 },
+          position: { x: spaceWidth * 2 - 150, y: -20 },
           dragHandle: ".leva-c-hwBXYF",
           className: "react-flow__node-default",
         },
         {
-          id: "visualiser",
-          type: "visualiser",
-          data: { label: "Visualiser" },
-          position: { x: spaceWidth * 2, y: 50 },
+          id: "oscilloscope",
+          type: "oscilloscope",
+          data: { label: "Oscilloscope" },
+          position: { x: spaceWidth * 3 - 150, y: 100 },
           className: "react-flow__node-default",
         },
         {
           id: "destination",
           type: "destination",
           data: { label: "Destination" },
-          position: { x: spaceWidth * 3, y: 50 },
+          position: { x: spaceWidth * 3 - 150, y: -20 },
           className: "react-flow__node-default",
         },
       ],
       edges: [
         {
-          id: "oscillator-to-reverb",
+          id: "oscillator-to-gain",
           source: "oscillator",
+          sourceHandle: "out",
+          target: "gain",
+          targetHandle: "in",
+        },
+        {
+          id: "lfo-to-gain",
+          source: "lfo",
+          sourceHandle: "out",
+          target: "gain",
+          targetHandle: "gain",
+        },
+        {
+          id: "gain-to-reverb",
+          source: "gain",
           sourceHandle: "out",
           target: "reverb",
           targetHandle: "in",
         },
         {
-          id: "reverb-to-visualiser",
+          id: "reverb-to-oscilloscope",
           source: "reverb",
           sourceHandle: "out",
-          target: "visualiser",
-          targetHandle: "in",
+          target: "oscilloscope",
+          targetHandle: "input1",
         },
         {
-          id: "visualiser-to-destination",
-          source: "visualiser",
-          target: "destination",
-          targetHandle: "in",
+          id: "gain-to-oscilloscope",
+          source: "gain",
           sourceHandle: "out",
+          target: "oscilloscope",
+          targetHandle: "input2",
         },
       ],
     }}
   />
 );
 
-export const Parameter = () => (
-  <Editor
-    elements={{
-      nodes: [
-        {
-          id: "parameter",
-          type: "parameter",
-          data: {
-            label: "Oscillator Frequency",
-            min: 0,
-            max: 200,
-            step: 1,
-            value: 0,
-          },
-          position: { x: 0, y: 50 },
-          dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
-        },
-        {
-          id: "oscillator",
-          type: "oscillator",
-          data: { label: "Oscillator" },
-          position: { x: spaceWidth, y: 50 },
-          dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
-        },
-        {
-          id: "visualiser",
-          type: "visualiser",
-          data: { label: "Visualiser" },
-          position: { x: spaceWidth * 2, y: 50 },
-          className: "react-flow__node-default",
-        },
-        {
-          id: "destination",
-          type: "destination",
-          data: { label: "Destination" },
-          position: { x: spaceWidth * 3, y: 50 },
-          className: "react-flow__node-default",
-        },
-      ],
-      edges: [
-        {
-          id: "parameter-to-oscillator",
-          source: "parameter",
-          sourceHandle: "out",
-          target: "oscillator",
-          targetHandle: "frequency",
-        },
-        {
-          id: "oscillator-to-visualiser",
-          source: "oscillator",
-          sourceHandle: "out",
-          target: "visualiser",
-          targetHandle: "in",
-        },
-        {
-          id: "visualiser-to-destination",
-          source: "visualiser",
-          target: "destination",
-          targetHandle: "in",
-          sourceHandle: "out",
-        },
-      ],
-    }}
-  />
-);
 
 export const Spectroscope = () => (
   <Editor
@@ -260,14 +166,14 @@ export const Spectroscope = () => (
           id: "visualiser",
           type: "spectroscope",
           data: { label: "Spectroscope" },
-          position: { x: spaceWidth, y: 50 },
+          position: { x: spaceWidth, y: 150 },
           className: "react-flow__node-default",
         },
         {
           id: "destination",
           type: "destination",
           data: { label: "Destination" },
-          position: { x: spaceWidth * 2, y: 50 },
+          position: { x: spaceWidth, y: 50 },
           className: "react-flow__node-default",
         },
       ],
@@ -279,107 +185,47 @@ export const Spectroscope = () => (
           target: "visualiser",
           targetHandle: "in",
         },
-        {
-          id: "visualiser-to-destination",
-          source: "visualiser",
-          target: "destination",
-          targetHandle: "in",
-          sourceHandle: "out",
-        },
       ],
     }}
   />
 );
 
-export const Gain = () => (
-  <Editor
-    elements={{
-      nodes: [
-        {
-          id: "oscillator",
-          type: "oscillator",
-          data: { label: "Oscillator" },
-          position: { x: 0, y: 50 },
-          dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
-        },
-        {
-          id: "gain",
-          type: "gain",
-          data: { label: "Gain" },
-          position: { x: spaceWidth, y: 50 },
-          dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
-        },
-        {
-          id: "visualiser",
-          type: "visualiser",
-          data: { label: "Visualiser" },
-          position: { x: spaceWidth * 2, y: 50 },
-          className: "react-flow__node-default",
-        },
-        {
-          id: "destination",
-          type: "destination",
-          data: { label: "Destination" },
-          position: { x: spaceWidth * 3, y: 50 },
-          className: "react-flow__node-default",
-        },
-      ],
-      edges: [
-        {
-          id: "oscillator-to-gain",
-          source: "oscillator",
-          sourceHandle: "out",
-          target: "gain",
-          targetHandle: "in",
-        },
-        {
-          id: "reverb-to-visualiser",
-          source: "gain",
-          sourceHandle: "out",
-          target: "visualiser",
-          targetHandle: "in",
-        },
-        {
-          id: "visualiser-to-destination",
-          source: "visualiser",
-          target: "destination",
-          targetHandle: "in",
-          sourceHandle: "out",
-        },
-      ],
-    }}
-  />
-);
 
 export const RandomSequencer = () => (
   <Editor
     elements={{
       nodes: [
         {
+          id: "oscillator-trigger",
+          type: "oscillator",
+          data: { label: "Trigger oscillator", values: { frequency: 1, type: 'square' } },
+          position: { x: 0, y: 170 },
+          dragHandle: ".leva-c-hwBXYF",
+          className: "react-flow__node-default",
+        },
+        {
           id: "mono-sequencer",
           type: "randomSequencer",
           data: {
             label: "Random Sequencer",
           },
-          position: { x: 0, y: 50 },
+          position: { x: spaceWidth, y: 50 },
           dragHandle: ".leva-c-hwBXYF",
           className: "react-flow__node-default",
         },
         {
           id: "oscillator",
           type: "oscillator",
-          data: { label: "Oscillator" },
-          position: { x: spaceWidth, y: 50 },
+          data: { label: "Oscillator", values: { frequency: 0 } },
+          position: { x: spaceWidth * 2, y: 50 },
           dragHandle: ".leva-c-hwBXYF",
           className: "react-flow__node-default",
         },
         {
           id: "visualiser",
-          type: "visualiser",
-          data: { label: "Visualiser" },
-          position: { x: spaceWidth * 2, y: 50 },
+          type: "oscilloscope",
+          data: { label: "Oscilloscope" },
+          position: { x: spaceWidth * 3, y: 150 },
           className: "react-flow__node-default",
         },
         {
@@ -391,6 +237,13 @@ export const RandomSequencer = () => (
         },
       ],
       edges: [
+        {
+          id: "trigger-to-sequencer",
+          source: "oscillator-trigger",
+          sourceHandle: "out",
+          target: "mono-sequencer",
+          targetHandle: "trigger",
+        },
         {
           id: "mono-sequencer-to-oscillator",
           source: "mono-sequencer",
@@ -403,111 +256,56 @@ export const RandomSequencer = () => (
           source: "oscillator",
           sourceHandle: "out",
           target: "visualiser",
-          targetHandle: "in",
+          targetHandle: "input1",
         },
         {
-          id: "visualiser-to-destination",
-          source: "visualiser",
-          target: "destination",
-          targetHandle: "in",
-          sourceHandle: "out",
-        },
-      ],
-    }}
-  />
-);
-
-export const Filter = () => (
-  <Editor
-    elements={{
-      nodes: [
-        {
-          id: "oscillator",
-          type: "oscillator",
-          data: { label: "Oscillator" },
-          position: { x: 0, y: 50 },
-          dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
-        },
-        {
-          id: "filter",
-          type: "filter",
-          data: { label: "Filter" },
-          position: { x: spaceWidth, y: 50 },
-          dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
-        },
-        {
-          id: "visualiser",
-          type: "visualiser",
-          data: { label: "Visualiser" },
-          position: { x: spaceWidth * 2, y: 50 },
-          className: "react-flow__node-default",
-        },
-        {
-          id: "destination",
-          type: "destination",
-          data: { label: "Destination" },
-          position: { x: spaceWidth * 3, y: 50 },
-          className: "react-flow__node-default",
-        },
-      ],
-      edges: [
-        {
-          id: "oscillator-to-reverb",
-          source: "oscillator",
-          sourceHandle: "out",
-          target: "filter",
-          targetHandle: "in",
-        },
-        {
-          id: "reverb-to-visualiser",
-          source: "filter",
+          id: "trigger-to-visualiser",
+          source: "oscillator-trigger",
           sourceHandle: "out",
           target: "visualiser",
-          targetHandle: "in",
-        },
-        {
-          id: "visualiser-to-destination",
-          source: "visualiser",
-          target: "destination",
-          targetHandle: "in",
-          sourceHandle: "out",
+          targetHandle: "input2",
         },
       ],
     }}
   />
 );
 
-export const RandomSequencerWorker = () => (
+
+export const RandomSequencerWorklet = () => (
   <Editor
     elements={{
       nodes: [
         {
-          id: "sequencer",
-          type: "randomSequencerWorklet",
-          data: { label: "Sequencer" },
-          position: { x: 0, y: 50 },
-          className: "react-flow__node-default",
+          id: "oscillator-trigger",
+          type: "oscillator",
+          data: { label: "Trigger oscillator", values: { frequency: 1, type: 'square' } },
+          position: { x: 0, y: 170 },
           dragHandle: ".leva-c-hwBXYF",
+          className: "react-flow__node-default",
+        },
+        {
+          id: "mono-sequencer",
+          type: "randomSequencerWorklet",
+          data: {
+            label: "Random Sequencer",
+          },
+          position: { x: spaceWidth, y: 50 },
+          dragHandle: ".leva-c-hwBXYF",
+          className: "react-flow__node-default",
         },
         {
           id: "oscillator",
           type: "oscillator",
-          data: {
-            label: "Oscillator",
-            config: { min: 0, max: 200, step: 1 },
-            values: { frequency: 0 },
-          },
-          position: { x: spaceWidth, y: 50 },
-          className: "react-flow__node-default",
+          data: { label: "Oscillator", values: { frequency: 0 } },
+          position: { x: spaceWidth * 2, y: 50 },
           dragHandle: ".leva-c-hwBXYF",
+          className: "react-flow__node-default",
         },
         {
           id: "visualiser",
-          type: "visualiser",
-          data: { label: "Visualiser" },
-          position: { x: spaceWidth * 2, y: 50 },
+          type: "oscilloscope",
+          data: { label: "Oscilloscope" },
+          position: { x: spaceWidth * 3, y: 150 },
           className: "react-flow__node-default",
         },
         {
@@ -520,8 +318,15 @@ export const RandomSequencerWorker = () => (
       ],
       edges: [
         {
-          id: "sequencer-to-oscillator",
-          source: "sequencer",
+          id: "trigger-to-sequencer",
+          source: "oscillator-trigger",
+          sourceHandle: "out",
+          target: "mono-sequencer",
+          targetHandle: "trigger",
+        },
+        {
+          id: "mono-sequencer-to-oscillator",
+          source: "mono-sequencer",
           sourceHandle: "out",
           target: "oscillator",
           targetHandle: "frequency",
@@ -531,14 +336,14 @@ export const RandomSequencerWorker = () => (
           source: "oscillator",
           sourceHandle: "out",
           target: "visualiser",
-          targetHandle: "in",
+          targetHandle: "input1",
         },
         {
-          id: "visualiser-to-destination",
-          source: "visualiser",
-          target: "destination",
-          targetHandle: "in",
+          id: "trigger-to-visualiser",
+          source: "oscillator-trigger",
           sourceHandle: "out",
+          target: "visualiser",
+          targetHandle: "input2",
         },
       ],
     }}
@@ -552,8 +357,8 @@ export const ScriptNode = () => (
         {
           id: "oscillator",
           type: "oscillator",
-          data: { label: "Oscillator", values: { frequency: 440 } },
-          position: { x: 0, y: 50 },
+          data: { label: "Oscillator", values: { frequency: 47 } },
+          position: { x: 0, y: 0 },
           className: "react-flow__node-default",
           dragHandle: ".leva-c-hwBXYF",
         },
@@ -572,28 +377,28 @@ output.forEach((outputChannel, channelIndex) => {
     sampleIndex < outputChannel.length;
     sampleIndex++
   ) {
-    outputChannel[sampleIndex] = input[channelIndex]?.[sampleIndex];
+    outputChannel[sampleIndex] = input[channelIndex]?.[sampleIndex] * 0.5;
   }
 });
           `,
             },
           },
-          position: { x: spaceWidth, y: 50 },
+          position: { x: spaceWidth, y: 100 },
           className: "react-flow__node-default",
           dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "visualiser",
-          type: "visualiser",
-          data: { label: "Visualiser" },
-          position: { x: spaceWidth * 3, y: 50 },
+          type: "oscilloscope",
+          data: { label: "Visualiser", config: { showGrid: true } },
+          position: { x: spaceWidth * 3, y: 0 },
           className: "react-flow__node-default",
         },
         {
           id: "destination",
           type: "destination",
           data: { label: "Destination" },
-          position: { x: spaceWidth * 4, y: 50 },
+          position: { x: spaceWidth * 3, y: 300 },
           className: "react-flow__node-default",
         },
       ],
@@ -606,18 +411,18 @@ output.forEach((outputChannel, channelIndex) => {
           targetHandle: "input0",
         },
         {
+          id: "oscillator-to-visialiser",
+          source: "oscillator",
+          sourceHandle: "out",
+          target: "visualiser",
+          targetHandle: "input1",
+        },
+        {
           id: "script-node-to-visualiser",
           source: "script-node",
           sourceHandle: "output0",
           target: "visualiser",
-          targetHandle: "in",
-        },
-        {
-          id: "visualiser-to-destination",
-          source: "visualiser",
-          target: "destination",
-          targetHandle: "in",
-          sourceHandle: "out",
+          targetHandle: "input2",
         },
       ],
     }}
