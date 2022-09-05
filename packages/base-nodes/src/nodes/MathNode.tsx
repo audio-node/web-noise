@@ -1,18 +1,17 @@
-import { plugins, useAudioNode, useNode, WNNode, WNNodeProps } from "@web-noise/core";
+import { useAudioNode, useNode, WNNode, WNNodeProps } from "@web-noise/core";
 import { button, LevaPanel, useControls, useCreateStore } from "leva";
 import { FC, useEffect } from "react";
 import { MathNode as TMathNode, MathNodeValues } from "../audioNodes/math";
+import { CodeEditor } from "../levaPlugins";
 
 interface MathNodeData {
   label: string;
   values?: MathNodeValues;
 }
 
-const { CodeEditor } = plugins;
-
 const MathNode: FC<WNNodeProps<MathNodeData>> = ({ data, id }) => {
   const { node } = useAudioNode<TMathNode>(id);
-  const { updateNodeValues } =  useNode(id);
+  const { updateNodeValues } = useNode(id);
 
   const { expression = "//expression" } = data.values || {};
 

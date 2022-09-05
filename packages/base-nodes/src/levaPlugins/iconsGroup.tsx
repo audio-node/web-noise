@@ -1,15 +1,15 @@
 import { createPlugin, useInputContext } from "leva/plugin";
 import styled from "@emotion/styled";
-import theme from "../theme";
+import { useTheme, Theme } from '@web-noise/core'
 
-const IconsGroupWrapper = styled.div`
+const IconsGroupWrapper = styled.div<{ theme: Theme }>`
   position: relative;
   z-index: 100;
   display: grid;
   row-gap: var(--leva-space-rowGap);
   grid-template-rows: minmax(var(--leva-sizes-rowHeight), max-content);
   align-items: center;
-  color: ${theme.colors.highlight2};
+  color: ${({ theme }) => theme.colors.highlight2};
   grid-template-columns: auto var(--leva-sizes-controlWidth);
   column-gap: var(--leva-space-colGap);
 `;
@@ -31,9 +31,10 @@ const IconsGroupIconWrapper = styled.div`
 `;
 
 const IconGroup = () => {
+const theme = useTheme();
   const { value, settings, label, onUpdate } = useInputContext();
   return (
-    <IconsGroupWrapper>
+    <IconsGroupWrapper theme={theme}>
       <IconsGroupLabel>{label}</IconsGroupLabel>
       <IconsGroupIcons>
         {(settings as any)?.options.map(

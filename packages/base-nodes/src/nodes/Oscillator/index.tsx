@@ -1,7 +1,17 @@
-import { useAudioNode, useNode, useTheme, WNNode, WNNodeProps, plugins } from "@web-noise/core";
+import {
+  useAudioNode,
+  useNode,
+  useTheme,
+  WNNode,
+  WNNodeProps,
+} from "@web-noise/core";
 import { LevaPanel, useControls, useCreateStore } from "leva";
 import { FC, useEffect } from "react";
-import { Oscillator as TOscillator, OscillatorValues } from "../../audioNodes/oscillator";
+import {
+  Oscillator as TOscillator,
+  OscillatorValues,
+} from "../../audioNodes/oscillator";
+import { iconsGroup } from "../../levaPlugins";
 import { SawToothIcon, SineIcon, SquareIcon, TriangleIcon } from "./icons";
 
 interface OscillatorData {
@@ -17,7 +27,7 @@ const DEFAULT_TYPE = "sine";
 
 const Oscillator: FC<WNNodeProps<OscillatorData>> = ({ id, data }) => {
   const { node } = useAudioNode<TOscillator>(id);
-  const { updateNodeValues } =  useNode(id);
+  const { updateNodeValues } = useNode(id);
 
   const theme = useTheme();
 
@@ -35,7 +45,7 @@ const Oscillator: FC<WNNodeProps<OscillatorData>> = ({ id, data }) => {
         min: data.config?.min ?? 0,
         label: "freq",
       },
-      type: plugins.iconsGroup({
+      type: iconsGroup({
         label: "type",
         value: type,
         options: [

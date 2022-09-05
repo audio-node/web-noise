@@ -1,26 +1,24 @@
+import styled from "@emotion/styled";
 import {
-  plugins,
-  useTheme,
+  Theme,
   useAudioNode,
   useNode,
+  useTheme,
   WNNode,
   WNNodeProps,
-  Theme,
 } from "@web-noise/core";
-import styled from "@emotion/styled";
 import { button, LevaPanel, useControls, useCreateStore } from "leva";
 import { FC, useEffect, useState } from "react";
 import {
   ScriptNode as TScriptNode,
   ScriptNodeValues,
 } from "../../audioNodes/scriptNode";
+import { CodeEditor } from "../../levaPlugins";
 
 interface ScriptNodeData {
   label: string;
   values?: ScriptNodeValues;
 }
-
-const { CodeEditor } = plugins;
 
 const ErrorWrapper = styled.div<{ theme: Theme }>`
   font-family: var(--leva-fonts-mono);

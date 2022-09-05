@@ -18,11 +18,6 @@ import theme from "./src/theme";
 import type { WNAudioNode, CreateWNAudioNode } from "./src/types";
 import type { Theme } from "./src/theme";
 
-const plugins = {
-  CodeEditor,
-  iconsGroup,
-};
-
 export type {
   WNAudioNode,
   WNNodeProps,
@@ -35,7 +30,6 @@ export type {
 };
 
 export {
-  plugins,
   theme,
   contextValue,
   Editor,
