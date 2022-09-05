@@ -737,6 +737,104 @@ export const Keyboard = () => (
   />
 );
 
+export const Sequencer = () => (
+  <Editor
+    elements={{
+      nodes: [
+        {
+          id: "clock",
+          type: "clock",
+          data: { label: "Clock" },
+          position: { x: 0, y: 0 },
+        },
+        {
+          id: "sequencer",
+          type: "stepSequencerWorklet",
+          data: {
+            label: "step sequencer Worklet",
+            values: {
+              sequenceData: Array.from(new Array(16), (_value, index) =>
+                index % 2
+                  ? { value: 48, active: false }
+                  : { value: 36, active: true }
+              ),
+            },
+          },
+          position: { x: spaceWidth, y: 30 },
+        },
+        {
+          id: "oscillator",
+          type: "oscillator",
+          data: { label: "Oscillator", values: { frequency: 0 } },
+          position: { x: spaceWidth * 2, y: 0 },
+        },
+        {
+          id: "gain",
+          type: "gain",
+          data: { label: "Gain", values: {} },
+          position: { x: spaceWidth * 3, y: 50 },
+        },
+        {
+          id: "visualiser",
+          type: "oscilloscope",
+          data: { label: "Visualiser" },
+          position: { x: spaceWidth * 4, y: 0 },
+        },
+        {
+          id: "destination",
+          type: "destination",
+          data: { label: "Destination" },
+          position: { x: spaceWidth * 4, y: 350 },
+        },
+      ],
+      edges: [
+        {
+          id: "oscillator-to-gain",
+          source: "oscillator",
+          sourceHandle: "out",
+          target: "gain",
+          targetHandle: "in",
+        },
+        {
+          id: "clock-to-sequencer",
+          source: "clock",
+          sourceHandle: "trigger",
+          target: "sequencer",
+          targetHandle: "trigger",
+        },
+        {
+          id: "sequencer-to-oscillator",
+          source: "sequencer",
+          sourceHandle: "freq",
+          target: "oscillator",
+          targetHandle: "frequency",
+        },
+        {
+          id: "sequencer-to-gain",
+          source: "sequencer",
+          sourceHandle: "gate",
+          target: "gain",
+          targetHandle: "gain",
+        },
+        {
+          id: "gain-to-visualiser",
+          source: "gain",
+          sourceHandle: "out",
+          target: "visualiser",
+          targetHandle: "input1",
+        },
+        {
+          id: "gain-to-destination",
+          source: "gain",
+          target: "destination",
+          targetHandle: "in",
+          sourceHandle: "out",
+        },
+      ],
+    }}
+  />
+);
+
 export const Clock = () => (
   <Editor
     elements={{

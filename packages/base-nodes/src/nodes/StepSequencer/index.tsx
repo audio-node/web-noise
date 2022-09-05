@@ -124,7 +124,7 @@ const StepSequencer: FC<NodeProps<StepSequencerData>> = ({ id, data }) => {
   );
 
   useEffect(
-    () => updateNodeValues({ mode: controls.mode }),
+    () => updateNodeValues({ mode: controls.mode, sequenceData }),
     [updateNodeValues, controls.mode]
   );
   useEffect(
