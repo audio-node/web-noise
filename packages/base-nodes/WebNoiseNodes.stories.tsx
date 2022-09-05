@@ -519,6 +519,93 @@ output.forEach((outputChannel, channelIndex) => {
   />
 );
 
+export const MathNode = () => (
+  <Editor
+    elements={{
+      nodes: [
+        {
+          id: "parameter",
+          type: "parameter",
+          data: {
+            label: "Limit",
+            values: {
+              value: 0.5,
+            },
+          },
+          position: { x: 0, y: 50 },
+          dragHandle: ".leva-c-hwBXYF",
+          className: "react-flow__node-default",
+        },
+        {
+          id: "oscillator",
+          type: "oscillator",
+          data: { label: "Oscillator", values: { frequency: 47 } },
+          position: { x: 0, y: 180 },
+          className: "react-flow__node-default",
+          dragHandle: ".leva-c-hwBXYF",
+        },
+        {
+          id: "math-node",
+          type: "mathNode",
+          data: {
+            label: "Math Node",
+            values: {
+              expression: `INPUT > A ? A : INPUT`,
+            },
+          },
+          position: { x: spaceWidth, y: 120 },
+          className: "react-flow__node-default",
+          dragHandle: ".leva-c-hwBXYF",
+        },
+        {
+          id: "visualiser",
+          type: "oscilloscope",
+          data: { label: "Visualiser", config: { showGrid: true, input1Color: '#ff2400' } },
+          position: { x: spaceWidth * 2, y: 50 },
+          className: "react-flow__node-default",
+        },
+        {
+          id: "destination",
+          type: "destination",
+          data: { label: "Destination" },
+          position: { x: spaceWidth * 2, y: 350 },
+          className: "react-flow__node-default",
+        },
+      ],
+      edges: [
+        {
+          id: "oscillator-to-math-node",
+          source: "oscillator",
+          sourceHandle: "out",
+          target: "math-node",
+          targetHandle: "INPUT",
+        },
+        {
+          id: "parameter-to-math-node",
+          source: "parameter",
+          sourceHandle: "out",
+          target: "math-node",
+          targetHandle: "A",
+        },
+        {
+          id: "parameter-to-visualiser",
+          source: "parameter",
+          sourceHandle: "out",
+          target: "visualiser",
+          targetHandle: "input1",
+        },
+        {
+          id: "math-node-to-visualiser",
+          source: "math-node",
+          sourceHandle: "out",
+          target: "visualiser",
+          targetHandle: "input2",
+        },
+      ],
+    }}
+  />
+);
+
 export const ADSR = () => (
   <Editor
     elements={{
