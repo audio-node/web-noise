@@ -64,7 +64,7 @@ export const Port = styled.div`
 `;
 
 const StyledInputHandle = styled(Handle)`
-  left: -2px;
+  left: -3px;
 `;
 
 const InputHandle: FC<Partial<HandleProps>> = (props) => (
@@ -72,7 +72,7 @@ const InputHandle: FC<Partial<HandleProps>> = (props) => (
 );
 
 const StyledOutputHandle = styled(Handle)`
-  right: -2px;
+  right: -3px;
 `;
 
 const OutputHandle: FC<Partial<HandleProps>> = (props) => (
