@@ -822,7 +822,7 @@ export const Clock = () => (
           id: "randomSequencer",
           type: "randomSequencer",
           data: { label: "randomSequencer" },
-          position: { x: spaceWidth, y: 100 },
+          position: { x: spaceWidth, y: 200 },
           dragHandle: ".leva-c-hwBXYF",
           className: "react-flow__node-default",
         },
