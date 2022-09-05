@@ -1,4 +1,8 @@
 {
   "name": "@web-noise/core",
-  "version": "0.0.1"
+  "version": "0.0.1",
+  "dependencies": {
+    "react-flow-renderer": "^10.3.16",
+    "react-icons": "^4.4.0"
+  }
 }

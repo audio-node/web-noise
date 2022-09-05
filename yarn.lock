@@ -12629,7 +12629,7 @@ react-error-overlay@^6.0.11:
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.11.tgz#92835de5841c5cf08ba00ddd2d677b6d17ff9adb"
   integrity sha512-/6UZ2qgEyH2aqzYZgQPxEnz33NJ2gNsnHA2o5+o4wW9bLM/JYQitNP9xPhsXwC08hMMovfGe/8retsdDsczPRg==
 
-react-flow-renderer@^10.2.1:
+react-flow-renderer@^10.3.16:
   version "10.3.16"
   resolved "https://registry.yarnpkg.com/react-flow-renderer/-/react-flow-renderer-10.3.16.tgz#7285dfcfa35678c2227ede649c8ed5518bf9f30c"
   integrity sha512-QNvM/W1eurDd4gDK47wBLNE4GfK6Gx+JeygI00JsanNIDKEL/cxNdXcP2fwYgJme72AxuaLXc5xliHGaGmy+Jw==
@@ -12643,7 +12643,7 @@ react-flow-renderer@^10.2.1:
     d3-zoom "^3.0.0"
     zustand "^3.7.2"
 
-react-icons@^4.3.1:
+react-icons@^4.4.0:
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.4.0.tgz#a13a8a20c254854e1ec9aecef28a95cdf24ef703"
   integrity sha512-fSbvHeVYo/B5/L4VhB7sBA1i2tS8MkT0Hb9t2H1AVPkwGfVHLJCqyr2Py9dKMxsyM63Eng1GkdZfbWj+Fmv8Rg==
