@@ -29,7 +29,6 @@ export const Oscillator = () => (
           type: "oscillator",
           data: { label: "Oscillator" },
           position: { x: 0, y: 50 },
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "visualiser",
@@ -74,14 +73,12 @@ export const ConstantSource = () => (
             },
           },
           position: { x: 0, y: 50 },
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "oscillator",
           type: "oscillator",
           data: { label: "Oscillator", values: { frequency: 0 } },
           position: { x: spaceWidth, y: 50 },
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "visualiser",
@@ -125,14 +122,12 @@ export const Gain = () => (
           type: "oscillator",
           data: { label: "Oscillator" },
           position: { x: 0, y: 50 },
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "gain",
           type: "gain",
           data: { label: "Gain" },
           position: { x: spaceWidth, y: 50 },
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "visualiser",
@@ -186,7 +181,6 @@ export const Filter = () => (
             values: { frequency: 94, type: "sawtooth" },
           },
           position: { x: 0, y: 50 },
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "filter",
@@ -196,7 +190,6 @@ export const Filter = () => (
             values: { frequency: 170, q: 2, type: "lowpass" },
           },
           position: { x: spaceWidth, y: 50 },
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "visualiser",

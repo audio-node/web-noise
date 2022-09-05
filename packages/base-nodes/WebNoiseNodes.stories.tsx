@@ -29,14 +29,12 @@ export const Oscilloscope = () => (
           type: "oscillator",
           data: { label: "Oscillator1", values: { frequency: 46 } },
           position: { x: 0, y: 0 },
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "oscillator2",
           type: "oscillator",
           data: { label: "Oscillator2", values: { frequency: 325 } },
           position: { x: 0, y: 150 },
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "oscilloscope",
@@ -49,7 +47,6 @@ export const Oscilloscope = () => (
           type: "gain",
           data: { label: "Gain", values: { gain: 0.3 } },
           position: { x: spaceWidth, y: 0 },
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "oscilloscope-resulting",
@@ -150,28 +147,24 @@ export const Reverb = () => (
           type: "oscillator",
           data: { label: "Oscillator", values: { frequency: 340 } },
           position: { x: 0, y: 50 },
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "lfo",
           type: "oscillator",
           data: { label: "LFO", values: { frequency: 1, type: "sawtooth" } },
           position: { x: 0, y: 250 },
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "gain",
           type: "gain",
           data: { label: "Gain" },
           position: { x: spaceWidth - 80, y: 50 },
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "reverb",
           type: "reverb",
           data: { label: "Reverb" },
           position: { x: spaceWidth * 2 - 150, y: -20 },
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "oscilloscope",
@@ -275,7 +268,6 @@ export const RandomSequencer = () => (
             values: { frequency: 1, type: "square" },
           },
           position: { x: 0, y: 170 },
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "mono-sequencer",
@@ -284,14 +276,12 @@ export const RandomSequencer = () => (
             label: "Random Sequencer",
           },
           position: { x: spaceWidth, y: 50 },
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "oscillator",
           type: "oscillator",
           data: { label: "Oscillator", values: { frequency: 0 } },
           position: { x: spaceWidth * 2, y: 50 },
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "visualiser",
@@ -352,7 +342,6 @@ export const RandomSequencerWorklet = () => (
             values: { frequency: 1, type: "square" },
           },
           position: { x: 0, y: 170 },
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "mono-sequencer",
@@ -361,14 +350,12 @@ export const RandomSequencerWorklet = () => (
             label: "Random Sequencer",
           },
           position: { x: spaceWidth, y: 50 },
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "oscillator",
           type: "oscillator",
           data: { label: "Oscillator", values: { frequency: 0 } },
           position: { x: spaceWidth * 2, y: 50 },
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "visualiser",
@@ -426,8 +413,6 @@ export const ScriptNode = () => (
           type: "oscillator",
           data: { label: "Oscillator", values: { frequency: 47 } },
           position: { x: 0, y: 0 },
-
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "script-node",
@@ -451,8 +436,6 @@ output.forEach((outputChannel, channelIndex) => {
             },
           },
           position: { x: spaceWidth, y: 100 },
-
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "visualiser",
@@ -508,15 +491,12 @@ export const MathNode = () => (
             },
           },
           position: { x: 0, y: 50 },
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "oscillator",
           type: "oscillator",
           data: { label: "Oscillator", values: { frequency: 47 } },
           position: { x: 0, y: 180 },
-
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "math-node",
@@ -528,8 +508,6 @@ export const MathNode = () => (
             },
           },
           position: { x: spaceWidth, y: 120 },
-
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "visualiser",
@@ -595,7 +573,6 @@ export const ADSR = () => (
             },
           },
           position: { x: 0, y: 50 },
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "oscillator",
@@ -605,7 +582,6 @@ export const ADSR = () => (
             values: { frequency: 0, type: "square" },
           },
           position: { x: spaceWidth, y: 50 },
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "adsr",
@@ -621,7 +597,6 @@ export const ADSR = () => (
             },
           },
           position: { x: spaceWidth * 2 - 70, y: 120 },
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "visualiser",
@@ -673,14 +648,12 @@ export const Keyboard = () => (
           type: "virtualKeyboard",
           data: { label: "Keyboard" },
           position: { x: 0, y: 50 },
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "oscillator",
           type: "oscillator",
           data: { label: "Oscillator", values: { frequency: 0 } },
           position: { x: spaceWidth * 2 - 20, y: 0 },
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "adsr",
@@ -696,14 +669,12 @@ export const Keyboard = () => (
             },
           },
           position: { x: spaceWidth * 2 - 80, y: 200 },
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "gain",
           type: "gain",
           data: { label: "Gain" },
           position: { x: spaceWidth * 3 - 50, y: 60 },
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "visualiser",
@@ -775,35 +746,30 @@ export const Clock = () => (
           type: "clock",
           data: { label: "Clock" },
           position: { x: 0, y: 0 },
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "sequencer",
           type: "randomSequencerWorklet",
           data: { label: "randomSequencer Worklet" },
           position: { x: spaceWidth, y: 0 },
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "randomSequencer",
           type: "randomSequencer",
           data: { label: "randomSequencer" },
           position: { x: spaceWidth, y: 200 },
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "oscillator",
           type: "oscillator",
           data: { label: "Oscillator", values: { frequency: 0 } },
           position: { x: spaceWidth * 2, y: 0 },
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "gain",
           type: "gain",
           data: { label: "Gain" },
           position: { x: spaceWidth * 3, y: 50 },
-          dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "visualiser",

@@ -108,6 +108,7 @@ export const Editor = ({
       ...node,
       targetPosition: Position.Left,
       sourcePosition: Position.Right,
+      dragHandle: ".leva-c-hwBXYF",
     }))
   );
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
