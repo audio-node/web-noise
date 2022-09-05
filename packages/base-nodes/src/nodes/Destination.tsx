@@ -21,7 +21,7 @@ const Destination: FC<NodeProps> = ({ targetPosition, id }) => {
 
   return (
     <>
-      <TitleBarWrapper className="leva-c-hwBXYF">
+      <TitleBarWrapper>
         <SpeakerIcon />
       </TitleBarWrapper>
       <Handle

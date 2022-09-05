@@ -22,6 +22,7 @@ import Wire from "./Wire";
 import { contextValue, ModuleContext } from "../Context";
 import defaultTheme from "../theme";
 import type { CreateWNAudioNode } from "../types";
+import { DRAG_HANDLE_SELECTOR } from '../constants'
 
 export interface Elements {
   nodes: Array<Node>;
@@ -108,7 +109,7 @@ export const Editor = ({
       ...node,
       targetPosition: Position.Left,
       sourcePosition: Position.Right,
-      dragHandle: ".leva-c-hwBXYF",
+      dragHandle: DRAG_HANDLE_SELECTOR,
     }))
   );
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
@@ -143,7 +144,7 @@ export const Editor = ({
         },
         targetPosition: Position.Left,
         sourcePosition: Position.Right,
-        dragHandle: ".leva-c-hwBXYF",
+        dragHandle: DRAG_HANDLE_SELECTOR,
       };
       //@ts-ignore
       setNodes((nds) => nds.concat(newNode));

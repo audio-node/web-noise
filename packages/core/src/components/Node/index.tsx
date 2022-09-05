@@ -5,6 +5,7 @@ import useAudioNode from "../../hooks/useAudioNode";
 import useNode from "../../hooks/useNode";
 import useTheme from "../../hooks/useTheme";
 import { Theme } from "../../theme";
+import { DRAG_HANDLE_CLASS } from "../../constants";
 
 const NodeWrapper = styled.div`
   background-color: var(--leva-colors-elevation1);
@@ -25,7 +26,7 @@ const Section = styled.div`
   background-color: var(--leva-colors-elevation1);
 `;
 
-export const TitleBar = styled(Section)`
+const TitleBarInner = styled(Section)`
   display: flex;
   height: var(--leva-sizes-titleBarHeight);
   touch-action: none;
@@ -36,14 +37,16 @@ export const TitleBar = styled(Section)`
   padding: 0 1rem;
 `;
 
-export const PortsPanel = styled(Section)<{ theme: Theme }>(({ theme }) => `
+export const PortsPanel = styled(Section)<{ theme: Theme }>(
+  ({ theme }) => `
   display: grid;
   grid-template-areas: "inputs outputs";
   background: ${theme.colors.elevation2};
   border-bottom: 1px solid ${theme.colors.elevation1};
   color: ${theme.colors.highlight3};
   font-size: 0.6rem;
-`);
+`
+);
 
 export const InputPorts = styled.div`
   grid-area: inputs;
@@ -80,11 +83,17 @@ export interface WNNodeData {
   label: string;
 }
 
-export type WNNodeProps<T = Record<string, unknown>> = NodeProps<T & WNNodeData>;
+export type WNNodeProps<T = Record<string, unknown>> = NodeProps<
+  T & WNNodeData
+>;
+
+export const TitleBar: FC<{ className?: string }> = ({ className, ...props }) => (
+  <TitleBarInner {...props} className={[className, DRAG_HANDLE_CLASS].join(' ')} />
+);
 
 export const WNNode: FC<{ id: string }> = ({ id, children }) => {
   const theme = useTheme();
-  const { data } =  useNode(id);
+  const { data } = useNode(id);
   const audioNode = useAudioNode(id);
 
   if (audioNode.loading) {
@@ -95,11 +104,13 @@ export const WNNode: FC<{ id: string }> = ({ id, children }) => {
     return <NodeErrorWrapper>error: {audioNode.error}</NodeErrorWrapper>;
   }
 
-  const { node: { inputs, outputs } } = audioNode;
+  const {
+    node: { inputs, outputs },
+  } = audioNode;
 
   return (
     <NodeWrapper>
-      <TitleBar className="leva-c-hwBXYF">{data?.label || "No Name"}</TitleBar>
+      <TitleBar>{data?.label || "No Name"}</TitleBar>
       <PortsPanel theme={theme}>
         <InputPorts>
           {inputs

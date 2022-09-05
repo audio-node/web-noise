@@ -1,4 +1,3 @@
-import { CodeEditor, iconsGroup } from "./src/levaPlugins";
 import { ModuleContext, contextValue } from "./src/Context";
 import Editor, {
   PluginConfig,
