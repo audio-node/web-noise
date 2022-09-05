@@ -2,7 +2,9 @@ import { Editor as DefaultEditor } from "@web-noise/core";
 import { FC } from "react";
 import { baseNodes, webAudioNodes } from "@web-noise/base-nodes";
 
-const Editor: typeof DefaultEditor = (props) => <DefaultEditor plugins={[baseNodes, webAudioNodes]} {...props} />;
+const Editor: typeof DefaultEditor = (props) => (
+  <DefaultEditor plugins={[baseNodes, webAudioNodes]} {...props} />
+);
 
 export default {
   title: "WebNoise nodes",
@@ -28,7 +30,6 @@ export const Oscilloscope = () => (
           data: { label: "Oscillator1", values: { frequency: 46 } },
           position: { x: 0, y: 0 },
           dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
         },
         {
           id: "oscillator2",
@@ -36,14 +37,12 @@ export const Oscilloscope = () => (
           data: { label: "Oscillator2", values: { frequency: 325 } },
           position: { x: 0, y: 150 },
           dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
         },
         {
           id: "oscilloscope",
           type: "oscilloscope",
           data: { label: "Oscilloscope" },
           position: { x: spaceWidth, y: 250 },
-          className: "react-flow__node-default",
         },
         {
           id: "gain",
@@ -51,21 +50,18 @@ export const Oscilloscope = () => (
           data: { label: "Gain", values: { gain: 0.3 } },
           position: { x: spaceWidth, y: 0 },
           dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
         },
         {
           id: "oscilloscope-resulting",
           type: "oscilloscope",
           data: { label: "Oscilloscope Resulting" },
           position: { x: spaceWidth * 2, y: 0 },
-          className: "react-flow__node-default",
         },
         {
           id: "destination",
           type: "destination",
           data: { label: "Destination" },
           position: { x: spaceWidth * 2, y: 300 },
-          className: "react-flow__node-default",
         },
       ],
       edges: [
@@ -118,21 +114,18 @@ export const WhiteNoise = () => (
           type: "whiteNoise",
           data: { label: "White Noise" },
           position: { x: 0, y: 50 },
-          className: "react-flow__node-default",
         },
         {
           id: "visualiser",
           type: "visualiser",
           data: { label: "Visualiser" },
           position: { x: spaceWidth, y: 150 },
-          className: "react-flow__node-default",
         },
         {
           id: "destination",
           type: "destination",
           data: { label: "Destination" },
           position: { x: spaceWidth, y: 50 },
-          className: "react-flow__node-default",
         },
       ],
       edges: [
@@ -158,15 +151,13 @@ export const Reverb = () => (
           data: { label: "Oscillator", values: { frequency: 340 } },
           position: { x: 0, y: 50 },
           dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
         },
         {
           id: "lfo",
           type: "oscillator",
-          data: { label: "LFO", values: { frequency: 1, type: 'sawtooth' } },
+          data: { label: "LFO", values: { frequency: 1, type: "sawtooth" } },
           position: { x: 0, y: 250 },
           dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
         },
         {
           id: "gain",
@@ -174,7 +165,6 @@ export const Reverb = () => (
           data: { label: "Gain" },
           position: { x: spaceWidth - 80, y: 50 },
           dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
         },
         {
           id: "reverb",
@@ -182,21 +172,18 @@ export const Reverb = () => (
           data: { label: "Reverb" },
           position: { x: spaceWidth * 2 - 150, y: -20 },
           dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
         },
         {
           id: "oscilloscope",
           type: "oscilloscope",
           data: { label: "Oscilloscope" },
           position: { x: spaceWidth * 3 - 150, y: 100 },
-          className: "react-flow__node-default",
         },
         {
           id: "destination",
           type: "destination",
           data: { label: "Destination" },
           position: { x: spaceWidth * 3 - 150, y: -20 },
-          className: "react-flow__node-default",
         },
       ],
       edges: [
@@ -240,7 +227,6 @@ export const Reverb = () => (
   />
 );
 
-
 export const Spectroscope = () => (
   <Editor
     elements={{
@@ -250,21 +236,18 @@ export const Spectroscope = () => (
           type: "whiteNoise",
           data: { label: "White Noise" },
           position: { x: 0, y: 50 },
-          className: "react-flow__node-default",
         },
         {
           id: "visualiser",
           type: "spectroscope",
           data: { label: "Spectroscope" },
           position: { x: spaceWidth, y: 150 },
-          className: "react-flow__node-default",
         },
         {
           id: "destination",
           type: "destination",
           data: { label: "Destination" },
           position: { x: spaceWidth, y: 50 },
-          className: "react-flow__node-default",
         },
       ],
       edges: [
@@ -280,7 +263,6 @@ export const Spectroscope = () => (
   />
 );
 
-
 export const RandomSequencer = () => (
   <Editor
     elements={{
@@ -288,10 +270,12 @@ export const RandomSequencer = () => (
         {
           id: "oscillator-trigger",
           type: "oscillator",
-          data: { label: "Trigger oscillator", values: { frequency: 1, type: 'square' } },
+          data: {
+            label: "Trigger oscillator",
+            values: { frequency: 1, type: "square" },
+          },
           position: { x: 0, y: 170 },
           dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
         },
         {
           id: "mono-sequencer",
@@ -301,7 +285,6 @@ export const RandomSequencer = () => (
           },
           position: { x: spaceWidth, y: 50 },
           dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
         },
         {
           id: "oscillator",
@@ -309,21 +292,18 @@ export const RandomSequencer = () => (
           data: { label: "Oscillator", values: { frequency: 0 } },
           position: { x: spaceWidth * 2, y: 50 },
           dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
         },
         {
           id: "visualiser",
           type: "oscilloscope",
           data: { label: "Oscilloscope" },
           position: { x: spaceWidth * 3, y: 150 },
-          className: "react-flow__node-default",
         },
         {
           id: "destination",
           type: "destination",
           data: { label: "Destination" },
           position: { x: spaceWidth * 3, y: 50 },
-          className: "react-flow__node-default",
         },
       ],
       edges: [
@@ -360,7 +340,6 @@ export const RandomSequencer = () => (
   />
 );
 
-
 export const RandomSequencerWorklet = () => (
   <Editor
     elements={{
@@ -368,10 +347,12 @@ export const RandomSequencerWorklet = () => (
         {
           id: "oscillator-trigger",
           type: "oscillator",
-          data: { label: "Trigger oscillator", values: { frequency: 1, type: 'square' } },
+          data: {
+            label: "Trigger oscillator",
+            values: { frequency: 1, type: "square" },
+          },
           position: { x: 0, y: 170 },
           dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
         },
         {
           id: "mono-sequencer",
@@ -381,7 +362,6 @@ export const RandomSequencerWorklet = () => (
           },
           position: { x: spaceWidth, y: 50 },
           dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
         },
         {
           id: "oscillator",
@@ -389,21 +369,18 @@ export const RandomSequencerWorklet = () => (
           data: { label: "Oscillator", values: { frequency: 0 } },
           position: { x: spaceWidth * 2, y: 50 },
           dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
         },
         {
           id: "visualiser",
           type: "oscilloscope",
           data: { label: "Oscilloscope" },
           position: { x: spaceWidth * 3, y: 150 },
-          className: "react-flow__node-default",
         },
         {
           id: "destination",
           type: "destination",
           data: { label: "Destination" },
           position: { x: spaceWidth * 3, y: 50 },
-          className: "react-flow__node-default",
         },
       ],
       edges: [
@@ -449,7 +426,7 @@ export const ScriptNode = () => (
           type: "oscillator",
           data: { label: "Oscillator", values: { frequency: 47 } },
           position: { x: 0, y: 0 },
-          className: "react-flow__node-default",
+
           dragHandle: ".leva-c-hwBXYF",
         },
         {
@@ -474,7 +451,7 @@ output.forEach((outputChannel, channelIndex) => {
             },
           },
           position: { x: spaceWidth, y: 100 },
-          className: "react-flow__node-default",
+
           dragHandle: ".leva-c-hwBXYF",
         },
         {
@@ -482,14 +459,12 @@ output.forEach((outputChannel, channelIndex) => {
           type: "oscilloscope",
           data: { label: "Visualiser", config: { showGrid: true } },
           position: { x: spaceWidth * 3, y: 0 },
-          className: "react-flow__node-default",
         },
         {
           id: "destination",
           type: "destination",
           data: { label: "Destination" },
           position: { x: spaceWidth * 3, y: 300 },
-          className: "react-flow__node-default",
         },
       ],
       edges: [
@@ -534,14 +509,13 @@ export const MathNode = () => (
           },
           position: { x: 0, y: 50 },
           dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
         },
         {
           id: "oscillator",
           type: "oscillator",
           data: { label: "Oscillator", values: { frequency: 47 } },
           position: { x: 0, y: 180 },
-          className: "react-flow__node-default",
+
           dragHandle: ".leva-c-hwBXYF",
         },
         {
@@ -554,22 +528,23 @@ export const MathNode = () => (
             },
           },
           position: { x: spaceWidth, y: 120 },
-          className: "react-flow__node-default",
+
           dragHandle: ".leva-c-hwBXYF",
         },
         {
           id: "visualiser",
           type: "oscilloscope",
-          data: { label: "Visualiser", config: { showGrid: true, input1Color: '#ff2400' } },
+          data: {
+            label: "Visualiser",
+            config: { showGrid: true, input1Color: "#ff2400" },
+          },
           position: { x: spaceWidth * 2, y: 50 },
-          className: "react-flow__node-default",
         },
         {
           id: "destination",
           type: "destination",
           data: { label: "Destination" },
           position: { x: spaceWidth * 2, y: 350 },
-          className: "react-flow__node-default",
         },
       ],
       edges: [
@@ -621,15 +596,16 @@ export const ADSR = () => (
           },
           position: { x: 0, y: 50 },
           dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
         },
         {
           id: "oscillator",
           type: "oscillator",
-          data: { label: "Oscillator", values: { frequency: 0, type: 'square' } },
+          data: {
+            label: "Oscillator",
+            values: { frequency: 0, type: "square" },
+          },
           position: { x: spaceWidth, y: 50 },
           dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
         },
         {
           id: "adsr",
@@ -646,14 +622,12 @@ export const ADSR = () => (
           },
           position: { x: spaceWidth * 2 - 70, y: 120 },
           dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
         },
         {
           id: "visualiser",
           type: "oscilloscope",
           data: { label: "Visualiser", config: { showGrid: true } },
           position: { x: spaceWidth * 3, y: 50 },
-          className: "react-flow__node-default",
         },
       ],
       edges: [
@@ -700,7 +674,6 @@ export const Keyboard = () => (
           data: { label: "Keyboard" },
           position: { x: 0, y: 50 },
           dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
         },
         {
           id: "oscillator",
@@ -708,7 +681,6 @@ export const Keyboard = () => (
           data: { label: "Oscillator", values: { frequency: 0 } },
           position: { x: spaceWidth * 2 - 20, y: 0 },
           dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
         },
         {
           id: "adsr",
@@ -725,7 +697,6 @@ export const Keyboard = () => (
           },
           position: { x: spaceWidth * 2 - 80, y: 200 },
           dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
         },
         {
           id: "gain",
@@ -733,21 +704,18 @@ export const Keyboard = () => (
           data: { label: "Gain" },
           position: { x: spaceWidth * 3 - 50, y: 60 },
           dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
         },
         {
           id: "visualiser",
           type: "visualiser",
           data: { label: "Visualiser" },
           position: { x: spaceWidth * 4 - 100, y: 50 },
-          className: "react-flow__node-default",
         },
         {
           id: "destination",
           type: "destination",
           data: { label: "Destination" },
           position: { x: spaceWidth * 5 - 50, y: 50 },
-          className: "react-flow__node-default",
         },
       ],
       edges: [
@@ -808,7 +776,6 @@ export const Clock = () => (
           data: { label: "Clock" },
           position: { x: 0, y: 0 },
           dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
         },
         {
           id: "sequencer",
@@ -816,7 +783,6 @@ export const Clock = () => (
           data: { label: "randomSequencer Worklet" },
           position: { x: spaceWidth, y: 0 },
           dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
         },
         {
           id: "randomSequencer",
@@ -824,7 +790,6 @@ export const Clock = () => (
           data: { label: "randomSequencer" },
           position: { x: spaceWidth, y: 200 },
           dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
         },
         {
           id: "oscillator",
@@ -832,7 +797,6 @@ export const Clock = () => (
           data: { label: "Oscillator", values: { frequency: 0 } },
           position: { x: spaceWidth * 2, y: 0 },
           dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
         },
         {
           id: "gain",
@@ -840,21 +804,18 @@ export const Clock = () => (
           data: { label: "Gain" },
           position: { x: spaceWidth * 3, y: 50 },
           dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
         },
         {
           id: "visualiser",
           type: "visualiser",
           data: { label: "Visualiser" },
           position: { x: spaceWidth * 4, y: 0 },
-          className: "react-flow__node-default",
         },
         {
           id: "destination",
           type: "destination",
           data: { label: "Destination" },
           position: { x: spaceWidth * 4, y: 350 },
-          className: "react-flow__node-default",
         },
       ],
       edges: [
@@ -897,4 +858,3 @@ export const Clock = () => (
     }}
   />
 );
-

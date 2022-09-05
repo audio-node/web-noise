@@ -30,21 +30,18 @@ export const Oscillator = () => (
           data: { label: "Oscillator" },
           position: { x: 0, y: 50 },
           dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
         },
         {
           id: "visualiser",
           type: "visualiser",
           data: { label: "Visualiser" },
           position: { x: spaceWidth, y: 150 },
-          className: "react-flow__node-default",
         },
         {
           id: "destination",
           type: "destination",
           data: { label: "Destination" },
           position: { x: spaceWidth, y: 50 },
-          className: "react-flow__node-default",
         },
       ],
       edges: [
@@ -78,7 +75,6 @@ export const ConstantSource = () => (
           },
           position: { x: 0, y: 50 },
           dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
         },
         {
           id: "oscillator",
@@ -86,21 +82,18 @@ export const ConstantSource = () => (
           data: { label: "Oscillator", values: { frequency: 0 } },
           position: { x: spaceWidth, y: 50 },
           dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
         },
         {
           id: "visualiser",
           type: "visualiser",
           data: { label: "Visualiser" },
           position: { x: spaceWidth * 2, y: 150 },
-          className: "react-flow__node-default",
         },
         {
           id: "destination",
           type: "destination",
           data: { label: "Destination" },
           position: { x: spaceWidth * 2, y: 50 },
-          className: "react-flow__node-default",
         },
       ],
       edges: [
@@ -133,7 +126,6 @@ export const Gain = () => (
           data: { label: "Oscillator" },
           position: { x: 0, y: 50 },
           dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
         },
         {
           id: "gain",
@@ -141,21 +133,18 @@ export const Gain = () => (
           data: { label: "Gain" },
           position: { x: spaceWidth, y: 50 },
           dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
         },
         {
           id: "visualiser",
           type: "visualiser",
           data: { label: "Visualiser" },
           position: { x: spaceWidth * 2, y: 150 },
-          className: "react-flow__node-default",
         },
         {
           id: "destination",
           type: "destination",
           data: { label: "Destination" },
           position: { x: spaceWidth * 2, y: 50 },
-          className: "react-flow__node-default",
         },
       ],
       edges: [
@@ -192,32 +181,34 @@ export const Filter = () => (
         {
           id: "oscillator",
           type: "oscillator",
-          data: { label: "Oscillator", values: { frequency: 94, type: 'sawtooth' } },
+          data: {
+            label: "Oscillator",
+            values: { frequency: 94, type: "sawtooth" },
+          },
           position: { x: 0, y: 50 },
           dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
         },
         {
           id: "filter",
           type: "filter",
-          data: { label: "Filter", values: { frequency: 170, q: 2, type: 'lowpass' } },
+          data: {
+            label: "Filter",
+            values: { frequency: 170, q: 2, type: "lowpass" },
+          },
           position: { x: spaceWidth, y: 50 },
           dragHandle: ".leva-c-hwBXYF",
-          className: "react-flow__node-default",
         },
         {
           id: "visualiser",
           type: "visualiser",
           data: { label: "Visualiser" },
           position: { x: spaceWidth * 2, y: 150 },
-          className: "react-flow__node-default",
         },
         {
           id: "destination",
           type: "destination",
           data: { label: "Destination" },
           position: { x: spaceWidth * 2, y: 50 },
-          className: "react-flow__node-default",
         },
       ],
       edges: [
