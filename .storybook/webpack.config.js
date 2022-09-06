@@ -1,7 +1,7 @@
 const path = require("path");
 
 // Export a function. Accept the base config as the only param.
-module.exports = async ({ config, mode }) => {
+module.exports = ({ config, mode }) => {
   config.module.rules.push({
     test: /\.(ts|tsx)$/,
     use: ["ts-loader"],

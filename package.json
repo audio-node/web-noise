@@ -7,6 +7,7 @@
   ],
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.16.7",
+    "@craco/craco": "^6.4.5",
     "@emotion/css": "^11.7.1",
     "@emotion/react": "^11.8.2",
     "@emotion/styled": "^11.8.1",
@@ -26,9 +27,9 @@
     "worklet-loader": "^2.0.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public -o docs"
