@@ -2,7 +2,11 @@
   "name": "@web-noise/core",
   "version": "0.0.1",
   "dependencies": {
+    "react-copy-to-clipboard": "^5.1.0",
     "react-flow-renderer": "^10.3.16",
     "react-icons": "^4.4.0"
+  },
+  "devDependencies": {
+    "@types/react-copy-to-clipboard": "^5.0.4"
   }
 }

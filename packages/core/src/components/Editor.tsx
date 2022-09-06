@@ -18,6 +18,7 @@ import "../styles";
 import AudioGraph, { NodeTypes as AudioNodeTypes } from "./AudioGraph";
 import ContextMenu from "./ContextMenu";
 import ResumeContext from "./ResumeContext";
+import SharePatch from "./SharePatch";
 import Wire from "./Wire";
 import { contextValue, ModuleContext } from "../Context";
 import defaultTheme from "../theme";
@@ -178,6 +179,7 @@ export const Editor = ({
             <MiniMap />
             <Controls>
               <ResumeContext />
+              <SharePatch />
             </Controls>
           </ReactFlow>
           <ContextMenu
