@@ -9,7 +9,6 @@ import ReactTooltip from "react-tooltip";
 const SharePatch: FC = () => {
   const { getNodes, getEdges } = useReactFlow();
   const [link, setLink] = useState<string>();
-  const ref = useRef<any>(null);
 
   const updateLink = useCallback(() => {
     const dump = JSON.stringify({
