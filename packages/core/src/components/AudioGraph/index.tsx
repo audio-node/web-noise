@@ -3,6 +3,7 @@ import { Edge, Node } from "react-flow-renderer";
 import useModule from "../../hooks/useModule";
 import { CreateWNAudioNode } from "../../types";
 import { diff } from "./helpers";
+import useStore from "../../store";
 
 export interface NodeTypes extends Record<string, CreateWNAudioNode> {}
 
@@ -10,7 +11,13 @@ const AudioGraph: FC<{
   edges: Array<Edge>;
   nodes: Array<Node>;
   nodeTypes: NodeTypes;
-}> = ({ nodes, edges, nodeTypes }) => {
+}> = ({ nodes: _nodes, edges: _edges, nodeTypes }) => {
+
+  const {
+    nodes,
+    edges,
+  } = useStore();
+
   const {
     registerNode,
     unregisterNode,
@@ -34,6 +41,15 @@ const AudioGraph: FC<{
     );
 
     (async () => {
+
+      createNodes.map(({ type, id, ...node }) => {
+        if (!type || !nodeTypes[type]) {
+          return null;
+        }
+        console.log("creating node", node);
+        return registerNode(id, nodeTypes[type](audioContext));
+      })
+
       await Promise.all(
         removeEdges.map(
           ({ id, source, sourceHandle, target, targetHandle }) => {
@@ -50,16 +66,6 @@ const AudioGraph: FC<{
         removeNodes.map(({ type, id, ...node }) => {
           console.log("removing node", node);
           return unregisterNode(id);
-        })
-      );
-
-      await Promise.all(
-        createNodes.map(({ type, id, ...node }) => {
-          if (!type || !nodeTypes[type]) {
-            return null;
-          }
-          console.log("creating node", node);
-          return registerNode(id, nodeTypes[type](audioContext));
         })
       );
 

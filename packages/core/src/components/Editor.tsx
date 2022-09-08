@@ -1,7 +1,6 @@
 import { ThemeProvider } from "@emotion/react";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import ReactFlow, {
-  addEdge,
   Background,
   BackgroundVariant,
   Controls,
@@ -11,19 +10,18 @@ import ReactFlow, {
   NodeTypes,
   Position,
   ReactFlowProvider,
-  useEdgesState,
-  useNodesState,
 } from "react-flow-renderer";
+import { DRAG_HANDLE_SELECTOR } from "../constants";
+import { contextValue, ModuleContext } from "../Context";
+import useStore from "../store";
 import "../styles";
+import defaultTheme from "../theme";
+import type { CreateWNAudioNode } from "../types";
 import AudioGraph, { NodeTypes as AudioNodeTypes } from "./AudioGraph";
 import ContextMenu from "./ContextMenu";
 import ResumeContext from "./ResumeContext";
 import SharePatch from "./SharePatch";
 import Wire from "./Wire";
-import { contextValue, ModuleContext } from "../Context";
-import defaultTheme from "../theme";
-import type { CreateWNAudioNode } from "../types";
-import { DRAG_HANDLE_SELECTOR } from '../constants'
 
 export interface Elements {
   nodes: Array<Node>;
@@ -101,24 +99,21 @@ export const Editor = ({
     []
   );
 
-  const { nodes: initialNodes, edges: initialEdges } = elements || {
-    nodes: [],
-    edges: [],
-  };
-  const [nodes, setNodes, onNodesChange] = useNodesState<Array<Node>>(
-    initialNodes.map((node) => ({
-      ...node,
-      targetPosition: Position.Left,
-      sourcePosition: Position.Right,
-      dragHandle: DRAG_HANDLE_SELECTOR,
-    }))
-  );
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const {
+    nodes,
+    edges,
+    onNodesChange,
+    onEdgesChange,
+    onConnect,
+    setElements,
+    addNode,
+  } = useStore();
 
-  const onConnect = useCallback(
-    (connection) => setEdges((eds) => addEdge(connection, eds)),
-    [setEdges]
-  );
+  useEffect(() => {
+    if (elements) {
+      setElements(elements);
+    }
+  }, [elements, setElements]);
 
   const [reactflowInstance, setReactflowInstance] = useState(null);
 
@@ -138,7 +133,6 @@ export const Editor = ({
         id: `${nodeType}-${+new Date()}`,
         type: nodeType,
         data: { label: nodeType },
-        // TODO: calculate position properly!
         position: {
           x: nodePosition.x,
           y: nodePosition.y,
@@ -147,10 +141,9 @@ export const Editor = ({
         sourcePosition: Position.Right,
         dragHandle: DRAG_HANDLE_SELECTOR,
       };
-      //@ts-ignore
-      setNodes((nds) => nds.concat(newNode));
+      addNode(newNode);
     },
-    [setNodes]
+    [addNode]
   );
 
   return (
@@ -187,7 +180,7 @@ export const Editor = ({
             onMenuItem={(nodeType, nodePosition) =>
               onAdd(nodeType, nodePosition)
             }
-            onClearEditor={() => setNodes([])}
+            onClearEditor={() => setElements({ nodes: [], edges: [] })}
           />
         </ReactFlowProvider>
       </ThemeProvider>
