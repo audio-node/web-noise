@@ -17,7 +17,7 @@ import useStore from "../store";
 import "../styles";
 import defaultTheme from "../theme";
 import type { CreateWNAudioNode } from "../types";
-import AudioGraph, { NodeTypes as AudioNodeTypes } from "./AudioGraph";
+import useAudioGraph, { NodeTypes as AudioNodeTypes } from "../hooks/useAudioGraph";
 import ContextMenu from "./ContextMenu";
 import ResumeContext from "./ResumeContext";
 import SharePatch from "./SharePatch";
@@ -146,11 +146,12 @@ export const Editor = ({
     [addNode]
   );
 
+  useAudioGraph({ nodeTypes: audioNodeTypes });
+
   return (
     <ModuleContext.Provider value={contextValue}>
       <ThemeProvider theme={defaultTheme}>
         <ReactFlowProvider>
-          <AudioGraph nodes={nodes} edges={edges} nodeTypes={audioNodeTypes} />
           <ReactFlow
             nodes={nodes}
             edges={edges}

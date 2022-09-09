@@ -1,22 +1,14 @@
-import { FC, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Edge, Node } from "react-flow-renderer";
-import useModule from "../../hooks/useModule";
-import { CreateWNAudioNode } from "../../types";
-import { diff } from "./helpers";
 import useStore from "../../store";
+import { CreateWNAudioNode } from "../../types";
+import useModule from "../useModule";
+import { diff } from "./helpers";
 
 export interface NodeTypes extends Record<string, CreateWNAudioNode> {}
 
-const AudioGraph: FC<{
-  edges: Array<Edge>;
-  nodes: Array<Node>;
-  nodeTypes: NodeTypes;
-}> = ({ nodes: _nodes, edges: _edges, nodeTypes }) => {
-
-  const {
-    nodes,
-    edges,
-  } = useStore();
+const useAudioGraph = ({ nodeTypes }: { nodeTypes: NodeTypes }) => {
+  const { nodes, edges } = useStore();
 
   const {
     registerNode,
@@ -41,14 +33,13 @@ const AudioGraph: FC<{
     );
 
     (async () => {
-
       createNodes.map(({ type, id, ...node }) => {
         if (!type || !nodeTypes[type]) {
           return null;
         }
         console.log("creating node", node);
         return registerNode(id, nodeTypes[type](audioContext));
-      })
+      });
 
       await Promise.all(
         removeEdges.map(
@@ -105,4 +96,4 @@ const AudioGraph: FC<{
   return null;
 };
 
-export default AudioGraph;
+export default useAudioGraph;
