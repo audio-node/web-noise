@@ -17,7 +17,9 @@ import useStore from "../store";
 import "../styles";
 import defaultTheme from "../theme";
 import type { CreateWNAudioNode } from "../types";
-import useAudioGraph, { NodeTypes as AudioNodeTypes } from "../hooks/useAudioGraph";
+import useAudioGraph, {
+  NodeTypes as AudioNodeTypes,
+} from "../hooks/useAudioGraph";
 import ContextMenu from "./ContextMenu";
 import ResumeContext from "./ResumeContext";
 import SharePatch from "./SharePatch";
@@ -99,16 +101,8 @@ export const Editor = ({
     []
   );
 
-  const {
-    nodes,
-    edges,
-    onNodesChange,
-    onEdgesChange,
-    onConnect,
-    setElements,
-    clearElements,
-    addNode,
-  } = useStore();
+  const { nodes, edges, onNodesChange, onEdgesChange, onConnect, setElements } =
+    useStore();
 
   useEffect(() => {
     if (elements) {
@@ -126,25 +120,6 @@ export const Editor = ({
       }
     },
     [reactflowInstance]
-  );
-
-  const onAdd = useCallback(
-    (nodeType, nodePosition) => {
-      const newNode = {
-        id: `${nodeType}-${+new Date()}`,
-        type: nodeType,
-        data: { label: nodeType },
-        position: {
-          x: nodePosition.x,
-          y: nodePosition.y,
-        },
-        targetPosition: Position.Left,
-        sourcePosition: Position.Right,
-        dragHandle: DRAG_HANDLE_SELECTOR,
-      };
-      addNode(newNode);
-    },
-    [addNode]
   );
 
   useAudioGraph({ nodeTypes: audioNodeTypes });
@@ -177,13 +152,7 @@ export const Editor = ({
               <SharePatch />
             </Controls>
           </ReactFlow>
-          <ContextMenu
-            nodeTypes={nodeTypes}
-            onMenuItem={(nodeType, nodePosition) =>
-              onAdd(nodeType, nodePosition)
-            }
-            onClearEditor={clearElements}
-          />
+          <ContextMenu nodeTypes={nodeTypes} />
         </ReactFlowProvider>
       </ThemeProvider>
     </ModuleContext.Provider>

@@ -1,13 +1,13 @@
 import styled from "@emotion/styled";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
-import { useReactFlow, useViewport } from "react-flow-renderer";
+import { useReactFlow, useViewport, Position } from "react-flow-renderer";
 import { Theme } from "../theme";
 import useTheme from "../hooks/useTheme";
+import useStore from "../store";
+import { DRAG_HANDLE_SELECTOR } from "../constants";
 
 interface ContextMenuProps {
   nodeTypes: any;
-  onMenuItem: (node: string, nodePosition: MousePosition) => void;
-  onClearEditor?: () => void;
 }
 
 type MousePosition = {
@@ -15,11 +15,7 @@ type MousePosition = {
   y: number;
 };
 
-const ContextMenu: FC<ContextMenuProps> = ({
-  nodeTypes,
-  onMenuItem,
-  onClearEditor,
-}) => {
+const ContextMenu: FC<ContextMenuProps> = ({ nodeTypes }) => {
   const theme = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const { x, y, zoom } = useViewport();
@@ -29,6 +25,8 @@ const ContextMenu: FC<ContextMenuProps> = ({
     y: 0,
   });
   const menuWrapper = useRef(null);
+
+  const { clearElements, addNode } = useStore();
 
   const onContextMenu = (e: MouseEvent) => {
     e.preventDefault();
@@ -61,11 +59,24 @@ const ContextMenu: FC<ContextMenuProps> = ({
   }, []);
 
   const onMenuItemClick = useCallback(
-    (node: string) => {
-      onMenuItem(node, project(mousePosition));
+    (nodeType: string) => {
+      const { x, y } = project(mousePosition);
+      const newNode = {
+        id: `${nodeType}-${+new Date()}`,
+        type: nodeType,
+        data: { label: nodeType },
+        position: {
+          x,
+          y,
+        },
+        targetPosition: Position.Left,
+        sourcePosition: Position.Right,
+        dragHandle: DRAG_HANDLE_SELECTOR,
+      };
+      addNode(newNode);
       setIsOpen(false);
     },
-    [onMenuItem, mousePosition, project]
+    [mousePosition, project, addNode]
   );
 
   return (
@@ -85,7 +96,7 @@ const ContextMenu: FC<ContextMenuProps> = ({
             ))}
           </ul>
           <ul>
-            <li onClick={onClearEditor}>clear editor</li>
+            <li onClick={clearElements}>clear editor</li>
           </ul>
         </MenuWrapper>
       ) : null}
