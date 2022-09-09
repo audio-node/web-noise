@@ -1,9 +1,13 @@
 import { useContext } from "react";
 import { ModuleContext } from '../Context';
-import type { WNAudioNode, AudioNodeChannel } from '../types';
+import type { WNAudioNode, AudioNodeChannel, CreateWNAudioNode } from '../types';
 
 const useModule = () => {
   const { module, audioContext, connections } = useContext(ModuleContext);
+
+  const createNode = (nodeFactory: CreateWNAudioNode) => {
+    return nodeFactory(audioContext);
+  }
 
   const registerNode = (id: string, node: WNAudioNode) => {
     module.set(id, node);
@@ -160,6 +164,7 @@ const useModule = () => {
 
   return {
     audioContext,
+    createNode,
     registerNode,
     unregisterNode,
     getNode,

@@ -11,12 +11,12 @@ const useAudioGraph = ({ nodeTypes }: { nodeTypes: NodeTypes }) => {
   const { nodes, edges } = useStore();
 
   const {
+    createNode,
     registerNode,
     unregisterNode,
     connect,
     disconnect,
     destroy,
-    audioContext,
   } = useModule();
 
   const prevEdges = useRef<Array<Edge>>([]);
@@ -38,7 +38,7 @@ const useAudioGraph = ({ nodeTypes }: { nodeTypes: NodeTypes }) => {
           return null;
         }
         console.log("creating node", node);
-        return registerNode(id, nodeTypes[type](audioContext));
+        return registerNode(id, createNode(nodeTypes[type]));
       });
 
       await Promise.all(
@@ -77,11 +77,11 @@ const useAudioGraph = ({ nodeTypes }: { nodeTypes: NodeTypes }) => {
   }, [
     nodes,
     edges,
+    createNode,
     registerNode,
     unregisterNode,
     connect,
     disconnect,
-    audioContext,
     nodeTypes,
   ]);
 
