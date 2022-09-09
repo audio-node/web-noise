@@ -106,6 +106,7 @@ export const Editor = ({
     onEdgesChange,
     onConnect,
     setElements,
+    clearElements,
     addNode,
   } = useStore();
 
@@ -181,7 +182,7 @@ export const Editor = ({
             onMenuItem={(nodeType, nodePosition) =>
               onAdd(nodeType, nodePosition)
             }
-            onClearEditor={() => setElements({ nodes: [], edges: [] })}
+            onClearEditor={clearElements}
           />
         </ReactFlowProvider>
       </ThemeProvider>

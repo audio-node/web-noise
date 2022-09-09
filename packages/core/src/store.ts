@@ -20,25 +20,26 @@ type RFState = {
   setNodes: (nodes: Node[]) => void;
   setEdges: (edges: Edge[]) => void;
   setElements: (elements: { nodes: Node[]; edges: Edge[] }) => void;
+  clearElements: () => void;
 };
 
 const useStore = create<RFState>((set, get) => ({
   nodes: [],
   edges: [],
   onNodesChange: (changes) => {
-    set({
-      nodes: applyNodeChanges(changes, get().nodes),
-    });
+    set(({ nodes }) => ({
+      nodes: applyNodeChanges(changes, nodes),
+    }));
   },
   onEdgesChange: (changes) => {
-    set({
-      edges: applyEdgeChanges(changes, get().edges),
-    });
+    set(({ edges }) => ({
+      edges: applyEdgeChanges(changes, edges),
+    }));
   },
   onConnect: (connection) => {
-    set({
-      edges: addEdge(connection, get().edges),
-    });
+    set(({ edges }) => ({
+      edges: addEdge(connection, edges),
+    }));
   },
   addNode: (node) => {
     set(({ nodes }) => ({
@@ -61,6 +62,12 @@ const useStore = create<RFState>((set, get) => ({
       edges,
     });
   },
+  clearElements: () => {
+    set({
+      nodes: [],
+      edges: [],
+    });
+  }
 }));
 
 export default useStore;
