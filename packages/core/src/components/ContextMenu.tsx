@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
-import { useReactFlow, useViewport, Position } from "react-flow-renderer";
+import { useReactFlow, Position } from "react-flow-renderer";
 import { Theme } from "../theme";
 import useTheme from "../hooks/useTheme";
 import useStore from "../store";
@@ -18,7 +18,6 @@ type MousePosition = {
 const ContextMenu: FC<ContextMenuProps> = ({ nodeTypes }) => {
   const theme = useTheme();
   const [isOpen, setIsOpen] = useState(false);
-  const { x, y, zoom } = useViewport();
   const { project } = useReactFlow();
   const [mousePosition, setMousePosition] = useState<MousePosition>({
     x: 0,
@@ -26,7 +25,10 @@ const ContextMenu: FC<ContextMenuProps> = ({ nodeTypes }) => {
   });
   const menuWrapper = useRef(null);
 
-  const { clearElements, addNode } = useStore();
+  const { clearElements, addNode } = useStore(({ clearElements, addNode }) => ({
+    clearElements,
+    addNode,
+  }));
 
   const onContextMenu = (e: MouseEvent) => {
     e.preventDefault();
