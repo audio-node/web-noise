@@ -1,53 +1,27 @@
 import { useCallback } from "react";
-import { useReactFlow, NodeProps, Node } from "react-flow-renderer";
+import useStore, { WNNodeData } from "../store";
 
-interface BaseNodeProps {
-  label: string;
-}
-
-const  useNode = <T extends BaseNodeProps>(id: string) => {
-  const { setNodes, getNode } = useReactFlow();
-  const node: Node<T> | undefined = getNode(id);
-  const data = node?.data;
-
-  const updateNodeData = useCallback(
-    (data: any) => {
-      setNodes((nodes) =>
-        nodes.map((node) => {
-          if (node.id === id) {
-            node.data = {
-              ...node.data,
-              ...data,
-            };
-          }
-
-          return node;
-        })
-      );
-    },
-    [setNodes, id]
-  );
+const useNode = (id: string) => {
+  const updateNodeData = useStore(({ updateNodeData }) => updateNodeData);
 
   const updateNodeValues = useCallback(
-    (values: any) => updateNodeData({ values }),
-    [updateNodeData]
+    (values: WNNodeData["values"]) => updateNodeData(id, { values }),
+    [id, updateNodeData]
   );
   const updateNodeConfig = useCallback(
-    (config: any) => updateNodeData({ config }),
-    [updateNodeData]
+    (config: WNNodeData["config"]) => updateNodeData(id, { config }),
+    [id, updateNodeData]
   );
   const updateNodeLabel = useCallback(
-    (label: string) => updateNodeData({ label }),
-    [updateNodeData]
+    (label: string) => updateNodeData(id, { label }),
+    [id, updateNodeData]
   );
 
   return {
-    updateNodeData,
     updateNodeValues,
     updateNodeConfig,
     updateNodeLabel,
-    data,
   };
 };
 
-export default  useNode;
+export default useNode;

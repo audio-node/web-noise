@@ -1,11 +1,11 @@
 import styled from "@emotion/styled";
 import { FC } from "react";
 import { Handle, HandleProps, NodeProps, Position } from "react-flow-renderer";
-import useAudioNode from "../../hooks/useAudioNode";
-import useNode from "../../hooks/useNode";
-import useTheme from "../../hooks/useTheme";
-import { Theme } from "../../theme";
 import { DRAG_HANDLE_CLASS } from "../../constants";
+import useAudioNode from "../../hooks/useAudioNode";
+import useTheme from "../../hooks/useTheme";
+import useStore, { WNNodeData } from "../../store";
+import { Theme } from "../../theme";
 
 const NodeWrapper = styled.div`
   background-color: var(--leva-colors-elevation1);
@@ -79,21 +79,24 @@ const OutputHandle: FC<Partial<HandleProps>> = (props) => (
   <StyledOutputHandle {...props} type="source" position={Position.Right} />
 );
 
-export interface WNNodeData {
-  label: string;
-}
-
 export type WNNodeProps<T = Record<string, unknown>> = NodeProps<
   T & WNNodeData
 >;
 
-export const TitleBar: FC<{ className?: string }> = ({ className, ...props }) => (
-  <TitleBarInner {...props} className={[className, DRAG_HANDLE_CLASS].join(' ')} />
+export const TitleBar: FC<{ className?: string }> = ({
+  className,
+  ...props
+}) => (
+  <TitleBarInner
+    {...props}
+    className={[className, DRAG_HANDLE_CLASS].join(" ")}
+  />
 );
 
 export const WNNode: FC<{ id: string }> = ({ id, children }) => {
   const theme = useTheme();
-  const { data } = useNode(id);
+  const getNode = useStore(({ getNode }) => getNode);
+  const { data } = getNode(id) || {};
   const audioNode = useAudioNode(id);
 
   if (audioNode.loading) {
