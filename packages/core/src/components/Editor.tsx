@@ -8,18 +8,16 @@ import ReactFlow, {
   MiniMap,
   Node,
   NodeTypes,
-  Position,
   ReactFlowProvider,
 } from "react-flow-renderer";
-import { DRAG_HANDLE_SELECTOR } from "../constants";
 import { contextValue, ModuleContext } from "../Context";
+import useAudioGraph, {
+  NodeTypes as AudioNodeTypes,
+} from "../hooks/useAudioGraph";
 import useStore from "../store";
 import "../styles";
 import defaultTheme from "../theme";
 import type { CreateWNAudioNode } from "../types";
-import useAudioGraph, {
-  NodeTypes as AudioNodeTypes,
-} from "../hooks/useAudioGraph";
 import ContextMenu from "./ContextMenu";
 import ResumeContext from "./ResumeContext";
 import SharePatch from "./SharePatch";
