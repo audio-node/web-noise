@@ -1,24 +1,26 @@
 import type { FC } from "react";
 
-import { useState, useCallback, useRef } from "react";
-import { ControlButton, useReactFlow } from "react-flow-renderer";
-import { FaShareAlt as IconShare } from "react-icons/fa";
+import { useCallback, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import { ControlButton } from "react-flow-renderer";
+import { FaShareAlt as IconShare } from "react-icons/fa";
 import ReactTooltip from "react-tooltip";
+import useStore from "../store";
 
 const SharePatch: FC = () => {
-  const { getNodes, getEdges } = useReactFlow();
+  const [nodes, edges] = useStore(({ nodes, edges }) => [nodes, edges]);
+
   const [link, setLink] = useState<string>();
 
   const updateLink = useCallback(() => {
     const dump = JSON.stringify({
-      nodes: getNodes(),
-      edges: getEdges(),
+      nodes,
+      edges,
     });
     const url = new URL(window.location.href);
     url.searchParams.append("state", btoa(dump));
     setLink(url.toString());
-  }, [setLink, getNodes, getEdges]);
+  }, [setLink, nodes, edges]);
 
   return (
     <ControlButton onMouseOver={updateLink}>
