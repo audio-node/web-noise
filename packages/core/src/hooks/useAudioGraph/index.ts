@@ -1,23 +1,22 @@
-import { FC, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Edge, Node } from "react-flow-renderer";
-import useModule from "../../hooks/useModule";
+import useStore from "../../store";
 import { CreateWNAudioNode } from "../../types";
+import useModule from "../useModule";
 import { diff } from "./helpers";
 
 export interface NodeTypes extends Record<string, CreateWNAudioNode> {}
 
-const AudioGraph: FC<{
-  edges: Array<Edge>;
-  nodes: Array<Node>;
-  nodeTypes: NodeTypes;
-}> = ({ nodes, edges, nodeTypes }) => {
+const useAudioGraph = ({ nodeTypes }: { nodeTypes: NodeTypes }) => {
+  const { nodes, edges } = useStore();
+
   const {
+    createNode,
     registerNode,
     unregisterNode,
     connect,
     disconnect,
     destroy,
-    audioContext,
   } = useModule();
 
   const prevEdges = useRef<Array<Edge>>([]);
@@ -34,6 +33,14 @@ const AudioGraph: FC<{
     );
 
     (async () => {
+      createNodes.map(({ type, id, ...node }) => {
+        if (!type || !nodeTypes[type]) {
+          return null;
+        }
+        console.log("creating node", node);
+        return registerNode(id, createNode(nodeTypes[type]));
+      });
+
       await Promise.all(
         removeEdges.map(
           ({ id, source, sourceHandle, target, targetHandle }) => {
@@ -54,16 +61,6 @@ const AudioGraph: FC<{
       );
 
       await Promise.all(
-        createNodes.map(({ type, id, ...node }) => {
-          if (!type || !nodeTypes[type]) {
-            return null;
-          }
-          console.log("creating node", node);
-          return registerNode(id, nodeTypes[type](audioContext));
-        })
-      );
-
-      await Promise.all(
         createEdges.map(
           ({ id, source, sourceHandle, target, targetHandle }) => {
             if (!sourceHandle || !targetHandle) {
@@ -80,11 +77,11 @@ const AudioGraph: FC<{
   }, [
     nodes,
     edges,
+    createNode,
     registerNode,
     unregisterNode,
     connect,
     disconnect,
-    audioContext,
     nodeTypes,
   ]);
 
@@ -99,4 +96,4 @@ const AudioGraph: FC<{
   return null;
 };
 
-export default AudioGraph;
+export default useAudioGraph;

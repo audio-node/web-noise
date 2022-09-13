@@ -5,7 +5,6 @@ import Editor, {
   Elements,
 } from "./src/components/Editor";
 import Wire from "./src/components/Wire";
-import AudioGraph from "./src/components/AudioGraph";
 import ResumeContext from "./src/components/ResumeContext";
 import ContextMenu from "./src/components/ContextMenu";
 import { WNNode, TitleBar, WNNodeProps, WNNodeData } from "./src/components/Node";
@@ -33,7 +32,6 @@ export {
   contextValue,
   Editor,
   ModuleContext,
-  AudioGraph,
   ResumeContext,
   ContextMenu,
   Wire,
