@@ -16,7 +16,7 @@ const SpeakerIcon = styled(MdSpeaker)`
   height: 3rem;
 `;
 
-const Destination: FC<NodeProps> = ({ targetPosition, id }) => {
+const Destination: FC<NodeProps> = ({ id }) => {
   useAudioNode<TDestination>(id);
 
   return (
@@ -26,7 +26,7 @@ const Destination: FC<NodeProps> = ({ targetPosition, id }) => {
       </TitleBarWrapper>
       <Handle
         type="target"
-        position={targetPosition || Position.Left}
+        position={Position.Left}
         id="in"
         onConnect={(params) => console.log("handle onConnect", params)}
       />
