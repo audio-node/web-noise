@@ -9,6 +9,7 @@ import {
   applyNodeChanges,
   applyEdgeChanges,
 } from "react-flow-renderer";
+import { DRAG_HANDLE_SELECTOR } from "./constants";
 
 export interface WNNodeData {
   label: string;
@@ -38,7 +39,10 @@ const useStore = create<RFState>((set, get) => ({
   edges: [],
   onNodesChange: (changes) => {
     set(({ nodes }) => ({
-      nodes: applyNodeChanges(changes, nodes),
+      nodes: applyNodeChanges(changes, nodes).map(node => ({
+        dragHandle: DRAG_HANDLE_SELECTOR,
+        ...node
+      })),
     }));
   },
   onEdgesChange: (changes) => {

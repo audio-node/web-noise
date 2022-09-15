@@ -4,7 +4,6 @@ import { useReactFlow, Position } from "react-flow-renderer";
 import { Theme } from "../theme";
 import useTheme from "../hooks/useTheme";
 import useStore from "../store";
-import { DRAG_HANDLE_SELECTOR } from "../constants";
 
 interface ContextMenuProps {
   nodeTypes: any;
@@ -73,7 +72,6 @@ const ContextMenu: FC<ContextMenuProps> = ({ nodeTypes }) => {
         },
         targetPosition: Position.Left,
         sourcePosition: Position.Right,
-        dragHandle: DRAG_HANDLE_SELECTOR,
       };
       addNode(newNode);
       setIsOpen(false);
