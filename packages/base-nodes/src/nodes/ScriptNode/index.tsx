@@ -7,13 +7,12 @@ import {
   WNNode,
   WNNodeProps,
 } from "@web-noise/core";
-import { button, LevaPanel, useControls, useCreateStore } from "leva";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState, useCallback } from "react";
 import {
   ScriptNode as TScriptNode,
   ScriptNodeValues,
 } from "../../audioNodes/scriptNode";
-import { CodeEditor } from "../../levaPlugins";
+import Editor from "./Editor";
 
 interface ScriptNodeData {
   label: string;
@@ -27,6 +26,27 @@ const ErrorWrapper = styled.div<{ theme: Theme }>`
   color: ${({ theme }) => theme.colors.error};
 `;
 
+const Section = styled.div`
+  padding: 0.4rem;
+  background-color: var(--leva-colors-elevation2);
+`;
+
+const Button = styled.button`
+  color: var(--leva-colors-highlight3);
+  background-color: var(--leva-colors-accent2);
+  cursor: pointer;
+  display: block;
+  outline: none;
+  font-size: var(--leva-fontSizes-root);
+  border: none;
+  appearance: none;
+  font-weight: var(--leva-fontWeights-button);
+  height: var(--leva-sizes-rowHeight);
+  border-radius: var(--leva-radii-sm);
+  width: 100%;
+  font-family: var(--leva-fonts-mono);
+`;
+
 const ScriptNode: FC<WNNodeProps<ScriptNodeData>> = ({ data, id }) => {
   const theme = useTheme();
 
@@ -34,17 +54,11 @@ const ScriptNode: FC<WNNodeProps<ScriptNodeData>> = ({ data, id }) => {
   const { updateNodeValues } = useNode(id);
 
   const { expression = "" } = data.values || {};
+  const [editorValue, setEditorValue] = useState(expression);
 
-  const store = useCreateStore();
-
-  const values = useControls(
-    {
-      expression: CodeEditor(expression),
-      set: button((get) => updateNodeValues({ expression: get("expression") })),
-    },
-    { store },
-    [node, updateNodeValues]
-  );
+  const saveExpression = useCallback(() => {
+    updateNodeValues({ expression: editorValue });
+  }, [editorValue, updateNodeValues]);
 
   useEffect(() => {
     node?.setValues({ expression });
@@ -68,7 +82,13 @@ const ScriptNode: FC<WNNodeProps<ScriptNodeData>> = ({ data, id }) => {
 
   return (
     <WNNode id={id}>
-      <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
+      <Editor
+        value={expression}
+        onUpdate={setEditorValue}
+      />
+      <Section>
+        <Button onClick={saveExpression}>set</Button>
+      </Section>
       {error && <ErrorWrapper theme={theme}>{error}</ErrorWrapper>}
     </WNNode>
   );
