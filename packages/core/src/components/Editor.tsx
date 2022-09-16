@@ -10,11 +10,7 @@ import ReactFlow, {
   NodeTypes,
   ReactFlowProvider,
 } from "react-flow-renderer";
-import { contextValue, ModuleContext } from "../Context";
-import useAudioGraph, {
-  NodeTypes as AudioNodeTypes,
-} from "../hooks/useAudioGraph";
-import useStore from "../store";
+import useStore, { AudioNodeTypes } from "../store";
 import "../styles";
 import defaultTheme from "../theme";
 import type { CreateWNAudioNode } from "../types";
@@ -99,14 +95,27 @@ export const Editor = ({
     []
   );
 
-  const { nodes, edges, onNodesChange, onEdgesChange, onConnect, setElements } =
-    useStore();
+  const {
+    nodes,
+    edges,
+    onNodesChange,
+    onNodesDelete,
+    onEdgesChange,
+    onEdgesDelete,
+    onConnect,
+    setGraph,
+    setAudioNodeTypes,
+  } = useStore();
+
+  useEffect(() => {
+    setAudioNodeTypes(audioNodeTypes);
+  }, [setAudioNodeTypes, audioNodeTypes]);
 
   useEffect(() => {
     if (elements) {
-      setElements(elements);
+      setGraph(elements);
     }
-  }, [elements, setElements]);
+  }, [elements, setGraph]);
 
   const [reactflowInstance, setReactflowInstance] = useState(null);
 
@@ -120,40 +129,38 @@ export const Editor = ({
     [reactflowInstance]
   );
 
-  useAudioGraph({ nodeTypes: audioNodeTypes });
-
   return (
-    <ModuleContext.Provider value={contextValue}>
-      <ThemeProvider theme={defaultTheme}>
-        <ReactFlowProvider>
-          <ReactFlow
-            nodes={nodes}
-            edges={edges}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
-            onConnect={onConnect}
-            onNodeDragStop={onNodeDragStop}
-            onInit={onInit}
-            onNodeClick={onNodeClick}
-            nodeTypes={nodeTypes}
-            edgeTypes={edgeTypes}
-            snapGrid={snapGrid}
-            defaultZoom={1.5}
-            defaultEdgeOptions={{ type: "wire" }}
-            snapToGrid
-            fitView
-          >
-            <Background variant={BackgroundVariant.Dots} gap={12} />
-            <MiniMap />
-            <Controls>
-              <ResumeContext />
-              <SharePatch />
-            </Controls>
-          </ReactFlow>
-          <ContextMenu nodeTypes={nodeTypes} />
-        </ReactFlowProvider>
-      </ThemeProvider>
-    </ModuleContext.Provider>
+    <ThemeProvider theme={defaultTheme}>
+      <ReactFlowProvider>
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onNodesDelete={onNodesDelete}
+          onEdgesChange={onEdgesChange}
+          onConnect={onConnect}
+          onNodeDragStop={onNodeDragStop}
+          onEdgesDelete={onEdgesDelete}
+          onInit={onInit}
+          onNodeClick={onNodeClick}
+          nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
+          snapGrid={snapGrid}
+          defaultZoom={1.5}
+          defaultEdgeOptions={{ type: "wire" }}
+          snapToGrid
+          fitView
+        >
+          <Background variant={BackgroundVariant.Dots} gap={12} />
+          <MiniMap />
+          <Controls>
+            <ResumeContext />
+            <SharePatch />
+          </Controls>
+        </ReactFlow>
+        <ContextMenu nodeTypes={nodeTypes} />
+      </ReactFlowProvider>
+    </ThemeProvider>
   );
 };
 

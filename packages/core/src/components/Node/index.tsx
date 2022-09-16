@@ -4,8 +4,9 @@ import { Handle, HandleProps, NodeProps, Position } from "react-flow-renderer";
 import { DRAG_HANDLE_CLASS } from "../../constants";
 import useAudioNode from "../../hooks/useAudioNode";
 import useTheme from "../../hooks/useTheme";
-import useStore, { WNNodeData } from "../../store";
+import useStore from "../../store";
 import { Theme } from "../../theme";
+import { WNNodeData } from "../../types";
 
 const NodeWrapper = styled.div`
   background-color: var(--leva-colors-elevation1);
@@ -100,11 +101,27 @@ export const WNNode: FC<{ id: string }> = ({ id, children }) => {
   const audioNode = useAudioNode(id);
 
   if (audioNode.loading) {
-    return <NodeLoaderWrapper>loading</NodeLoaderWrapper>;
+    return (
+      <NodeLoaderWrapper className={DRAG_HANDLE_CLASS}>
+        loading
+      </NodeLoaderWrapper>
+    );
   }
 
   if (audioNode.error) {
-    return <NodeErrorWrapper>error: {audioNode.error}</NodeErrorWrapper>;
+    return (
+      <NodeErrorWrapper className={DRAG_HANDLE_CLASS}>
+        error: {audioNode.error.toString()}
+      </NodeErrorWrapper>
+    );
+  }
+
+  if (!audioNode.node) {
+    return (
+      <NodeLoaderWrapper className={DRAG_HANDLE_CLASS}>
+        can't find audio node
+      </NodeLoaderWrapper>
+    );
   }
 
   const {

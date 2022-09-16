@@ -8,7 +8,11 @@
     "react-tooltip": "^4.2.21",
     "zustand": "^4.1.1"
   },
+  "scripts": {
+    "test": "craco test"
+  },
   "devDependencies": {
-    "@types/react-copy-to-clipboard": "^5.0.4"
+    "@types/react-copy-to-clipboard": "^5.0.4",
+    "web-audio-engine": "^0.13.4"
   }
 }

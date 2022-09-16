@@ -1,5 +1,6 @@
 import { useCallback } from "react";
-import useStore, { WNNodeData } from "../store";
+import useStore from "../store";
+import { WNNodeData } from "../types";
 
 const useNode = (id: string) => {
   const updateNodeData = useStore(({ updateNodeData }) => updateNodeData);

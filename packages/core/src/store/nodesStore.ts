@@ -1,47 +1,38 @@
-import create from "zustand";
 import {
-  Edge,
-  Node,
   addEdge,
-  OnNodesChange,
-  OnEdgesChange,
-  OnConnect,
-  applyNodeChanges,
   applyEdgeChanges,
+  applyNodeChanges,
+  OnConnect,
+  OnEdgesChange,
+  OnNodesChange,
 } from "react-flow-renderer";
-import { DRAG_HANDLE_SELECTOR } from "./constants";
+import { StateCreator } from "zustand";
+import { DRAG_HANDLE_SELECTOR } from "../constants";
+import type { WNNode, WNNodeData, WNEdge } from "../types";
 
-export interface WNNodeData {
-  label: string;
-  values?: Record<string, unknown>;
-  config?: Record<string, unknown>;
-}
-
-export type WNNode = Node<WNNodeData>;
-
-type RFState = {
+export interface NodesState {
   nodes: WNNode[];
-  edges: Edge[];
+  edges: WNEdge[];
   onNodesChange: OnNodesChange;
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
   addNode: (node: WNNode) => void;
   setNodes: (nodes: WNNode[]) => void;
-  setEdges: (edges: Edge[]) => void;
-  setElements: (elements: { nodes: WNNode[]; edges: Edge[] }) => void;
+  setEdges: (edges: WNEdge[]) => void;
+  setNodesAndEdges: (elements: { nodes: WNNode[]; edges: WNEdge[] }) => void;
   clearElements: () => void;
   getNode: (id: string) => WNNode | null;
   updateNodeData: (id: string, data: Partial<WNNodeData>) => void;
-};
+}
 
-const useStore = create<RFState>((set, get) => ({
+const nodesStateCreator: StateCreator<NodesState> = (set, get) => ({
   nodes: [],
   edges: [],
   onNodesChange: (changes) => {
     set(({ nodes }) => ({
-      nodes: applyNodeChanges(changes, nodes).map(node => ({
+      nodes: applyNodeChanges(changes, nodes).map((node) => ({
         dragHandle: DRAG_HANDLE_SELECTOR,
-        ...node
+        ...node,
       })),
     }));
   },
@@ -70,7 +61,7 @@ const useStore = create<RFState>((set, get) => ({
       edges,
     });
   },
-  setElements: ({ nodes, edges }) => {
+  setNodesAndEdges: ({ nodes, edges }) => {
     set({
       nodes,
       edges,
@@ -106,6 +97,6 @@ const useStore = create<RFState>((set, get) => ({
       };
     });
   },
-}));
+});
 
-export default useStore;
+export default nodesStateCreator;
