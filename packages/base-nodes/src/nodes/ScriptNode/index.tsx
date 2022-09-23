@@ -67,7 +67,10 @@ const ScriptNode: FC<WNNodeProps<ScriptNodeData>> = ({ data, id }) => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    node?.onMessage((data) => {
+    if (!node) {
+      return;
+    }
+    node.onMessage((data) => {
       const { name } = data;
       switch (name) {
         case "error":

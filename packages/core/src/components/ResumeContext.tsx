@@ -7,10 +7,10 @@ import {
   FaVolumeOff as IconUnmute,
 } from "react-icons/fa";
 
-import useModule from "../hooks/useModule";
+import useStore from "../store";
 
 const ResumeContext: FC = () => {
-  const { audioContext } = useModule();
+  const audioContext = useStore(({ audioContext }) => audioContext);
   const [isContextResumed, setIsContextResumed] = useState<boolean>(
     audioContext.state === "running"
   );

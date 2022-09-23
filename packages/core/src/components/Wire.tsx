@@ -1,12 +1,5 @@
 import { useEffect } from "react";
-import {
-  getBezierPath,
-  getEdgeCenter,
-  getMarkerEnd,
-  EdgeProps,
-  MarkerType,
-} from "react-flow-renderer";
-import { useModule } from "@web-noise/core";
+import { EdgeProps, getBezierPath } from "react-flow-renderer";
 
 const Wire = ({
   id,
@@ -24,7 +17,6 @@ const Wire = ({
   target,
   sourceHandleId,
   targetHandleId,
-  ...rest
 }: EdgeProps) => {
   useEffect(() => {
     if (!sourceHandleId || !targetHandleId) {
@@ -34,7 +26,8 @@ const Wire = ({
     return () => {
       console.log(`disconnected ${source} from ${target}`);
     };
-  }, [source, target]);
+  }, [source, sourceHandleId, target, targetHandleId]);
+
   const edgePath = getBezierPath({
     targetX,
     targetY,

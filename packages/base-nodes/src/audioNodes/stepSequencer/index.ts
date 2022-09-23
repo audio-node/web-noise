@@ -6,10 +6,13 @@ import {
   DEFAULT_STEP_VALUE,
 } from "./constants";
 
-const clockCounterProcessor = new URL('../clockCounter/worklet.ts', import.meta.url);
-const stepSequencerWorkletProcessor = new URL('./worklet.ts', import.meta.url);
+const clockCounterProcessor = new URL(
+  "../clockCounter/worklet.ts",
+  import.meta.url
+);
+const stepSequencerWorkletProcessor = new URL("./worklet.ts", import.meta.url);
 
-type TickHandler = (args: Record<string, any | never>) => void;
+type TickHandler = (args: { sequenceIndex: number }) => void;
 
 export interface StepData {
   active: boolean;
@@ -140,7 +143,7 @@ export const stepSequencerWorklet = async (
     audioContext,
     "step-sequencer-processor",
     {
-      numberOfOutputs: 4
+      numberOfOutputs: 4,
     }
   );
 

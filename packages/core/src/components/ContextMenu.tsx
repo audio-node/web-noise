@@ -24,10 +24,12 @@ const ContextMenu: FC<ContextMenuProps> = ({ nodeTypes }) => {
   });
   const menuWrapper = useRef(null);
 
-  const { clearElements, addNode } = useStore(({ clearElements, addNode }) => ({
-    clearElements,
-    addNode,
-  }));
+  const { clearGraph, createNode } = useStore(
+    ({ clearGraph, createNode }) => ({
+      clearGraph,
+      createNode,
+    })
+  );
 
   const onContextMenu = (e: MouseEvent) => {
     e.preventDefault();
@@ -73,10 +75,10 @@ const ContextMenu: FC<ContextMenuProps> = ({ nodeTypes }) => {
         targetPosition: Position.Left,
         sourcePosition: Position.Right,
       };
-      addNode(newNode);
+      createNode(newNode);
       setIsOpen(false);
     },
-    [mousePosition, project, addNode]
+    [mousePosition, project, createNode]
   );
 
   return (
@@ -96,7 +98,7 @@ const ContextMenu: FC<ContextMenuProps> = ({ nodeTypes }) => {
             ))}
           </ul>
           <ul>
-            <li onClick={clearElements}>clear editor</li>
+            <li onClick={clearGraph}>clear editor</li>
           </ul>
         </MenuWrapper>
       ) : null}
