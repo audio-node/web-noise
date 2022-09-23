@@ -34,6 +34,10 @@ import { scriptNode } from "./src/audioNodes/scriptNode";
 import MathNode from "./src/nodes/MathNode";
 import { math } from "./src/audioNodes/math";
 import { midiToFrequency } from "./src/audioNodes/midiToFrequency";
+import AudioTrack from "./src/nodes/AudioTrack";
+import audioTrack from "./src/audioNodes/audioTrack";
+
+
 export const webAudioNodes: PluginConfig = {
   components: [
     {
@@ -106,6 +110,7 @@ export const baseNodes: PluginConfig = {
       node: WNNode,
       audioNode: midiToFrequency,
     },
+    { type: "audioTrack", node: AudioTrack, audioNode: audioTrack },
   ],
   name: "Web Noise base nodes",
 };
