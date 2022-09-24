@@ -1,10 +1,11 @@
 import styled from "@emotion/styled";
-import { FC } from "react";
+import React, { FC, useState, useCallback, useRef } from "react";
 import { Handle, HandleProps, NodeProps, Position } from "react-flow-renderer";
 import { DRAG_HANDLE_CLASS } from "../../constants";
 import useAudioNode from "../../hooks/useAudioNode";
 import useTheme from "../../hooks/useTheme";
 import useStore from "../../store";
+import useNode from "../../hooks/useNode";
 import { Theme } from "../../theme";
 import { WNNodeData } from "../../types";
 
@@ -36,6 +37,37 @@ const TitleBarInner = styled(Section)`
   flex: 1 1 0%;
   color: var(--leva-colors-highlight1);
   padding: 0 1rem;
+`;
+
+const TitleBarLabel = styled.input`
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: center;
+  color: var(--leva-colors-highlight1);
+  font-family: var(--leva-fonts-mono);
+  font-size: var(--leva-fontSizes-root);
+  cursor: inherit;
+  text-overflow: ellipsis;
+  outline: none;
+
+  &:focus {
+    box-shadow: 0 0 0 green var(--leva-colors-accent2);
+  }
+  &:focus-within {
+    box-shadow: 0 0 0 green var(--leva-colors-accent2);
+  }
+  &:focus-vissible {
+    box-shadow: 0 0 0 green var(--leva-colors-accent2);
+  }
+  &:not([readonly]):focus {
+    color: #fff;
+    appearance: none;
+    cursor: auto;
+    background-color: var(--leva-colors-elevation2);
+    padding: 0.3rem;
+    border-radius: 0.2rem;
+  }
 `;
 
 export const PortsPanel = styled(Section)<{ theme: Theme }>(
@@ -97,8 +129,42 @@ export const TitleBar: FC<{ className?: string }> = ({
 export const WNNode: FC<{ id: string }> = ({ id, children }) => {
   const theme = useTheme();
   const getNode = useStore(({ getNode }) => getNode);
+
+  const { updateNodeLabel } = useNode(id);
   const { data } = getNode(id) || {};
   const audioNode = useAudioNode(id);
+
+  const labelInputRef = useRef<HTMLInputElement>(null);
+
+  const [labelEditMode, setLabelEditMode] = useState(false);
+
+  const editNodeLabel = useCallback(
+    (event: React.MouseEvent) => {
+      //@ts-ignore
+      event.target?.select();
+      setLabelEditMode(true);
+    },
+    [setLabelEditMode]
+  );
+
+  const exitEditMode = useCallback(() => {
+    window.getSelection()?.collapseToEnd();
+    setLabelEditMode(false);
+  }, [setLabelEditMode]);
+
+  const saveNodeLabel = useCallback(() => {
+    exitEditMode();
+    if (labelInputRef.current) {
+      updateNodeLabel(labelInputRef.current.value);
+    }
+  }, [labelInputRef, exitEditMode, updateNodeLabel]);
+
+  const cancelNodeLabelEdit = useCallback(() => {
+    exitEditMode();
+    if (labelInputRef.current && data?.label) {
+      labelInputRef.current.value = data.label;
+    }
+  }, [labelInputRef, exitEditMode, data]);
 
   if (audioNode.loading) {
     return (
@@ -130,7 +196,26 @@ export const WNNode: FC<{ id: string }> = ({ id, children }) => {
 
   return (
     <NodeWrapper>
-      <TitleBar>{data?.label || "No Name"}</TitleBar>
+      <TitleBar>
+        <TitleBarLabel
+          ref={labelInputRef}
+          type="text"
+          readOnly={!labelEditMode}
+          defaultValue={data?.label || "No Name"}
+          onDoubleClick={(event) => editNodeLabel(event)}
+          onBlur={saveNodeLabel}
+          onKeyDown={(event) => {
+            switch (event.key) {
+              case "Escape":
+                cancelNodeLabelEdit();
+                break;
+              case "Enter":
+                saveNodeLabel();
+                break;
+            }
+          }}
+        />
+      </TitleBar>
       <PortsPanel theme={theme}>
         <InputPorts>
           {inputs
