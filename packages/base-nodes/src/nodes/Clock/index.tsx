@@ -1,19 +1,14 @@
 import { useAudioNode, useNode, useTheme, WNNode, WNNodeProps } from "@web-noise/core";
 import { button, folder, LevaPanel, useControls, useCreateStore } from "leva";
 import { FC, useCallback, useEffect, useState } from "react";
-import { Clock as TClock } from "../../audioNodes/clock";
+import { Clock as TClock, ClockValues } from "../../audioNodes/clock";
 
 interface ClockData {
-  values?: {
-    bpm?: number;
-  };
-  config?: {
-    min?: number;
-    max?: number;
-  };
+  values?: ClockValues;
 }
 
 const DEFAULT_BPM = 120;
+const DEFAULT_DURATION = 0.01;
 
 const Clock: FC<WNNodeProps<ClockData>> = ({ data, id }) => {
   const { node } = useAudioNode<TClock>(id);
@@ -34,7 +29,7 @@ const Clock: FC<WNNodeProps<ClockData>> = ({ data, id }) => {
     setActive(false);
   }, [node, setActive]);
 
-  const { bpm = DEFAULT_BPM } = data.values || {};
+  const { bpm = DEFAULT_BPM, duration = DEFAULT_DURATION } = data.values || {};
 
   const values = useControls(
     {
@@ -44,6 +39,12 @@ const Clock: FC<WNNodeProps<ClockData>> = ({ data, id }) => {
             value: bpm,
             min: 0,
             max: 500,
+          },
+          duration: {
+            value: duration,
+            min: 0.01,
+            step: 0.01,
+            max: 10,
           },
         },
         { collapsed: true, color: theme.colors.accent2 }

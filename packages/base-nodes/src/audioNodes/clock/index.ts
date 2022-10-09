@@ -3,14 +3,15 @@ import { WNAudioNode } from "@web-noise/core";
 const clockWorklet = new URL('./worklet.ts', import.meta.url);
 
 export interface ClockValues {
-  bpm: number;
+  bpm?: number;
+  duration?: number;
 }
 
 export interface Clock extends WNAudioNode {
   clock: AudioWorkletNode;
   bpm: AudioParam;
   onTick: (fn: (data: MessageEvent<any>["data"]) => void) => void;
-  setValues: (values?: Partial<ClockValues>) => void;
+  setValues: (values?: ClockValues) => void;
   setTempo: (value: number) => void;
   start: () => void;
   stop: () => void;
@@ -18,11 +19,10 @@ export interface Clock extends WNAudioNode {
 
 export const clock = async (audioContext: AudioContext): Promise<Clock> => {
   await audioContext.audioWorklet.addModule(clockWorklet);
-  const clock = new AudioWorkletNode(audioContext, "clock-processor", {
-    numberOfOutputs: 2,
-  });
+  const clock = new AudioWorkletNode(audioContext, "clock-processor");
 
   const bpm = clock.parameters.get("bpm")!;
+  const duration = clock.parameters.get("duration")!;
   const inputGate = clock.parameters.get("inputGate")!;
 
   return {
@@ -30,18 +30,20 @@ export const clock = async (audioContext: AudioContext): Promise<Clock> => {
       bpm: {
         port: bpm,
       },
+      duration: {
+        port: duration,
+      },
     },
     outputs: {
-      out: {
+      trigger: {
         port: [clock, 0],
       },
-      trigger: {
-        port: [clock, 1],
-      },
     },
-    setValues: ({ bpm: bpmValue } = {}) => {
+    setValues: ({ bpm: bpmValue, duration: durationValue } = {}) => {
       typeof bpmValue !== "undefined" &&
         bpm.setValueAtTime(bpmValue, audioContext.currentTime);
+      typeof durationValue !== "undefined" &&
+        duration.setValueAtTime(durationValue, audioContext.currentTime);
     },
     setTempo: (value) => {
       bpm.setValueAtTime(value, audioContext.currentTime);
