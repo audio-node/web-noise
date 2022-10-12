@@ -166,6 +166,14 @@ export const WNNode: FC<{ id: string }> = ({ id, children }) => {
     }
   }, [labelInputRef, exitEditMode, data]);
 
+  if (!audioNode) {
+    return (
+      <NodeLoaderWrapper className={DRAG_HANDLE_CLASS}>
+        can't find audio node
+      </NodeLoaderWrapper>
+    );
+  }
+
   if (audioNode.loading) {
     return (
       <NodeLoaderWrapper className={DRAG_HANDLE_CLASS}>

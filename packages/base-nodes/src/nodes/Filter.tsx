@@ -23,7 +23,7 @@ const DEFAULT_Q = 0;
 const DEFAULT_FILTER_TYPE: BiquadFilterType = "lowpass";
 
 const Filter: FC<WNNodeProps<FilterData>> = ({ data, id }) => {
-  const { node } = useAudioNode<TFilter>(id);
+  const { node } = useAudioNode<TFilter>(id) || {};
   const { updateNodeValues } =  useNode(id);
   const store = useCreateStore();
 

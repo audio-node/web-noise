@@ -51,7 +51,7 @@ const midiToNote: FormatNote<number, string> = (value) => {
 };
 
 const StepSequencer: FC<NodeProps<StepSequencerData>> = ({ id, data }) => {
-  const { node } = useAudioNode<NodeStepSequencer>(id);
+  const { node } = useAudioNode<NodeStepSequencer>(id) || {};
   const { updateNodeValues, updateNodeConfig } =  useNode(id);
 
   const theme = useTheme();

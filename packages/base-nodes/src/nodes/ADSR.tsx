@@ -15,7 +15,7 @@ const MAX_RELEASE_VALUE = 10;
 
 const ADSR: FC<WNNodeProps<ADSRData>> = ({ data, id }) => {
   const { updateNodeValues } = useNode(id);
-  const { node } = useAudioNode<TADSR>(id);
+  const { node } = useAudioNode<TADSR>(id) || {};
 
   const theme = useTheme();
 

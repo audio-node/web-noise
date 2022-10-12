@@ -30,7 +30,7 @@ const Stage = styled.div`
 `;
 
 const Oscilloscope: FC<WNNodeProps<OscilloscopeData>> = ({ data, id }) => {
-  const { node } = useAudioNode<TOscilloscope>(id);
+  const { node } = useAudioNode<TOscilloscope>(id) || {};
   const { updateNodeConfig } = useNode(id);
 
   const theme = useTheme();

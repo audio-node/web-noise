@@ -9,7 +9,7 @@ interface GainData {
 
 const Gain: FC<WNNodeProps<GainData>> = ({ data, id }) => {
   const { updateNodeValues } =  useNode(id);
-  const { node } = useAudioNode<TGain>(id);
+  const { node } = useAudioNode<TGain>(id) || {};
 
   const theme = useTheme();
 

@@ -6,7 +6,7 @@ import useAnimationFrame from "use-animation-frame";
 import { Analyser } from "../audioNodes/analyser";
 
 const Spectroscope: FC<WNNodeProps> = ({ data, id }) => {
-  const { node } = useAudioNode<Analyser>(id);
+  const { node } = useAudioNode<Analyser>(id) || {};
   const { analyser } = node || {};
 
   const theme = useTheme();

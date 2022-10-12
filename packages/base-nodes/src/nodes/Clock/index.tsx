@@ -11,7 +11,7 @@ const DEFAULT_BPM = 120;
 const DEFAULT_DURATION = 0.01;
 
 const Clock: FC<WNNodeProps<ClockData>> = ({ data, id }) => {
-  const { node } = useAudioNode<TClock>(id);
+  const { node } = useAudioNode<TClock>(id) || {};
   const { updateNodeValues } = useNode(id);
   const [isActive, setActive] = useState(false);
 

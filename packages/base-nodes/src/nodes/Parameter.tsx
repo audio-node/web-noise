@@ -8,7 +8,7 @@ interface ParameterData {
 }
 
 const Parameter: FC<WNNodeProps<ParameterData>> = ({ data, id }) => {
-  const { node } = useAudioNode<ConstantSource>(id);
+  const { node } = useAudioNode<ConstantSource>(id) || {};
 
   const { updateNodeValues } =  useNode(id);
   const store = useCreateStore();

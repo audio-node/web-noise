@@ -6,7 +6,7 @@ import { RandomSequencer as TRandomSequencer } from "../audioNodes/randomSequenc
 import { WNNode } from "@web-noise/core";
 
 const RandomSequencer: FC<NodeProps> = ({ id }) => {
-  const { node } = useAudioNode<TRandomSequencer>(id);
+  const { node } = useAudioNode<TRandomSequencer>(id) || {};
 
   const store = useCreateStore();
 
