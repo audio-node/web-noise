@@ -1,8 +1,8 @@
 export class ClockProcessor extends AudioWorkletProcessor {
-  value: number = 0;
-  futureTickTime: number | null = null;
   nextTickTime: number | null = null;
   isTicking: boolean = false;
+  isTriggered: boolean = false;
+  cursor: number = 0;
 
   static get parameterDescriptors() {
     return [
@@ -14,6 +14,13 @@ export class ClockProcessor extends AudioWorkletProcessor {
         automationRate: "a-rate",
       },
       {
+        name: "duration",
+        defaultValue: 0.0001,
+        minValue: 0.0001,
+        maxValue: 10,
+        automationRate: "k-rate",
+      },
+      {
         name: "inputGate",
         defaultValue: 0,
         minValue: 0,
@@ -23,10 +30,13 @@ export class ClockProcessor extends AudioWorkletProcessor {
     ];
   }
 
-  process(_inputs: any, outputs: any, parameters: any) {
+  process(
+    _inputs: Float32Array[][],
+    outputs: Float32Array[][],
+    parameters: Record<string, Float32Array>
+  ) {
     const isTicking = parameters.inputGate[0] === 1;
-    const gate = outputs[0];
-    const trigger = outputs[1];
+    const trigger = outputs[0];
     const bpm = parameters["bpm"][0];
     if (bpm === 0) {
       return true;
@@ -38,36 +48,29 @@ export class ClockProcessor extends AudioWorkletProcessor {
     }
     if (this.nextTickTime < currentTime + 0.1) {
       if (isTicking) {
-        this.value = 1 - this.value;
         this.port.postMessage({ name: "tick", time: +new Date() });
-        trigger.forEach((outputChannel: any) => {
-          for (
-            let sampleIndex = 0;
-            sampleIndex < outputChannel.length;
-            sampleIndex++
-          ) {
-            outputChannel[sampleIndex] = 0;
-          }
-          outputChannel[0] = 1;
-        });
+        this.isTriggered = true;
       }
 
-      //
       this.nextTickTime = this.nextTickTime + secondsPerBeat;
     }
 
-    if (isTicking) {
-      gate.forEach((outputChannel: any) => {
-        for (
-          let sampleIndex = 0;
-          sampleIndex < outputChannel.length;
-          sampleIndex++
-        ) {
-          outputChannel[sampleIndex] = this.value;
+    if (this.isTriggered) {
+      const triggerLength = Math.ceil(parameters.duration[0] * sampleRate);
+      trigger.forEach((outputChannel) => {
+        for (let i = 0; i < outputChannel.length; i++) {
+          this.cursor++;
+
+          outputChannel[i] = 1;
+          if (this.cursor >= triggerLength) {
+            this.isTriggered = false;
+            this.cursor = 0;
+            break;
+          }
         }
       });
     } else {
-      this.value = 0;
+      this.cursor = 0;
     }
     return true;
   }
