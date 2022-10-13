@@ -73,7 +73,7 @@ interface AudioTrackData {
 
 const AudioTrack: FC<WNNodeProps<AudioTrackData>> = ({ data, id }) => {
   const { updateNodeValues, updateNodeConfig } = useNode(id);
-  const { node } = useAudioNode<TAudioTrack>(id);
+  const { node } = useAudioNode<TAudioTrack>(id) || {};
   const [isActive, setActive] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [duration, setDuration] = useState(0);
