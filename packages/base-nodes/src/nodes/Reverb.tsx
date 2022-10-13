@@ -9,7 +9,7 @@ interface ReverbData {
 }
 
 const Reverb: FC<WNNodeProps<ReverbData>> = ({ id, data }) => {
-  const { node: reverb } = useAudioNode<TReverb>(id);
+  const { node } = useAudioNode<TReverb>(id) || {};
   const { updateNodeValues } =  useNode(id);
   const store = useCreateStore();
 
@@ -27,7 +27,7 @@ const Reverb: FC<WNNodeProps<ReverbData>> = ({ id, data }) => {
     { store }
   );
 
-  useEffect(() => reverb?.setValues(data.values), [reverb, data]);
+  useEffect(() => node?.setValues(data.values), [node, data]);
   useEffect(() => updateNodeValues(values), [values]);
 
   return (

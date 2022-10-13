@@ -9,7 +9,7 @@ import { Analyser } from "../audioNodes/analyser";
 
 const Visualiser: FC<WNNodeProps> = ({ data, id }) => {
   const analyserNode = useAudioNode<Analyser>(id);
-  const { node } = analyserNode;
+  const { node } = analyserNode || {};
   const { analyser } = node || {};
 
   const theme = useTheme();

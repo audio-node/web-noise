@@ -10,7 +10,7 @@ interface MathNodeData {
 }
 
 const MathNode: FC<WNNodeProps<MathNodeData>> = ({ data, id }) => {
-  const { node } = useAudioNode<TMathNode>(id);
+  const { node } = useAudioNode<TMathNode>(id) || {};
   const { updateNodeValues } = useNode(id);
 
   const { expression = "//expression" } = data.values || {};

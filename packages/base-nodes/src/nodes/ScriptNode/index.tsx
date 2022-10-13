@@ -50,7 +50,7 @@ const Button = styled.button`
 const ScriptNode: FC<WNNodeProps<ScriptNodeData>> = ({ data, id }) => {
   const theme = useTheme();
 
-  const { node } = useAudioNode<TScriptNode>(id);
+  const { node } = useAudioNode<TScriptNode>(id) || {};
   const { updateNodeValues } = useNode(id);
 
   const { expression = "" } = data.values || {};

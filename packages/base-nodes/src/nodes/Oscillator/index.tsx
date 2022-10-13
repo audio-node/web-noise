@@ -26,7 +26,7 @@ const DEFAULT_FREQUENCY = 440;
 const DEFAULT_TYPE = "sine";
 
 const Oscillator: FC<WNNodeProps<OscillatorData>> = ({ id, data }) => {
-  const { node } = useAudioNode<TOscillator>(id);
+  const { node } = useAudioNode<TOscillator>(id) || {};
   const { updateNodeValues } = useNode(id);
 
   const theme = useTheme();

@@ -20,7 +20,7 @@ const Keyboard = styled(Piano)`
 `;
 
 const VirtualKeyboard: FC<WNNodeProps> = ({ id }) => {
-  const { node } = useAudioNode<TVirtualKeyboard>(id);
+  const { node } = useAudioNode<TVirtualKeyboard>(id) || {};
 
   const theme = useTheme();
 
