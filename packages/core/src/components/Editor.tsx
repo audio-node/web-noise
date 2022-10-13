@@ -28,7 +28,7 @@ export interface PluginComponent {
   id?: string;
   type: string;
   node: any;
-  audioNode: CreateWNAudioNode;
+  audioNode: CreateWNAudioNode | false;
   description?: string;
   name?: string;
 }

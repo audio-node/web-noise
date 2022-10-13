@@ -8,7 +8,7 @@ import type {
   OutputPort,
 } from "../../types";
 
-export interface AudioNodeTypes extends Record<string, CreateWNAudioNode> {}
+export interface AudioNodeTypes extends Record<string, CreateWNAudioNode | false> {}
 
 interface AudioNodeLoadingState {
   loading: true;
@@ -55,16 +55,6 @@ const audioNodesStateCreator: StateCreator<AudioNodesState> = (set, get) => ({
   audioContext: new AudioContext(),
   audioNodes: {},
   registerAudioNode: async ({ id, type }) => {
-    set(({ audioNodes }) => ({
-      audioNodes: {
-        ...audioNodes,
-        [id]: {
-          loading: true,
-          error: null,
-          node: null,
-        },
-      },
-    }));
     if (!type) {
       set(({ audioNodes }) => ({
         audioNodes: {
@@ -80,6 +70,9 @@ const audioNodesStateCreator: StateCreator<AudioNodesState> = (set, get) => ({
     }
     const { audioNodeTypes, audioContext } = get();
     const createNode = audioNodeTypes[type];
+    if(createNode === false){
+      return;
+    }
     if (!createNode) {
       set(({ audioNodes }) => ({
         audioNodes: {
@@ -93,6 +86,16 @@ const audioNodesStateCreator: StateCreator<AudioNodesState> = (set, get) => ({
       }));
       return;
     }
+    set(({ audioNodes }) => ({
+      audioNodes: {
+        ...audioNodes,
+        [id]: {
+          loading: true,
+          error: null,
+          node: null,
+        },
+      },
+    }));
     try {
       const audioNode = await createNode(audioContext);
       set(({ audioNodes }) => ({
