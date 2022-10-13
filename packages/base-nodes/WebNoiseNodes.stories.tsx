@@ -922,3 +922,73 @@ export const Clock = () => (
     }}
   />
 );
+
+export const AudioTrack = () => (
+  <Editor
+    elements={{
+      nodes: [
+        {
+          id: "audio-track",
+          type: "audioTrack",
+          data: {
+            label: "Audio Track",
+            // values: { src: "http://davejustice.com/wave-edit/vibrate.mp3" },
+            values: {
+              src: "https://s3-us-west-2.amazonaws.com/s.cdpn.io/123941/Yodel_Sound_Effect.mp3",
+            },
+            // values: { src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" },
+            // values: { src: "https://storage.googleapis.com/media-session/elephants-dream/the-wires.mp3" },
+          },
+          position: { x: spaceWidth, y: 50 },
+        },
+        {
+          id: "parameter",
+          type: "parameter",
+          data: { label: "On/Off", values: { value: 0 } },
+          position: { x: 0, y: 0 },
+        },
+        {
+          id: "loop-parameter",
+          type: "parameter",
+          data: { label: "Loop", values: { value: 0 } },
+          position: { x: 0, y: 150 },
+        },
+        {
+          id: "visualiser",
+          type: "oscilloscope",
+          data: { label: "Visualiser" },
+          position: { x: spaceWidth * 3, y: 150 },
+        },
+        {
+          id: "destination",
+          type: "destination",
+          data: { label: "Destination" },
+          position: { x: spaceWidth * 3, y: 50 },
+        },
+      ],
+      edges: [
+        {
+          id: "parameter-to-audio-track",
+          source: "parameter",
+          sourceHandle: "out",
+          target: "audio-track",
+          targetHandle: "gate",
+        },
+        {
+          id: "loop-to-audio-track",
+          source: "loop-parameter",
+          sourceHandle: "out",
+          target: "audio-track",
+          targetHandle: "loop",
+        },
+        {
+          id: "audio-track-to-visualiser",
+          source: "audio-track",
+          sourceHandle: "out",
+          target: "visualiser",
+          targetHandle: "input1",
+        },
+      ],
+    }}
+  />
+);
