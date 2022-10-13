@@ -992,3 +992,39 @@ export const AudioTrack = () => (
     }}
   />
 );
+
+export const ValueMeter = () => (
+  <Editor
+    elements={{
+      nodes: [
+        {
+          id: "oscillator",
+          type: "oscillator",
+          data: { label: "Oscillator", values: { frequency: 46 } },
+          position: { x: 0, y: 0 },
+        },
+        {
+          id: "value-meter",
+          type: "valueMeter",
+          data: {},
+          position: { x: spaceWidth, y: 0 },
+        },
+        {
+          id: "destination",
+          type: "destination",
+          data: { label: "Destination" },
+          position: { x: spaceWidth * 2, y: 0 },
+        },
+      ],
+      edges: [
+        {
+          id: "oscillator-to-value-meter",
+          source: "oscillator",
+          sourceHandle: "out",
+          target: "value-meter",
+          targetHandle: "input1",
+        },
+      ],
+    }}
+  />
+);
