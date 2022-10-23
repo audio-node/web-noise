@@ -2,6 +2,8 @@ import { WNAudioNode } from "@web-noise/core";
 
 const analyserWorkletUrl = new URL('./worklet.ts', import.meta.url);
 
+export type AnalyserEventHandler = (event: { data: Float32Array }) => void
+
 export interface Oscolloscope extends WNAudioNode {
   input1Analyser: AudioWorkletNode;
   input2Analyser: AudioWorkletNode;
