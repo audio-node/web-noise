@@ -5,6 +5,7 @@ import {
   OnConnect,
   OnEdgesChange,
   OnNodesChange,
+  NodeTypes,
 } from "react-flow-renderer";
 import { StateCreator } from "zustand";
 import { DRAG_HANDLE_SELECTOR } from "../constants";
@@ -23,6 +24,8 @@ export interface NodesState {
   clearElements: () => void;
   getNode: (id: string) => WNNode | null;
   updateNodeData: (id: string, data: Partial<WNNodeData>) => void;
+  nodeTypes: NodeTypes;
+  setNodeTypes: (nodeTypes: NodeTypes) => void;
 }
 
 const nodesStateCreator: StateCreator<NodesState> = (set, get) => ({
@@ -97,6 +100,8 @@ const nodesStateCreator: StateCreator<NodesState> = (set, get) => ({
       };
     });
   },
+  nodeTypes: {},
+  setNodeTypes: (nodeTypes) => set({ nodeTypes }),
 });
 
 export default nodesStateCreator;

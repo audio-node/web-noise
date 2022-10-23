@@ -2,10 +2,11 @@
   "name": "@web-noise/core",
   "version": "0.0.1",
   "dependencies": {
-    "react-copy-to-clipboard": "^5.1.0",
+    "@types/react-modal": "^3.13.1",
+    "react-contexify": "^5.0.0",
     "react-flow-renderer": "^10.3.16",
+    "react-hotkeys": "^2.0.0",
     "react-icons": "^4.4.0",
-    "react-tooltip": "^4.2.21",
     "zustand": "^4.1.1"
   },
   "scripts": {
