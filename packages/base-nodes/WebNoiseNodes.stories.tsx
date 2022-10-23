@@ -1028,3 +1028,19 @@ export const ValueMeter = () => (
     }}
   />
 );
+
+export const Sticker = () => (
+  <Editor
+    elements={{
+      nodes: [
+        {
+          id: "sticker",
+          type: "sticker",
+          data: { values: { text: "*Example text*" } },
+          position: { x: 0, y: 50 },
+        },
+      ],
+      edges: [],
+    }}
+  />
+);

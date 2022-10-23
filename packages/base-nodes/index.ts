@@ -37,6 +37,7 @@ import { midiToFrequency } from "./src/audioNodes/midiToFrequency";
 import AudioTrack from "./src/nodes/AudioTrack";
 import audioTrack from "./src/audioNodes/audioTrack";
 import ValueMeter from "./src/nodes/ValueMeter";
+import Sticker from "./src/nodes/Sticker";
 
 
 export const webAudioNodes: PluginConfig = {
@@ -113,6 +114,7 @@ export const baseNodes: PluginConfig = {
     },
     { type: "audioTrack", node: AudioTrack, audioNode: audioTrack },
     { type: "valueMeter", node: ValueMeter, audioNode: oscilloscope },
+    { type: "sticker", node: Sticker, audioNode: false },
   ],
   name: "Web Noise base nodes",
 };
