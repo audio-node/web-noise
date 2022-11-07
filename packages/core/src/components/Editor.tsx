@@ -1,5 +1,6 @@
 import { ThemeProvider } from "@emotion/react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import { useContextMenu } from "react-contexify";
 import ReactFlow, {
   Background,
   BackgroundVariant,
@@ -7,36 +8,22 @@ import ReactFlow, {
   Edge,
   MiniMap,
   Node,
-  NodeTypes,
   ReactFlowProvider,
 } from "react-flow-renderer";
-import useStore, { AudioNodeTypes } from "../store";
+import useStore from "../store";
 import "../styles";
-import defaultTheme from "../theme";
-import type { CreateWNAudioNode } from "../types";
-import ContextMenu from "./ContextMenu";
+import defaultTheme, { Theme } from "../theme";
+import type { PluginConfig } from "../types";
+import EditorContextMenu, {
+  MENU_ID as EDITOR_CONTEXT_MENU_ID,
+} from "./contextMenu/EditorContextMenu";
 import ResumeContext from "./ResumeContext";
-import SharePatch from "./SharePatch";
+import ToggleMinimap from "./ToggleMinimap";
 import Wire from "./Wire";
 
 export interface Elements {
   nodes: Array<Node>;
   edges: Array<Edge>;
-}
-
-export interface PluginComponent {
-  id?: string;
-  type: string;
-  node: any;
-  audioNode: CreateWNAudioNode | false;
-  description?: string;
-  name?: string;
-}
-
-export interface PluginConfig {
-  components: Array<PluginComponent>;
-  name?: string;
-  description?: string;
 }
 
 const onNodeDragStop = (_event: any, node: any) =>
@@ -49,45 +36,16 @@ const snapGrid: [number, number] = [20, 20];
 export const Editor = ({
   elements,
   plugins = [],
+  editorContextMenu = [],
+  onChange = () => {},
+  theme = defaultTheme,
 }: {
   elements?: Elements;
   plugins?: Array<PluginConfig>;
+  editorContextMenu?: Array<ReactNode>;
+  onChange?: ({ nodes, edges }: Elements) => void;
+  theme?: Theme;
 }) => {
-  const [nodeTypes, audioNodeTypes] = useMemo(() => {
-    return plugins.reduce<[NodeTypes, AudioNodeTypes]>(
-      ([accNodes, accAudioNodes], plugin) => {
-        const [nodes, audioNodes] = plugin.components.reduce<
-          [NodeTypes, AudioNodeTypes]
-        >(
-          ([pluginNodes, pluginAudioNodes], component) => {
-            return [
-              {
-                ...pluginNodes,
-                [component.type]: component.node,
-              },
-              {
-                ...pluginAudioNodes,
-                [component.type]: component.audioNode,
-              },
-            ];
-          },
-          [{}, {}]
-        );
-        return [
-          {
-            ...accNodes,
-            ...nodes,
-          },
-          {
-            ...accAudioNodes,
-            ...audioNodes,
-          },
-        ];
-      },
-      [{}, {}]
-    );
-  }, [plugins]);
-
   const edgeTypes = useMemo(
     () => ({
       wire: Wire,
@@ -104,12 +62,16 @@ export const Editor = ({
     onEdgesDelete,
     onConnect,
     setGraph,
-    setAudioNodeTypes,
+    setPlugins,
   } = useStore();
 
-  useEffect(() => {
-    setAudioNodeTypes(audioNodeTypes);
-  }, [setAudioNodeTypes, audioNodeTypes]);
+  useEffect(() => onChange({ nodes, edges }), [nodes, edges]);
+
+  const editorConfig = useStore(({ config }) => config);
+
+  const nodeTypes = useStore(({ nodeTypes }) => nodeTypes);
+
+  useEffect(() => setPlugins(plugins), [plugins]);
 
   useEffect(() => {
     if (elements) {
@@ -129,8 +91,13 @@ export const Editor = ({
     [reactflowInstance]
   );
 
+  // const { onContextMenu, ...contextMenuProps } = useContextMenu();
+  const { show: showEditorContextMenu } = useContextMenu({
+    id: EDITOR_CONTEXT_MENU_ID,
+  });
+
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={theme}>
       <ReactFlowProvider>
         <ReactFlow
           nodes={nodes}
@@ -143,6 +110,7 @@ export const Editor = ({
           onEdgesDelete={onEdgesDelete}
           onInit={onInit}
           onNodeClick={onNodeClick}
+          onContextMenu={showEditorContextMenu}
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
           snapGrid={snapGrid}
@@ -152,13 +120,23 @@ export const Editor = ({
           fitView
         >
           <Background variant={BackgroundVariant.Dots} gap={12} />
-          <MiniMap />
-          <Controls>
-            <ResumeContext />
-            <SharePatch />
+          {editorConfig.showMinimap ? <MiniMap /> : null}
+
+          <Controls
+            style={{
+              right: "1rem",
+              left: "initial",
+              bottom: "40%",
+              top: "initial",
+            }}
+            showInteractive={false}
+          >
+            <ToggleMinimap />
           </Controls>
+
+          <ResumeContext />
+          <EditorContextMenu editorContextMenu={editorContextMenu} />
         </ReactFlow>
-        <ContextMenu nodeTypes={nodeTypes} />
       </ReactFlowProvider>
     </ThemeProvider>
   );

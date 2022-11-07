@@ -1,6 +1,6 @@
-import { OnConnect, addEdge } from "react-flow-renderer";
+import { OnConnect, addEdge, NodeTypes } from "react-flow-renderer";
 import create from "zustand";
-import { WNEdge, WNNode } from "../types";
+import { WNEdge, WNNode, PluginConfig } from "../types";
 import audioNodesStateCreator, {
   AudioNodesState,
   AudioNodeState,
@@ -9,6 +9,10 @@ import audioNodesStateCreator, {
 import nodesStateCreator, { NodesState } from "./nodesStore";
 
 export type { AudioNodeState, AudioNodeTypes, NodesState };
+
+interface EditorConfig {
+  showMinimap: boolean;
+}
 
 const useStore = create<
   AudioNodesState &
@@ -22,6 +26,10 @@ const useStore = create<
       onConnect: OnConnect;
       onEdgesDelete: (edges: WNEdge[]) => void;
       onNodesDelete: (nodes: WNNode[]) => Promise<void>;
+      plugins: Array<PluginConfig>;
+      setPlugins: (plugins: Array<PluginConfig>) => void;
+      config: EditorConfig;
+      setConfig: (config: Partial<EditorConfig>) => void;
     }
 >((...args) => {
   const [set, get] = args;
@@ -69,6 +77,51 @@ const useStore = create<
     onNodesDelete: async (nodes) => {
       const { unregisterAudioNodes } = get();
       unregisterAudioNodes(nodes);
+    },
+    plugins: [],
+    setPlugins: async (plugins) => {
+      const [nodeTypes, audioNodeTypes] = plugins.reduce<
+        [NodeTypes, AudioNodeTypes]
+      >(
+        ([accNodes, accAudioNodes], plugin) => {
+          const [nodes, audioNodes] = plugin.components.reduce<
+            [NodeTypes, AudioNodeTypes]
+          >(
+            ([pluginNodes, pluginAudioNodes], component) => {
+              return [
+                {
+                  ...pluginNodes,
+                  [component.type]: component.node,
+                },
+                {
+                  ...pluginAudioNodes,
+                  [component.type]: component.audioNode,
+                },
+              ];
+            },
+            [{}, {}]
+          );
+          return [
+            {
+              ...accNodes,
+              ...nodes,
+            },
+            {
+              ...accAudioNodes,
+              ...audioNodes,
+            },
+          ];
+        },
+        [{}, {}]
+      );
+      const { setAudioNodeTypes, setNodeTypes } = get();
+      set({ plugins });
+      setAudioNodeTypes(audioNodeTypes);
+      setNodeTypes(nodeTypes);
+    },
+    config: { showMinimap: false },
+    setConfig: (changes) => {
+      set(({ config }) => ({ config: { ...config, ...changes } }));
     },
   };
 });

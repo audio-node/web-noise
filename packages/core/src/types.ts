@@ -29,3 +29,18 @@ export interface WNNodeData {
 
 export type WNNode = Node<WNNodeData>;
 export type WNEdge = Edge;
+
+export interface PluginComponent {
+  id?: string;
+  type: string;
+  node: any;
+  audioNode: CreateWNAudioNode | false;
+  description?: string;
+  name?: string;
+}
+
+export interface PluginConfig {
+  components: Array<PluginComponent>;
+  name?: string;
+  description?: string;
+}
