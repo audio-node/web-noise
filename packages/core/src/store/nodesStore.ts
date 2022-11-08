@@ -11,6 +11,12 @@ import { StateCreator } from "zustand";
 import { DRAG_HANDLE_SELECTOR } from "../constants";
 import type { WNNode, WNNodeData, WNEdge } from "../types";
 
+export interface GraphState {
+  nodes: WNNode[];
+  edges: WNEdge[];
+}
+
+//@TODO: rename to NodesStore
 export interface NodesState {
   nodes: WNNode[];
   edges: WNEdge[];
@@ -20,7 +26,8 @@ export interface NodesState {
   addNode: (node: WNNode) => void;
   setNodes: (nodes: WNNode[]) => void;
   setEdges: (edges: WNEdge[]) => void;
-  setNodesAndEdges: (elements: { nodes: WNNode[]; edges: WNEdge[] }) => void;
+  setNodesAndEdges: (elements: GraphState) => void;
+  getNodesAndEdges: () => GraphState;
   clearElements: () => void;
   getNode: (id: string) => WNNode | null;
   updateNodeData: (id: string, data: Partial<WNNodeData>) => void;
@@ -69,6 +76,10 @@ const nodesStateCreator: StateCreator<NodesState> = (set, get) => ({
       nodes,
       edges,
     });
+  },
+  getNodesAndEdges: () => {
+    const { nodes, edges } = get();
+    return { nodes, edges };
   },
   clearElements: () => {
     set({

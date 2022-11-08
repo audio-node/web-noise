@@ -10,11 +10,24 @@ const EditorWrapper: FC = () => {
 
   useEffect(() => {
     const loc = new URL(window.location.href);
+
     const stateParam = loc.searchParams.get("state");
     if (stateParam) {
       setGraphState(JSON.parse(decodeURIComponent(escape(atob(stateParam)))));
       loc.searchParams.delete("state");
       window.history.replaceState({}, document.title, loc.toString());
+      return;
+    }
+
+    const fileParam = loc.searchParams.get("file");
+    if (fileParam) {
+      fetch(fileParam)
+        .then((res) => res.json())
+        .then(({ nodes, edges }) => setGraphState({ nodes, edges }))
+        .catch((e) => alert(e));
+      loc.searchParams.delete("file");
+      window.history.replaceState({}, document.title, loc.toString());
+      return;
     }
   }, [setGraphState]);
 
