@@ -6,9 +6,9 @@ import audioNodesStateCreator, {
   AudioNodeState,
   AudioNodeTypes,
 } from "./audioGraphStore";
-import nodesStateCreator, { NodesState } from "./nodesStore";
+import nodesStateCreator, { NodesState, GraphState } from "./nodesStore";
 
-export type { AudioNodeState, AudioNodeTypes, NodesState };
+export type { AudioNodeState, AudioNodeTypes, NodesState, GraphState };
 
 interface EditorConfig {
   showMinimap: boolean;

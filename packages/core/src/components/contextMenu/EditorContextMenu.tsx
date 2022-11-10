@@ -3,10 +3,12 @@ import { FC, ReactNode, useCallback, useState } from "react";
 import { Item, Menu, Separator } from "react-contexify";
 import "react-contexify/dist/ReactContexify.css";
 import { GlobalHotKeys } from "react-hotkeys";
+import downloadFile from "js-file-download";
 import useTheme from "../../hooks/useTheme";
 import useStore from "../../store";
 import { Theme } from "../../theme";
 import AddNode from "../AddNode";
+import UploadPatch from "../UploadPatch";
 
 type MousePosition = {
   x: number;
@@ -42,6 +44,7 @@ const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
     y: 0,
   });
   const [showAddNode, setShowAddNode] = useState(false);
+  const [showUploadPatch, setShowUploadPatch] = useState(false);
 
   const addNodeHandler = useCallback(
     (x, y) => {
@@ -53,12 +56,19 @@ const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
 
   const clearGraph = useStore(({ clearGraph }) => clearGraph);
 
+  const getNodesAndEdges = useStore(({ getNodesAndEdges }) => getNodesAndEdges);
+
   const deleteAllHandler = useCallback(
     (e) => {
       clearGraph();
     },
     [clearGraph]
   );
+
+  const downloadPatchHandler = useCallback(() => {
+    const fileName = "web-noise-patch.json";
+    downloadFile(JSON.stringify(getNodesAndEdges(), null, 2), fileName);
+  }, [getNodesAndEdges]);
 
   return (
     <>
@@ -77,6 +87,10 @@ const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
         closeMenu={() => setShowAddNode(false)}
         mousePosition={mousePosition}
       />
+      <UploadPatch
+        isOpen={showUploadPatch}
+        closeMenu={() => setShowUploadPatch(false)}
+      />
       <MenuWrapper id={MENU_ID} animation={false} colors={theme.colors}>
         <ItemWrapper
           onClick={({ triggerEvent: { clientX, clientY } }) =>
@@ -87,6 +101,10 @@ const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
         </ItemWrapper>
         <Separator />
         <ItemWrapper onClick={deleteAllHandler}>Delete All</ItemWrapper>
+        <Separator />
+        <ItemWrapper onClick={downloadPatchHandler}>Download patch</ItemWrapper>
+        <ItemWrapper onClick={() => setShowUploadPatch(true)}>Upload patch</ItemWrapper>
+        <Separator />
         {editorContextMenu.map((item, index) => (
           <ItemWrapper key={index}>{item}</ItemWrapper>
         ))}
