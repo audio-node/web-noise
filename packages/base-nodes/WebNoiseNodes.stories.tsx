@@ -1,8 +1,9 @@
 import { Editor as DefaultEditor } from "@web-noise/core";
 import { FC } from "react";
-import { baseNodes, webAudioNodes } from "@web-noise/base-nodes";
+import { baseNodes, webAudioNodes } from ".";
+import { Elements } from "./src/nodes/Editor";
 
-const Editor: typeof DefaultEditor = (props) => (
+const Editor: FC<{ elements: Elements }> = (props) => (
   <DefaultEditor plugins={[baseNodes, webAudioNodes]} {...props} />
 );
 
@@ -1041,6 +1042,85 @@ export const Sticker = () => (
         },
       ],
       edges: [],
+    }}
+  />
+);
+
+export const Midi = () => (
+  <Editor
+    elements={{
+      nodes: [
+        {
+          id: "midi-input",
+          type: "midiInput",
+          data: {
+            label: "midiInput",
+          },
+          position: {
+            x: -20,
+            y: 0,
+          },
+        },
+        {
+          id: "value-meter1",
+          type: "valueMeter",
+          data: {
+            label: "valueMeter",
+          },
+          position: {
+            x: 300,
+            y: 20,
+          },
+        },
+        {
+          id: "value-meter-2",
+          type: "valueMeter",
+          data: {
+            label: "valueMeter",
+          },
+          position: {
+            x: 300,
+            y: 60,
+          },
+        },
+        {
+          id: "value-meter-3",
+          type: "valueMeter",
+          data: {
+            label: "valueMeter",
+          },
+          position: {
+            x: 300,
+            y: 100,
+          },
+        },
+      ],
+      edges: [
+        {
+          type: "wire",
+          source: "midi-input",
+          sourceHandle: "command",
+          target: "value-meter1",
+          targetHandle: "input1",
+          id: "reactflow__edge-midi-inputcommand-value-meter1input1",
+        },
+        {
+          type: "wire",
+          source: "midi-input",
+          sourceHandle: "note",
+          target: "value-meter-2",
+          targetHandle: "input1",
+          id: "reactflow__edge-midi-inputnote-value-meter-2input1",
+        },
+        {
+          type: "wire",
+          source: "midi-input",
+          sourceHandle: "velocity",
+          target: "value-meter-3",
+          targetHandle: "input1",
+          id: "reactflow__edge-midi-inputvelocity-value-meter-3input1",
+        },
+      ],
     }}
   />
 );
