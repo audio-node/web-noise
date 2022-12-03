@@ -1,6 +1,5 @@
 import { ThemeProvider } from "@emotion/react";
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
-import { useContextMenu } from "react-contexify";
 import ReactFlow, {
   Background,
   BackgroundVariant,
@@ -15,8 +14,14 @@ import "../styles";
 import defaultTheme, { Theme } from "../theme";
 import type { PluginConfig } from "../types";
 import EditorContextMenu, {
-  MENU_ID as EDITOR_CONTEXT_MENU_ID,
+  useEditorContextMenu,
 } from "./contextMenu/EditorContextMenu";
+import NodeContextMenu, {
+  useNodeContextMenu,
+} from "./contextMenu/NodeContextMenu";
+import EdgeContextMenu, {
+  useEdgeContextMenu,
+} from "./contextMenu/EdgeContextMenu";
 import ResumeContext from "./ResumeContext";
 import ToggleMinimap from "./ToggleMinimap";
 import Wire from "./Wire";
@@ -91,10 +96,9 @@ export const Editor = ({
     [reactflowInstance]
   );
 
-  // const { onContextMenu, ...contextMenuProps } = useContextMenu();
-  const { show: showEditorContextMenu } = useContextMenu({
-    id: EDITOR_CONTEXT_MENU_ID,
-  });
+  const { onContextMenu: onEditorContextMenu } = useEditorContextMenu();
+  const { onContextMenu: onNodeContextMenu } = useNodeContextMenu();
+  const { onContextMenu: onEdgeContextMenu } = useEdgeContextMenu();
 
   return (
     <ThemeProvider theme={theme}>
@@ -110,7 +114,9 @@ export const Editor = ({
           onEdgesDelete={onEdgesDelete}
           onInit={onInit}
           onNodeClick={onNodeClick}
-          onContextMenu={showEditorContextMenu}
+          onContextMenu={onEditorContextMenu}
+          onNodeContextMenu={onNodeContextMenu}
+          onEdgeContextMenu={onEdgeContextMenu}
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
           snapGrid={snapGrid}
@@ -136,6 +142,8 @@ export const Editor = ({
 
           <ResumeContext />
           <EditorContextMenu editorContextMenu={editorContextMenu} />
+          <NodeContextMenu />
+          <EdgeContextMenu />
         </ReactFlow>
       </ReactFlowProvider>
     </ThemeProvider>

@@ -1,14 +1,13 @@
-import styled from "@emotion/styled";
+import downloadFile from "js-file-download";
 import { FC, ReactNode, useCallback, useState } from "react";
-import { Item, Menu, Separator } from "react-contexify";
+import { Separator, useContextMenu } from "react-contexify";
 import "react-contexify/dist/ReactContexify.css";
 import { GlobalHotKeys } from "react-hotkeys";
-import downloadFile from "js-file-download";
 import useTheme from "../../hooks/useTheme";
 import useStore from "../../store";
-import { Theme } from "../../theme";
 import AddNode from "../AddNode";
 import UploadPatch from "../UploadPatch";
+import { ItemWrapper, MenuWrapper } from "./styles";
 
 type MousePosition = {
   x: number;
@@ -17,22 +16,13 @@ type MousePosition = {
 
 export const MENU_ID = "editor-menu";
 
-const ItemWrapper = styled(Item)``;
+export const useEditorContextMenu = () => {
+  const { show } = useContextMenu({
+    id: MENU_ID,
+  });
 
-const MenuWrapper = styled(Menu)<{ colors: Theme["colors"] }>`
-  background: ${({ colors }) => colors.elevation2};
-  padding: 0;
-  border-radius: 0;
-
-  .react-contexify__item__content {
-    color: ${({ colors }) => colors.whitePrimary};
-  }
-
-  .react-contexify__separator {
-    background-color: ${({ colors }) => colors.elevation1};
-    margin: 0;
-  }
-`;
+  return { onContextMenu: show };
+};
 
 const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
   editorContextMenu = [],
@@ -103,7 +93,9 @@ const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
         <ItemWrapper onClick={deleteAllHandler}>Delete All</ItemWrapper>
         <Separator />
         <ItemWrapper onClick={downloadPatchHandler}>Download patch</ItemWrapper>
-        <ItemWrapper onClick={() => setShowUploadPatch(true)}>Upload patch</ItemWrapper>
+        <ItemWrapper onClick={() => setShowUploadPatch(true)}>
+          Upload patch
+        </ItemWrapper>
         <Separator />
         {editorContextMenu.map((item, index) => (
           <ItemWrapper key={index}>{item}</ItemWrapper>
