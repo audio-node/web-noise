@@ -40,16 +40,19 @@ export const midiInput = async (
     ? [...access.inputs.values()]
     : [];
 
+  const midiMessageHandler = (event: WebMidi.MIDIMessageEvent) => {
+    midiInputNode.port.postMessage({
+      name: "midimessage",
+      value: event.data,
+    });
+  };
+
   const updateMidiInputHandler = () => {
     for (var input of midiInputs) {
-      input.onmidimessage = (event) => {
-        if ((event.target as WebMidi.MIDIInput).id === currentInputDeviceId) {
-          midiInputNode.port.postMessage({
-            name: "midimessage",
-            value: event.data,
-          });
-        }
-      };
+      input.onmidimessage = () => {};
+      if (input.id === currentInputDeviceId) {
+        input.onmidimessage = midiMessageHandler;
+      }
     }
   };
 
@@ -80,6 +83,7 @@ export const midiInput = async (
     setValues: ({ currentInput: currentInputValue } = {}) => {
       if (typeof currentInputValue !== "undefined") {
         currentInputDeviceId = currentInputValue;
+        updateMidiInputHandler();
       }
     },
   };
