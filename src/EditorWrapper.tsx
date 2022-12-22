@@ -25,8 +25,6 @@ const EditorWrapper: FC = () => {
         .then((res) => res.json())
         .then(({ nodes, edges }) => setGraphState({ nodes, edges }))
         .catch((e) => alert(e));
-      loc.searchParams.delete("file");
-      window.history.replaceState({}, document.title, loc.toString());
       return;
     }
   }, [setGraphState]);
