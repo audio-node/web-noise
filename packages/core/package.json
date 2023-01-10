@@ -2,20 +2,24 @@
   "name": "@web-noise/core",
   "version": "0.0.1",
   "dependencies": {
+    "@types/jest": "^29.2.4",
     "@types/react-modal": "^3.13.1",
     "js-file-download": "^0.4.12",
     "react-contexify": "^5.0.0",
     "react-file-drop": "^3.1.6",
-    "react-flow-renderer": "^10.3.16",
+    "react-flow-renderer": "^10.3.17",
     "react-hotkeys": "^2.0.0",
     "react-icons": "^4.4.0",
+    "typescript": "^4.9.4",
     "zustand": "^4.1.1"
   },
   "scripts": {
-    "test": "craco test"
+    "test": "jest"
   },
   "devDependencies": {
     "@types/react-copy-to-clipboard": "^5.0.4",
+    "jest": "^29.3.1",
+    "ts-jest": "^29.0.3",
     "web-audio-engine": "^0.13.4"
   }
 }

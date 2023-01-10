@@ -1,10 +1,8 @@
-import { OfflineAudioContext, api } from "web-audio-engine";
+// @ts-nocheck
+
 import create from "zustand/vanilla";
 import storeCreator from ".";
 import { CreateWNAudioNode } from "../../types";
-
-global.AudioContext = OfflineAudioContext;
-global.AudioNode = api.AudioNode;
 
 
 const { getState, setState } = create(storeCreator);

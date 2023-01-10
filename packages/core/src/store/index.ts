@@ -1,5 +1,10 @@
-import { OnConnect, addEdge, NodeTypes } from "react-flow-renderer";
-import create from "zustand";
+import {
+  OnConnect,
+  addEdge,
+  getConnectedEdges,
+  NodeTypes,
+} from "react-flow-renderer";
+import create, { StateCreator } from "zustand";
 import { WNEdge, WNNode, PluginConfig } from "../types";
 import audioNodesStateCreator, {
   AudioNodesState,
@@ -14,24 +19,23 @@ interface EditorConfig {
   showMinimap: boolean;
 }
 
-const useStore = create<
-  AudioNodesState &
-    NodesState & {
-      setGraph: (elements: {
-        nodes: WNNode[];
-        edges: WNEdge[];
-      }) => Promise<void>;
-      clearGraph: () => void;
-      createNode: (node: WNNode) => void;
-      onConnect: OnConnect;
-      onEdgesDelete: (edges: WNEdge[]) => void;
-      onNodesDelete: (nodes: WNNode[]) => Promise<void>;
-      plugins: Array<PluginConfig>;
-      setPlugins: (plugins: Array<PluginConfig>) => void;
-      config: EditorConfig;
-      setConfig: (config: Partial<EditorConfig>) => void;
-    }
->((...args) => {
+type StoreState = AudioNodesState &
+  NodesState & {
+    setGraph: (elements: { nodes: WNNode[]; edges: WNEdge[] }) => Promise<void>;
+    clearGraph: () => void;
+    createNode: (node: WNNode) => void;
+    removeNodes: (nodes: WNNode[]) => void;
+    removeEdges: (nodes: WNEdge[]) => void;
+    onConnect: OnConnect;
+    onEdgesDelete: (edges: WNEdge[]) => void;
+    onNodesDelete: (nodes: WNNode[]) => Promise<void>;
+    plugins: Array<PluginConfig>;
+    setPlugins: (plugins: Array<PluginConfig>) => void;
+    config: EditorConfig;
+    setConfig: (config: Partial<EditorConfig>) => void;
+  };
+
+export const stateCreator: StateCreator<StoreState> = (...args) => {
   const [set, get] = args;
   return {
     ...audioNodesStateCreator(...args),
@@ -61,6 +65,29 @@ const useStore = create<
       const { addNode, registerAudioNode } = get();
       registerAudioNode(node);
       addNode(node);
+    },
+    removeNodes: (nodes) => {
+      const {
+        edges,
+        nodes: currentNodes,
+        onNodesDelete,
+        removeEdges,
+      } = get();
+      const connectedEdges = getConnectedEdges(nodes, edges);
+      removeEdges(connectedEdges)
+      onNodesDelete(nodes);
+      const nodeIds = nodes.map(({ id }) => id);
+      set({
+        nodes: currentNodes.filter(({ id }) => !nodeIds.includes(id)),
+      });
+    },
+    removeEdges: (edges) => {
+      const { edges: currentEdges, onEdgesDelete } = get();
+      const edgeIds = edges.map(({ id }) => id);
+      onEdgesDelete(edges);
+      set({
+        edges: currentEdges.filter(({ id }) => !edgeIds.includes(id)),
+      });
     },
     onConnect: async (connection) => {
       const { registerAudioConnections, edges, setEdges } = get();
@@ -124,6 +151,8 @@ const useStore = create<
       set(({ config }) => ({ config: { ...config, ...changes } }));
     },
   };
-});
+};
+
+const useStore = create<StoreState>(stateCreator);
 
 export default useStore;
