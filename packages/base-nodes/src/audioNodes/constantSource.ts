@@ -11,6 +11,7 @@ export interface ConstantSource extends WNAudioNode {
 
 export const constantSource = (audioContext: AudioContext): ConstantSource => {
   const constantSource = audioContext.createConstantSource();
+  constantSource.offset.value = 0;
   constantSource.start();
 
   return {
