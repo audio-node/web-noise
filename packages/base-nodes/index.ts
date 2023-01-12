@@ -40,6 +40,8 @@ import ValueMeter from "./src/nodes/ValueMeter";
 import Sticker from "./src/nodes/Sticker";
 import MidiInput from "./src/nodes/MidiInput";
 import { midiInput } from "./src/audioNodes/midiInput";
+import DataRecorder from "./src/nodes/DataRecorder";
+import { dataRecorder } from "./src/audioNodes/dataRecorder";
 
 
 export const webAudioNodes: PluginConfig = {
@@ -121,6 +123,11 @@ export const baseNodes: PluginConfig = {
       type: "midiInput",
       node: MidiInput,
       audioNode: midiInput,
+    },
+    {
+      type: "dataRecorder",
+      node: DataRecorder,
+      audioNode: dataRecorder,
     },
   ],
   name: "Web Noise base nodes",
