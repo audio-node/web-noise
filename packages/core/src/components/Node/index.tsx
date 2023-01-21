@@ -28,7 +28,7 @@ const Section = styled.div`
   background-color: var(--leva-colors-elevation1);
 `;
 
-const TitleBarInner = styled(Section)`
+export const TitleBarInner = styled(Section)`
   display: flex;
   height: var(--leva-sizes-titleBarHeight);
   touch-action: none;
@@ -39,7 +39,7 @@ const TitleBarInner = styled(Section)`
   padding: 0 1rem;
 `;
 
-const TitleBarLabel = styled.input`
+export const TitleBarLabel = styled.input`
   width: 100%;
   background: none;
   border: none;
@@ -100,15 +100,15 @@ const StyledInputHandle = styled(Handle)`
   left: -3px;
 `;
 
-const InputHandle: FC<Partial<HandleProps>> = (props) => (
+export const InputHandle: FC<Partial<HandleProps>> = (props) => (
   <StyledInputHandle {...props} type="target" position={Position.Left} />
 );
 
-const StyledOutputHandle = styled(Handle)`
+export const StyledOutputHandle = styled(Handle)`
   right: -3px;
 `;
 
-const OutputHandle: FC<Partial<HandleProps>> = (props) => (
+export const OutputHandle: FC<Partial<HandleProps>> = (props) => (
   <StyledOutputHandle {...props} type="source" position={Position.Right} />
 );
 
@@ -126,7 +126,16 @@ export const TitleBar: FC<{ className?: string }> = ({
   />
 );
 
-export const WNNode: FC<{ id: string }> = ({ id, children }) => {
+interface WNNodeParameters extends NodeProps {
+  hidePorts?: boolean;
+}
+
+export const WNNode: FC<WNNodeParameters> = ({
+  id,
+  children,
+  hidePorts,
+  ...rest
+}) => {
   const theme = useTheme();
   const getNode = useStore(({ getNode }) => getNode);
 
@@ -224,28 +233,30 @@ export const WNNode: FC<{ id: string }> = ({ id, children }) => {
           }}
         />
       </TitleBar>
-      <PortsPanel theme={theme}>
-        <InputPorts>
-          {inputs
-            ? Object.keys(inputs).map((key, index) => (
-                <Port key={index}>
-                  <InputHandle id={key} />
-                  <span>{key}</span>
-                </Port>
-              ))
-            : null}
-        </InputPorts>
-        <OutputPorts>
-          {outputs
-            ? Object.keys(outputs).map((key, index) => (
-                <Port key={index}>
-                  <OutputHandle id={key} />
-                  <span>{key}</span>
-                </Port>
-              ))
-            : null}
-        </OutputPorts>
-      </PortsPanel>
+      {!hidePorts && (
+        <PortsPanel theme={theme}>
+          <InputPorts>
+            {inputs
+              ? Object.keys(inputs).map((key, index) => (
+                  <Port key={index}>
+                    <InputHandle id={key} />
+                    <span>{key}</span>
+                  </Port>
+                ))
+              : null}
+          </InputPorts>
+          <OutputPorts>
+            {outputs
+              ? Object.keys(outputs).map((key, index) => (
+                  <Port key={index}>
+                    <OutputHandle id={key} />
+                    <span>{key}</span>
+                  </Port>
+                ))
+              : null}
+          </OutputPorts>
+        </PortsPanel>
+      )}
       {children}
     </NodeWrapper>
   );

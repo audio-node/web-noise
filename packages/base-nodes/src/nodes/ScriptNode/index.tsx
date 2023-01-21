@@ -47,7 +47,8 @@ const Button = styled.button`
   font-family: var(--leva-fonts-mono);
 `;
 
-const ScriptNode: FC<WNNodeProps<ScriptNodeData>> = ({ data, id }) => {
+const ScriptNode: FC<WNNodeProps<ScriptNodeData>> = (props) => {
+  const { data, id } = props;
   const theme = useTheme();
 
   const { node } = useAudioNode<TScriptNode>(id) || {};
@@ -84,11 +85,8 @@ const ScriptNode: FC<WNNodeProps<ScriptNodeData>> = ({ data, id }) => {
   }, [node]);
 
   return (
-    <WNNode id={id}>
-      <Editor
-        value={expression}
-        onUpdate={setEditorValue}
-      />
+    <WNNode {...props}>
+      <Editor value={expression} onUpdate={setEditorValue} />
       <Section>
         <Button onClick={saveExpression}>set</Button>
       </Section>

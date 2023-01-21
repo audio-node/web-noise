@@ -9,8 +9,8 @@ import { Midi } from "@tonaljs/tonal";
 import { button, LevaPanel, useControls, useCreateStore } from "leva";
 import { FC, useCallback, useEffect, useState } from "react";
 import { NodeProps } from "react-flow-renderer";
- import { useAudioNode } from "@web-noise/core";
- import { useNode } from "@web-noise/core";
+import { useAudioNode } from "@web-noise/core";
+import { useNode } from "@web-noise/core";
 import {
   DEFAULT_SEQUENCE_MODE,
   DEFAULT_STEP_VALUE,
@@ -50,9 +50,10 @@ const midiToNote: FormatNote<number, string> = (value) => {
   return Midi.midiToNoteName(value);
 };
 
-const StepSequencer: FC<NodeProps<StepSequencerData>> = ({ id, data }) => {
+const StepSequencer: FC<NodeProps<StepSequencerData>> = (props) => {
+  const { id, data } = props;
   const { node } = useAudioNode<NodeStepSequencer>(id) || {};
-  const { updateNodeValues, updateNodeConfig } =  useNode(id);
+  const { updateNodeValues, updateNodeConfig } = useNode(id);
 
   const theme = useTheme();
 
@@ -142,7 +143,7 @@ const StepSequencer: FC<NodeProps<StepSequencerData>> = ({ id, data }) => {
   }, [node, controls.mode]);
 
   return (
-    <WNNode id={id}>
+    <WNNode {...props}>
       <LevaPanel
         store={store}
         fill

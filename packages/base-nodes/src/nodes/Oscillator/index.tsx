@@ -25,7 +25,8 @@ interface OscillatorData {
 const DEFAULT_FREQUENCY = 440;
 const DEFAULT_TYPE = "sine";
 
-const Oscillator: FC<WNNodeProps<OscillatorData>> = ({ id, data }) => {
+const Oscillator: FC<WNNodeProps<OscillatorData>> = (props) => {
+  const { id, data } = props;
   const { node } = useAudioNode<TOscillator>(id) || {};
   const { updateNodeValues } = useNode(id);
 
@@ -76,7 +77,7 @@ const Oscillator: FC<WNNodeProps<OscillatorData>> = ({ id, data }) => {
   useEffect(() => updateNodeValues(values), [values, updateNodeValues]);
 
   return (
-    <WNNode id={id}>
+    <WNNode {...props}>
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
     </WNNode>
   );

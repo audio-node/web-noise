@@ -46,7 +46,7 @@ const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
 
   const clearGraph = useStore(({ clearGraph }) => clearGraph);
 
-  const getNodesAndEdges = useStore(({ getNodesAndEdges }) => getNodesAndEdges);
+  const getEditorState = useStore((store) => store.getEditorState);
 
   const deleteAllHandler = useCallback(
     (e) => {
@@ -57,8 +57,8 @@ const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
 
   const downloadPatchHandler = useCallback(() => {
     const fileName = "web-noise-patch.json";
-    downloadFile(JSON.stringify(getNodesAndEdges(), null, 2), fileName);
-  }, [getNodesAndEdges]);
+    downloadFile(JSON.stringify(getEditorState(), null, 2), fileName);
+  }, [getEditorState]);
 
   return (
     <>

@@ -8,7 +8,8 @@ import type {
   OutputPort,
 } from "../../types";
 
-export interface AudioNodeTypes extends Record<string, CreateWNAudioNode | false> {}
+export interface AudioNodeTypes
+  extends Record<string, CreateWNAudioNode | false> {}
 
 interface AudioNodeLoadingState {
   loading: true;
@@ -54,7 +55,7 @@ const audioNodesStateCreator: StateCreator<AudioNodesState> = (set, get) => ({
   setAudioNodeTypes: (audioNodeTypes) => set({ audioNodeTypes }),
   audioContext: new AudioContext(),
   audioNodes: {},
-  registerAudioNode: async ({ id, type }) => {
+  registerAudioNode: async ({ id, type, data }) => {
     if (!type) {
       set(({ audioNodes }) => ({
         audioNodes: {
@@ -70,7 +71,7 @@ const audioNodesStateCreator: StateCreator<AudioNodesState> = (set, get) => ({
     }
     const { audioNodeTypes, audioContext } = get();
     const createNode = audioNodeTypes[type];
-    if(createNode === false){
+    if (createNode === false) {
       return;
     }
     if (!createNode) {
@@ -97,7 +98,7 @@ const audioNodesStateCreator: StateCreator<AudioNodesState> = (set, get) => ({
       },
     }));
     try {
-      const audioNode = await createNode(audioContext);
+      const audioNode = await createNode(audioContext, data);
       set(({ audioNodes }) => ({
         audioNodes: {
           ...audioNodes,
@@ -126,7 +127,8 @@ const audioNodesStateCreator: StateCreator<AudioNodesState> = (set, get) => ({
     await Promise.all(nodes.map(registerAudioNode));
     return;
   },
-  unregisterAudioNode: ({ id }) => {
+  unregisterAudioNode: (props) => {
+    const { id, data } = props;
     const { audioNodes } = get();
     const { [id]: audioNode, ...newAudioNodes } = audioNodes;
     if (!audioNode) {
@@ -242,7 +244,8 @@ const audioNodesStateCreator: StateCreator<AudioNodesState> = (set, get) => ({
     const { registerAudioConnection } = get();
     edges.forEach(registerAudioConnection);
   },
-  unregisterAudioConnection: ({ id }) => {
+  unregisterAudioConnection: (props) => {
+    const { id, data } = props;
     const { audioConnections } = get();
     const { [id]: audioConnection, ...newAudioConnections } = audioConnections;
     if (!audioConnection) {

@@ -1,6 +1,7 @@
 import { FC, useCallback } from "react";
-import { useContextMenu } from "react-contexify";
+import { useContextMenu, PredicateParams } from "react-contexify";
 import "react-contexify/dist/ReactContexify.css";
+import { WNNode } from "../../types";
 import useTheme from "../../hooks/useTheme";
 import useStore from "../../store";
 import { ItemWrapper, MenuWrapper } from "./styles";
@@ -8,7 +9,6 @@ import { ItemWrapper, MenuWrapper } from "./styles";
 export const MENU_ID = "editor-node-menu";
 
 export const useNodeContextMenu = () => {
-
   const { show } = useContextMenu({
     id: MENU_ID,
   });
@@ -24,16 +24,62 @@ export const useNodeContextMenu = () => {
   return { onContextMenu };
 };
 
-const NodeContextMenu: FC<{}> = ({}) => {
+const NodeContextMenu: FC<{}> = (args) => {
   const theme = useTheme();
 
   const removeNodes = useStore((store) => store.removeNodes);
+  const addNodeToControlPanel = useStore(
+    (store) => store.addNodeToControlPanel
+  );
+  const removeNodeFromControlPanel = useStore(
+    (store) => store.removeNodeFromControlPanel
+  );
+  const controlPanelNodeTypes = useStore(
+    (store) => store.controlPanelNodeTypes
+  );
+  const controlPanelNodes = useStore((store) => store.controlPanel.nodes);
+
+  const isOnControlPanel = useCallback(
+    ({ props }: PredicateParams<{ node: WNNode }>) => {
+      if (!props?.node.type) {
+        return false;
+      }
+      return !!controlPanelNodes.find(({ id }) => id === props.node.id);
+    },
+    [controlPanelNodes]
+  );
+
+  const hasControlPanelNode = useCallback(
+    ({ props }: PredicateParams<{ node: WNNode }>) => {
+      if (!props?.node.type) {
+        return false;
+      }
+      return !!controlPanelNodeTypes[props.node.type];
+    },
+    [controlPanelNodeTypes]
+  );
 
   return (
     <>
       <MenuWrapper id={MENU_ID} animation={false} colors={theme.colors}>
         <ItemWrapper onClick={(event) => removeNodes([event.props.node])}>
           Delete Node (DEL)
+        </ItemWrapper>
+        <ItemWrapper
+          hidden={(...args) =>
+            !hasControlPanelNode(...args) || isOnControlPanel(...args)
+          }
+          onClick={(event) => addNodeToControlPanel(event.props.node)}
+        >
+          Add To Control Panel
+        </ItemWrapper>
+        <ItemWrapper
+          hidden={(...args) =>
+            !hasControlPanelNode(...args) || !isOnControlPanel(...args)
+          }
+          onClick={(event) => removeNodeFromControlPanel(event.props.node)}
+        >
+          Remove From Control Panel
         </ItemWrapper>
       </MenuWrapper>
     </>

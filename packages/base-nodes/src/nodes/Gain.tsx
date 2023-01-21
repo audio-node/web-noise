@@ -1,4 +1,10 @@
-import { useAudioNode, useNode, useTheme, WNNode, WNNodeProps } from "@web-noise/core";
+import {
+  useAudioNode,
+  useNode,
+  useTheme,
+  WNNode,
+  WNNodeProps,
+} from "@web-noise/core";
 import { LevaPanel, useControls, useCreateStore } from "leva";
 import { FC, useEffect } from "react";
 import { Gain as TGain, GainValues } from "../audioNodes/gain";
@@ -7,8 +13,9 @@ interface GainData {
   values?: GainValues;
 }
 
-const Gain: FC<WNNodeProps<GainData>> = ({ data, id }) => {
-  const { updateNodeValues } =  useNode(id);
+const Gain: FC<WNNodeProps<GainData>> = (props) => {
+  const { id, data } = props;
+  const { updateNodeValues } = useNode(id);
   const { node } = useAudioNode<TGain>(id) || {};
 
   const theme = useTheme();
@@ -35,7 +42,7 @@ const Gain: FC<WNNodeProps<GainData>> = ({ data, id }) => {
   useEffect(() => updateNodeValues(values), [values]);
 
   return (
-    <WNNode id={id}>
+    <WNNode {...props}>
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
     </WNNode>
   );
