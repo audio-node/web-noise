@@ -1,4 +1,10 @@
-import { useAudioNode, useNode, useTheme, WNNode, WNNodeProps } from "@web-noise/core";
+import {
+  useAudioNode,
+  useNode,
+  useTheme,
+  WNNode,
+  WNNodeProps,
+} from "@web-noise/core";
 import { button, folder, LevaPanel, useControls, useCreateStore } from "leva";
 import { FC, useCallback, useEffect, useState } from "react";
 import { Clock as TClock, ClockValues } from "../../audioNodes/clock";
@@ -10,7 +16,8 @@ interface ClockData {
 const DEFAULT_BPM = 120;
 const DEFAULT_DURATION = 0.01;
 
-const Clock: FC<WNNodeProps<ClockData>> = ({ data, id }) => {
+const Clock: FC<WNNodeProps<ClockData>> = (props) => {
+  const { id, data } = props;
   const { node } = useAudioNode<TClock>(id) || {};
   const { updateNodeValues } = useNode(id);
   const [isActive, setActive] = useState(false);
@@ -66,7 +73,7 @@ const Clock: FC<WNNodeProps<ClockData>> = ({ data, id }) => {
   useEffect(() => updateNodeValues(values), [values, updateNodeValues]);
 
   return (
-    <WNNode id={id}>
+    <WNNode {...props}>
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
     </WNNode>
   );

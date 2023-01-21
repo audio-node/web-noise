@@ -53,7 +53,8 @@ const DownloadButton = styled.button`
   }
 `;
 
-const DataRecorder: FC<WNNodeProps<RecorderData>> = ({ id }) => {
+const DataRecorder: FC<WNNodeProps<RecorderData>> = (props) => {
+  const { id, data } = props;
   const { node } = useAudioNode<TDataRecorder>(id) || {};
   const [isRecording, setIsRecording] = useState(false);
   const [recorderData, setRecorderData] = useState<RecorderData>();
@@ -89,7 +90,7 @@ const DataRecorder: FC<WNNodeProps<RecorderData>> = ({ id }) => {
   }, [node, progressDisplayRef.current, progressTimeRef.current]);
 
   return (
-    <WNNode id={id}>
+    <WNNode {...props}>
       <DataRecorderInner theme={theme}>
         <RecordingIndicator theme={theme} isRecording={isRecording} />
         <RecrodingTime

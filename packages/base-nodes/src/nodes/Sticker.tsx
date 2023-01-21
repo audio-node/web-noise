@@ -62,7 +62,8 @@ const MdPreview = styled.div`
   padding: 0 0.5rem;
 `;
 
-const Sticker: FC<WNNodeProps<StickerData>> = ({ data, id }) => {
+const Sticker: FC<WNNodeProps<StickerData>> = (props) => {
+  const { id, data } = props;
   const { updateNodeValues } = useNode(id);
 
   const editorRef = useRef<HTMLTextAreaElement | null>(null);
@@ -91,7 +92,6 @@ const Sticker: FC<WNNodeProps<StickerData>> = ({ data, id }) => {
       previewRef.current?.removeEventListener("dblclick", doubleClickHandler);
     };
   }, [editorRef.current, previewRef.current, setEditMode]);
-
 
   return (
     <Resizable

@@ -36,7 +36,8 @@ const Stage = styled.div`
   }
 `;
 
-const Oscilloscope: FC<WNNodeProps<OscilloscopeData>> = ({ data, id }) => {
+const Oscilloscope: FC<WNNodeProps<OscilloscopeData>> = (props) => {
+  const { id, data } = props;
   const { node } = useAudioNode<TOscilloscope>(id) || {};
   const { updateNodeConfig } = useNode(id);
 
@@ -71,12 +72,15 @@ const Oscilloscope: FC<WNNodeProps<OscilloscopeData>> = ({ data, id }) => {
     { store: store }
   );
 
-  useEffect(() => updateNodeConfig({ ...config, size }), [config, size, updateNodeConfig]);
+  useEffect(
+    () => updateNodeConfig({ ...config, size }),
+    [config, size, updateNodeConfig]
+  );
 
-  const {width, height} = size;
+  const { width, height } = size;
 
   return (
-    <WNNode id={id}>
+    <WNNode {...props}>
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
       {node && (
         <Resizable

@@ -23,7 +23,8 @@ const ValueDisplay = styled.input`
   padding: 0.3rem;
 `;
 
-const ValueMeter: FC<NodeProps> = ({ id }) => {
+const ValueMeter: FC<NodeProps> = (props) => {
+  const { id, data } = props;
   const { node } = useAudioNode<Oscilloscope>(id) || {};
 
   const inputRef = useRef<HTMLInputElement>(null);

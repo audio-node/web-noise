@@ -9,7 +9,7 @@ import ReactFlow, {
   Node,
   ReactFlowProvider,
 } from "react-flow-renderer";
-import useStore from "../store";
+import useStore, { EditorState } from "../store";
 import "../styles";
 import defaultTheme, { Theme } from "../theme";
 import type { PluginConfig } from "../types";
@@ -24,12 +24,8 @@ import EdgeContextMenu, {
 } from "./contextMenu/EdgeContextMenu";
 import ResumeContext from "./ResumeContext";
 import ToggleMinimap from "./ToggleMinimap";
+import ControlPanel from "./ControlPanel";
 import Wire from "./Wire";
-
-export interface Elements {
-  nodes: Array<Node>;
-  edges: Array<Edge>;
-}
 
 const onNodeDragStop = (_event: any, node: any) =>
   console.log("drag stop", node);
@@ -45,10 +41,10 @@ export const Editor = ({
   onChange = () => {},
   theme = defaultTheme,
 }: {
-  elements?: Elements;
+  elements?: EditorState;
   plugins?: Array<PluginConfig>;
   editorContextMenu?: Array<ReactNode>;
-  onChange?: ({ nodes, edges }: Elements) => void;
+  onChange?: ({ nodes, edges, controlPanel }: EditorState) => void;
   theme?: Theme;
 }) => {
   const edgeTypes = useMemo(
@@ -61,16 +57,20 @@ export const Editor = ({
   const {
     nodes,
     edges,
+    controlPanel,
     onNodesChange,
     onNodesDelete,
     onEdgesChange,
     onEdgesDelete,
     onConnect,
-    setGraph,
+    setEditorState,
     setPlugins,
   } = useStore();
 
-  useEffect(() => onChange({ nodes, edges }), [nodes, edges]);
+  useEffect(
+    () => onChange({ nodes, edges, controlPanel }),
+    [nodes, edges, controlPanel]
+  );
 
   const editorConfig = useStore(({ config }) => config);
 
@@ -80,9 +80,9 @@ export const Editor = ({
 
   useEffect(() => {
     if (elements) {
-      setGraph(elements);
+      setEditorState(elements);
     }
-  }, [elements, setGraph]);
+  }, [elements, setEditorState]);
 
   const [reactflowInstance, setReactflowInstance] = useState(null);
 
@@ -141,6 +141,7 @@ export const Editor = ({
           </Controls>
 
           <ResumeContext />
+          <ControlPanel />
           <EditorContextMenu editorContextMenu={editorContextMenu} />
           <NodeContextMenu />
           <EdgeContextMenu />

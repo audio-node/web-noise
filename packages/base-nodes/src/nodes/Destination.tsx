@@ -16,7 +16,8 @@ const SpeakerIcon = styled(MdSpeaker)`
   height: 3rem;
 `;
 
-const Destination: FC<NodeProps> = ({ id }) => {
+const Destination: FC<NodeProps> = (props) => {
+  const { id, data } = props;
   useAudioNode<TDestination>(id);
 
   return (

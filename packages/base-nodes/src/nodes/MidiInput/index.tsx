@@ -14,7 +14,7 @@ import {
   MidiInputList as MidiInputDevices,
   MidiValues,
 } from "../../audioNodes/midiInput";
-import MidiDeviceItem from './MidiDeviceItem'
+import MidiDeviceItem from "./MidiDeviceItem";
 
 interface MidiData {
   values?: MidiValues;
@@ -34,8 +34,8 @@ const NoMidiDevicesMessage = styled.div<{ theme: Theme }>`
   color: ${({ theme }) => theme.colors.highlight1};
 `;
 
-
-const MidiInput: FC<WNNodeProps<MidiData>> = ({ data, id }) => {
+const MidiInput: FC<WNNodeProps<MidiData>> = (props) => {
+  const { id, data } = props;
   const { node } = useAudioNode<TMidiInput>(id) || {};
   const { updateNodeValues } = useNode(id);
 
@@ -65,7 +65,7 @@ const MidiInput: FC<WNNodeProps<MidiData>> = ({ data, id }) => {
   useEffect(() => node?.setValues(data.values), [node, data]);
 
   return (
-    <WNNode id={id}>
+    <WNNode {...props}>
       <LevaPanel
         store={store}
         fill

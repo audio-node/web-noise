@@ -3,10 +3,19 @@ import { Editor, theme } from "@web-noise/core";
 import { FC, ReactNode, useEffect, useMemo, useState } from "react";
 import SharePatch from "./SharePatch";
 
+const CONTROL_PANEL_DEFAULTS = {
+  nodes: [],
+  show: true,
+};
+
 const EditorWrapper: FC = () => {
   const [showSharePatch, setShowSharePatch] = useState(false);
 
-  const [graphState, setGraphState] = useState({ nodes: [], edges: [] });
+  const [graphState, setGraphState] = useState({
+    nodes: [],
+    edges: [],
+    controlPanel: CONTROL_PANEL_DEFAULTS,
+  });
 
   useEffect(() => {
     const loc = new URL(window.location.href);
@@ -23,7 +32,9 @@ const EditorWrapper: FC = () => {
     if (fileParam) {
       fetch(fileParam)
         .then((res) => res.json())
-        .then(({ nodes, edges }) => setGraphState({ nodes, edges }))
+        .then(({ nodes, edges, controlPanel = CONTROL_PANEL_DEFAULTS }) =>
+          setGraphState({ nodes, edges, controlPanel })
+        )
         .catch((e) => alert(e));
       return;
     }

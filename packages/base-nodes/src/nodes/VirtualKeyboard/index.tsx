@@ -19,7 +19,8 @@ const Keyboard = styled(Piano)`
   }
 `;
 
-const VirtualKeyboard: FC<WNNodeProps> = ({ id }) => {
+const VirtualKeyboard: FC<WNNodeProps> = (props) => {
+  const { id } = props;
   const { node } = useAudioNode<TVirtualKeyboard>(id) || {};
 
   const theme = useTheme();
@@ -89,7 +90,7 @@ const VirtualKeyboard: FC<WNNodeProps> = ({ id }) => {
   );
 
   return (
-    <WNNode id={id}>
+    <WNNode {...props}>
       <LevaPanel
         store={store}
         fill

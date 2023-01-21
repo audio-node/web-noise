@@ -22,9 +22,10 @@ const DEFAULT_FREQUENCY = 12000;
 const DEFAULT_Q = 0;
 const DEFAULT_FILTER_TYPE: BiquadFilterType = "lowpass";
 
-const Filter: FC<WNNodeProps<FilterData>> = ({ data, id }) => {
+const Filter: FC<WNNodeProps<FilterData>> = (props) => {
+  const { id, data } = props;
   const { node } = useAudioNode<TFilter>(id) || {};
-  const { updateNodeValues } =  useNode(id);
+  const { updateNodeValues } = useNode(id);
   const store = useCreateStore();
 
   const {
@@ -60,7 +61,7 @@ const Filter: FC<WNNodeProps<FilterData>> = ({ data, id }) => {
   useEffect(() => updateNodeValues(values), [values]);
 
   return (
-    <WNNode id={id}>
+    <WNNode {...props}>
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
     </WNNode>
   );

@@ -5,7 +5,8 @@ import { useAudioNode } from "@web-noise/core";
 import { RandomSequencer as TRandomSequencer } from "../audioNodes/randomSequencer";
 import { WNNode } from "@web-noise/core";
 
-const RandomSequencer: FC<NodeProps> = ({ id }) => {
+const RandomSequencer: FC<NodeProps> = (props) => {
+  const { id, data } = props;
   const { node } = useAudioNode<TRandomSequencer>(id) || {};
 
   const store = useCreateStore();
@@ -29,7 +30,7 @@ const RandomSequencer: FC<NodeProps> = ({ id }) => {
   }, [node, set]);
 
   return (
-    <WNNode id={id}>
+    <WNNode {...props}>
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
     </WNNode>
   );

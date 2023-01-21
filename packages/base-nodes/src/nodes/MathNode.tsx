@@ -9,7 +9,8 @@ interface MathNodeData {
   values?: MathNodeValues;
 }
 
-const MathNode: FC<WNNodeProps<MathNodeData>> = ({ data, id }) => {
+const MathNode: FC<WNNodeProps<MathNodeData>> = (props) => {
+  const { id, data } = props;
   const { node } = useAudioNode<TMathNode>(id) || {};
   const { updateNodeValues } = useNode(id);
 
@@ -31,7 +32,7 @@ const MathNode: FC<WNNodeProps<MathNodeData>> = ({ data, id }) => {
   );
 
   return (
-    <WNNode id={id}>
+    <WNNode {...props}>
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
     </WNNode>
   );

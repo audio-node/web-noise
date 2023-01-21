@@ -1,23 +1,22 @@
 import styled from "@emotion/styled";
 import {
+  NumberInput,
+  theme,
   useAudioNode,
   useNode,
   useTheme,
   WNNode,
   WNNodeProps,
 } from "@web-noise/core";
-import { button, folder, LevaPanel, useControls, useCreateStore } from "leva";
-import { FC, useCallback, useEffect, useMemo, useState } from "react";
-import { theme } from "@web-noise/core";
-import { Resizable } from "re-resizable";
+import { LevaPanel, useControls, useCreateStore } from "leva";
+import { FC, useCallback, useEffect, useState } from "react";
 import {
   AudioTrack as TAudioTrack,
   AudioTrackValues,
 } from "../../audioNodes/audioTrack";
-import Wave from "./Wave";
-import NumberInput from "./NumberInput";
-import Input from "./Input";
 import Button from "./Button";
+import Input from "./Input";
+import Wave from "./Wave";
 
 const Section = styled.div`
   font-family: var(--leva-fonts-mono);
@@ -71,7 +70,8 @@ interface AudioTrackData {
   config?: AudioTrackConfig;
 }
 
-const AudioTrack: FC<WNNodeProps<AudioTrackData>> = ({ data, id }) => {
+const AudioTrack: FC<WNNodeProps<AudioTrackData>> = (props) => {
+  const { id, data } = props;
   const { updateNodeValues, updateNodeConfig } = useNode(id);
   const { node } = useAudioNode<TAudioTrack>(id) || {};
   const [isActive, setActive] = useState(false);
@@ -153,7 +153,7 @@ const AudioTrack: FC<WNNodeProps<AudioTrackData>> = ({ data, id }) => {
   }, [node]);
 
   return (
-    <WNNode id={id}>
+    <WNNode {...props}>
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
       <Section>
         <Input
@@ -165,7 +165,7 @@ const AudioTrack: FC<WNNodeProps<AudioTrackData>> = ({ data, id }) => {
         />
       </Section>
 
-      <div style={{ position: "relative", cursor: 'default' }}>
+      <div style={{ position: "relative", cursor: "default" }}>
         {node && isLoading && <Loader>loading</Loader>}
         {node && (
           <Wave
@@ -179,43 +179,43 @@ const AudioTrack: FC<WNNodeProps<AudioTrackData>> = ({ data, id }) => {
             }
           />
         )}
-          <SampleInterval>
-            <SampleInputWrapper>
-              <SampleInputTitle>start</SampleInputTitle>
-              <NumberInput
-                min={0}
-                max={end}
-                step={0.01}
-                value={start}
-                onChange={(value) => {
-                  updateNodeValues({ start: value, end, src });
-                }}
-              />
-            </SampleInputWrapper>
-            <SampleInputWrapper>
-              <SampleInputTitle>end</SampleInputTitle>
-              <NumberInput
-                min={start}
-                max={duration}
-                step={0.01}
-                value={end}
-                onChange={(value) => {
-                  updateNodeValues({ start, end: value, src });
-                }}
-              />
-            </SampleInputWrapper>
-          </SampleInterval>
-          <Section>
-            {isActive ? (
-              <Button style={{ width: "100%" }} onClick={stop}>
-                stop
-              </Button>
-            ) : (
-              <Button style={{ width: "100%" }} onClick={play}>
-                play
-              </Button>
-            )}
-          </Section>
+        <SampleInterval>
+          <SampleInputWrapper>
+            <SampleInputTitle>start</SampleInputTitle>
+            <NumberInput
+              min={0}
+              max={end}
+              step={0.01}
+              value={start}
+              onChange={(value) => {
+                updateNodeValues({ start: value, end, src });
+              }}
+            />
+          </SampleInputWrapper>
+          <SampleInputWrapper>
+            <SampleInputTitle>end</SampleInputTitle>
+            <NumberInput
+              min={start}
+              max={duration}
+              step={0.01}
+              value={end}
+              onChange={(value) => {
+                updateNodeValues({ start, end: value, src });
+              }}
+            />
+          </SampleInputWrapper>
+        </SampleInterval>
+        <Section>
+          {isActive ? (
+            <Button style={{ width: "100%" }} onClick={stop}>
+              stop
+            </Button>
+          ) : (
+            <Button style={{ width: "100%" }} onClick={play}>
+              play
+            </Button>
+          )}
+        </Section>
       </div>
     </WNNode>
   );

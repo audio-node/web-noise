@@ -69,6 +69,7 @@ const UploadPatch: FC<UploadPatchProps> = ({ isOpen, closeMenu }) => {
   const theme = useTheme();
 
   const setGraph = useStore(({ setGraph }) => setGraph);
+  const setEditorState = useStore(store => store.setEditorState);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -78,8 +79,8 @@ const UploadPatch: FC<UploadPatchProps> = ({ isOpen, closeMenu }) => {
       file
         .text()
         .then(JSON.parse)
-        .then((graphState) => {
-          setGraph(graphState);
+        .then((editorState) => {
+          setEditorState(editorState);
           closeMenu();
         })
         .catch(console.error);

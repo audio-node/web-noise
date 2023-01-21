@@ -18,7 +18,8 @@ export interface WNAudioNode extends Record<string, any> {
 }
 
 export type CreateWNAudioNode = (
-  audioContext: AudioContext
+  audioContext: AudioContext,
+  data?: WNNodeData
 ) => WNAudioNode | Promise<WNAudioNode>;
 
 export interface WNNodeData {
@@ -30,11 +31,21 @@ export interface WNNodeData {
 export type WNNode = Node<WNNodeData>;
 export type WNEdge = Edge;
 
+export interface WNContainerNode {
+  patch: { nodes: WNNode[]; edges: WNEdge[] };
+}
+
+export type CreateWNContainerNode = (
+  node?: WNNode
+) => WNContainerNode | Promise<WNContainerNode>;
+
 export interface PluginComponent {
   id?: string;
   type: string;
   node: any;
   audioNode: CreateWNAudioNode | false;
+  containerNode?: CreateWNContainerNode;
+  controlPanelNode?: any;
   description?: string;
   name?: string;
 }

@@ -8,7 +8,8 @@ interface ReverbData {
   values?: ReverbValues;
 }
 
-const Reverb: FC<WNNodeProps<ReverbData>> = ({ id, data }) => {
+const Reverb: FC<WNNodeProps<ReverbData>> = (props) => {
+  const { id, data } = props;
   const { node } = useAudioNode<TReverb>(id) || {};
   const { updateNodeValues } =  useNode(id);
   const store = useCreateStore();
@@ -31,7 +32,7 @@ const Reverb: FC<WNNodeProps<ReverbData>> = ({ id, data }) => {
   useEffect(() => updateNodeValues(values), [values]);
 
   return (
-    <WNNode id={id}>
+    <WNNode {...props}>
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
     </WNNode>
   );

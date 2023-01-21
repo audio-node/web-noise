@@ -31,6 +31,10 @@ const nodes = [
   },
 ];
 
+describe("createNode", () => {
+  it.todo("handles container node");
+});
+
 describe("removeEdges", () => {
   const { getState, setState } = create(stateCreator);
   const unregisterAudioConnectionsSpy = jest.fn();
@@ -81,4 +85,12 @@ describe("removeNodes", () => {
     expect(getState().nodes).toEqual(nodes.slice(1));
     expect(getState().edges).toEqual(edges.slice(0, 3));
   });
+
+  it.todo("removes children nodes");
+});
+
+describe("setPlugins", () => {
+  it.todo("sets node types");
+  it.todo("sets audio node types");
+  it.todo("sets container node types");
 });

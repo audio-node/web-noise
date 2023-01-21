@@ -5,7 +5,8 @@ import { useAudioNode, useTheme, WNNode, WNNodeProps } from "@web-noise/core";
 import useAnimationFrame from "use-animation-frame";
 import { Analyser } from "../audioNodes/analyser";
 
-const Spectroscope: FC<WNNodeProps> = ({ data, id }) => {
+const Spectroscope: FC<WNNodeProps> = (props) => {
+  const { data, id } = props;
   const { node } = useAudioNode<Analyser>(id) || {};
   const { analyser } = node || {};
 
@@ -57,7 +58,7 @@ const Spectroscope: FC<WNNodeProps> = ({ data, id }) => {
 
   useAnimationFrame(tick);
   return (
-    <WNNode id={id}>
+    <WNNode {...props}>
       <LevaPanel store={store} fill flat hideCopyButton titleBar={false} />
       <canvas ref={canvasRef} style={{ display: "block", width: "100%" }} />
     </WNNode>
