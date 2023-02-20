@@ -1,3 +1,4 @@
+import type { FC } from "react";
 import { Node, Edge } from "react-flow-renderer";
 
 export type AudioNodeChannel = [AudioNode, number];
@@ -17,15 +18,18 @@ export interface WNAudioNode extends Record<string, any> {
   setValues?: (values?: any) => void;
 }
 
-export type CreateWNAudioNode = (
+export type CreateWNAudioNode<T = WNAudioNode> = (
   audioContext: AudioContext,
   data?: WNNodeData
-) => WNAudioNode | Promise<WNAudioNode>;
+) => T | Promise<T>;
 
-export interface WNNodeData {
+export interface WNNodeData<
+  Values = Record<string, unknown>,
+  Config = Record<string, unknown>
+> {
   label: string;
-  values?: Record<string, unknown>;
-  config?: Record<string, unknown>;
+  values?: Values;
+  config?: Config;
 }
 
 export type WNNode = Node<WNNodeData>;
@@ -38,6 +42,14 @@ export interface WNContainerNode {
 export type CreateWNContainerNode = (
   node?: WNNode
 ) => WNContainerNode | Promise<WNContainerNode>;
+
+export interface ControlPanelNodeProps {
+  node: WNNode;
+  audioNode?: WNAudioNode | null;
+  updateNodeValues?: (param: any) => void;
+}
+
+export type ControlPanelNode = FC<ControlPanelNodeProps>;
 
 export interface PluginComponent {
   id?: string;

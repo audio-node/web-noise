@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import {
-  NumberInput,
   theme,
   useAudioNode,
   useNode,
@@ -14,6 +13,7 @@ import {
   AudioTrack as TAudioTrack,
   AudioTrackValues,
 } from "../../audioNodes/audioTrack";
+import NumberInput from "../../components/NumberInput";
 import Button from "./Button";
 import Input from "./Input";
 import Wave from "./Wave";

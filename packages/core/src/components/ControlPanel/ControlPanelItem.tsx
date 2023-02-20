@@ -1,12 +1,15 @@
 import type { FC } from "react";
+import { useMemo } from "react";
 
 import styled from "@emotion/styled";
 import "react-grid-layout/css/styles.css";
 import { MdOutlineDragIndicator as DragIcon } from "react-icons/md";
+import useAudioNode from "../../hooks/useAudioNode";
+import useNode from "../../hooks/useNode";
 import useTheme from "../../hooks/useTheme";
 import useStore from "../../store";
 import { Theme } from "../../theme";
-import { WNNode } from "../../types";
+import { WNNode, ControlPanelNodeProps } from "../../types";
 import {
   IconsBarLeft,
   IconWrapper,
@@ -20,25 +23,31 @@ const ControlPanelNodeWrapper = styled.div<{ theme: Theme }>`
   grid-template-rows: auto 1fr;
 `;
 
-const PanelNode: FC<{ node: WNNode }> = ({ node }) => {
-  const controlPanelNodeTypes = useStore(
-    (store) => store.controlPanelNodeTypes
-  );
+const PanelNode: FC<ControlPanelNodeProps> = (props) => {
+  const { node } = props;
 
-  const { type } = node;
-  if (!type) {
+  const getControlPanelNode = useStore((store) => store.getControlPanelNode);
+
+  const ControlPanelNode = useMemo(() => getControlPanelNode(node), [node]);
+
+  if (!ControlPanelNode) {
     return null;
   }
-  if (!controlPanelNodeTypes[type]) {
-    console.error(`could not find node for type ${type}`);
-    return null;
-  }
-  const ControlPanelNode = controlPanelNodeTypes[type];
-  return <ControlPanelNode {...node} />;
+
+  return <ControlPanelNode {...props} />;
 };
 
-const ControlPanelItem: FC<{ node: WNNode }> = ({ node }) => {
+interface ControlPanelItemProps {
+  node: WNNode;
+}
+
+const ControlPanelItem: FC<ControlPanelItemProps> = (props) => {
+  const { node } = props;
   const theme = useTheme();
+
+  const { id } = node;
+  const { node: audioNode } = useAudioNode(id) || {};
+  const { updateNodeValues } = useNode(id);
 
   return (
     <ControlPanelNodeWrapper theme={theme}>
@@ -51,7 +60,11 @@ const ControlPanelItem: FC<{ node: WNNode }> = ({ node }) => {
 
         <PanelTitle>{node.data.label}</PanelTitle>
       </TitleBarWrapper>
-      <PanelNode node={node} />
+      <PanelNode
+        node={node}
+        audioNode={audioNode}
+        updateNodeValues={updateNodeValues}
+      />
     </ControlPanelNodeWrapper>
   );
 };

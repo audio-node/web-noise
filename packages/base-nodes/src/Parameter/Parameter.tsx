@@ -1,13 +1,14 @@
 import styled from "@emotion/styled";
 import {
-  NumberInput,
   Theme,
   useAudioNode,
   useNode,
   useTheme,
   WNNodeProps,
+  WNAudioNode,
 } from "@web-noise/core";
 import { FC, useEffect } from "react";
+import NumberInput from "../components/NumberInput";
 import { ConstantSource, ConstantSourceValues } from "./constantSource";
 
 const InputWrapper = styled.div<{ theme: Theme }>`
@@ -54,24 +55,23 @@ const InputWrapper = styled.div<{ theme: Theme }>`
   }
 `;
 
-
-interface ParameterData {
+export interface ParameterData {
   values?: ConstantSourceValues;
 }
 
-export type ParameterProps = WNNodeProps<ParameterData>;
+export interface ParameterProps  {
+  node: WNNodeProps<ParameterData>;
+  audioNode?: WNAudioNode | null;
+  updateNodeValues?: (param: any) => void;
+}
 
-const Parameter: FC<ParameterProps> = (props) => {
-  const { id, data } = props;
+const Parameter: FC<ParameterProps> = ({ node: props, audioNode, updateNodeValues }) => {
+  const { data } = props;
   const theme = useTheme();
 
-  const { node } = useAudioNode<ConstantSource>(id) || {};
+  const { value = 0 } = data.values || {};
 
-  const { updateNodeValues } = useNode(id);
-
-  const { value = 1 } = data.values || {};
-
-  useEffect(() => node?.setValues(data.values), [node, data]);
+  useEffect(() => audioNode?.setValues?.(data.values), [audioNode, data]);
 
   return (
     <InputWrapper theme={theme}>
@@ -79,7 +79,7 @@ const Parameter: FC<ParameterProps> = (props) => {
         step={1}
         value={value}
         onChange={(value) => {
-          updateNodeValues({ value });
+          updateNodeValues?.({ value });
         }}
       />
     </InputWrapper>

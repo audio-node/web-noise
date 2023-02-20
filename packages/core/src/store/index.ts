@@ -5,7 +5,7 @@ import {
   NodeTypes,
 } from "react-flow-renderer";
 import create, { StateCreator } from "zustand";
-import { WNEdge, WNNode, PluginConfig, CreateWNContainerNode } from "../types";
+import { WNEdge, WNNode, PluginConfig, CreateWNContainerNode, ControlPanelNode } from "../types";
 import audioNodesStateCreator, {
   AudioNodesState,
   AudioNodeState,
@@ -18,7 +18,7 @@ export type { AudioNodeState, AudioNodeTypes, NodesState, GraphState };
 export interface ContainerNodeTypes
   extends Record<string, CreateWNContainerNode> {}
 
-export interface ControlPanelNodeTypes extends Record<string, any> {}
+export interface ControlPanelNodeTypes extends Record<string, ControlPanelNode> {}
 
 interface EditorConfig {
   showMinimap: boolean;
@@ -67,6 +67,7 @@ type StoreState = AudioNodesState &
     setControlPanelNodeTypes: (
       controlPanelNodeTypes: ControlPanelNodeTypes
     ) => void;
+    getControlPanelNode: (node: WNNode) => ControlPanelNode | null;
     controlPanel: ControlPanelState;
     setControlPanelNodes: (nodes: ControlPanelNodes) => void;
     showControlPanel: () => void;
@@ -121,15 +122,18 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
         throw new Error(`node type is not defined for node: ${node.id}`);
       }
 
-      await registerAudioNode(node);
-      addNode(node);
-
       const createContainerNode = containerNodeTypes[node.type];
       if (createContainerNode) {
-        const containerNode = await createContainerNode(node);
-        const { patch } = containerNode;
-        await createNodes(patch.nodes);
-        createEdges(patch.edges);
+        const patch = await createContainerNode(node);
+        const extendedNode = {
+          ...node,
+          data: { ...node.data, values: { patch } },
+        };
+        await registerAudioNode(extendedNode);
+        addNode(node);
+      } else {
+        await registerAudioNode(node);
+        addNode(node);
       }
     },
     removeNode: (node) => get().removeNodes([node]),
@@ -239,6 +243,18 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
     controlPanelNodeTypes: {},
     setControlPanelNodeTypes: (controlPanelNodeTypes) =>
       set({ controlPanelNodeTypes }),
+    getControlPanelNode: (node) => {
+      const { controlPanelNodeTypes } = get();
+      const { type } = node;
+      if (!type) {
+        return null;
+      }
+      if (!controlPanelNodeTypes[type]) {
+        console.error(`could not find node for type ${type}`);
+        return null;
+      }
+      return controlPanelNodeTypes[type];
+    },
     controlPanel: {
       show: true,
       nodes: [],

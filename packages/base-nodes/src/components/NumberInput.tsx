@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { FC, useEffect, useMemo, useRef, useState } from "react";
+import { FC, useEffect, useRef } from "react";
 import { useThrottledCallback } from "use-debounce";
 
 const SampleInput = styled.span`
@@ -81,12 +81,22 @@ const NumberInput: FC<NumberInputProps> = ({
     if (!inputRef.current) {
       return;
     }
+
     inputRef.current.addEventListener("wheel", (event) => {
       event.preventDefault();
       event.stopPropagation();
       startChangedHandler(event);
     });
-  }, [inputRef.current]);
+
+    inputRef.current.onchange = (event) => {
+      const value = (event.target as HTMLInputElement).value;
+      onChange(+value);
+    };
+  }, [inputRef.current, onChange]);
+
+  useEffect(() => {
+    inputRef.current && (inputRef.current.value = value.toString());
+  }, [inputRef.current, value]);
 
   return (
     <SampleInput>
@@ -96,10 +106,6 @@ const NumberInput: FC<NumberInputProps> = ({
         step={step}
         min={min}
         max={max}
-        value={value}
-        onChange={(e) => {
-          onChange(+e.target.value);
-        }}
       />
     </SampleInput>
   );

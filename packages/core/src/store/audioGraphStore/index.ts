@@ -98,7 +98,8 @@ const audioNodesStateCreator: StateCreator<AudioNodesState> = (set, get) => ({
       },
     }));
     try {
-      const audioNode = await createNode(audioContext, data);
+      //@ts-ignore
+      const audioNode = await createNode(audioContext, data, get().audioNodeTypes);
       set(({ audioNodes }) => ({
         audioNodes: {
           ...audioNodes,
