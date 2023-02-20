@@ -1,7 +1,8 @@
 import { PluginConfig } from "@web-noise/core";
 import { WNNode } from "@web-noise/core";
 
-import ParameterPlugin from "./src/Parameter";
+import ParameterComponent from "./src/Parameter";
+import Patch from "./src/Patch";
 import Gain from "./src/nodes/Gain";
 import { gain } from "./src/audioNodes/gain";
 import Destination from "./src/nodes/Destination";
@@ -61,7 +62,7 @@ export const webAudioNodes: PluginConfig = {
     },
     { type: "gain", node: Gain, audioNode: gain },
     { type: "filter", node: Filter, audioNode: filter },
-    ParameterPlugin,
+    ParameterComponent,
     { type: "oscillator", node: Oscillator, audioNode: oscillator },
     { type: "visualiser", node: Visualiser, audioNode: analyser },
     {
@@ -133,6 +134,7 @@ export const baseNodes: PluginConfig = {
       node: DataRecorder,
       audioNode: dataRecorder,
     },
+    Patch,
     { type: "inlet", node: Inlet, audioNode: passThrough },
     { type: "outlet", node: Outlet, audioNode: passThrough },
   ],

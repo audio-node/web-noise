@@ -17,25 +17,39 @@ import {
   Port,
 } from "./src/components/Node";
 import Modal from "./src/components/Modal";
-import NumberInput from "./src/components/NumberInput";
 import useAudioNode from "./src/hooks/useAudioNode";
 import useNode from "./src/hooks/useNode";
 import useTheme from "./src/hooks/useTheme";
 import useStore, { EditorState } from "./src/store";
+import createPatch from "./src/store/audioGraphStore/createPatch";
 import theme from "./src/theme";
-import type { WNAudioNode, CreateWNAudioNode, WNNodeData } from "./src/types";
+import type {
+  WNAudioNode,
+  CreateWNAudioNode,
+  ControlPanelNodeProps,
+  ControlPanelNode,
+  WNNodeData,
+  WNNode as TWNNode,
+  InputPort,
+  OutputPort,
+} from "./src/types";
 import type { Theme } from "./src/theme";
 
 export type {
   WNAudioNode,
+  TWNNode,
   WNNodeProps,
   WNNodeData,
   CreateWNAudioNode,
+  ControlPanelNodeProps,
+  ControlPanelNode,
   Theme,
   Elements,
   PluginConfig,
   PluginComponent,
   EditorState,
+  InputPort,
+  OutputPort,
 };
 
 export {
@@ -52,9 +66,9 @@ export {
   InputPorts,
   InputHandle,
   Port,
-  NumberInput,
   useAudioNode,
   useNode,
   useTheme,
   useStore,
+  createPatch,
 };
