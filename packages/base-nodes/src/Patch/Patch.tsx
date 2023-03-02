@@ -1,43 +1,20 @@
 import styled from "@emotion/styled";
 import {
   Theme,
+  useAudioNode,
   useStore,
   useTheme,
-  useAudioNode,
+  useNode,
   WNNode,
   TWNNode,
-  WNAudioNode,
   WNNodeProps,
-  ControlPanelNodeProps,
-  EditorState,
 } from "@web-noise/core";
 import { FC, useCallback, useMemo } from "react";
 import GridLayout from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import Input from "../components/Input";
+import PanelNode from "./PanelNode";
 import { Patch as TPatch } from "./patchAudioNode";
-
-const PanelNode: FC<ControlPanelNodeProps> = (props) => {
-  const { node, audioNode } = props;
-
-  const getControlPanelNode = useStore((store) => store.getControlPanelNode);
-
-  const ControlPanelNode = useMemo(() => getControlPanelNode(node), [node]);
-
-  if (!ControlPanelNode) {
-    return null;
-  }
-
-  return (
-    <ControlPanelNode {...props} updateNodeValues={audioNode?.setValues} />
-  );
-};
-
-interface PatchData {
-  values?: {
-    url?: string;
-  };
-}
 
 const NodeWrapper = styled.div<{ theme: Theme }>`
   background-color: ${({ theme }) => theme.colors.elevation2};
@@ -58,6 +35,13 @@ const PanelNodeTitle = styled.div<{ theme: Theme }>`
   margin-top: 0.3rem;
 `;
 
+interface PatchData {
+  values?: {
+    url?: string;
+    nodes?: Record<TWNNode["id"], unknown>;
+  };
+}
+
 const Patch: FC<WNNodeProps<PatchData>> = (props) => {
   const { id, data } = props;
   const { url } = data.values || {};
@@ -66,6 +50,8 @@ const Patch: FC<WNNodeProps<PatchData>> = (props) => {
   const createNode = useStore((store) => store.createNode);
   const removeNode = useStore((store) => store.removeNode);
   const getNode = useStore((store) => store.getNode);
+
+  const { updateNodeValues } = useNode(id);
 
   const { node: audioNode } = useAudioNode<TPatch>(id) || {};
   const patchData = audioNode?.patch;
@@ -124,12 +110,32 @@ const Patch: FC<WNNodeProps<PatchData>> = (props) => {
           isDraggable={false}
         >
           {filteredNodes.map((node) => {
+            const nodeValues = data.values?.nodes?.[node.id];
+            const extendedNode = {
+              ...node,
+              data: {
+                ...node.data,
+                values: {
+                  ...node.data.values,
+                  ...(nodeValues || {}),
+                },
+              },
+            };
             return (
               <PanelNodeWrapper theme={theme} key={node.id}>
                 <PanelNodeTitle theme={theme}>{node.data.label}</PanelNodeTitle>
                 <PanelNode
-                  node={node}
+                  node={extendedNode}
                   audioNode={audioNode?.audioNodes.get(node.id)?.node}
+                  updateNodeValues={(values) => {
+                    updateNodeValues({
+                      ...data.values,
+                      nodes: {
+                        ...data.values?.nodes,
+                        [node.id]: values,
+                      },
+                    });
+                  }}
                 />
               </PanelNodeWrapper>
             );

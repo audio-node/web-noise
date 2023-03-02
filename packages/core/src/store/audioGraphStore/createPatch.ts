@@ -1,12 +1,12 @@
 import type {
-  CreateWNAudioNode,
   WNAudioNode,
   WNNode,
   WNEdge,
   InputPort,
   OutputPort,
+  AudioNodeTypes,
 } from "../../types";
-import { AudioNodeTypes, AudioNodeState } from ".";
+import { AudioNodeState } from ".";
 
 type AudioNodes = Map<string, AudioNodeState<WNAudioNode>>;
 type RegisterAudioNode = (node: WNNode) => Promise<void>;
@@ -64,7 +64,6 @@ const createPatch = (
       node: null,
     });
     try {
-      //@ts-ignore
       const audioNode = await createNode(audioContext, data, audioNodeTypes);
       audioNodes.set(id, {
         loading: false,

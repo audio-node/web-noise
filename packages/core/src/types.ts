@@ -18,9 +18,13 @@ export interface WNAudioNode extends Record<string, any> {
   setValues?: (values?: any) => void;
 }
 
+export interface AudioNodeTypes
+  extends Record<string, CreateWNAudioNode | false> {}
+
 export type CreateWNAudioNode<T = WNAudioNode> = (
   audioContext: AudioContext,
-  data?: WNNodeData
+  data?: WNNodeData,
+  audioNodeTypes?: AudioNodeTypes
 ) => T | Promise<T>;
 
 export interface WNNodeData<
