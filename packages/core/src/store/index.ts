@@ -5,11 +5,17 @@ import {
   NodeTypes,
 } from "react-flow-renderer";
 import create, { StateCreator } from "zustand";
-import { WNEdge, WNNode, PluginConfig, CreateWNContainerNode, ControlPanelNode } from "../types";
+import {
+  WNEdge,
+  WNNode,
+  PluginConfig,
+  CreateWNContainerNode,
+  ControlPanelNode,
+  AudioNodeTypes,
+} from "../types";
 import audioNodesStateCreator, {
   AudioNodesState,
   AudioNodeState,
-  AudioNodeTypes,
 } from "./audioGraphStore";
 import nodesStateCreator, { NodesState, GraphState } from "./nodesStore";
 
@@ -18,7 +24,8 @@ export type { AudioNodeState, AudioNodeTypes, NodesState, GraphState };
 export interface ContainerNodeTypes
   extends Record<string, CreateWNContainerNode> {}
 
-export interface ControlPanelNodeTypes extends Record<string, ControlPanelNode> {}
+export interface ControlPanelNodeTypes
+  extends Record<string, ControlPanelNode> {}
 
 interface EditorConfig {
   showMinimap: boolean;

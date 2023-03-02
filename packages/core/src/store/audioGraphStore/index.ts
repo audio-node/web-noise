@@ -1,15 +1,12 @@
 import type { StateCreator } from "zustand";
 import type {
-  CreateWNAudioNode,
   WNAudioNode,
   WNNode,
   WNEdge,
   InputPort,
   OutputPort,
+  AudioNodeTypes,
 } from "../../types";
-
-export interface AudioNodeTypes
-  extends Record<string, CreateWNAudioNode | false> {}
 
 interface AudioNodeLoadingState {
   loading: true;
