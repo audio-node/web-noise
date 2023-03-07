@@ -104,7 +104,7 @@ const Patch: FC<WNNodeProps<PatchData>> = (props) => {
           className="layout"
           cols={1}
           rowHeight={1}
-          width={172}
+          width={153}
           margin={[0, 0]}
           isResizable={false}
           isDraggable={false}
