@@ -55,28 +55,42 @@ const InputWrapper = styled.div<{ theme: Theme }>`
   }
 `;
 
-export interface ParameterData {
-  values?: ConstantSourceValues;
+interface ParameterConfig {
+  min?: number;
+  max?: number;
+  step?: number;
 }
 
-export interface ParameterProps  {
+export interface ParameterData {
+  values?: ConstantSourceValues;
+  config?: ParameterConfig;
+}
+
+export interface ParameterProps {
   node: WNNodeProps<ParameterData>;
   audioNode?: WNAudioNode | null;
   updateNodeValues?: (param: any) => void;
 }
 
-const Parameter: FC<ParameterProps> = ({ node: props, audioNode, updateNodeValues }) => {
+const Parameter: FC<ParameterProps> = ({
+  node: props,
+  audioNode,
+  updateNodeValues,
+}) => {
   const { data } = props;
   const theme = useTheme();
 
   const { value = 0 } = data.values || {};
+  const { min = -Infinity, max = Infinity, step = 1 } = data.config || {};
 
   useEffect(() => audioNode?.setValues?.(data.values), [audioNode, data]);
 
   return (
     <InputWrapper theme={theme}>
       <NumberInput
-        step={1}
+        min={min}
+        max={max}
+        step={step}
         value={value}
         onChange={(value) => {
           updateNodeValues?.({ value });

@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import React, { FC, useState, useCallback, useRef } from "react";
 import { Handle, HandleProps, NodeProps, Position } from "react-flow-renderer";
+import { MdSettings as SettingsIcon } from "react-icons/md";
 import { DRAG_HANDLE_CLASS } from "../../constants";
 import useAudioNode from "../../hooks/useAudioNode";
 import useTheme from "../../hooks/useTheme";
@@ -21,6 +22,16 @@ const NodeErrorWrapper = styled(NodeWrapper)`
   padding: 1rem 2rem;
 `;
 
+const SettingsIconWrapper = styled(SettingsIcon)`
+  font-size: 1.2rem;
+  opacity: 0.4;
+  width: 1rem;
+  &:hover {
+    opacity: 1;
+    cursor: pointer;
+  }
+`;
+
 const Section = styled.div`
   position: relative;
   font-family: var(--leva-fonts-mono);
@@ -36,7 +47,8 @@ export const TitleBarInner = styled(Section)`
   justify-content: center;
   flex: 1 1 0%;
   color: var(--leva-colors-highlight1);
-  padding: 0 1rem;
+  padding: 0 0.4rem;
+  gap: 0.3rem;
 `;
 
 export const TitleBarLabel = styled.input`
@@ -127,13 +139,13 @@ export const TitleBar: FC<{ className?: string }> = ({
 );
 
 interface WNNodeParameters extends NodeProps {
-  hidePorts?: boolean;
+  config?: React.ReactElement;
 }
 
 export const WNNode: FC<WNNodeParameters> = ({
   id,
   children,
-  hidePorts,
+  config,
   ...rest
 }) => {
   const theme = useTheme();
@@ -146,6 +158,7 @@ export const WNNode: FC<WNNodeParameters> = ({
   const labelInputRef = useRef<HTMLInputElement>(null);
 
   const [labelEditMode, setLabelEditMode] = useState(false);
+  const [configMode, setShowConfigMode] = useState(false);
 
   const editNodeLabel = useCallback(
     (event: React.MouseEvent) => {
@@ -232,32 +245,35 @@ export const WNNode: FC<WNNodeParameters> = ({
             }
           }}
         />
+        {config && (
+          <SettingsIconWrapper
+            onClickCapture={() => setShowConfigMode((isShown) => !isShown)}
+          />
+        )}
       </TitleBar>
-      {!hidePorts && (
-        <PortsPanel theme={theme}>
-          <InputPorts>
-            {inputs
-              ? Object.keys(inputs).map((key, index) => (
-                  <Port key={index}>
-                    <InputHandle id={key} />
-                    <span>{key}</span>
-                  </Port>
-                ))
-              : null}
-          </InputPorts>
-          <OutputPorts>
-            {outputs
-              ? Object.keys(outputs).map((key, index) => (
-                  <Port key={index}>
-                    <OutputHandle id={key} />
-                    <span>{key}</span>
-                  </Port>
-                ))
-              : null}
-          </OutputPorts>
-        </PortsPanel>
-      )}
-      {children}
+      <PortsPanel theme={theme}>
+        <InputPorts>
+          {inputs
+            ? Object.keys(inputs).map((key, index) => (
+                <Port key={index}>
+                  <InputHandle id={key} />
+                  <span>{key}</span>
+                </Port>
+              ))
+            : null}
+        </InputPorts>
+        <OutputPorts>
+          {outputs
+            ? Object.keys(outputs).map((key, index) => (
+                <Port key={index}>
+                  <OutputHandle id={key} />
+                  <span>{key}</span>
+                </Port>
+              ))
+            : null}
+        </OutputPorts>
+      </PortsPanel>
+      {config && configMode ? config : children}
     </NodeWrapper>
   );
 };
