@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { Node, Edge } from "react-flow-renderer";
+import { Node, Edge } from "reactflow";
 
 export type AudioNodeChannel = [AudioNode, number];
 

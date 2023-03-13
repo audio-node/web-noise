@@ -3,7 +3,7 @@ import {
   addEdge,
   getConnectedEdges,
   NodeTypes,
-} from "react-flow-renderer";
+} from "reactflow";
 import create, { StateCreator } from "zustand";
 import {
   WNEdge,

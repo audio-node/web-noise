@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import React, { FC, useState, useCallback, useRef } from "react";
-import { Handle, HandleProps, NodeProps, Position } from "react-flow-renderer";
+import { Handle, HandleProps, NodeProps, Position } from "reactflow";
 import { MdSettings as SettingsIcon } from "react-icons/md";
 import { DRAG_HANDLE_CLASS } from "../../constants";
 import useAudioNode from "../../hooks/useAudioNode";

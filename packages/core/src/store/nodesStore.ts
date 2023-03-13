@@ -6,7 +6,7 @@ import {
   OnEdgesChange,
   OnNodesChange,
   NodeTypes,
-} from "react-flow-renderer";
+} from "reactflow";
 import { StateCreator } from "zustand";
 import { DRAG_HANDLE_SELECTOR } from "../constants";
 import type { WNNode, WNNodeData, WNEdge } from "../types";

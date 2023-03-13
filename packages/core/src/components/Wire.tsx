@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { EdgeProps, getBezierPath } from "react-flow-renderer";
+import { EdgeProps, getBezierPath } from "reactflow";
 
 const Wire = ({
   id,
@@ -28,7 +28,7 @@ const Wire = ({
     };
   }, [source, sourceHandleId, target, targetHandleId]);
 
-  const edgePath = getBezierPath({
+  const [edgePath] = getBezierPath({
     targetX,
     targetY,
     targetPosition,

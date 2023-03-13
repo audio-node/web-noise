@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { FC, MouseEvent, useCallback, useState } from "react";
-import { Position, useReactFlow } from "react-flow-renderer";
+import { Position, useReactFlow } from "reactflow";
 import useTheme from "../hooks/useTheme";
 import useStore from "../store";
 import { Theme } from "../theme";

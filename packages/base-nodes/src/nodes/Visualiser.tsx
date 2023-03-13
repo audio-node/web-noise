@@ -1,6 +1,6 @@
 import { LevaPanel, useControls, useCreateStore } from "leva";
 import { FC, useCallback, useMemo, useRef } from "react";
-import { NodeProps } from "react-flow-renderer";
+import { NodeProps } from "reactflow";
 import { useAudioNode, useTheme, WNNode, WNNodeProps } from "@web-noise/core";
 //@ts-ignore
 import useAnimationFrame from "use-animation-frame";

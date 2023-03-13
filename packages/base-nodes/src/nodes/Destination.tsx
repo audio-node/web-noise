@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { TitleBar, useAudioNode } from "@web-noise/core";
 import { FC } from "react";
-import { Handle, NodeProps, Position } from "react-flow-renderer";
+import { Handle, NodeProps, Position } from "reactflow";
 import { MdSpeaker } from "react-icons/md";
 import { Destination as TDestination } from "../audioNodes/destination";
 

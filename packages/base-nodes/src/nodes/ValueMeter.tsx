@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { TitleBar, useAudioNode } from "@web-noise/core";
 import { FC, useEffect, useRef } from "react";
-import { Handle, NodeProps, Position } from "react-flow-renderer";
+import { Handle, NodeProps, Position } from "reactflow";
 import {
   AnalyserEventHandler,
   Oscolloscope as Oscilloscope,

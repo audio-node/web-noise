@@ -9,7 +9,7 @@ import {
   InputHandle,
 } from "@web-noise/core";
 import { FC, useEffect, useRef } from "react";
-import { Handle, NodeProps, Position } from "react-flow-renderer";
+import { Handle, NodeProps, Position } from "reactflow";
 import { PassThrough } from "../audioNodes/passThrough";
 import { TbArrowBarToRight as Icon } from "react-icons/tb";
 

@@ -1,5 +1,6 @@
 import { ThemeProvider } from "@emotion/react";
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import 'reactflow/dist/style.css';
 import ReactFlow, {
   Background,
   BackgroundVariant,
@@ -8,7 +9,7 @@ import ReactFlow, {
   MiniMap,
   Node,
   ReactFlowProvider,
-} from "react-flow-renderer";
+} from "reactflow";
 import useStore, { EditorState } from "../store";
 import "../styles";
 import defaultTheme, { Theme } from "../theme";
@@ -120,7 +121,7 @@ export const Editor = ({
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
           snapGrid={snapGrid}
-          defaultZoom={1.5}
+          defaultViewport={{ x: 0, y: 0, zoom: 1.5 }}
           defaultEdgeOptions={{ type: "wire" }}
           snapToGrid
           fitView

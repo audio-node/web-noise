@@ -1,6 +1,6 @@
 import type { FC } from "react";
 
-import { ControlButton } from "react-flow-renderer";
+import { ControlButton } from "reactflow";
 import { FaMap, FaRegMap } from "react-icons/fa";
 import useStore from "../store";
 
