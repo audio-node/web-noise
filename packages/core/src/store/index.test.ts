@@ -2,88 +2,174 @@
 
 import create from "zustand/vanilla";
 import { stateCreator } from ".";
+import patch, { setAudioNodeTypes } from "../patch";
 
-const edges = [
-  {
-    id: "edge1",
-  },
-  {
-    id: "edge2",
-  },
-  {
-    id: "edge3",
-  },
-  {
-    id: "edge4",
-    source: "node-1",
-    sourceHandle: "out",
-    target: "node-2",
-    targetHandle: "in",
-  },
-];
-
-const nodes = [
-  {
-    id: "node-1",
-  },
-  {
-    id: "node-2",
-  },
-];
+const syncNode: CreateWNAudioNode = (audioContext) => {
+  const constantSourceNode = audioContext.createConstantSource();
+  const gain = audioContext.createGain();
+  return {
+    inputs: {
+      audioNodePort: {
+        port: constantSourceNode.offset,
+      },
+    },
+    outputs: {
+      audioNodePort: {
+        port: gain,
+      },
+    },
+    destroy: jest.fn(),
+  };
+};
+setAudioNodeTypes({ syncNode });
 
 describe("createNode", () => {
+  const { getState, setState } = create(stateCreator);
+  const { createNode } = getState();
+
+  it("calls patch.registerAudioNode on createNode", async () => {
+    jest.spyOn(patch, "registerAudioNode");
+    const id = "sync-node";
+    const node = {
+      id,
+      type: "syncNode",
+    };
+    createNode(node);
+    expect(patch.registerAudioNode).toHaveBeenCalledWith(node);
+  });
+
   it.todo("handles container node");
 });
 
-describe("removeEdges", () => {
+describe("removeNode", () => {
   const { getState, setState } = create(stateCreator);
-  const unregisterAudioConnectionsSpy = jest.fn();
+  const { createNode, removeNode } = getState();
+  const id = "sync-node-new";
+  const nodeMock = {
+    id,
+    type: "syncNode",
+  };
 
-  setState({
-    edges,
-    unregisterAudioConnections: unregisterAudioConnectionsSpy,
+  it("calls patch.unregisterAudioNodes on removeNode", async () => {
+    jest.spyOn(patch, "unregisterAudioNodes");
+    await createNode(nodeMock);
+    removeNode(nodeMock);
+    expect(patch.unregisterAudioNodes).toHaveBeenCalledWith([nodeMock]);
   });
+});
+
+describe("createEdges", () => {
+  const { getState } = create(stateCreator);
+  const { createNodes, createEdges } = getState();
+  const nodesMock = [
+    {
+      id: "node1",
+      type: "syncNode",
+    },
+    {
+      id: "node2",
+      type: "syncNode",
+    },
+  ];
+  createNodes(nodesMock);
+
+  const edge = {
+    id: "node1-node-port-2-node2-node-port",
+    source: "node1",
+    sourceHandle: "audioNodePort",
+    target: "node2",
+    targetHandle: "audioNodePort",
+  };
+
+  it("calls patch.unregisterAudioConnections on removeEdges", async () => {
+    jest.spyOn(patch, "registerAudioConnections");
+    createEdges([edge]);
+    expect(patch.registerAudioConnections).toHaveBeenCalledWith([edge]);
+  });
+});
+
+describe("removeEdges", () => {
+  const { getState } = create(stateCreator);
   const { removeEdges } = getState();
+  const edge = {
+    id: "node1-node-port-2-node2-node-port",
+    source: "node1",
+    sourceHandle: "audioNodePort",
+    target: "node2",
+    targetHandle: "audioNodePort",
+  };
 
-  const edgesToRemove = edges.slice(0, 2);
-  removeEdges(edgesToRemove);
-
-  it("calls unregisterAudioConnections with removed edges", () => {
-    expect(unregisterAudioConnectionsSpy).toHaveBeenCalledWith(edgesToRemove);
-  });
-
-  it("removes edges from the store", () => {
-    expect(getState().edges).toEqual(edges.slice(2));
+  it("calls patch.unregisterAudioConnections on removeEdges", async () => {
+    jest.spyOn(patch, "unregisterAudioConnections");
+    removeEdges([edge]);
+    expect(patch.unregisterAudioConnections).toHaveBeenCalledWith([edge]);
   });
 });
 
 describe("removeNodes", () => {
-  const { getState, setState } = create(stateCreator);
-  const unregisterAudioConnectionsSpy = jest.fn();
-  const unregisterAudioNodesSpy = jest.fn();
+  jest.spyOn(patch, "unregisterAudioConnections");
+  jest.spyOn(patch, "unregisterAudioNodes");
 
-  setState({
-    edges,
-    nodes,
-    unregisterAudioConnections: unregisterAudioConnectionsSpy,
-    unregisterAudioNodes: unregisterAudioNodesSpy,
-  });
-  const { removeNodes } = getState();
+  const node1 = {
+    id: "node-1",
+    type: "syncNode",
+  };
 
-  const nodesToRemove = nodes.slice(0, 1);
-  removeNodes(nodesToRemove);
+  const node2 = {
+    id: "node-2",
+    type: "syncNode",
+  };
 
-  it("calls unregisterAudioNodes with removed edges", () => {
-    expect(unregisterAudioNodesSpy).toHaveBeenCalledWith(nodesToRemove);
-  });
+  const node3 = {
+    id: "node-3",
+    type: "syncNode",
+  };
 
-  it("calls unregisterAudioConnections with removed edges", () => {
-    expect(unregisterAudioConnectionsSpy).toHaveBeenCalledWith(edges.slice(3));
+  const node4 = {
+    id: "node-4",
+    type: "syncNode",
+  };
+
+  const edge1 = {
+    id: "edge3",
+    source: "node-3",
+    sourceHandle: "audioNodePort",
+    target: "node-4",
+    targetHandle: "audioNodePort",
+  };
+
+  const edge2 = {
+    id: "edge4",
+    source: "node-1",
+    sourceHandle: "audioNodePort",
+    target: "node-2",
+    targetHandle: "audioNodePort",
+  };
+
+  const nodesToRemove = [node2];
+  const { getState } = create(stateCreator);
+
+  const { createNodes, createEdges, removeNodes } = getState();
+
+  beforeAll(async () => {
+    await createNodes([node1, node2, node3, node4]);
+    createEdges([edge1, edge2]);
+    removeNodes(nodesToRemove);
   });
 
   it("removes nodes and connected edges from the store", () => {
-    expect(getState().nodes).toEqual(nodes.slice(1));
-    expect(getState().edges).toEqual(edges.slice(0, 3));
+    expect(getState().nodes).toEqual([node1, node3, node4]);
+    expect(getState().edges).toEqual([edge1]);
+  });
+
+  it("calls patch.unregisterAudioNodes with removed edges", () => {
+    expect(patch.unregisterAudioNodes).toHaveBeenCalledWith(nodesToRemove);
+  });
+
+  it("calls unregisterAudioConnections with removed edges", () => {
+    expect(patch.unregisterAudioConnections).toHaveBeenCalledWith(
+      [edge2]
+    );
   });
 
   it.todo("removes children nodes");

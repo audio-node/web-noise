@@ -23,8 +23,7 @@ export interface AudioNodeTypes
 
 export type CreateWNAudioNode<T = WNAudioNode> = (
   audioContext: AudioContext,
-  data?: WNNodeData,
-  audioNodeTypes?: AudioNodeTypes
+  data?: WNNodeData
 ) => T | Promise<T>;
 
 export interface WNNodeData<

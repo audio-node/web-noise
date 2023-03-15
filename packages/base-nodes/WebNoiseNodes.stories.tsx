@@ -3,6 +3,11 @@ import { FC } from "react";
 import { baseNodes, webAudioNodes } from ".";
 import { Elements } from "./src/nodes/Editor";
 
+const CONTROL_PANEL_DEFAULTS = {
+  nodes: [],
+  show: true,
+};
+
 const Editor: FC<{ elements: Elements }> = (props) => (
   <DefaultEditor plugins={[baseNodes, webAudioNodes]} {...props} />
 );
@@ -99,6 +104,7 @@ export const Oscilloscope = () => (
           targetHandle: "input1",
         },
       ],
+      controlPanel: CONTROL_PANEL_DEFAULTS,
     }}
   />
 );
@@ -135,6 +141,7 @@ export const WhiteNoise = () => (
           targetHandle: "in",
         },
       ],
+      controlPanel: CONTROL_PANEL_DEFAULTS,
     }}
   />
 );
@@ -217,6 +224,7 @@ export const Reverb = () => (
           targetHandle: "input2",
         },
       ],
+      controlPanel: CONTROL_PANEL_DEFAULTS,
     }}
   />
 );
@@ -253,6 +261,7 @@ export const Spectroscope = () => (
           targetHandle: "in",
         },
       ],
+      controlPanel: CONTROL_PANEL_DEFAULTS,
     }}
   />
 );
@@ -327,6 +336,7 @@ export const RandomSequencer = () => (
           targetHandle: "input2",
         },
       ],
+      controlPanel: CONTROL_PANEL_DEFAULTS,
     }}
   />
 );
@@ -401,6 +411,7 @@ export const RandomSequencerWorklet = () => (
           targetHandle: "input2",
         },
       ],
+      controlPanel: CONTROL_PANEL_DEFAULTS,
     }}
   />
 );
@@ -474,6 +485,7 @@ output.forEach((outputChannel, channelIndex) => {
           targetHandle: "input2",
         },
       ],
+      controlPanel: CONTROL_PANEL_DEFAULTS,
     }}
   />
 );
@@ -556,6 +568,7 @@ export const MathNode = () => (
           targetHandle: "input2",
         },
       ],
+      controlPanel: CONTROL_PANEL_DEFAULTS,
     }}
   />
 );
@@ -636,6 +649,7 @@ export const ADSR = () => (
           targetHandle: "input2",
         },
       ],
+      controlPanel: CONTROL_PANEL_DEFAULTS,
     }}
   />
 );
@@ -734,6 +748,7 @@ export const Keyboard = () => (
           sourceHandle: "out",
         },
       ],
+      controlPanel: CONTROL_PANEL_DEFAULTS,
     }}
   />
 );
@@ -832,6 +847,7 @@ export const Sequencer = () => (
           sourceHandle: "out",
         },
       ],
+      controlPanel: CONTROL_PANEL_DEFAULTS,
     }}
   />
 );
@@ -920,6 +936,7 @@ export const Clock = () => (
           sourceHandle: "out",
         },
       ],
+      controlPanel: CONTROL_PANEL_DEFAULTS,
     }}
   />
 );
@@ -990,6 +1007,7 @@ export const AudioTrack = () => (
           targetHandle: "input1",
         },
       ],
+      controlPanel: CONTROL_PANEL_DEFAULTS,
     }}
   />
 );
@@ -1026,6 +1044,7 @@ export const ValueMeter = () => (
           targetHandle: "input1",
         },
       ],
+      controlPanel: CONTROL_PANEL_DEFAULTS,
     }}
   />
 );
@@ -1042,6 +1061,7 @@ export const Sticker = () => (
         },
       ],
       edges: [],
+      controlPanel: CONTROL_PANEL_DEFAULTS,
     }}
   />
 );
@@ -1121,6 +1141,7 @@ export const Midi = () => (
           id: "reactflow__edge-midi-inputvelocity-value-meter-3input1",
         },
       ],
+      controlPanel: CONTROL_PANEL_DEFAULTS,
     }}
   />
 );

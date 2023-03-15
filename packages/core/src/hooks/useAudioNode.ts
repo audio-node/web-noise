@@ -1,11 +1,8 @@
-import useStore, { AudioNodeState } from "../store";
+import patch, { AudioNodeState } from "../patch";
 import type { WNAudioNode } from "../types";
 
 const useAudioNode = <T = WNAudioNode>(id: string) => {
-  const node = useStore(
-    ({ audioNodes }) => audioNodes[id]
-  ) as AudioNodeState<T> | undefined;
-  return node;
+  return patch.audioNodes.get(id) as AudioNodeState<T> | undefined;
 };
 
 export default useAudioNode;

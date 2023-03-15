@@ -6,7 +6,7 @@ import { FaVolumeOff as IconUnmute } from "react-icons/fa";
 import useTheme from "../hooks/useTheme";
 import { Theme } from "../theme";
 
-import useStore from "../store";
+import patch from '../patch'
 
 const Layout = styled.div<{ theme: Theme }>`
   position: fixed;
@@ -43,7 +43,7 @@ const Icon = styled(IconUnmute)`
 
 const ResumeContext: FC = () => {
   const theme = useTheme();
-  const audioContext = useStore(({ audioContext }) => audioContext);
+  const audioContext = patch.audioContext;
   const [isContextResumed, setIsContextResumed] = useState<boolean>(
     audioContext.state === "running"
   );

@@ -2,6 +2,11 @@ import { Editor as DefaultEditor } from "@web-noise/core";
 import { FC } from "react";
 import { baseNodes, webAudioNodes } from "@web-noise/base-nodes";
 
+const CONTROL_PANEL_DEFAULTS = {
+  nodes: [],
+  show: true,
+};
+
 const Editor: typeof DefaultEditor = (props) => (
   <DefaultEditor plugins={[baseNodes, webAudioNodes]} {...props} />
 );
@@ -52,6 +57,7 @@ export const Oscillator = () => (
           targetHandle: "in",
         },
       ],
+      controlPanel: CONTROL_PANEL_DEFAULTS,
     }}
   />
 );
@@ -109,6 +115,7 @@ export const ConstantSource = () => (
           targetHandle: "in",
         },
       ],
+      controlPanel: CONTROL_PANEL_DEFAULTS,
     }}
   />
 );
@@ -165,6 +172,7 @@ export const Gain = () => (
           sourceHandle: "out",
         },
       ],
+      controlPanel: CONTROL_PANEL_DEFAULTS,
     }}
   />
 );
@@ -220,6 +228,7 @@ export const Filter = () => (
           targetHandle: "in",
         },
       ],
+      controlPanel: CONTROL_PANEL_DEFAULTS,
     }}
   />
 );

@@ -1,25 +1,17 @@
-import {
-  OnConnect,
-  addEdge,
-  getConnectedEdges,
-  NodeTypes,
-} from "reactflow";
+import { addEdge, getConnectedEdges, NodeTypes, OnConnect } from "reactflow";
 import create, { StateCreator } from "zustand";
+import patch, { setAudioNodeTypes } from "../patch";
 import {
+  AudioNodeTypes,
+  ControlPanelNode,
+  CreateWNContainerNode,
+  PluginConfig,
   WNEdge,
   WNNode,
-  PluginConfig,
-  CreateWNContainerNode,
-  ControlPanelNode,
-  AudioNodeTypes,
 } from "../types";
-import audioNodesStateCreator, {
-  AudioNodesState,
-  AudioNodeState,
-} from "./audioGraphStore";
-import nodesStateCreator, { NodesState, GraphState } from "./nodesStore";
+import nodesStateCreator, { GraphState, NodesState } from "./nodesStore";
 
-export type { AudioNodeState, AudioNodeTypes, NodesState, GraphState };
+export type { AudioNodeTypes, NodesState, GraphState };
 
 export interface ContainerNodeTypes
   extends Record<string, CreateWNContainerNode> {}
@@ -48,61 +40,57 @@ export interface EditorState extends GraphState {
   controlPanel: ControlPanelState;
 }
 
-type StoreState = AudioNodesState &
-  NodesState & {
-    setGraph: (elements: { nodes: WNNode[]; edges: WNEdge[] }) => Promise<void>;
-    clearGraph: () => void;
-    createNode: (node: WNNode) => Promise<void>;
-    createNodes: (node: WNNode[]) => Promise<void>;
-    removeNode: (node: WNNode) => void;
-    removeNodes: (nodes: WNNode[]) => void;
-    removeEdges: (nodes: WNEdge[]) => void;
-    onConnect: OnConnect;
-    createEdges: (edge: WNEdge[]) => void;
-    onEdgesDelete: (edges: WNEdge[]) => void;
-    onNodesDelete: (nodes: WNNode[]) => Promise<void>;
-    plugins: Array<PluginConfig>;
-    setPlugins: (plugins: Array<PluginConfig>) => void;
-    config: EditorConfig;
-    setConfig: (config: Partial<EditorConfig>) => void;
-    containerNodeTypes: ContainerNodeTypes;
-    setContainerNodeTypes: (containerNodeTypes: ContainerNodeTypes) => void;
-    getEditorState: () => EditorState;
-    setEditorState: (state: EditorState) => Promise<void>;
-    /* move to control panel store */
-    controlPanelNodeTypes: ControlPanelNodeTypes;
-    setControlPanelNodeTypes: (
-      controlPanelNodeTypes: ControlPanelNodeTypes
-    ) => void;
-    getControlPanelNode: (node: WNNode) => ControlPanelNode | null;
-    controlPanel: ControlPanelState;
-    setControlPanelNodes: (nodes: ControlPanelNodes) => void;
-    showControlPanel: () => void;
-    hideControlPanel: () => void;
-    addNodeToControlPanel: (node: WNNode) => void;
-    removeNodeFromControlPanel: (node: WNNode) => void;
-    removeNodesFromControlPanel: (nodes: WNNode[]) => void;
-    /* / move to control panel store */
-  };
+type StoreState = NodesState & {
+  setGraph: (elements: { nodes: WNNode[]; edges: WNEdge[] }) => Promise<void>;
+  clearGraph: () => void;
+  createNode: (node: WNNode) => Promise<void>;
+  createNodes: (node: WNNode[]) => Promise<void>;
+  removeNode: (node: WNNode) => void;
+  removeNodes: (nodes: WNNode[]) => void;
+  removeEdges: (nodes: WNEdge[]) => void;
+  onConnect: OnConnect;
+  createEdges: (edge: WNEdge[]) => void;
+  onEdgesDelete: (edges: WNEdge[]) => void;
+  onNodesDelete: (nodes: WNNode[]) => Promise<void>;
+  plugins: Array<PluginConfig>;
+  setPlugins: (plugins: Array<PluginConfig>) => void;
+  config: EditorConfig;
+  setConfig: (config: Partial<EditorConfig>) => void;
+  containerNodeTypes: ContainerNodeTypes;
+  setContainerNodeTypes: (containerNodeTypes: ContainerNodeTypes) => void;
+  getEditorState: () => EditorState;
+  setEditorState: (state: EditorState) => Promise<void>;
+  /* move to control panel store */
+  controlPanelNodeTypes: ControlPanelNodeTypes;
+  setControlPanelNodeTypes: (
+    controlPanelNodeTypes: ControlPanelNodeTypes
+  ) => void;
+  getControlPanelNode: (node: WNNode) => ControlPanelNode | null;
+  controlPanel: ControlPanelState;
+  setControlPanelNodes: (nodes: ControlPanelNodes) => void;
+  showControlPanel: () => void;
+  hideControlPanel: () => void;
+  addNodeToControlPanel: (node: WNNode) => void;
+  removeNodeFromControlPanel: (node: WNNode) => void;
+  removeNodesFromControlPanel: (nodes: WNNode[]) => void;
+  /* / move to control panel store */
+};
 
 export const stateCreator: StateCreator<StoreState> = (...args) => {
   const [set, get] = args;
   return {
-    ...audioNodesStateCreator(...args),
     ...nodesStateCreator(...args),
     setGraph: async ({ nodes, edges }) => {
       const {
         createNodes,
         createEdges,
         setNodesAndEdges,
-        unregisterAudioConnections,
-        unregisterAudioNodes,
         nodes: activeNodes,
         edges: activeEdges,
       } = get();
       setNodesAndEdges({ nodes: [], edges: [] });
-      unregisterAudioConnections(activeEdges);
-      unregisterAudioNodes(activeNodes);
+      patch.unregisterAudioConnections(activeEdges);
+      patch.unregisterAudioNodes(activeNodes);
 
       await createNodes(nodes);
       createEdges(edges);
@@ -116,14 +104,7 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
       await Promise.all(nodes.map((node) => createNode(node)));
     },
     createNode: async (node) => {
-      const {
-        addNode,
-        registerAudioNode,
-        registerAudioNodes,
-        createNodes,
-        createEdges,
-        containerNodeTypes,
-      } = get();
+      const { addNode, containerNodeTypes } = get();
 
       if (typeof node.type === "undefined") {
         throw new Error(`node type is not defined for node: ${node.id}`);
@@ -131,15 +112,15 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
 
       const createContainerNode = containerNodeTypes[node.type];
       if (createContainerNode) {
-        const patch = await createContainerNode(node);
+        const patchData = await createContainerNode(node);
         const extendedNode = {
           ...node,
-          data: { ...node.data, values: { patch } },
+          data: { ...node.data, values: { patch: patchData } },
         };
-        await registerAudioNode(extendedNode);
+        await patch.registerAudioNode(extendedNode);
         addNode(node);
       } else {
-        await registerAudioNode(node);
+        await patch.registerAudioNode(node);
         addNode(node);
       }
     },
@@ -175,25 +156,23 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
       });
     },
     createEdges: (newEdges) => {
-      const { registerAudioConnections, edges, setEdges } = get();
+      const { edges, setEdges } = get();
       if (newEdges.length > edges.length) {
-        registerAudioConnections(newEdges.slice(edges.length));
+        patch.registerAudioConnections(newEdges.slice(edges.length));
       }
       setEdges(newEdges);
     },
     onConnect: async (connection) => {
-      const { registerAudioConnections, edges, setEdges, createEdges } = get();
+      const { edges, createEdges } = get();
       const newEdges = addEdge(connection, edges);
       createEdges(newEdges);
     },
     onEdgesDelete: (edges) => {
-      const { unregisterAudioConnections } = get();
-      unregisterAudioConnections(edges);
+      patch.unregisterAudioConnections(edges);
     },
     onNodesDelete: async (nodes) => {
       get().removeNodesFromControlPanel(nodes);
-      const { unregisterAudioNodes } = get();
-      unregisterAudioNodes(nodes);
+      patch.unregisterAudioNodes(nodes);
     },
     plugins: [],
     setPlugins: async (plugins) => {
@@ -215,12 +194,8 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
           }
         }
       }
-      const {
-        setAudioNodeTypes,
-        setNodeTypes,
-        setContainerNodeTypes,
-        setControlPanelNodeTypes,
-      } = get();
+      const { setNodeTypes, setContainerNodeTypes, setControlPanelNodeTypes } =
+        get();
       set({ plugins });
       setAudioNodeTypes(audioNodeTypes);
       setNodeTypes(nodeTypes);
