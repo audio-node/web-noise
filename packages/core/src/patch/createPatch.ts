@@ -1,22 +1,50 @@
 import type {
-  WNAudioNode,
-  WNNode,
-  WNEdge,
   InputPort,
   OutputPort,
-  AudioNodeTypes,
-} from "../../types";
-import { AudioNodeState } from ".";
+  WNAudioNode,
+  WNEdge,
+  WNNode,
+} from "../types";
+
+import { getAudioNodeType } from "./audioNodeTypes";
+
+interface AudioNodeLoadingState {
+  loading: true;
+  error: null;
+  node: null;
+}
+
+interface AudioNodeErrorState {
+  loading: false;
+  error: Error;
+  node: null;
+}
+
+interface AudioNodeLoadedState<T> {
+  loading: false;
+  error: null;
+  node: T;
+}
+
+export type AudioNodeState<T> =
+  | AudioNodeLoadingState
+  | AudioNodeErrorState
+  | AudioNodeLoadedState<T>;
 
 type AudioNodes = Map<string, AudioNodeState<WNAudioNode>>;
 type RegisterAudioNode = (node: WNNode) => Promise<void>;
-type RegisterAudioNodes = (nodes: WNNode[]) => Promise<void>[];
+type RegisterAudioNodes = (nodes: WNNode[]) => Promise<void[]>;
+type UnregisterAudioNode = (node: WNNode) => void;
+type UnregisterAudioNodes = (node: WNNode[]) => void;
 
 type AudioConnections = Map<string, { output: OutputPort; input: InputPort }>;
 type RegisterAudioConnection = (edge: WNEdge) => void;
 type RegisterAudioConnections = (edge: WNEdge[]) => void[];
+type UnregisterAudioConnection = (edge: WNEdge) => void;
+type UnregisterAudioConnections = (edge: WNEdge[]) => void[];
 
-interface Patch {
+export interface Patch {
+  audioContext: AudioContext;
   audioNodes: AudioNodes;
   registerAudioNode: RegisterAudioNode;
   registerAudioNodes: RegisterAudioNodes;
@@ -29,10 +57,9 @@ interface Patch {
   unregisterAudioConnections: (edges: WNEdge[]) => void;
 }
 
-const createPatch = (
-  audioContext: AudioContext,
-  audioNodeTypes: AudioNodeTypes
-): Patch => {
+type CreatePatch = (audioContext?: AudioContext) => Patch;
+
+const createPatch: CreatePatch = (audioContext = new AudioContext()) => {
   const audioNodes: AudioNodes = new Map();
   const audioConnections: AudioConnections = new Map();
 
@@ -46,7 +73,7 @@ const createPatch = (
       });
       return;
     }
-    const createNode = audioNodeTypes[type];
+    const createNode = getAudioNodeType(type);
     if (createNode === false) {
       return;
     }
@@ -64,7 +91,7 @@ const createPatch = (
       node: null,
     });
     try {
-      const audioNode = await createNode(audioContext, data, audioNodeTypes);
+      const audioNode = await createNode(audioContext, data);
       audioNodes.set(id, {
         loading: false,
         error: null,
@@ -79,8 +106,47 @@ const createPatch = (
     }
   };
 
-  const registerAudioNodes: RegisterAudioNodes = (nodes) => {
-    return nodes.map(registerAudioNode);
+  const registerAudioNodes: RegisterAudioNodes = async (nodes) => {
+    return Promise.all(nodes.map(registerAudioNode));
+  };
+
+  const unregisterAudioNode: UnregisterAudioNode = (props) => {
+    const { id, data } = props;
+    const audioNode = audioNodes.get(id);
+    if (!audioNode) {
+      console.error(`Audio node #${id} does not exist`);
+      return;
+    }
+    const { loading, error, node } = audioNode;
+
+    if (loading) {
+      console.error(`Audio node #${id} is yet not loaded`);
+      return;
+    }
+
+    if (error) {
+      console.error(`Audio node #${id} is in error state: ${error.toString()}`);
+      return;
+    }
+
+    node.destroy && node.destroy();
+
+    //disconnect all ports
+    Object.values(node.inputs || {}).forEach(
+      ({ port }) =>
+        port instanceof AudioNode && port.disconnect && port.disconnect()
+    );
+
+    Object.values(node.outputs || {}).forEach(
+      ({ port }) =>
+        port instanceof AudioNode && port.disconnect && port.disconnect()
+    );
+
+    audioNodes.delete(id);
+  };
+
+  const unregisterAudioNodes: UnregisterAudioNodes = (nodes) => {
+    return nodes.map(unregisterAudioNode);
   };
 
   const registerAudioConnection: RegisterAudioConnection = (edge) => {
@@ -154,17 +220,65 @@ const createPatch = (
     return edges.map(registerAudioConnection);
   };
 
+  const unregisterAudioConnection: UnregisterAudioConnection = (edge) => {
+    const { id, data } = edge;
+    const audioConnection = audioConnections.get(id);
+    if (!audioConnection) {
+      console.error(`can't find connection with id: ${id}`);
+      return;
+    }
+
+    const {
+      input: { port: inputNodePort },
+      output: { port: outputNodePort },
+    } = audioConnection;
+    const isInputNode = inputNodePort instanceof AudioNode;
+    const isInputParam = inputNodePort instanceof AudioParam;
+    const isInputArray = inputNodePort instanceof Array;
+    const isInputSimple = isInputNode || isInputParam;
+
+    const isOutputNode = outputNodePort instanceof AudioNode;
+    const isOutputArray = outputNodePort instanceof Array;
+
+    if (isOutputNode && isInputSimple) {
+      //@ts-ignore inputNode can actually be AudioParam
+      outputNodePort.disconnect(inputNodePort);
+    } else if (isOutputNode && isInputArray) {
+      outputNodePort.disconnect(inputNodePort[0], 0, inputNodePort[1]);
+    } else if (isOutputArray && isInputSimple) {
+      //@ts-ignore inputNode can actually be AudioParam
+      outputNodePort[0].disconnect(inputNodePort, outputNodePort[1]);
+    } else if (isOutputArray && isInputArray) {
+      outputNodePort[0].disconnect(
+        inputNodePort[0],
+        outputNodePort[1],
+        inputNodePort[1]
+      );
+    } else {
+      console.log(outputNodePort, inputNodePort);
+      throw new Error(
+        `output port can not be only AudioNode or AudioNodeChannel`
+      );
+    }
+    audioConnections.delete(id);
+  };
+
+  const unregisterAudioConnections: UnregisterAudioConnections = (edges) => {
+    return edges.map(unregisterAudioConnection);
+  };
+
   return {
+    audioContext,
     audioNodes,
     registerAudioNode,
     registerAudioNodes,
-    unregisterAudioNode: (node) => {},
-    unregisterAudioNodes: (nodes) => {},
+    unregisterAudioNode,
+    unregisterAudioNodes,
     audioConnections,
     registerAudioConnection,
     registerAudioConnections,
-    unregisterAudioConnection: (edge) => {},
-    unregisterAudioConnections: (edges) => {},
+    unregisterAudioConnection,
+    unregisterAudioConnections,
   };
 };
 

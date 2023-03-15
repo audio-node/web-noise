@@ -1,12 +1,7 @@
 // @ts-nocheck
 
-import create from "zustand/vanilla";
-import storeCreator from ".";
 import { CreateWNAudioNode } from "../../types";
-
-
-const { getState, setState } = create(storeCreator);
-const { setAudioNodeTypes, registerAudioNodes } = getState();
+import { createPatch, setAudioNodeTypes } from ".";
 
 const baseNodeConfig = {
   data: { label: "test node" },
@@ -42,9 +37,20 @@ const testNode: CreateWNAudioNode = (audioContext) => {
   };
 };
 
-setAudioNodeTypes({
+const audioNodeTypes = {
   testNode,
-});
+};
+
+setAudioNodeTypes(audioNodeTypes);
+
+const patch = createPatch(new AudioContext());
+const {
+  audioNodes,
+  registerAudioNodes,
+  audioConnections,
+  registerAudioConnection,
+  unregisterAudioConnection,
+} = patch;
 
 describe("audio connection registration", () => {
   beforeAll(async () => {
@@ -61,7 +67,6 @@ describe("audio connection registration", () => {
       },
     ]);
   });
-  const { registerAudioConnection, unregisterAudioConnection } = getState();
 
   describe("node to node", () => {
     const connectionId = "node1-node-port-2-node2-node-port";
@@ -74,20 +79,17 @@ describe("audio connection registration", () => {
     };
 
     it("registers", async () => {
-      const { audioNodes } = getState();
-
-      const { node: node1 } = audioNodes.node1;
+      const { node: node1 } = audioNodes.get("node1");
       const outputPort = node1.outputs.audioNodePort.port;
       jest.spyOn(outputPort, "connect");
 
-      const { node: node2 } = audioNodes.node2;
+      const { node: node2 } = audioNodes.get("node2");
       const inputPort = node2.inputs.audioNodePort.port;
 
       registerAudioConnection(edge);
       expect(outputPort.connect).toHaveBeenCalledWith(inputPort);
 
-      const newState = getState();
-      expect(newState.audioConnections[connectionId]).toEqual({
+      expect(audioConnections.get(connectionId)).toEqual({
         input: {
           port: inputPort,
         },
@@ -96,20 +98,17 @@ describe("audio connection registration", () => {
     });
 
     it("unregisters", async () => {
-      const { audioNodes } = getState();
-
-      const { node: node1 } = audioNodes.node1;
+      const { node: node1 } = audioNodes.get("node1");
       const outputPort = node1.outputs.audioNodePort.port;
       jest.spyOn(outputPort, "disconnect");
 
-      const { node: node2 } = audioNodes.node2;
+      const { node: node2 } = audioNodes.get("node2");
       const inputPort = node2.inputs.audioNodePort.port;
 
       unregisterAudioConnection(edge);
       expect(outputPort.disconnect).toHaveBeenCalledWith(inputPort);
 
-      const newState = getState();
-      expect(newState.audioConnections[connectionId]).toBeUndefined();
+      expect(audioConnections.get(connectionId)).toBeUndefined();
     });
   });
 
@@ -124,20 +123,17 @@ describe("audio connection registration", () => {
     };
 
     it("registers", async () => {
-      const { audioNodes } = getState();
-
-      const { node: node1 } = audioNodes.node1;
+      const { node: node1 } = audioNodes.get("node1");
       const outputPort = node1.outputs.audioNodePort.port;
       jest.spyOn(outputPort, "connect");
 
-      const { node: node2 } = audioNodes.node2;
+      const { node: node2 } = audioNodes.get("node2");
       const inputPort = node2.inputs.audioParamPort.port;
 
       registerAudioConnection(edge);
       expect(outputPort.connect).toHaveBeenCalledWith(inputPort);
 
-      const newState = getState();
-      expect(newState.audioConnections[connectionId]).toEqual({
+      expect(audioConnections.get(connectionId)).toEqual({
         input: {
           port: inputPort,
         },
@@ -146,20 +142,17 @@ describe("audio connection registration", () => {
     });
 
     it("unregisters", async () => {
-      const { audioNodes } = getState();
-
-      const { node: node1 } = audioNodes.node1;
+      const { node: node1 } = audioNodes.get("node1");
       const outputPort = node1.outputs.audioNodePort.port;
       jest.spyOn(outputPort, "disconnect");
 
-      const { node: node2 } = audioNodes.node2;
+      const { node: node2 } = audioNodes.get("node2");
       const inputPort = node2.inputs.audioParamPort.port;
 
       unregisterAudioConnection(edge);
       expect(outputPort.disconnect).toHaveBeenCalledWith(inputPort);
 
-      const newState = getState();
-      expect(newState.audioConnections[connectionId]).toBeUndefined();
+      expect(audioConnections.get(connectionId)).toBeUndefined();
     });
   });
 
@@ -174,20 +167,17 @@ describe("audio connection registration", () => {
     };
 
     it("registers", async () => {
-      const { audioNodes } = getState();
-
-      const { node: node1 } = audioNodes.node1;
+      const { node: node1 } = audioNodes.get("node1");
       const outputPort = node1.outputs.audioNodePort.port;
       jest.spyOn(outputPort, "connect");
 
-      const { node: node2 } = audioNodes.node2;
+      const { node: node2 } = audioNodes.get("node2");
       const inputPort = node2.inputs.audioNodeChannelPort.port;
 
       registerAudioConnection(edge);
       expect(outputPort.connect).toHaveBeenCalledWith(inputPort[0], 0, 3);
 
-      const newState = getState();
-      expect(newState.audioConnections[connectionId]).toEqual({
+      expect(audioConnections.get(connectionId)).toEqual({
         input: {
           port: inputPort,
         },
@@ -196,20 +186,17 @@ describe("audio connection registration", () => {
     });
 
     it("unregisters", async () => {
-      const { audioNodes } = getState();
-
-      const { node: node1 } = audioNodes.node1;
+      const { node: node1 } = audioNodes.get("node1");
       const outputPort = node1.outputs.audioNodePort.port;
       jest.spyOn(outputPort, "disconnect");
 
-      const { node: node2 } = audioNodes.node2;
+      const { node: node2 } = audioNodes.get("node2");
       const inputPort = node2.inputs.audioNodeChannelPort.port;
 
       unregisterAudioConnection(edge);
       expect(outputPort.disconnect).toHaveBeenCalledWith(inputPort[0], 0, 3);
 
-      const newState = getState();
-      expect(newState.audioConnections[connectionId]).toBeUndefined();
+      expect(audioConnections.get(connectionId)).toBeUndefined();
     });
   });
 
@@ -224,20 +211,17 @@ describe("audio connection registration", () => {
     };
 
     it("registers", async () => {
-      const { audioNodes } = getState();
-
-      const { node: node1 } = audioNodes.node1;
+      const { node: node1 } = audioNodes.get("node1");
       const outputPort = node1.outputs.audioNodeChannelPort.port;
       jest.spyOn(outputPort[0], "connect");
 
-      const { node: node2 } = audioNodes.node2;
+      const { node: node2 } = audioNodes.get("node2");
       const inputPort = node2.inputs.audioNodePort.port;
 
       registerAudioConnection(edge);
       expect(outputPort[0].connect).toHaveBeenCalledWith(inputPort, 3);
 
-      const newState = getState();
-      expect(newState.audioConnections[connectionId]).toEqual({
+      expect(audioConnections.get(connectionId)).toEqual({
         input: {
           port: inputPort,
         },
@@ -246,20 +230,17 @@ describe("audio connection registration", () => {
     });
 
     it("unregisters", async () => {
-      const { audioNodes } = getState();
-
-      const { node: node1 } = audioNodes.node1;
+      const { node: node1 } = audioNodes.get("node1");
       const outputPort = node1.outputs.audioNodeChannelPort.port;
       jest.spyOn(outputPort[0], "disconnect");
 
-      const { node: node2 } = audioNodes.node2;
+      const { node: node2 } = audioNodes.get("node2");
       const inputPort = node2.inputs.audioNodePort.port;
 
       unregisterAudioConnection(edge);
       expect(outputPort[0].disconnect).toHaveBeenCalledWith(inputPort, 3);
 
-      const newState = getState();
-      expect(newState.audioConnections[connectionId]).toBeUndefined();
+      expect(audioConnections.get(connectionId)).toBeUndefined();
     });
   });
 
@@ -274,20 +255,17 @@ describe("audio connection registration", () => {
     };
 
     it("registers", async () => {
-      const { audioNodes } = getState();
-
-      const { node: node1 } = audioNodes.node1;
+      const { node: node1 } = audioNodes.get("node1");
       const outputPort = node1.outputs.audioNodeChannelPort.port;
       jest.spyOn(outputPort[0], "connect");
 
-      const { node: node2 } = audioNodes.node2;
+      const { node: node2 } = audioNodes.get("node2");
       const inputPort = node2.inputs.audioParamPort.port;
 
       registerAudioConnection(edge);
       expect(outputPort[0].connect).toHaveBeenCalledWith(inputPort, 3);
 
-      const newState = getState();
-      expect(newState.audioConnections[connectionId]).toEqual({
+      expect(audioConnections.get(connectionId)).toEqual({
         input: {
           port: inputPort,
         },
@@ -296,20 +274,17 @@ describe("audio connection registration", () => {
     });
 
     it("unregisters", async () => {
-      const { audioNodes } = getState();
-
-      const { node: node1 } = audioNodes.node1;
+      const { node: node1 } = audioNodes.get("node1");
       const outputPort = node1.outputs.audioNodeChannelPort.port;
       jest.spyOn(outputPort[0], "disconnect");
 
-      const { node: node2 } = audioNodes.node2;
+      const { node: node2 } = audioNodes.get("node2");
       const inputPort = node2.inputs.audioParamPort.port;
 
       unregisterAudioConnection(edge);
       expect(outputPort[0].disconnect).toHaveBeenCalledWith(inputPort, 3);
 
-      const newState = getState();
-      expect(newState.audioConnections[connectionId]).toBeUndefined();
+      expect(audioConnections.get(connectionId)).toBeUndefined();
     });
   });
 
@@ -324,20 +299,17 @@ describe("audio connection registration", () => {
     };
 
     it("registers", async () => {
-      const { audioNodes } = getState();
-
-      const { node: node1 } = audioNodes.node1;
+      const { node: node1 } = audioNodes.get("node1");
       const outputPort = node1.outputs.audioNodeChannelPort.port;
       jest.spyOn(outputPort[0], "connect");
 
-      const { node: node2 } = audioNodes.node2;
+      const { node: node2 } = audioNodes.get("node2");
       const inputPort = node2.inputs.audioNodeChannelPort.port;
 
       registerAudioConnection(edge);
       expect(outputPort[0].connect).toHaveBeenCalledWith(inputPort[0], 3, 3);
 
-      const newState = getState();
-      expect(newState.audioConnections[connectionId]).toEqual({
+      expect(audioConnections.get(connectionId)).toEqual({
         input: {
           port: inputPort,
         },
@@ -346,20 +318,17 @@ describe("audio connection registration", () => {
     });
 
     it("unregisters", async () => {
-      const { audioNodes } = getState();
-
-      const { node: node1 } = audioNodes.node1;
+      const { node: node1 } = audioNodes.get("node1");
       const outputPort = node1.outputs.audioNodeChannelPort.port;
       jest.spyOn(outputPort[0], "disconnect");
 
-      const { node: node2 } = audioNodes.node2;
+      const { node: node2 } = audioNodes.get("node2");
       const inputPort = node2.inputs.audioNodeChannelPort.port;
 
       unregisterAudioConnection(edge);
       expect(outputPort[0].disconnect).toHaveBeenCalledWith(inputPort[0], 3, 3);
 
-      const newState = getState();
-      expect(newState.audioConnections[connectionId]).toBeUndefined();
+      expect(audioConnections.get(connectionId)).toBeUndefined();
     });
   });
 });

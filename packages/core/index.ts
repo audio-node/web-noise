@@ -21,7 +21,7 @@ import useAudioNode from "./src/hooks/useAudioNode";
 import useNode from "./src/hooks/useNode";
 import useTheme from "./src/hooks/useTheme";
 import useStore, { EditorState } from "./src/store";
-import createPatch from "./src/store/audioGraphStore/createPatch";
+import { createPatch } from "./src/patch";
 import theme from "./src/theme";
 import type {
   WNAudioNode,

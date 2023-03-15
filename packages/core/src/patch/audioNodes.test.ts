@@ -1,12 +1,7 @@
 // @ts-nocheck
 
-import create from "zustand/vanilla";
-import storeCreator from ".";
 import { CreateWNAudioNode } from "../../types";
-
-
-const { getState, setState } = create(storeCreator);
-const { setAudioNodeTypes } = getState();
+import { createPatch, setAudioNodeTypes } from ".";
 
 const baseNodeConfig = {
   data: { label: "test node" },
@@ -27,29 +22,32 @@ const advancedNode: CreateWNAudioNode = (audioContext) => {
   return {
     inputs: {
       audioNodeTypePort: {
-        port: constantSourceNode
+        port: constantSourceNode,
       },
     },
     outputs: {
       audioNodeTypePort: {
-        port: gain
+        port: gain,
       },
     },
     destroy: jest.fn(),
   };
 };
 
-setAudioNodeTypes({
+const audioNodeTypes = {
   syncNode,
   asyncNode,
   errorNode,
   asyncErrorNode,
-  advancedNode
-});
+  advancedNode,
+};
+
+setAudioNodeTypes(audioNodeTypes);
+
+const patch = createPatch(new AudioContext());
+const { audioNodes, registerAudioNode, registerAudioNodes } = patch;
 
 describe("audio nodes registration", () => {
-  const { registerAudioNode, registerAudioNodes } = getState();
-
   it("registers sync node", async () => {
     const id = "sync-node";
     const result = registerAudioNode({
@@ -58,8 +56,7 @@ describe("audio nodes registration", () => {
       type: "syncNode",
     });
 
-    const state1 = getState();
-    expect(state1.audioNodes[id]).toEqual({
+    expect(audioNodes.get(id)).toEqual({
       loading: true,
       error: null,
       node: null,
@@ -67,8 +64,7 @@ describe("audio nodes registration", () => {
 
     await result;
 
-    const state2 = getState();
-    expect(state2.audioNodes[id]).toEqual({
+    expect(audioNodes.get(id)).toEqual({
       loading: false,
       error: null,
       node: {},
@@ -83,8 +79,7 @@ describe("audio nodes registration", () => {
       type: "asyncNode",
     });
 
-    const state1 = getState();
-    expect(state1.audioNodes[id]).toEqual({
+    expect(audioNodes.get(id)).toEqual({
       loading: true,
       error: null,
       node: null,
@@ -92,8 +87,7 @@ describe("audio nodes registration", () => {
 
     await result;
 
-    const state2 = getState();
-    expect(state2.audioNodes[id]).toEqual({
+    expect(audioNodes.get(id)).toEqual({
       loading: false,
       error: null,
       node: {},
@@ -102,8 +96,7 @@ describe("audio nodes registration", () => {
 });
 
 describe("audio nodes unregistration", () => {
-  const { registerAudioNode, registerAudioNodes, unregisterAudioNode } =
-    getState();
+  const { registerAudioNode, registerAudioNodes, unregisterAudioNode } = patch;
   const id = "sync-node-new";
   const nodeMock = {
     ...baseNodeConfig,
@@ -113,20 +106,22 @@ describe("audio nodes unregistration", () => {
 
   it("calls destroy method on node unregister", async () => {
     await registerAudioNode(nodeMock);
-    const { audioNodes } = getState();
-    const node = audioNodes[id].node;
+    const { audioNodes } = patch;
+    const node = audioNodes.get(id).node;
     unregisterAudioNode(nodeMock);
     expect(node.destroy).toHaveBeenCalled();
   });
 
-  it("calls disconnect on all input and output ports", async() => {
+  it("calls disconnect on all input and output ports", async () => {
     await registerAudioNode(nodeMock);
-    const { audioNodes } = getState();
-    const { node: { inputs, outputs } } = audioNodes[id];
+    const { audioNodes } = patch;
+    const {
+      node: { inputs, outputs },
+    } = audioNodes.get(id);
     const { port: audioNodeInputPort } = inputs.audioNodeTypePort;
     const { port: audioNodeOutputPort } = outputs.audioNodeTypePort;
-    jest.spyOn(audioNodeInputPort, 'disconnect');
-    jest.spyOn(audioNodeOutputPort, 'disconnect');
+    jest.spyOn(audioNodeInputPort, "disconnect");
+    jest.spyOn(audioNodeOutputPort, "disconnect");
     unregisterAudioNode(nodeMock);
     //@ts-ignore
     expect(audioNodeInputPort.disconnect).toHaveBeenCalled();
@@ -136,7 +131,7 @@ describe("audio nodes unregistration", () => {
 });
 
 describe("audio node registration erros", () => {
-  const { registerAudioNode, registerAudioNodes } = getState();
+  const { registerAudioNode, registerAudioNodes } = patch;
 
   it("sets error when node property id is missing", async () => {
     const id = "error-node-1";
@@ -145,8 +140,7 @@ describe("audio node registration erros", () => {
       id,
     });
 
-    const state1 = getState();
-    const node = state1.audioNodes[id];
+    const node = audioNodes.get(id);
     expect(node).toEqual({
       loading: false,
       error: expect.any(Error),
@@ -162,8 +156,7 @@ describe("audio node registration erros", () => {
       type: "unknownType",
     });
 
-    const state1 = getState();
-    const node = state1.audioNodes[id];
+    const node = audioNodes.get(id);
     expect(node).toEqual({
       loading: false,
       error: expect.any(Error),
@@ -179,8 +172,7 @@ describe("audio node registration erros", () => {
       type: "errorNode",
     });
 
-    const state1 = getState();
-    expect(state1.audioNodes[id]).toEqual({
+    expect(audioNodes.get(id)).toEqual({
       loading: false,
       error: expect.any(Error),
       node: null,
@@ -195,8 +187,7 @@ describe("audio node registration erros", () => {
       type: "asyncErrorNode",
     });
 
-    const state1 = getState();
-    expect(state1.audioNodes[id]).toEqual({
+    expect(audioNodes.get(id)).toEqual({
       loading: true,
       error: null,
       node: null,
@@ -204,12 +195,10 @@ describe("audio node registration erros", () => {
 
     await result;
 
-    const state2 = getState();
-    expect(state2.audioNodes[id]).toEqual({
+    expect(audioNodes.get(id)).toEqual({
       loading: false,
       error: expect.any(Error),
       node: null,
     });
   });
 });
-
