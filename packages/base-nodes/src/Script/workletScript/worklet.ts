@@ -1,9 +1,14 @@
+import { IncomingMessageData } from "../types";
+import transpile from "../transpile";
+
+interface ProcessSandbox {
+  inputs: Float32Array[][];
+  outputs: Float32Array[][];
+  parameters: Record<string, Float32Array>;
+}
+
 export class ScriptNodeProcessor extends AudioWorkletProcessor {
-  expressionFn: (
-    inputs: Float32Array[][],
-    outputs: Float32Array[][],
-    parameters: Record<string, Float32Array>
-  ) => void = () => {};
+  expressionFn: (ProcessSandbox: ProcessSandbox) => void = () => {};
 
   errorIsSent = false;
   lastErrorMessage: string;
@@ -40,15 +45,13 @@ export class ScriptNodeProcessor extends AudioWorkletProcessor {
   constructor() {
     super();
 
-    this.port.onmessage = ({ data }) => {
+    this.port.onmessage = ({ data }: MessageEvent<IncomingMessageData>) => {
       if (data.name === "expression") {
         try {
           //@ts-ignore
           this.expressionFn = new Function(
-            "inputs",
-            "outputs",
-            "parameters",
-            data.value
+            "ProcessSandbox",
+            transpile(data.value)
           );
         } catch (error) {
           this.expressionFn = () => {
@@ -90,7 +93,7 @@ export class ScriptNodeProcessor extends AudioWorkletProcessor {
     parameters: Record<string, Float32Array>
   ) {
     try {
-      this.expressionFn(inputs, outputs, parameters);
+      this.expressionFn({ inputs, outputs, parameters });
       this.onSuccess();
     } catch (error) {
       this.onError(error);

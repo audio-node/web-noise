@@ -1,23 +1,6 @@
-import { WNAudioNode } from "@web-noise/core";
+import { ScriptNode } from "../types";
 
 const sciptNodeWorklet = new URL("./worklet.ts", import.meta.url);
-
-export interface ScriptNodeValues {
-  expression?: string;
-}
-
-// interface MessageData extends Record<string, unknown> {
-//   name: string;
-// }
-type MessageData = { name: "error"; error: Error } | { name: "clean-error" };
-
-type MessageHandler = (args: MessageData) => void;
-
-export interface ScriptNode extends WNAudioNode {
-  scriptNode: AudioWorkletNode;
-  setValues: (values?: ScriptNodeValues) => void;
-  onMessage: (fn: MessageHandler) => void;
-}
 
 export const scriptNode = async (
   audioContext: AudioContext
@@ -32,11 +15,7 @@ export const scriptNode = async (
     }
   );
 
-  let messageHandler: MessageHandler = () => {};
-
-  scriptNode.port.onmessage = ({ data }: MessageEvent<MessageData>) => {
-    messageHandler(data);
-  };
+  scriptNode.port.start();
 
   return {
     outputs: {
@@ -79,13 +58,12 @@ export const scriptNode = async (
         port: [scriptNode, 1],
       },
     },
+    channel: scriptNode.port,
     setValues: ({ expression } = {}) =>
       expression &&
       scriptNode.port.postMessage({
         name: "expression",
         value: expression,
       }),
-    onMessage: (fn) => (messageHandler = fn),
-    scriptNode,
   };
 };
