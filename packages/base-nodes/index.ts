@@ -35,8 +35,7 @@ import {
   stepSequencer,
   stepSequencerWorklet,
 } from "./src/audioNodes/stepSequencer";
-import ScriptNode from "./src/nodes/ScriptNode";
-import { scriptNode } from "./src/audioNodes/scriptNode";
+import { Script, WorkletScript } from './src/Script';
 import MathNode from "./src/nodes/MathNode";
 import { math } from "./src/audioNodes/math";
 import { midiToFrequency } from "./src/audioNodes/midiToFrequency";
@@ -110,7 +109,8 @@ export const baseNodes: PluginConfig = {
       node: StepSequencer,
       audioNode: stepSequencerWorklet,
     },
-    { type: "scriptNode", node: ScriptNode, audioNode: scriptNode },
+    Script,
+    WorkletScript,
     {
       type: "mathNode",
       node: MathNode,
