@@ -35,7 +35,7 @@ const useEditor = ({ value }: { value?: string }) => {
         diagnosticCodesToIgnore: [1375, 2792, 2451],
       });
 
-      const uri = monaco.Uri.parse("inmemory://model-" + new Date());
+      const uri = monaco.Uri.parse("file://model-" + (+new Date()));
       const model = monaco.editor.createModel(value || "", "typescript", uri);
 
       const editor = monaco.editor.create(ref.current, {

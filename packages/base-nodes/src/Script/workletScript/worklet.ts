@@ -5,6 +5,9 @@ interface ProcessSandbox {
   inputs: Float32Array[][];
   outputs: Float32Array[][];
   parameters: Record<string, Float32Array>;
+  currentFrame: number;
+  currentTime: number;
+  sampleRate: number;
 }
 
 export class ScriptNodeProcessor extends AudioWorkletProcessor {
@@ -93,7 +96,14 @@ export class ScriptNodeProcessor extends AudioWorkletProcessor {
     parameters: Record<string, Float32Array>
   ) {
     try {
-      this.expressionFn({ inputs, outputs, parameters });
+      this.expressionFn({
+        inputs,
+        outputs,
+        parameters,
+        currentTime,
+        currentFrame,
+        sampleRate,
+      });
       this.onSuccess();
     } catch (error) {
       this.onError(error);
