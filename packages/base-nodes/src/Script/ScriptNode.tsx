@@ -5,23 +5,25 @@ import Editor from "../components/Editor";
 import {
   MessageData,
   ScriptNode as TScriptNode,
-  ScriptNodeValues,
+  ScriptNodeData,
 } from "./types";
-import { types as scriptTypes, defaultValue as scriptDefaultValue } from "./script/editorConfig";
-import { types as workletScriptTypes, defaultValue as workletScriptDefaultValue } from "./workletScript/editorConfig";
-
-interface ScriptNodeData {
-  label: string;
-  values?: ScriptNodeValues;
-}
+import {
+  types as scriptTypes,
+  defaultValue as scriptDefaultValue,
+} from "./script/editorConfig";
+import {
+  types as workletScriptTypes,
+  defaultValue as workletScriptDefaultValue,
+} from "./workletScript/editorConfig";
 
 const ScriptNode: FC<WNNodeProps<ScriptNodeData>> = (props) => {
   const { data, id, type } = props;
 
   const { node } = useAudioNode<TScriptNode>(id) || {};
-  const { updateNodeValues } = useNode(id);
+  const { updateNodeValues, updateNodeConfig } = useNode(id);
 
   const { expression = "" } = data.values || {};
+  const { size = { width: 16 * 35, height: 16 * 20 } } = data.config || {};
 
   const saveExpression = (expression: string) => {
     updateNodeValues({ expression });
@@ -54,28 +56,46 @@ const ScriptNode: FC<WNNodeProps<ScriptNodeData>> = (props) => {
     };
   }, [node]);
 
+  const { width, height } = size;
+
   return (
     <WNNode {...props}>
       <Resizable
-        defaultSize={{
-          width: 16 * 35,
-          height: 16 * 20,
-        }}
+        size={{ width, height }}
         minWidth={200}
+        enable={{
+          top: false,
+          right: true,
+          bottom: true,
+          left: false,
+          topRight: false,
+          bottomRight: true,
+          bottomLeft: false,
+          topLeft: false,
+        }}
+        onResizeStop={(e, direction, ref, d) => {
+          console.log(5555);
+          updateNodeConfig({
+            size: {
+              width: width + d.width,
+              height: height + d.height,
+            },
+          });
+        }}
       >
         <Editor
           value={expression}
-          defaultValue={type === "workletScript"
+          defaultValue={
+            type === "workletScript"
               ? workletScriptDefaultValue
-              : scriptDefaultValue}
+              : scriptDefaultValue
+          }
           onExecute={(expression) => {
             saveExpression(expression);
             runExpression(expression);
           }}
           editorTypes={
-            type === "workletScript"
-              ? workletScriptTypes
-              : scriptTypes
+            type === "workletScript" ? workletScriptTypes : scriptTypes
           }
           error={error}
         />
