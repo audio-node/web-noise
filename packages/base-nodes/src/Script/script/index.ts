@@ -1,7 +1,11 @@
-import { IncomingMessageData, ScriptNode } from "../types";
+import { IncomingMessageData, ScriptNode, ScriptNodeData } from "../types";
 import transpile from "../transpile";
 const passThroughWorker = new URL(
   "../../audioNodes/passThrough/worklet.ts",
+  import.meta.url
+);
+const triggerWatcherWorklet = new URL(
+  "./triggerWatcher.worklet.ts",
   import.meta.url
 );
 
@@ -16,10 +20,23 @@ const createPassThroughNodes = (audioContext: AudioContext, length: number) =>
 
 const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
 
+type TriggerWatcherPortEvent = { name: "triggered" } | { name: "untriggered" };
+
 export const scriptNode = async (
-  audioContext: AudioContext
+  audioContext: AudioContext,
+  data: ScriptNodeData
 ): Promise<ScriptNode> => {
-  await audioContext.audioWorklet.addModule(passThroughWorker);
+  await Promise.all([
+    audioContext.audioWorklet.addModule(passThroughWorker),
+    audioContext.audioWorklet.addModule(triggerWatcherWorklet),
+  ]);
+
+  const triggerWatcher = new AudioWorkletNode(
+    audioContext,
+    "trigger-watcher-processor"
+  );
+
+  triggerWatcher.port.start();
 
   const inputs = createPassThroughNodes(audioContext, INPUTS_COUNT);
   const outputs = createPassThroughNodes(audioContext, OUTPUTS_COUNT);
@@ -27,11 +44,31 @@ export const scriptNode = async (
   let currentInputs: Array<AudioWorkletNode> = [];
   let currentOutputs: Array<AudioWorkletNode> = [];
 
+  let currentOnTriggeredCallback: (() => void) | null = null;
+  let currentOnUntriggeredCallback: (() => void) | null = null;
+
+  triggerWatcher.port.addEventListener(
+    "message",
+    ({ data }: MessageEvent<TriggerWatcherPortEvent>) => {
+      switch (data.name) {
+        case "triggered":
+          currentOnTriggeredCallback?.();
+          break;
+        case "untriggered":
+          currentOnUntriggeredCallback?.();
+          break;
+      }
+    }
+  );
+
   const runExpression = async (expression: string) => {
     inputs.forEach((input, index) => input.disconnect(currentInputs[index]));
     currentOutputs.forEach((output, index) =>
       output.disconnect(outputs[index])
     );
+
+    currentOnTriggeredCallback = null;
+    currentOnUntriggeredCallback = null;
 
     currentInputs = createPassThroughNodes(audioContext, INPUTS_COUNT);
     inputs.forEach((input, index) => input.connect(currentInputs[index]));
@@ -46,6 +83,12 @@ export const scriptNode = async (
       );
 
       await expressionFn({
+        onTriggered: (fn: () => void) => {
+          currentOnTriggeredCallback = fn;
+        },
+        onUntriggered: (fn: () => void) => {
+          currentOnUntriggeredCallback = fn;
+        },
         inputs: currentInputs,
         outputs: currentOutputs,
         audioContext,
@@ -72,15 +115,26 @@ export const scriptNode = async (
   };
   channel.port2.start();
 
+  const { expression } = data.values || {};
+  expression && runExpression(expression);
+
   return {
-    inputs: inputs.reduce(
-      (acc, port, index) => ({ ...acc, [`input${index}`]: { port } }),
-      {}
-    ),
+    inputs: {
+      trigger: {
+        port: triggerWatcher,
+      },
+      ...inputs.reduce(
+        (acc, port, index) => ({ ...acc, [`input${index}`]: { port } }),
+        {}
+      ),
+    },
     outputs: outputs.reduce(
       (acc, port, index) => ({ ...acc, [`output${index}`]: { port } }),
       {}
     ),
+    destroy: () => {
+      triggerWatcher.port.close();
+    },
     setValues: ({ expression } = {}) => {
       expression &&
         channel.port2.postMessage({

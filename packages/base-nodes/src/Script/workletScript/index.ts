@@ -1,9 +1,10 @@
-import { ScriptNode } from "../types";
+import { ScriptNode, ScriptNodeValues, ScriptNodeData } from "../types";
 
 const sciptNodeWorklet = new URL("./worklet.ts", import.meta.url);
 
 export const scriptNode = async (
-  audioContext: AudioContext
+  audioContext: AudioContext,
+  data: ScriptNodeData
 ): Promise<ScriptNode> => {
   await audioContext.audioWorklet.addModule(sciptNodeWorklet);
   const scriptNode = new AudioWorkletNode(
@@ -16,6 +17,16 @@ export const scriptNode = async (
   );
 
   scriptNode.port.start();
+
+  const runExpression = (expression: ScriptNodeValues["expression"]) => {
+    scriptNode.port.postMessage({
+      name: "expression",
+      value: expression,
+    });
+  };
+
+  const { expression } = data.values || {};
+  expression && runExpression(expression);
 
   return {
     outputs: {
@@ -59,11 +70,6 @@ export const scriptNode = async (
       },
     },
     channel: scriptNode.port,
-    setValues: ({ expression } = {}) =>
-      expression &&
-      scriptNode.port.postMessage({
-        name: "expression",
-        value: expression,
-      }),
+    setValues: ({ expression } = {}) => expression && runExpression(expression),
   };
 };
