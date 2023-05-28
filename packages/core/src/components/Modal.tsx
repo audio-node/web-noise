@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { FC } from "react";
+import { MdClose as CloseIcon } from "react-icons/md";
 import useTheme from "../hooks/useTheme";
 import { Theme } from "../theme";
 
@@ -22,6 +23,14 @@ const ModalInner = styled.div<{ theme: Theme }>`
   width: 70%;
   height: 80%;
   overflow-y: scroll;
+  position: relative;
+`;
+
+const ModalCloser = styled(CloseIcon)<{ theme: Theme }>`
+  position: absolute;
+  top: 0.2rem;
+  right: 0.2rem;
+  cursor: pointer;
 `;
 
 const Modal: FC<{ onClose?: () => void }> = ({ children, onClose }) => {
@@ -35,6 +44,7 @@ const Modal: FC<{ onClose?: () => void }> = ({ children, onClose }) => {
         theme={theme}
       >
         {children}
+        <ModalCloser theme={theme} onClick={onClose} />
       </ModalInner>
     </ModalOuter>
   );

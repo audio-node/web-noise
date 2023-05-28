@@ -1,0 +1,90 @@
+import styled from "@emotion/styled";
+import { FC, MouseEvent, useCallback, useState } from "react";
+import { Position, useReactFlow } from "reactflow";
+import useTheme from "../../hooks/useTheme";
+import useStore from "../../store";
+import { Theme } from "../../theme";
+import { PluginComponent } from "../../types";
+import Modal from "../Modal";
+import Filters, { FiltersState } from "./Filters";
+import Plugins from "./Plugins";
+
+interface AddNodeProps {
+  isOpen: boolean;
+  closeMenu: () => void;
+  mousePosition: MousePosition;
+}
+
+type MousePosition = {
+  x: number;
+  y: number;
+};
+
+const AddNodeWrapper = styled.div<{ theme: Theme }>`
+  height: 100%;
+  width: 100%;
+  display: flex;
+  gap: 1rem;
+`;
+
+const PluginsPanel = styled.div<{ theme: Theme }>`
+  flex-grow: 1;
+  height: 100%;
+  overflow-y: scroll;
+`;
+
+const AddNode: FC<AddNodeProps> = ({ isOpen, closeMenu, mousePosition }) => {
+  const theme = useTheme();
+  const { project } = useReactFlow();
+
+  const { createNode } = useStore(({ createNode }) => ({
+    createNode,
+  }));
+
+  const [filtersState, setFiltersState] = useState<FiltersState>({});
+
+  const onComponentClick = useCallback(
+    ({ type }: PluginComponent) => {
+      const { x, y } = project(mousePosition);
+      const newNode = {
+        //@TODO: generate node id in `createNode` function
+        id: `${type}-${+new Date()}`,
+        type,
+        data: { label: type },
+        position: {
+          x,
+          y,
+        },
+        targetPosition: Position.Left,
+        sourcePosition: Position.Right,
+      };
+      createNode(newNode);
+      closeMenu();
+    },
+    [mousePosition, project, createNode, closeMenu, mousePosition]
+  );
+
+  return isOpen ? (
+    <Modal
+      onClose={() => {
+        closeMenu();
+        setFiltersState({});
+      }}
+    >
+      <AddNodeWrapper theme={theme}>
+        <Filters onChange={setFiltersState} value={filtersState} />
+        <PluginsPanel theme={theme}>
+          <Plugins
+            filters={filtersState}
+            onComponentClick={(component) => {
+              onComponentClick(component);
+              setFiltersState({});
+            }}
+          />
+        </PluginsPanel>
+      </AddNodeWrapper>
+    </Modal>
+  ) : null;
+};
+
+export default AddNode;
