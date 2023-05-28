@@ -66,6 +66,7 @@ export interface PluginComponent {
 }
 
 export interface PluginConfig {
+  id?: string;
   components: Array<PluginComponent>;
   name?: string;
   description?: string;
