@@ -2,6 +2,7 @@ import { PluginConfig } from "@web-noise/core";
 import { WNNode } from "@web-noise/core";
 
 import ParameterComponent from "./src/Parameter";
+import AudioInputComponent from "./src/AudioInput";
 import Patch from "./src/Patch";
 import Gain from "./src/nodes/Gain";
 import { gain } from "./src/audioNodes/gain";
@@ -35,7 +36,7 @@ import {
   stepSequencer,
   stepSequencerWorklet,
 } from "./src/audioNodes/stepSequencer";
-import { Script, WorkletScript } from './src/Script';
+import { Script, WorkletScript } from "./src/Script";
 import MathNode from "./src/nodes/MathNode";
 import { math } from "./src/audioNodes/math";
 import { midiToFrequency } from "./src/audioNodes/midiToFrequency";
@@ -134,6 +135,7 @@ export const baseNodes: PluginConfig = {
       node: DataRecorder,
       audioNode: dataRecorder,
     },
+    AudioInputComponent,
     Patch,
     { type: "inlet", node: Inlet, audioNode: passThrough },
     { type: "outlet", node: Outlet, audioNode: passThrough },
