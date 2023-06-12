@@ -1,6 +1,9 @@
 {
   "name": "@web-noise/base-nodes",
   "version": "0.0.1",
+  "scripts": {
+    "test": "jest"
+  },
   "dependencies": {
     "@monaco-editor/loader": "^1.3.3",
     "@tonaljs/tonal": "^4.6.5",
@@ -16,5 +19,8 @@
     "react-simple-code-editor": "^0.13.0",
     "use-animation-frame": "^0.1.4",
     "use-debounce": "^8.0.4"
+  },
+  "devDependencies": {
+    "ts-jest": "^29.1.0"
   }
 }
