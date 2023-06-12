@@ -80,9 +80,9 @@ export class MathProcessor extends AudioWorkletProcessor {
             A: parameters.A[0],
             B: parameters.B[0],
             C: parameters.C[0],
-            X: parameters.X[sampleIndex],
-            Y: parameters.Y[sampleIndex],
-            Z: parameters.Z[sampleIndex],
+            X: parameters.X.length === 1 ? parameters.X[0] : parameters.X[sampleIndex],
+            Y: parameters.Y.length === 1 ? parameters.Y[0] : parameters.Y[sampleIndex],
+            Z: parameters.Z.length === 1 ? parameters.Z[0] : parameters.Z[sampleIndex],
             INPUT: input[channelIndex]?.[sampleIndex],
           };
           outputChannel[sampleIndex] = this.expressionFn(args);
