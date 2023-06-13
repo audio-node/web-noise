@@ -38,6 +38,7 @@ import {
   stepSequencerWorklet,
 } from "./src/audioNodes/stepSequencer";
 import { Script, WorkletScript } from "./src/Script";
+import { Gate } from "./src/Gate";
 import MathNode from "./src/nodes/MathNode";
 import { math } from "./src/audioNodes/math";
 import { midiToFrequency } from "./src/audioNodes/midiToFrequency";
@@ -113,6 +114,7 @@ export const baseNodes: PluginConfig = {
     },
     Script,
     WorkletScript,
+    Gate,
     {
       type: "mathNode",
       node: MathNode,

@@ -3,33 +3,16 @@ import styled from "@emotion/styled";
 import { FaRegArrowAltCircleRight as SetUrlIcon } from "react-icons/fa";
 import { theme } from "@web-noise/core";
 
-const InputWrapper = styled.div`
+export const InputWrapper = styled.div`
   display: flex;
   position: relative;
 `;
 
-const InputButton = styled.button`
-  position: absolute;
-  right: 0;
-  height: 100%;
-  outline: none;
-  background: none;
-  border: none;
-  color: var(--leva-colors-highlight1);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  &:hover {
-    color: var(--leva-colors-highlight2);
-  }
-  &:active {
-    color: var(--leva-colors-highlight3);
-  }
-`;
-
-const InputInner = styled.input`
+export const InputInner = styled.input`
   padding-right: 2rem;
   padding-left: 0.3rem;
+  padding-top: 0;
+  padding-bottom: 0;
   width: 100%;
   appearance: textfield;
   font-size: inherit;
@@ -59,42 +42,32 @@ const InputInner = styled.input`
   }
 `;
 
-const Input: FC<{
+export interface InputProps {
   value?: string;
   placeholder?: string;
-  onSubmit?: (value: string) => void;
-}> = ({ value = "", placeholder = "", onSubmit = () => {} }) => {
-  const [currentValue, setCurrentValue] = useState<string>(value);
+  onChange?: (value: string) => void;
+  type?: string;
+}
 
-  const applyCurrentValue = useCallback(() => {
-    onSubmit(currentValue);
-  }, [currentValue, onSubmit]);
-
-  const handleKeyDown: KeyboardEventHandler = useCallback(
-    (event) => {
-      switch (event.key) {
-        case "Escape":
-          console.log("rollback");
-          break;
-        case "Enter":
-          applyCurrentValue();
-          break;
-      }
-    },
-    [applyCurrentValue, onSubmit]
-  );
+const Input = ({
+  type,
+  value,
+  placeholder,
+  onChange = () => {},
+}: InputProps) => {
   return (
     <InputWrapper>
       <InputInner
-        value={currentValue}
+        type={type}
+        value={value}
         placeholder={placeholder}
-        onKeyDown={handleKeyDown}
-        onChange={(event) => setCurrentValue(event.target.value)}
+        onKeyDownCapture={(event) => {
+          event.stopPropagation();
+        }}
+        onChange={(event) => {
+          onChange(event.target.value);
+        }}
       />
-
-      <InputButton onClick={applyCurrentValue}>
-        <SetUrlIcon />
-      </InputButton>
     </InputWrapper>
   );
 };
