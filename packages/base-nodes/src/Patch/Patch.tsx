@@ -12,7 +12,7 @@ import {
 import { FC, useCallback, useMemo } from "react";
 import GridLayout from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
-import Input from "../components/Input";
+import Input from "../components/SubmitInput";
 import PanelNode from "./PanelNode";
 import { Patch as TPatch } from "./patchAudioNode";
 

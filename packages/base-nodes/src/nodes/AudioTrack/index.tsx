@@ -14,7 +14,7 @@ import {
   AudioTrackValues,
 } from "../../audioNodes/audioTrack";
 import NumberInput from "../../components/NumberInput";
-import Button from "./Button";
+import Button from "../../components/Button";
 import Input from "./Input";
 import Wave from "./Wave";
 
@@ -207,11 +207,11 @@ const AudioTrack: FC<WNNodeProps<AudioTrackData>> = (props) => {
         </SampleInterval>
         <Section>
           {isActive ? (
-            <Button style={{ width: "100%" }} onClick={stop}>
+            <Button theme={theme} style={{ width: "100%" }} onClick={stop}>
               stop
             </Button>
           ) : (
-            <Button style={{ width: "100%" }} onClick={play}>
+            <Button theme={theme} style={{ width: "100%" }} onClick={play}>
               play
             </Button>
           )}
