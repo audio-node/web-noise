@@ -10,7 +10,7 @@ import patch from '../patch'
 
 const Layout = styled.div<{ theme: Theme }>`
   position: fixed;
-  z-index: 10001;
+  z-index: 10003;
   width: 100%;
   height: 100%;
   top: 0;
