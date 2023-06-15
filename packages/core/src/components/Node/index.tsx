@@ -146,6 +146,7 @@ export const WNNode: FC<WNNodeParameters> = ({
   id,
   children,
   config,
+  selected,
   ...rest
 }) => {
   const theme = useTheme();
@@ -273,7 +274,7 @@ export const WNNode: FC<WNNodeParameters> = ({
             : null}
         </OutputPorts>
       </PortsPanel>
-      {config && configMode ? config : children}
+      {config && configMode && selected ? config : children}
     </NodeWrapper>
   );
 };
