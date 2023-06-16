@@ -9,6 +9,8 @@ const Section = styled.div`
   font-size: var(--leva-fontSizes-root);
   background-color: var(--leva-colors-elevation2);
   padding: 0.4rem 0.5rem;
+  height: 100%;
+  box-sizing: border-box;
 `;
 
 export interface GateProps {

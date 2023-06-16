@@ -11,6 +11,8 @@ const StyledButton = styled(Button)<{
   textColor: string;
 }>`
   width: 100%;
+  height: 100%;
+  min-height: 1.2rem;
   user-select: none;
   background-color: ${({ color }) => color};
   color: ${({ textColor }) => textColor};
