@@ -54,9 +54,10 @@ const Input = ({
   value,
   placeholder,
   onChange = () => {},
+  ...props
 }: InputProps) => {
   return (
-    <InputWrapper>
+    <InputWrapper {...props}>
       <InputInner
         type={type}
         value={value}
