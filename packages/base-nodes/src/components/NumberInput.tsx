@@ -53,19 +53,25 @@ interface NumberInputProps {
   value?: number;
   step?: number;
   onChange?: (value: number) => void;
+  placeholder?: string;
 }
 
 const NumberInput: FC<NumberInputProps> = ({
   max = Infinity,
   min = -Infinity,
-  value = 0,
+  value,
   step = 1,
   onChange = () => {},
+  placeholder,
+  ...props
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const startChangedHandler = useThrottledCallback(
     (event: Pick<WheelEvent, "deltaY">) => {
+      if (typeof value === "undefined") {
+        return;
+      }
       //@TODO: come up with more logical factor calculation
       const factor = max < 10 ? 5 : max / 100;
       const st = +(value + Math.round(event.deltaY / factor) * step).toFixed(2);
@@ -95,17 +101,21 @@ const NumberInput: FC<NumberInputProps> = ({
   }, [inputRef.current, onChange]);
 
   useEffect(() => {
+    if (typeof value === "undefined") {
+      return;
+    }
     inputRef.current && (inputRef.current.value = value.toString());
   }, [inputRef.current, value]);
 
   return (
-    <SampleInput>
+    <SampleInput {...props}>
       <SampleInputInner
         ref={inputRef}
         type="number"
         step={step}
         min={min}
         max={max}
+        placeholder={placeholder}
       />
     </SampleInput>
   );
