@@ -2,7 +2,8 @@
   "name": "@web-noise/base-nodes",
   "version": "0.0.1",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "generate:node": "echo 'Component directory name' ; read dir_name; hygen node-generator new $dir_name"
   },
   "dependencies": {
     "@monaco-editor/loader": "^1.3.3",
@@ -21,6 +22,7 @@
     "use-debounce": "^8.0.4"
   },
   "devDependencies": {
+    "hygen": "^6.2.11",
     "ts-jest": "^29.1.0"
   }
 }
