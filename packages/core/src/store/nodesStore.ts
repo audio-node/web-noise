@@ -9,12 +9,7 @@ import {
 } from "reactflow";
 import { StateCreator } from "zustand";
 import { DRAG_HANDLE_SELECTOR } from "../constants";
-import type { WNNode, WNNodeData, WNEdge } from "../types";
-
-export interface GraphState {
-  nodes: WNNode[];
-  edges: WNEdge[];
-}
+import type { WNNode, WNNodeData, WNEdge, GraphState } from "../types";
 
 //@TODO: rename to NodesStore
 export interface NodesState {

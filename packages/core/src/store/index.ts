@@ -4,20 +4,15 @@ import patch, { setAudioNodeTypes } from "../patch";
 import {
   AudioNodeTypes,
   ControlPanelNode,
-  CreateWNContainerNode,
+  PluginComponent,
   PluginConfig,
   WNEdge,
   WNNode,
+  GraphState,
 } from "../types";
-import nodesStateCreator, { GraphState, NodesState } from "./nodesStore";
+import nodesStateCreator, { NodesState } from "./nodesStore";
 
 export type { AudioNodeTypes, NodesState, GraphState };
-
-export interface ContainerNodeTypes
-  extends Record<string, CreateWNContainerNode> {}
-
-export interface ControlPanelNodeTypes
-  extends Record<string, ControlPanelNode> {}
 
 interface EditorConfig {
   showMinimap: boolean;
@@ -30,6 +25,8 @@ type ControlPanelNodes = Array<{
   x?: number;
   y?: number;
 }>;
+
+type NodesConfiguration = Record<string, PluginComponent>;
 
 interface ControlPanelState {
   show: boolean;
@@ -54,17 +51,12 @@ type StoreState = NodesState & {
   onNodesDelete: (nodes: WNNode[]) => Promise<void>;
   plugins: Array<PluginConfig>;
   setPlugins: (plugins: Array<PluginConfig>) => void;
+  nodesConfiguration: NodesConfiguration;
   config: EditorConfig;
   setConfig: (config: Partial<EditorConfig>) => void;
-  containerNodeTypes: ContainerNodeTypes;
-  setContainerNodeTypes: (containerNodeTypes: ContainerNodeTypes) => void;
   getEditorState: () => EditorState;
   setEditorState: (state: EditorState) => Promise<void>;
   /* move to control panel store */
-  controlPanelNodeTypes: ControlPanelNodeTypes;
-  setControlPanelNodeTypes: (
-    controlPanelNodeTypes: ControlPanelNodeTypes
-  ) => void;
   getControlPanelNode: (node: WNNode) => ControlPanelNode | null;
   controlPanel: ControlPanelState;
   setControlPanelNodes: (nodes: ControlPanelNodes) => void;
@@ -103,14 +95,27 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
       const { createNode } = get();
       await Promise.all(nodes.map((node) => createNode(node)));
     },
-    createNode: async (node) => {
-      const { addNode, containerNodeTypes } = get();
+    createNode: async (nodeData) => {
+      const { addNode, nodesConfiguration } = get();
 
-      if (typeof node.type === "undefined") {
-        throw new Error(`node type is not defined for node: ${node.id}`);
+      const { type, id, data } = nodeData;
+
+      if (typeof type === "undefined") {
+        throw new Error(`node type is not defined for node: ${id}`);
       }
 
-      const createContainerNode = containerNodeTypes[node.type];
+      const node = {
+        ...nodeData,
+        data: {
+          ...data,
+          config: {
+            ...nodesConfiguration[type]?.defaultConfig,
+            ...data?.config,
+          },
+        },
+      };
+
+      const createContainerNode = nodesConfiguration[type]?.containerNode;
       if (createContainerNode) {
         const patchData = await createContainerNode(node);
         const extendedNode = {
@@ -176,32 +181,50 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
     },
     plugins: [],
     setPlugins: async (plugins) => {
-      const nodeTypes: NodeTypes = {};
-      const audioNodeTypes: AudioNodeTypes = {};
-      const containerNodeTypes: ContainerNodeTypes = {};
-      const controlPanelNodeTypes: ControlPanelNodeTypes = {};
-      for (let plugin of plugins) {
-        for (let component of plugin.components) {
-          const { node, audioNode, containerNode, controlPanelNode } =
-            component;
-          nodeTypes[component.type] = node;
-          audioNodeTypes[component.type] = audioNode;
-          if (typeof containerNode !== "undefined") {
-            containerNodeTypes[component.type] = containerNode;
-          }
-          if (typeof controlPanelNode !== "undefined") {
-            controlPanelNodeTypes[component.type] = controlPanelNode;
-          }
-        }
-      }
-      const { setNodeTypes, setContainerNodeTypes, setControlPanelNodeTypes } =
-        get();
+      const { setNodeTypes } = get();
       set({ plugins });
+
+      const nodesConf: NodesConfiguration = plugins.reduce((acc, plugin) => {
+        return {
+          ...acc,
+          ...plugin.components.reduce(
+            (subAcc, item) => ({
+              ...subAcc,
+              [item.type]: item,
+            }),
+            {}
+          ),
+        };
+      }, {});
+
+      const nodeTypes: NodeTypes = Object.keys(nodesConf).reduce(
+        (acc, type) => {
+          return {
+            ...acc,
+            [type]: nodesConf[type].node,
+          };
+        },
+        {}
+      );
+
+      const audioNodeTypes: AudioNodeTypes = Object.keys(nodesConf).reduce(
+        (acc, type) => {
+          return {
+            ...acc,
+            [type]: nodesConf[type].audioNode,
+          };
+        },
+        {}
+      );
+
       setAudioNodeTypes(audioNodeTypes);
       setNodeTypes(nodeTypes);
-      setContainerNodeTypes(containerNodeTypes);
-      setControlPanelNodeTypes(controlPanelNodeTypes);
+
+      set(({ nodesConfiguration }) => ({
+        nodesConfiguration: { ...nodesConfiguration, ...nodesConf },
+      }));
     },
+    nodesConfiguration: {},
     config: { showMinimap: false },
     setConfig: (changes) => {
       set(({ config }) => ({ config: { ...config, ...changes } }));
@@ -220,22 +243,18 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
         controlPanel,
       });
     },
-    containerNodeTypes: {},
-    setContainerNodeTypes: (containerNodeTypes) => set({ containerNodeTypes }),
-    controlPanelNodeTypes: {},
-    setControlPanelNodeTypes: (controlPanelNodeTypes) =>
-      set({ controlPanelNodeTypes }),
     getControlPanelNode: (node) => {
-      const { controlPanelNodeTypes } = get();
+      const { nodesConfiguration } = get();
       const { type } = node;
       if (!type) {
         return null;
       }
-      if (!controlPanelNodeTypes[type]) {
+      const controlPanelNode = nodesConfiguration[type]?.controlPanelNode;
+      if (!controlPanelNode) {
         console.error(`could not find node for type ${type}`);
         return null;
       }
-      return controlPanelNodeTypes[type];
+      return controlPanelNode;
     },
     controlPanel: {
       show: true,

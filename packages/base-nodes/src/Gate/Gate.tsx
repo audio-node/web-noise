@@ -21,26 +21,10 @@ export interface GateProps {
 
 const Gate: FC<GateProps> = ({ node: props, audioNode, updateNodeValues }) => {
   const { data } = props;
-  const theme = useTheme();
-
-  const DEFAULT_CONFIG = {
-    //
-    label: "open",
-    color: theme.colors.accent2,
-    textColor: theme.colors.highlight3,
-    labelOpened: "close",
-    colorOpened: theme.colors.accent3,
-    textColorOpened: theme.colors.highlight3,
-    //
-    isToggle: false,
-  };
 
   const { isOpened = false } = data.values || {};
 
-  const config = {
-    ...DEFAULT_CONFIG,
-    ...data.config,
-  };
+  const config = data.config || {};
   const { isToggle } = config;
 
   useEffect(() => audioNode?.setValues?.(data.values), [audioNode, data]);

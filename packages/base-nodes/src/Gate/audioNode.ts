@@ -1,4 +1,4 @@
-import { WNNodeData, WNAudioNode } from "@web-noise/core";
+import { WNNodeData, WNAudioNode, CreateWNAudioNode } from "@web-noise/core";
 import { GateValues } from "./types";
 
 export interface Gate extends WNAudioNode {
@@ -9,10 +9,10 @@ export interface Gate extends WNAudioNode {
 
 export const gate = (
   audioContext: AudioContext,
-  data: WNNodeData<GateValues>
+  data?: WNNodeData<GateValues>
 ): Gate => {
   const constantSource = audioContext.createConstantSource();
-  constantSource.offset.value = +(data.values?.isOpened ?? false);
+  constantSource.offset.value = +(data?.values?.isOpened ?? false);
   constantSource.start();
 
   return {

@@ -11,7 +11,6 @@ import {
   Theme,
   useTheme,
 } from "@web-noise/core";
-import Config from "./Config";
 import <%= componentName %> from "./<%= componentName %>";
 import { <%= componentName %>Data } from "./types";
 import { <%= componentName %> as T<%= componentName %> } from "./audioNode";
@@ -24,7 +23,7 @@ const <%= componentName %>Node = (props: <%= componentName %>Props) => {
   const { updateNodeValues } = useNode(id);
 
   return (
-    <WNNode {...props} config={<Config {...props} />}>
+    <WNNode {...props}>
       <<%= componentName %>
         node={props}
         audioNode={node}

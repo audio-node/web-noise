@@ -12,7 +12,7 @@ export interface <%= componentName %> extends WNAudioNode {
 
 export const <%= componentType %> = async (
   audioContext: AudioContext,
-  data: <%= componentName %>Data
+  data?: <%= componentName %>Data
 ): Promise<<%= componentName %>> => {
   await audioContext.audioWorklet.addModule(<%= componentType %>Worklet);
   const workletNode = new AudioWorkletNode(

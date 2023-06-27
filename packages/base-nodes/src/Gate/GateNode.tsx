@@ -1,7 +1,6 @@
 import { useAudioNode, useNode, useTheme, WNNode } from "@web-noise/core";
 import { FC } from "react";
 import { Gate as TGate } from "./audioNode";
-import Config from "./Config";
 import Gate from "./Gate";
 import { GateProps } from "./types";
 
@@ -36,7 +35,7 @@ const GateNode: FC<GateProps> = (props) => {
   };
 
   return (
-    <WNNode {...props} config={<Config {...propsWithFallback} />}>
+    <WNNode {...props}>
       <Gate
         node={propsWithFallback}
         audioNode={node}

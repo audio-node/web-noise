@@ -8,10 +8,10 @@ export interface Select extends WNAudioNode {
 
 export const select = async (
   audioContext: AudioContext,
-  data: SelectData
+  data?: SelectData
 ): Promise<Select> => {
-  let currentOptions = data.config?.options;
-  let currentValue = data.values?.value;
+  let currentOptions = data?.config?.options;
+  let currentValue = data?.values?.value;
 
   const constantSource = audioContext.createConstantSource();
   constantSource.start();

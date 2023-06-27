@@ -1,5 +1,6 @@
-import type { FC } from "react";
+import type { FC, ReactNode } from "react";
 import { Node, Edge } from "reactflow";
+import { WNNodeProps } from "./components/Node";
 
 export type AudioNodeChannel = [AudioNode, number];
 
@@ -38,13 +39,14 @@ export interface WNNodeData<
 export type WNNode = Node<WNNodeData>;
 export type WNEdge = Edge;
 
-export interface WNContainerNode {
-  patch: { nodes: WNNode[]; edges: WNEdge[] };
+export interface GraphState {
+  nodes: WNNode[];
+  edges: WNEdge[];
 }
 
 export type CreateWNContainerNode = (
-  node?: WNNode
-) => WNContainerNode | Promise<WNContainerNode>;
+  node: WNNode
+) => GraphState | Promise<GraphState | void> | void;
 
 export interface ControlPanelNodeProps {
   node: WNNode;
@@ -52,7 +54,9 @@ export interface ControlPanelNodeProps {
   updateNodeValues?: (param: any) => void;
 }
 
-export type ControlPanelNode = FC<ControlPanelNodeProps>;
+// export type ControlPanelNode = (props: ControlPanelNodeProps) => any;
+export type ControlPanelNode = any;
+export type ConfigNode = (props: WNNodeProps<WNNodeData>) => any;
 
 export interface PluginComponent {
   id?: string;
@@ -60,7 +64,9 @@ export interface PluginComponent {
   node: any;
   audioNode: CreateWNAudioNode | false;
   containerNode?: CreateWNContainerNode;
-  controlPanelNode?: any;
+  controlPanelNode?: ControlPanelNode;
+  configNode?: ConfigNode;
+  defaultConfig?: any;
   description?: string;
   name?: string;
 }

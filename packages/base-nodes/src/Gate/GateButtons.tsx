@@ -6,9 +6,9 @@ import { GateConfig } from "./types";
 
 const StyledButton = styled(Button)<{
   theme: Theme;
-  color: string;
+  color?: string;
   colorOpened?: string;
-  textColor: string;
+  textColor?: string;
 }>`
   width: 100%;
   height: 100%;
@@ -23,7 +23,7 @@ const StyledButton = styled(Button)<{
 `;
 
 interface TriggerButtonProps {
-  config: Required<GateConfig>;
+  config: GateConfig;
   triggered: boolean;
   onPressed: () => void;
   onReleased: () => void;
@@ -62,7 +62,7 @@ export const TriggerButton = ({
 };
 
 interface ToggleButtonProps {
-  config: Required<GateConfig>;
+  config: GateConfig;
   onToggle: (isToggled: boolean) => void;
   toggled: boolean;
 }
