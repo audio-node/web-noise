@@ -16,9 +16,9 @@ export interface Patch extends WNAudioNode {
 
 export const patchNode = async (
   audioContext: AudioContext,
-  data: WNNodeData<PatchValues>
+  data?: WNNodeData<PatchValues>
 ): Promise<Patch> => {
-  const patchData = data.values?.patch;
+  const patchData = data?.values?.patch;
   if (typeof patchData === "undefined") {
     return {};
   }

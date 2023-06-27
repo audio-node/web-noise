@@ -4,7 +4,7 @@ const sciptNodeWorklet = new URL("./worklet.ts", import.meta.url);
 
 export const scriptNode = async (
   audioContext: AudioContext,
-  data: ScriptNodeData
+  data?: ScriptNodeData
 ): Promise<ScriptNode> => {
   await audioContext.audioWorklet.addModule(sciptNodeWorklet);
   const scriptNode = new AudioWorkletNode(
@@ -25,7 +25,7 @@ export const scriptNode = async (
     });
   };
 
-  const { expression } = data.values || {};
+  const { expression } = data?.values || {};
   expression && runExpression(expression);
 
   return {

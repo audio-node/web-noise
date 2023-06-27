@@ -1,8 +1,4 @@
-import Editor, {
-  PluginConfig,
-  PluginComponent,
-  Elements,
-} from "./src/components/Editor";
+import Editor, { Elements } from "./src/components/Editor";
 import Wire from "./src/components/Wire";
 import {
   WNNode,
@@ -27,6 +23,8 @@ import type {
   WNAudioNode,
   CreateWNAudioNode,
   ControlPanelNodeProps,
+  PluginConfig,
+  PluginComponent,
   ControlPanelNode,
   WNNodeData,
   WNNode as TWNNode,

@@ -34,8 +34,8 @@ const NodeContextMenu: FC<{}> = (args) => {
   const removeNodeFromControlPanel = useStore(
     (store) => store.removeNodeFromControlPanel
   );
-  const controlPanelNodeTypes = useStore(
-    (store) => store.controlPanelNodeTypes
+  const nodesConfiguration = useStore(
+    (store) => store.nodesConfiguration
   );
   const controlPanelNodes = useStore((store) => store.controlPanel.nodes);
 
@@ -54,9 +54,9 @@ const NodeContextMenu: FC<{}> = (args) => {
       if (!props?.node.type) {
         return false;
       }
-      return !!controlPanelNodeTypes[props.node.type];
+      return !!nodesConfiguration[props.node.type];
     },
-    [controlPanelNodeTypes]
+    [nodesConfiguration]
   );
 
   return (

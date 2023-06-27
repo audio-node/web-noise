@@ -14,6 +14,8 @@ const plugin: PluginComponent = {
       r.json()
     );
 
+    //@TODO: validate data
+
     return data;
   },
 };

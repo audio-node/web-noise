@@ -22,7 +22,7 @@ const <%= componentName %> = ({ node: props, audioNode, updateNodeValues }: <%= 
 
   return (
     <<%= componentName %>Wrapper theme={theme}>
-      test
+      ...control panel...
     </<%= componentName %>Wrapper>
   );
 };

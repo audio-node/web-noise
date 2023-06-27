@@ -33,6 +33,9 @@ describe("createNode", () => {
     const node = {
       id,
       type: "syncNode",
+      data: {
+        config: {},
+      },
     };
     createNode(node);
     expect(patch.registerAudioNode).toHaveBeenCalledWith(node);
@@ -113,21 +116,33 @@ describe("removeNodes", () => {
   const node1 = {
     id: "node-1",
     type: "syncNode",
+    data: {
+      config: {},
+    },
   };
 
   const node2 = {
     id: "node-2",
     type: "syncNode",
+    data: {
+      config: {},
+    },
   };
 
   const node3 = {
     id: "node-3",
     type: "syncNode",
+    data: {
+      config: {},
+    },
   };
 
   const node4 = {
     id: "node-4",
     type: "syncNode",
+    data: {
+      config: {},
+    },
   };
 
   const edge1 = {
@@ -167,9 +182,7 @@ describe("removeNodes", () => {
   });
 
   it("calls unregisterAudioConnections with removed edges", () => {
-    expect(patch.unregisterAudioConnections).toHaveBeenCalledWith(
-      [edge2]
-    );
+    expect(patch.unregisterAudioConnections).toHaveBeenCalledWith([edge2]);
   });
 
   it.todo("removes children nodes");

@@ -24,7 +24,7 @@ type TriggerWatcherPortEvent = { name: "triggered" } | { name: "untriggered" };
 
 export const scriptNode = async (
   audioContext: AudioContext,
-  data: ScriptNodeData
+  data?: ScriptNodeData
 ): Promise<ScriptNode> => {
   await Promise.all([
     audioContext.audioWorklet.addModule(passThroughWorker),
@@ -115,7 +115,7 @@ export const scriptNode = async (
   };
   channel.port2.start();
 
-  const { expression } = data.values || {};
+  const { expression } = data?.values || {};
   expression && runExpression(expression);
 
   return {

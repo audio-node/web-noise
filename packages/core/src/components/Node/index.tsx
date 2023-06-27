@@ -138,23 +138,29 @@ export const TitleBar: FC<{ className?: string }> = ({
   />
 );
 
-interface WNNodeParameters extends NodeProps {
-  config?: React.ReactElement;
+export interface WNNodeParameters extends NodeProps {
+  children?: any;
 }
 
-export const WNNode: FC<WNNodeParameters> = ({
-  id,
-  children,
-  config,
-  selected,
-  ...rest
-}) => {
+const useConfigNode = (type: string) => {
+  const ConfigNode = useStore(
+    (store) => store.nodesConfiguration[type]?.configNode
+  );
+
+  return {
+    ConfigNode,
+  };
+};
+
+export const WNNode = (props: WNNodeParameters) => {
+  const { id, children, selected, ...rest } = props;
   const theme = useTheme();
   const getNode = useStore(({ getNode }) => getNode);
 
   const { updateNodeLabel } = useNode(id);
   const { data } = getNode(id) || {};
   const audioNode = useAudioNode(id);
+  const { ConfigNode } = useConfigNode(rest.type);
 
   const labelInputRef = useRef<HTMLInputElement>(null);
 
@@ -246,7 +252,7 @@ export const WNNode: FC<WNNodeParameters> = ({
             }
           }}
         />
-        {config && (
+        {ConfigNode && (
           <SettingsIconWrapper
             onClickCapture={() => setShowConfigMode((isShown) => !isShown)}
           />
@@ -274,7 +280,11 @@ export const WNNode: FC<WNNodeParameters> = ({
             : null}
         </OutputPorts>
       </PortsPanel>
-      {config && configMode && selected ? config : children}
+      {ConfigNode && configMode && selected ? (
+        <ConfigNode {...props} />
+      ) : (
+        children
+      )}
     </NodeWrapper>
   );
 };
