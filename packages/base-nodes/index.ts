@@ -51,6 +51,7 @@ import MidiInput from "./src/nodes/MidiInput";
 import { midiInput } from "./src/audioNodes/midiInput";
 import DataRecorder from "./src/nodes/DataRecorder";
 import { dataRecorder } from "./src/audioNodes/dataRecorder";
+import MidiNote from "./src/MidiNote";
 
 import Inlet from "./src/nodes/Inlet";
 import Outlet from "./src/nodes/Outlet";
@@ -140,6 +141,7 @@ export const baseNodes: PluginConfig = {
       node: DataRecorder,
       audioNode: dataRecorder,
     },
+    MidiNote,
     AudioInputComponent,
     FrequencyMeter,
     Patch,
