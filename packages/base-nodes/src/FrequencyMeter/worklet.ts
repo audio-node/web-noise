@@ -1,5 +1,7 @@
+import Pitchfinder from 'pitchfinder';
 import { createUseBuffer } from "../lib";
-import getFrequency from "./getFrequency";
+
+const detectPitch = Pitchfinder.DynamicWavelet({ sampleRate: sampleRate });
 
 const BUFFER_SIZE = 1024;
 
@@ -13,11 +15,11 @@ export class FrequencyMeterProcessor extends AudioWorkletProcessor {
     }
 
     const buffer = this.useBuffer(input[0]);
-    const frequency = getFrequency(buffer, sampleRate);
+    const frequency = detectPitch(buffer);
 
     outputs[0].forEach((channel) => {
       for (let index in channel) {
-        channel[index] = frequency;
+        channel[index] = frequency || 0;
       }
     });
 
