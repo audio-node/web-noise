@@ -29,6 +29,19 @@ const getAudioInputsList = async () => {
     });
 };
 
+const getAudioStream = async (deviceId: string) => {
+  return navigator.mediaDevices
+    .getUserMedia({
+      audio: {
+        deviceId,
+      },
+    })
+    .catch((e) => {
+      console.log("Could not access audio device.", e);
+      return null;
+    });
+};
+
 const audioInput = async (audioContext: AudioContext): Promise<AudioInput> => {
   await audioContext.audioWorklet.addModule(passThroughWorker);
   const output = new AudioWorkletNode(audioContext, "pass-through-processor");
@@ -37,6 +50,7 @@ const audioInput = async (audioContext: AudioContext): Promise<AudioInput> => {
   let currentInputDeviceId: MediaDeviceInfo["deviceId"] | null = null;
   let currentInputSource: MediaStreamAudioSourceNode | null = null;
 
+  await getAudioStream("default");
   let audioInputs = await getAudioInputsList();
 
   const updateAudioInputHandler = async () => {
@@ -49,16 +63,7 @@ const audioInput = async (audioContext: AudioContext): Promise<AudioInput> => {
     }
     for (var input of audioInputs) {
       if (input.deviceId === currentInputDeviceId) {
-        const mediaStream = await navigator.mediaDevices
-          .getUserMedia({
-            audio: {
-              deviceId: currentInputDeviceId,
-            },
-          })
-          .catch((e) => {
-            console.log("Could not access audio device.", e);
-            return null;
-          });
+        const mediaStream = await getAudioStream(currentInputDeviceId);
 
         if (mediaStream) {
           currentInputSource =
