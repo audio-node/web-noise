@@ -2,10 +2,8 @@ import styled from "@emotion/styled";
 import { TitleBar, useAudioNode } from "@web-noise/core";
 import { FC, useEffect, useRef } from "react";
 import { Handle, NodeProps, Position } from "reactflow";
-import {
-  AnalyserEventHandler,
-  Oscolloscope as Oscilloscope,
-} from "../audioNodes/oscilloscope";
+import { Oscilloscope } from "../Oscilloscope/audioNode";
+import { AnalyserEventHandler } from "../Oscilloscope/types";
 
 const TitleBarWrapper = styled(TitleBar)`
   width: auto;

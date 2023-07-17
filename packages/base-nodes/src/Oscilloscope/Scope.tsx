@@ -1,18 +1,29 @@
 import { theme } from "@web-noise/core";
 import { FC, useEffect, useMemo, useRef } from "react";
+import defaultConfig from "./defaultConfig";
 
 const rendererWorkerUrl = new URL("./renderer.worker.ts", import.meta.url);
 
-
-const Scope: FC<{ analyser: AudioWorkletNode; color?: string }> = ({
-  analyser,
+const Scope: FC<{
+  port: MessagePort;
+  color?: string;
+  minValue?: number;
+  maxValue?: number;
+}> = ({
+  port,
   color = theme.colors.accent2,
+  minValue = defaultConfig.minValue,
+  maxValue = defaultConfig.maxValue,
 }) => {
   const worker = useMemo(() => {
     return new Worker(rendererWorkerUrl);
   }, []);
+
   useEffect(() => {
-    return () => worker?.terminate();
+    return () => {
+      port.close();
+      worker?.terminate();
+    };
   }, [worker]);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -22,12 +33,9 @@ const Scope: FC<{ analyser: AudioWorkletNode; color?: string }> = ({
     if (canvasElement && worker) {
       //@ts-ignore
       const canvas = canvasElement.transferControlToOffscreen();
-      worker.postMessage({ name: "INIT", canvas, port: analyser.port }, [
-        canvas,
-        analyser.port,
-      ]);
+      worker.postMessage({ name: "INIT", canvas, port }, [canvas, port]);
     }
-  }, [canvasRef, analyser, worker]);
+  }, [canvasRef, port, worker]);
 
   useEffect(() => {
     if (!worker) {
@@ -35,6 +43,13 @@ const Scope: FC<{ analyser: AudioWorkletNode; color?: string }> = ({
     }
     worker.postMessage({ name: "SET_COLOR", color });
   }, [color, worker]);
+
+  useEffect(() => {
+    if (!worker) {
+      return;
+    }
+    worker.postMessage({ name: "SET_SCALE", minValue, maxValue });
+  }, [minValue, maxValue, worker]);
 
   return <canvas ref={canvasRef} />;
 };
