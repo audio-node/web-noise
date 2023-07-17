@@ -27,13 +27,17 @@ export type CreateWNAudioNode<T = WNAudioNode> = (
   data?: WNNodeData
 ) => T | Promise<T>;
 
+export type NodeDefaultConfig = {
+  size?: { width: number; height: number };
+};
+
 export interface WNNodeData<
   Values = Record<string, unknown>,
   Config = Record<string, unknown>
 > {
   label: string;
   values?: Values;
-  config?: Config;
+  config?: Config & NodeDefaultConfig;
 }
 
 export type WNNode = Node<WNNodeData>;
@@ -67,6 +71,7 @@ export interface PluginComponent {
   controlPanelNode?: ControlPanelNode;
   configNode?: ConfigNode;
   defaultConfig?: any;
+  resizable?: boolean;
   description?: string;
   name?: string;
 }

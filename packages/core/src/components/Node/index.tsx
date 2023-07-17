@@ -1,7 +1,8 @@
 import styled from "@emotion/styled";
-import React, { FC, useState, useCallback, useRef } from "react";
+import React, { FC, useState, useCallback, useRef, useMemo } from "react";
 import { Handle, HandleProps, NodeProps, Position } from "reactflow";
 import { MdSettings as SettingsIcon } from "react-icons/md";
+import { Resizable } from "re-resizable";
 import { DRAG_HANDLE_CLASS } from "../../constants";
 import useAudioNode from "../../hooks/useAudioNode";
 import useTheme from "../../hooks/useTheme";
@@ -156,8 +157,14 @@ export const WNNode = (props: WNNodeParameters) => {
   const { id, children, selected, ...rest } = props;
   const theme = useTheme();
   const getNode = useStore(({ getNode }) => getNode);
+  const nodesConfiguration = useStore((store) => store.nodesConfiguration);
 
-  const { updateNodeLabel } = useNode(id);
+  const isResizeable = useMemo(
+    () => nodesConfiguration[props.type].resizable ?? false,
+    [nodesConfiguration, props.type]
+  );
+
+  const { updateNodeLabel, updateNodeConfig } = useNode(id);
   const { data } = getNode(id) || {};
   const audioNode = useAudioNode(id);
   const { ConfigNode } = useConfigNode(rest.type);
@@ -227,6 +234,10 @@ export const WNNode = (props: WNNodeParameters) => {
     );
   }
 
+  const size = data?.config?.size as
+    | { width: number; height: number }
+    | undefined;
+
   const {
     node: { inputs, outputs },
   } = audioNode;
@@ -282,6 +293,31 @@ export const WNNode = (props: WNNodeParameters) => {
       </PortsPanel>
       {ConfigNode && configMode && selected ? (
         <ConfigNode {...props} />
+      ) : isResizeable ? (
+        <Resizable
+          size={size}
+          minWidth={180}
+          minHeight={30}
+          enable={{
+            bottom: true,
+            bottomRight: true,
+            right: true,
+          }}
+          onResizeStop={(e, direction, ref, d) => {
+            const newSize = size
+              ? {
+                  width: size.width + d.width,
+                  height: size.height + d.height,
+                }
+              : ref.getBoundingClientRect();
+            updateNodeConfig({
+              ...data?.config,
+              size: newSize,
+            });
+          }}
+        >
+          {children}
+        </Resizable>
       ) : (
         children
       )}

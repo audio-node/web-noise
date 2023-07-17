@@ -23,8 +23,7 @@ import { adsr } from "./src/audioNodes/adsr";
 import Clock from "./src/nodes/Clock";
 import { clock } from "./src/audioNodes/clock";
 import { whiteNoise } from "./src/audioNodes/whiteNoise";
-import Oscilloscope from "./src/nodes/Oscilloscope";
-import { oscilloscope } from "./src/audioNodes/oscilloscope";
+import Oscilloscope from "./src/Oscilloscope";
 import VirtualKeyboard from "./src/nodes/VirtualKeyboard";
 import { virtualKeyboard } from "./src/audioNodes/virtualKeyboard";
 import RandomSequencer from "./src/nodes/RandomSequencer";
@@ -84,11 +83,7 @@ export const baseNodes: PluginConfig = {
     { type: "adsr", node: ADSR, audioNode: adsr },
     { type: "clock", node: Clock, audioNode: clock },
     { type: "whiteNoise", node: WNNode, audioNode: whiteNoise },
-    {
-      type: "oscilloscope",
-      node: Oscilloscope,
-      audioNode: oscilloscope,
-    },
+    Oscilloscope,
     {
       type: "virtualKeyboard",
       node: VirtualKeyboard,
@@ -129,7 +124,7 @@ export const baseNodes: PluginConfig = {
       audioNode: midiToFrequency,
     },
     { type: "audioTrack", node: AudioTrack, audioNode: audioTrack },
-    { type: "valueMeter", node: ValueMeter, audioNode: oscilloscope },
+    { type: "valueMeter", node: ValueMeter, audioNode: Oscilloscope.audioNode },
     { type: "sticker", node: Sticker, audioNode: false },
     {
       type: "midiInput",
