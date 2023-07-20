@@ -1,6 +1,6 @@
 import { ThemeProvider } from "@emotion/react";
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
-import 'reactflow/dist/style.css';
+import "reactflow/dist/style.css";
 import ReactFlow, {
   Background,
   BackgroundVariant,
@@ -9,11 +9,13 @@ import ReactFlow, {
   MiniMap,
   Node,
   ReactFlowProvider,
+  useViewport,
+  ReactFlowInstance,
 } from "reactflow";
-import useStore, { EditorState } from "../store";
+import useStore from "../store";
 import "../styles";
 import defaultTheme, { Theme } from "../theme";
-import type { PluginConfig } from "../types";
+import type { PluginConfig, EditorState } from "../types";
 import EditorContextMenu, {
   useEditorContextMenu,
 } from "./contextMenu/EditorContextMenu";
@@ -36,13 +38,13 @@ const onNodeClick = (_event: any, element: any) =>
 const snapGrid: [number, number] = [20, 20];
 
 export const Editor = ({
-  elements,
+  editorState,
   plugins = [],
   editorContextMenu = [],
   onChange = () => {},
   theme = defaultTheme,
 }: {
-  elements?: EditorState;
+  editorState?: EditorState;
   plugins?: Array<PluginConfig>;
   editorContextMenu?: Array<ReactNode>;
   onChange?: ({ nodes, edges, controlPanel }: EditorState) => void;
@@ -68,11 +70,6 @@ export const Editor = ({
     setPlugins,
   } = useStore();
 
-  useEffect(
-    () => onChange({ nodes, edges, controlPanel }),
-    [nodes, edges, controlPanel]
-  );
-
   const editorConfig = useStore(({ config }) => config);
 
   const nodeTypes = useStore(({ nodeTypes }) => nodeTypes);
@@ -80,12 +77,25 @@ export const Editor = ({
   useEffect(() => setPlugins(plugins), [plugins]);
 
   useEffect(() => {
-    if (elements) {
-      setEditorState(elements);
+    if (editorState) {
+      setEditorState(editorState);
     }
-  }, [elements, setEditorState]);
+  }, [editorState, setEditorState]);
 
-  const [reactflowInstance, setReactflowInstance] = useState(null);
+  const [reactflowInstance, setReactflowInstance] =
+    useState<ReactFlowInstance | null>(null);
+
+  useEffect(() => {
+    if (!reactflowInstance) {
+      return;
+    }
+    onChange({
+      nodes,
+      edges,
+      controlPanel,
+      viewport: reactflowInstance.getViewport(),
+    });
+  }, [nodes, edges, controlPanel]);
 
   const onInit = useCallback(
     (rfi) => {
@@ -100,6 +110,15 @@ export const Editor = ({
   const { onContextMenu: onEditorContextMenu } = useEditorContextMenu();
   const { onContextMenu: onNodeContextMenu } = useNodeContextMenu();
   const { onContextMenu: onEdgeContextMenu } = useEdgeContextMenu();
+
+  useEffect(() => {
+    if (!editorState?.viewport) {
+      return;
+    }
+    setTimeout(() => {
+      reactflowInstance?.setViewport(editorState.viewport);
+    }, 100);
+  }, [editorState?.viewport, reactflowInstance]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -121,7 +140,7 @@ export const Editor = ({
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
           snapGrid={snapGrid}
-          defaultViewport={{ x: 0, y: 0, zoom: 1.5 }}
+          defaultViewport={editorState?.viewport}
           defaultEdgeOptions={{ type: "wire" }}
           snapToGrid
           fitView

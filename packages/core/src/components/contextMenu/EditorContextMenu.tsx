@@ -3,6 +3,7 @@ import { FC, ReactNode, useCallback, useState } from "react";
 import { Separator, useContextMenu } from "react-contexify";
 import "react-contexify/dist/ReactContexify.css";
 import { GlobalHotKeys } from "react-hotkeys";
+import { useReactFlow } from "reactflow";
 import useTheme from "../../hooks/useTheme";
 import useStore from "../../store";
 import AddNode from "../AddNode";
@@ -55,10 +56,18 @@ const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
     [clearGraph]
   );
 
+  const reactFlowInstance = useReactFlow();
+
   const downloadPatchHandler = useCallback(() => {
     const fileName = "web-noise-patch.json";
-    downloadFile(JSON.stringify(getEditorState(), null, 2), fileName);
-  }, [getEditorState]);
+    const editorState = getEditorState();
+    const viewport = reactFlowInstance.getViewport();
+    const data = {
+      ...editorState,
+      viewport
+    }
+    downloadFile(JSON.stringify(data, null, 2), fileName);
+  }, [getEditorState, reactFlowInstance]);
 
   return (
     <>

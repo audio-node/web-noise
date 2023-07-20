@@ -1,5 +1,5 @@
 import type { FC, ReactNode } from "react";
-import { Node, Edge } from "reactflow";
+import { Node, Edge, Viewport } from "reactflow";
 import { WNNodeProps } from "./components/Node";
 
 export type AudioNodeChannel = [AudioNode, number];
@@ -46,6 +46,27 @@ export type WNEdge = Edge;
 export interface GraphState {
   nodes: WNNode[];
   edges: WNEdge[];
+}
+
+export type ControlPanelNodes = Array<{
+  id: WNNode["id"];
+  width?: number;
+  height?: number;
+  x?: number;
+  y?: number;
+}>;
+
+export interface ControlPanelState {
+  show: boolean;
+  nodes: ControlPanelNodes;
+}
+
+export interface EditorStoreState extends GraphState {
+  controlPanel: ControlPanelState;
+}
+
+export interface EditorState extends EditorStoreState {
+  viewport: Viewport;
 }
 
 export type CreateWNContainerNode = (

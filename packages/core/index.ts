@@ -16,7 +16,7 @@ import Modal from "./src/components/Modal";
 import useAudioNode from "./src/hooks/useAudioNode";
 import useNode from "./src/hooks/useNode";
 import useTheme from "./src/hooks/useTheme";
-import useStore, { EditorState } from "./src/store";
+import useStore from "./src/store";
 import { createPatch } from "./src/patch";
 import theme from "./src/theme";
 import type {
@@ -30,6 +30,7 @@ import type {
   WNNode as TWNNode,
   InputPort,
   OutputPort,
+  EditorState,
 } from "./src/types";
 import type { Theme } from "./src/theme";
 
