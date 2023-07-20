@@ -3,19 +3,21 @@ import { Editor, theme } from "@web-noise/core";
 import { FC, ReactNode, useEffect, useMemo, useState } from "react";
 import SharePatch from "./SharePatch";
 
-const CONTROL_PANEL_DEFAULTS = {
+// @TODO: move default state to editor
+const EDITOR_DEFAULTS = {
   nodes: [],
-  show: true,
+  edges: [],
+  controlPanel: {
+    nodes: [],
+    show: true,
+  },
+  viewport: { x: 0, y: 0, zoom: 1.5 },
 };
 
 const EditorWrapper: FC = () => {
   const [showSharePatch, setShowSharePatch] = useState(false);
 
-  const [graphState, setGraphState] = useState({
-    nodes: [],
-    edges: [],
-    controlPanel: CONTROL_PANEL_DEFAULTS,
-  });
+  const [graphState, setGraphState] = useState(EDITOR_DEFAULTS);
 
   useEffect(() => {
     const loc = new URL(window.location.href);
@@ -32,9 +34,9 @@ const EditorWrapper: FC = () => {
     if (fileParam) {
       fetch(fileParam)
         .then((res) => res.json())
-        .then(({ nodes, edges, controlPanel = CONTROL_PANEL_DEFAULTS }) =>
-          setGraphState({ nodes, edges, controlPanel })
-        )
+        .then((fileData) => {
+          setGraphState({ ...EDITOR_DEFAULTS, ...fileData });
+        })
         .catch((e) => alert(e));
       return;
     }
@@ -44,7 +46,7 @@ const EditorWrapper: FC = () => {
     () => (
       <Editor
         theme={theme}
-        elements={graphState}
+        editorState={graphState}
         plugins={[baseNodes, webAudioNodes]}
         editorContextMenu={[
           <span onClick={() => setShowSharePatch(true)}>Share patch</span>,

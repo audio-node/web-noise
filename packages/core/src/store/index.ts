@@ -4,11 +4,14 @@ import patch, { setAudioNodeTypes } from "../patch";
 import {
   AudioNodeTypes,
   ControlPanelNode,
+  ControlPanelNodes,
   PluginComponent,
   PluginConfig,
   WNEdge,
   WNNode,
   GraphState,
+  EditorStoreState as EditorState,
+  ControlPanelState,
 } from "../types";
 import nodesStateCreator, { NodesState } from "./nodesStore";
 
@@ -18,24 +21,7 @@ interface EditorConfig {
   showMinimap: boolean;
 }
 
-type ControlPanelNodes = Array<{
-  id: WNNode["id"];
-  width?: number;
-  height?: number;
-  x?: number;
-  y?: number;
-}>;
-
 type NodesConfiguration = Record<string, PluginComponent>;
-
-interface ControlPanelState {
-  show: boolean;
-  nodes: ControlPanelNodes;
-}
-
-export interface EditorState extends GraphState {
-  controlPanel: ControlPanelState;
-}
 
 type StoreState = NodesState & {
   setGraph: (elements: { nodes: WNNode[]; edges: WNEdge[] }) => Promise<void>;
