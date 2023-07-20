@@ -125,6 +125,7 @@ export const Editor = ({
           defaultEdgeOptions={{ type: "wire" }}
           snapToGrid
           fitView
+          disableKeyboardA11y
         >
           <Background variant={BackgroundVariant.Dots} gap={12} />
           {editorConfig.showMinimap ? <MiniMap /> : null}
