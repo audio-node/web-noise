@@ -24,6 +24,11 @@ export const <%= componentType %> = async (
   constantSource.start();
 
   return {
+    inputs: {
+      in: {
+        port: workletNode,
+      },
+    },
     outputs: {
       out: {
         port: constantSource,
