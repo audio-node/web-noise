@@ -4,6 +4,7 @@ import { WNNode } from "@web-noise/core";
 import ParameterComponent from "./src/Parameter";
 import AudioInputComponent from "./src/AudioInput";
 import FrequencyMeter from "./src/FrequencyMeter";
+import Scale from "./src/Scale";
 import Patch from "./src/Patch";
 import Gain from "./src/nodes/Gain";
 import { gain } from "./src/audioNodes/gain";
@@ -139,6 +140,7 @@ export const baseNodes: PluginConfig = {
     MidiNote,
     AudioInputComponent,
     FrequencyMeter,
+    Scale,
     Patch,
     { type: "inlet", node: Inlet, audioNode: passThrough },
     { type: "outlet", node: Outlet, audioNode: passThrough },
