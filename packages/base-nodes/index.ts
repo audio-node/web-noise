@@ -5,6 +5,7 @@ import ParameterComponent from "./src/Parameter";
 import AudioInputComponent from "./src/AudioInput";
 import FrequencyMeter from "./src/FrequencyMeter";
 import Scale from "./src/Scale";
+import Delay from "./src/Delay";
 import Patch from "./src/Patch";
 import Gain from "./src/nodes/Gain";
 import { gain } from "./src/audioNodes/gain";
@@ -74,6 +75,7 @@ export const webAudioNodes: PluginConfig = {
       node: Spectroscope,
       audioNode: analyser,
     },
+    Delay,
   ],
   name: "Web Audio Api base nodes",
 };
