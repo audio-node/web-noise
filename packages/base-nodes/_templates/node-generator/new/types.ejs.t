@@ -1,5 +1,5 @@
 ---
-to: src/<%= name %>/types.ts
+to: src/<%= componentFolder %>/types.ts
 ---
 import { WNNodeProps, WNNodeData } from "@web-noise/core";
 
