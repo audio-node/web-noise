@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "scripts": {
     "test": "jest",
-    "generate:node": "echo 'Component directory name' ; read dir_name; hygen node-generator new $dir_name"
+    "generate:node": "hygen node-generator new"
   },
   "dependencies": {
     "@monaco-editor/loader": "^1.3.3",

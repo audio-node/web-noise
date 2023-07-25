@@ -1,5 +1,6 @@
 ---
-to: src/<%= name %>/worklet.ts
+to: src/<%= componentFolder %>/worklet.ts
+skip_if: <%= !hasWorklet %>
 ---
 export class <%= componentName %>Processor extends AudioWorkletProcessor {
   process(

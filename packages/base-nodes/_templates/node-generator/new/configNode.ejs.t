@@ -1,5 +1,6 @@
 ---
-to: src/<%= name %>/Config.tsx
+to: src/<%= componentFolder %>/Config.tsx
+skip_if: <%= !hasConfig %>
 ---
 import { useNode, useTheme } from "@web-noise/core";
 import {
