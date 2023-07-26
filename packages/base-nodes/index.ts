@@ -6,6 +6,7 @@ import AudioInputComponent from "./src/AudioInput";
 import FrequencyMeter from "./src/FrequencyMeter";
 import Scale from "./src/Scale";
 import Delay from "./src/Delay";
+import Quantizer from "./src/Quantizer";
 import Patch from "./src/Patch";
 import Gain from "./src/nodes/Gain";
 import { gain } from "./src/audioNodes/gain";
@@ -142,6 +143,7 @@ export const baseNodes: PluginConfig = {
     MidiNote,
     AudioInputComponent,
     FrequencyMeter,
+    Quantizer,
     Scale,
     Patch,
     { type: "inlet", node: Inlet, audioNode: passThrough },
