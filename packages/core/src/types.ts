@@ -59,6 +59,7 @@ export type ControlPanelNodes = Array<{
 export interface ControlPanelState {
   show: boolean;
   nodes: ControlPanelNodes;
+  size: { width: number; height: number; }
 }
 
 export interface EditorStoreState extends GraphState {

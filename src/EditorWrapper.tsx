@@ -9,7 +9,11 @@ const EDITOR_DEFAULTS = {
   edges: [],
   controlPanel: {
     nodes: [],
-    show: true,
+    show: false,
+    size: {
+      width: 200,
+      height: 100,
+    },
   },
   viewport: { x: 0, y: 0, zoom: 1.5 },
 };
@@ -35,7 +39,15 @@ const EditorWrapper: FC = () => {
       fetch(fileParam)
         .then((res) => res.json())
         .then((fileData) => {
-          setGraphState({ ...EDITOR_DEFAULTS, ...fileData });
+          const newGraphState = {
+            ...EDITOR_DEFAULTS,
+            ...fileData,
+            controlPanel: {
+              ...EDITOR_DEFAULTS.controlPanel,
+              ...fileData.controlPanel,
+            },
+          };
+          setGraphState(newGraphState);
         })
         .catch((e) => alert(e));
       return;

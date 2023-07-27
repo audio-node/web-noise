@@ -95,15 +95,15 @@ const Patch: FC<WNNodeProps<PatchData>> = (props) => {
           layout={controlPanelNodes.map(
             ({ id: i, width, height, x, y }, index) => ({
               i,
-              w: width || 1,
-              h: height || 55,
+              w: width || 4,
+              h: height || 6,
               x: x || 0,
               y: y || controlPanelNodes.length + index,
             })
           )}
           className="layout"
-          cols={1}
-          rowHeight={1}
+          cols={4}
+          rowHeight={10}
           width={153}
           margin={[0, 0]}
           isResizable={false}
