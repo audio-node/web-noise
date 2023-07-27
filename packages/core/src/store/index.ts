@@ -48,6 +48,7 @@ type StoreState = NodesState & {
   setControlPanelNodes: (nodes: ControlPanelNodes) => void;
   showControlPanel: () => void;
   hideControlPanel: () => void;
+  setControlPanelSize: (width: { width: number; height: number }) => void;
   addNodeToControlPanel: (node: WNNode) => void;
   removeNodeFromControlPanel: (node: WNNode) => void;
   removeNodesFromControlPanel: (nodes: WNNode[]) => void;
@@ -245,6 +246,10 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
     controlPanel: {
       show: true,
       nodes: [],
+      size: {
+        width: 200,
+        height: 100,
+      },
     },
     showControlPanel: () =>
       set(({ controlPanel }) => ({
@@ -283,6 +288,16 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
           controlPanel: {
             ...controlPanel,
             nodes,
+          },
+        };
+      });
+    },
+    setControlPanelSize: (size) => {
+      set(({ controlPanel }) => {
+        return {
+          controlPanel: {
+            ...controlPanel,
+            size,
           },
         };
       });
