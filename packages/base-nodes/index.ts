@@ -145,9 +145,15 @@ export const baseNodes: PluginConfig = {
     FrequencyMeter,
     Quantizer,
     Scale,
+  ],
+  name: "Web Noise base nodes",
+};
+
+export const patchNodes: PluginConfig = {
+  components: [
     Patch,
     { type: "inlet", node: Inlet, audioNode: passThrough },
     { type: "outlet", node: Outlet, audioNode: passThrough },
   ],
-  name: "Web Noise base nodes",
+  name: "Patch nodes",
 };

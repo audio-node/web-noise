@@ -1,4 +1,4 @@
-import { baseNodes, webAudioNodes } from "@web-noise/base-nodes";
+import { baseNodes, webAudioNodes, patchNodes } from "@web-noise/base-nodes";
 import { Editor, theme } from "@web-noise/core";
 import { FC, ReactNode, useEffect, useMemo, useState } from "react";
 import SharePatch from "./SharePatch";
@@ -59,7 +59,7 @@ const EditorWrapper: FC = () => {
       <Editor
         theme={theme}
         editorState={graphState}
-        plugins={[baseNodes, webAudioNodes]}
+        plugins={[baseNodes, webAudioNodes, patchNodes]}
         editorContextMenu={[
           <span onClick={() => setShowSharePatch(true)}>Share patch</span>,
         ]}
