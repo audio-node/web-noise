@@ -218,13 +218,15 @@ const ControlPanel: FC = () => {
               <GridLayout
                 // containerPadding={[10, 8]}
                 layout={controlPanelNodes.map(
-                  ({ id: i, width, height, x, y }, index) => ({
-                    i,
-                    w: width || 4,
-                    h: height || 6,
-                    x: x || 0,
-                    y: y || controlPanelNodes.length + index,
-                  })
+                  ({ id: i, width, height, x, y }, index) => {
+                    return {
+                      i,
+                      w: width || 4,
+                      h: height || 6,
+                      x: x ?? 0,
+                      y: y ?? controlPanelNodes.length + index,
+                    };
+                  }
                 )}
                 className="layout"
                 cols={4}
@@ -233,17 +235,19 @@ const ControlPanel: FC = () => {
                 margin={[0, 0]}
                 isResizable={!isGridLocked}
                 draggableHandle=".grid-item-handle"
-                onLayoutChange={(nodes) =>
-                  setControlPanelNodes(
-                    nodes.map(({ i, w, h, x, y }) => ({
-                      id: i,
-                      width: w,
-                      height: h,
-                      x,
-                      y,
-                    }))
-                  )
-                }
+                onLayoutChange={(nodes) => {
+                  requestAnimationFrame(() => {
+                    setControlPanelNodes(
+                      nodes.map(({ i, w, h, x, y }) => ({
+                        id: i,
+                        width: w,
+                        height: h,
+                        x,
+                        y,
+                      }))
+                    );
+                  });
+                }}
               >
                 {filteredNodes.map((node) => {
                   return (
