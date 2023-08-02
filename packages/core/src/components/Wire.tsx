@@ -1,5 +1,7 @@
-import { useEffect } from "react";
-import { EdgeProps, getBezierPath } from "reactflow";
+import { useEffect, useMemo } from "react";
+import { EdgeProps, getBezierPath, getConnectedEdges } from "reactflow";
+import useTheme from "../hooks/useTheme";
+import useStore from "../store";
 
 const Wire = ({
   id,
@@ -17,7 +19,13 @@ const Wire = ({
   target,
   sourceHandleId,
   targetHandleId,
+  selected,
 }: EdgeProps) => {
+  const theme = useTheme();
+  const getNode = useStore(({ getNode }) => getNode);
+  const sourceNode = getNode(source);
+  const targetNode = getNode(target);
+  const isConnectedToSelected = sourceNode?.selected || targetNode?.selected;
   useEffect(() => {
     if (!sourceHandleId || !targetHandleId) {
       return;
@@ -41,7 +49,14 @@ const Wire = ({
     <>
       <path
         id={id}
-        style={style}
+        style={{
+          ...style,
+          stroke: selected
+            ? theme.colors.accent2
+            : isConnectedToSelected
+            ? theme.colors.highlight3
+            : theme.colors.highlight2,
+        }}
         className="react-flow__edge-path Wire"
         d={edgePath}
         markerEnd={markerEnd}

@@ -40,14 +40,6 @@ injectGlobal`
       box-shadow: 0 0 0 0.5px #${theme.colors.accent2};
     }
 
-    .react-flow__edge-path {
-      stroke: #898989
-    }
-
-    .react-flow__edge.selected .react-flow__edge-path {
-      stroke: #007bff;
-    }
-
     /* .react-flow__minimap-mask {
       fill: ${theme.colors.elevation1}
     }
