@@ -18,6 +18,11 @@ import { Theme } from "../../theme";
 import ControlPanelItem from "./ControlPanelItem";
 import { IconsBar, IconWrapper, PanelTitle, TitleBarWrapper } from "./styles";
 
+export const GRID_CONFIG = {
+  rowHeight: 10,
+  cols: 4,
+}
+
 const ControlPanelIconWrapper = styled.div<{ theme: Theme }>`
   position: fixed;
   z-index: 5;
@@ -138,6 +143,25 @@ const ControlPanel: FC = () => {
 
   const [isGridLocked, setGridLocked] = useState(true);
 
+  const layout = useMemo(() => {
+    const fallbackY = controlPanelNodes.reduce(
+      (acc, { height = GRID_CONFIG.rowHeight, x, y = 0 }) => {
+        const Y = y + height;
+        return Y > acc ? Y : acc;
+      },
+      0
+    );
+    return controlPanelNodes.map(({ id: i, width, height, x, y }) => {
+      return {
+        i,
+        w: width || GRID_CONFIG.cols,
+        h: height || 6,
+        x: x ?? 0,
+        y: y ?? fallbackY,
+      };
+    });
+  }, [controlPanelNodes]);
+
   if (!filteredNodes.length) {
     return null;
   }
@@ -216,21 +240,10 @@ const ControlPanel: FC = () => {
           >
             <ControlPanelBody theme={theme}>
               <GridLayout
-                // containerPadding={[10, 8]}
-                layout={controlPanelNodes.map(
-                  ({ id: i, width, height, x, y }, index) => {
-                    return {
-                      i,
-                      w: width || 4,
-                      h: height || 6,
-                      x: x ?? 0,
-                      y: y ?? controlPanelNodes.length + index,
-                    };
-                  }
-                )}
+                layout={layout}
                 className="layout"
-                cols={4}
-                rowHeight={10}
+                cols={GRID_CONFIG.cols}
+                rowHeight={GRID_CONFIG.rowHeight}
                 width={width}
                 margin={[0, 0]}
                 isResizable={!isGridLocked}
