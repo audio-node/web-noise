@@ -1,6 +1,7 @@
 import { addEdge, getConnectedEdges, NodeTypes, OnConnect } from "reactflow";
 import create, { StateCreator } from "zustand";
 import patch, { setAudioNodeTypes } from "../patch";
+import { CONTROL_PANEL_GRID_CONFIG } from "../constants";
 import {
   AudioNodeTypes,
   ControlPanelNode,
@@ -259,13 +260,25 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
       set(({ controlPanel }) => ({
         controlPanel: { ...controlPanel, show: false },
       })),
-    addNodeToControlPanel: (node) =>
+    addNodeToControlPanel: (node) => {
+      const { nodesConfiguration } = get();
+      const defaultConfig = node.type
+        ? nodesConfiguration[node.type]?.defaultConfig
+        : {};
+      const { height } = defaultConfig?.size || {};
+      const newNode = {
+        id: node.id,
+        ...(height
+          ? { height: height / CONTROL_PANEL_GRID_CONFIG.rowHeight }
+          : {}),
+      };
       set(({ controlPanel }) => ({
         controlPanel: {
           ...controlPanel,
-          nodes: [...controlPanel.nodes, { id: node.id }],
+          nodes: [...controlPanel.nodes, newNode],
         },
-      })),
+      }));
+    },
     removeNodeFromControlPanel: (node) =>
       get().removeNodesFromControlPanel([node]),
     removeNodesFromControlPanel: (nodes) => {

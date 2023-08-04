@@ -17,11 +17,7 @@ import useStore from "../../store";
 import { Theme } from "../../theme";
 import ControlPanelItem from "./ControlPanelItem";
 import { IconsBar, IconWrapper, PanelTitle, TitleBarWrapper } from "./styles";
-
-export const GRID_CONFIG = {
-  rowHeight: 10,
-  cols: 4,
-}
+import { CONTROL_PANEL_GRID_CONFIG } from "../../constants";
 
 const ControlPanelIconWrapper = styled.div<{ theme: Theme }>`
   position: fixed;
@@ -145,7 +141,7 @@ const ControlPanel: FC = () => {
 
   const layout = useMemo(() => {
     const fallbackY = controlPanelNodes.reduce(
-      (acc, { height = GRID_CONFIG.rowHeight, x, y = 0 }) => {
+      (acc, { height = CONTROL_PANEL_GRID_CONFIG.rowHeight, x, y = 0 }) => {
         const Y = y + height;
         return Y > acc ? Y : acc;
       },
@@ -154,7 +150,7 @@ const ControlPanel: FC = () => {
     return controlPanelNodes.map(({ id: i, width, height, x, y }) => {
       return {
         i,
-        w: width || GRID_CONFIG.cols,
+        w: width || CONTROL_PANEL_GRID_CONFIG.cols,
         h: height || 6,
         x: x ?? 0,
         y: y ?? fallbackY,
@@ -242,8 +238,8 @@ const ControlPanel: FC = () => {
               <GridLayout
                 layout={layout}
                 className="layout"
-                cols={GRID_CONFIG.cols}
-                rowHeight={GRID_CONFIG.rowHeight}
+                cols={CONTROL_PANEL_GRID_CONFIG.cols}
+                rowHeight={CONTROL_PANEL_GRID_CONFIG.rowHeight}
                 width={width}
                 margin={[0, 0]}
                 isResizable={!isGridLocked}
