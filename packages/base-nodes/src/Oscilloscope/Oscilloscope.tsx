@@ -49,7 +49,14 @@ const Oscilloscope = ({ node: props, audioNode }: OscilloscopeProps) => {
     if (!audioNode) {
       return;
     }
-    setPorts(audioNode.getPorts());
+    const channel1 = new MessageChannel();
+    channel1.port2.start();
+
+    const channel2 = new MessageChannel();
+    channel2.port2.start();
+
+    audioNode.registerPorts([channel1.port1, channel2.port1])
+    setPorts([channel1.port2, channel2.port2]);
   }, [audioNode]);
 
   if (!ports) {
