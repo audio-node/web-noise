@@ -47,7 +47,7 @@ import { math } from "./src/audioNodes/math";
 import { midiToFrequency } from "./src/audioNodes/midiToFrequency";
 import AudioTrack from "./src/nodes/AudioTrack";
 import audioTrack from "./src/audioNodes/audioTrack";
-import ValueMeter from "./src/nodes/ValueMeter";
+import ValueMeter from "./src/ValueMeter";
 import Sticker from "./src/nodes/Sticker";
 import MidiInput from "./src/nodes/MidiInput";
 import { midiInput } from "./src/audioNodes/midiInput";
@@ -128,7 +128,7 @@ export const baseNodes: PluginConfig = {
       audioNode: midiToFrequency,
     },
     { type: "audioTrack", node: AudioTrack, audioNode: audioTrack },
-    { type: "valueMeter", node: ValueMeter, audioNode: Oscilloscope.audioNode },
+    ValueMeter,
     { type: "sticker", node: Sticker, audioNode: false },
     {
       type: "midiInput",
