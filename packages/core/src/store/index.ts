@@ -1,5 +1,5 @@
 import { addEdge, getConnectedEdges, NodeTypes, OnConnect } from "reactflow";
-import create, { StateCreator } from "zustand";
+import { create, StateCreator } from "zustand";
 import patch, { setAudioNodeTypes } from "../patch";
 import { CONTROL_PANEL_GRID_CONFIG } from "../constants";
 import {
