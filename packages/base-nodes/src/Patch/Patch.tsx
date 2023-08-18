@@ -33,6 +33,9 @@ const PanelNodeTitle = styled.div<{ theme: Theme }>`
   font-size: var(--leva-fontSizes-root);
   margin-left: 0.5rem;
   margin-top: 0.3rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 interface PatchData {
@@ -91,56 +94,60 @@ const Patch: FC<WNNodeProps<PatchData>> = (props) => {
         </NodeWrapper>
       ) : null}
       {controlPanelNodes ? (
-        <GridLayout
-          layout={controlPanelNodes.map(
-            ({ id: i, width, height, x, y }, index) => ({
-              i,
-              w: width || 4,
-              h: height || 6,
-              x: x || 0,
-              y: y || controlPanelNodes.length + index,
-            })
-          )}
-          className="layout"
-          cols={4}
-          rowHeight={10}
-          width={153}
-          margin={[0, 0]}
-          isResizable={false}
-          isDraggable={false}
-        >
-          {filteredNodes.map((node) => {
-            const nodeValues = data.values?.nodes?.[node.id];
-            const extendedNode = {
-              ...node,
-              data: {
-                ...node.data,
-                values: {
-                  ...node.data.values,
-                  ...(nodeValues || {}),
+        <div style={{ width: `${patchData.controlPanel.size.width + 1}px` }}>
+          <GridLayout
+            layout={controlPanelNodes.map(
+              ({ id: i, width, height, x, y }, index) => ({
+                i,
+                w: width || 4,
+                h: height || 6,
+                x: x || 0,
+                y: y || controlPanelNodes.length + index,
+              })
+            )}
+            className="layout"
+            cols={4}
+            rowHeight={10}
+            width={patchData.controlPanel.size.width}
+            margin={[0, 0]}
+            isResizable={false}
+            isDraggable={false}
+          >
+            {filteredNodes.map((node) => {
+              const nodeValues = data.values?.nodes?.[node.id];
+              const extendedNode = {
+                ...node,
+                data: {
+                  ...node.data,
+                  values: {
+                    ...node.data.values,
+                    ...(nodeValues || {}),
+                  },
                 },
-              },
-            };
-            return (
-              <PanelNodeWrapper theme={theme} key={node.id}>
-                <PanelNodeTitle theme={theme}>{node.data.label}</PanelNodeTitle>
-                <PanelNode
-                  node={extendedNode}
-                  audioNode={audioNode?.audioNodes.get(node.id)?.node}
-                  updateNodeValues={(values) => {
-                    updateNodeValues({
-                      ...data.values,
-                      nodes: {
-                        ...data.values?.nodes,
-                        [node.id]: values,
-                      },
-                    });
-                  }}
-                />
-              </PanelNodeWrapper>
-            );
-          })}
-        </GridLayout>
+              };
+              return (
+                <PanelNodeWrapper theme={theme} key={node.id}>
+                  <PanelNodeTitle theme={theme}>
+                    {node.data.label}
+                  </PanelNodeTitle>
+                  <PanelNode
+                    node={extendedNode}
+                    audioNode={audioNode?.audioNodes.get(node.id)?.node}
+                    updateNodeValues={(values) => {
+                      updateNodeValues({
+                        ...data.values,
+                        nodes: {
+                          ...data.values?.nodes,
+                          [node.id]: values,
+                        },
+                      });
+                    }}
+                  />
+                </PanelNodeWrapper>
+              );
+            })}
+          </GridLayout>
+        </div>
       ) : null}
     </WNNode>
   );
