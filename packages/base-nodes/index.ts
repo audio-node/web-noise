@@ -17,7 +17,7 @@ import { filter } from "./src/audioNodes/filter";
 import Oscillator from "./src/nodes/Oscillator";
 import { oscillator } from "./src/audioNodes/oscillator";
 import Visualiser from "./src/nodes/Visualiser";
-import Spectroscope from "./src/nodes/Spectroscope";
+import Spectroscope from "./src/Spectroscope";
 import { analyser } from "./src/audioNodes/analyser";
 import Reverb from "./src/nodes/Reverb";
 import { reverb } from "./src/audioNodes/reverb";
@@ -71,11 +71,6 @@ export const webAudioNodes: PluginConfig = {
     ParameterComponent,
     { type: "oscillator", node: Oscillator, audioNode: oscillator },
     { type: "visualiser", node: Visualiser, audioNode: analyser },
-    {
-      type: "spectroscope",
-      node: Spectroscope,
-      audioNode: analyser,
-    },
     Delay,
   ],
   name: "Web Audio Api base nodes",
@@ -88,6 +83,7 @@ export const baseNodes: PluginConfig = {
     { type: "clock", node: Clock, audioNode: clock },
     { type: "whiteNoise", node: WNNode, audioNode: whiteNoise },
     Oscilloscope,
+    Spectroscope,
     {
       type: "virtualKeyboard",
       node: VirtualKeyboard,
