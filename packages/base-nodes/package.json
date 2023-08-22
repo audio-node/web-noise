@@ -10,6 +10,7 @@
     "@tonaljs/tonal": "^4.6.5",
     "@types/marked": "^4.0.7",
     "@types/webmidi": "^2.0.6",
+    "fft-js": "^0.0.12",
     "leva": "0.9.21",
     "marked": "^4.1.1",
     "monaco-editor": "^0.38.0",
