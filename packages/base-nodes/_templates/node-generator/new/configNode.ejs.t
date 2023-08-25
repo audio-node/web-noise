@@ -14,7 +14,7 @@ import { <%= componentName %>Props } from "./types";
 
 const <%= componentName %>Config = ({ id, data }: <%= componentName %>Props) => {
   const theme = useTheme();
-  const { updateNodeValues } = useNode(id);
+  const { updateNodeValues, updateNodeConfig } = useNode(id);
 
   const { config = {} } = data;
 

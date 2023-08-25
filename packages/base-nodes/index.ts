@@ -14,8 +14,7 @@ import Destination from "./src/nodes/Destination";
 import { destination } from "./src/audioNodes/destination";
 import Filter from "./src/nodes/Filter";
 import { filter } from "./src/audioNodes/filter";
-import Oscillator from "./src/nodes/Oscillator";
-import { oscillator } from "./src/audioNodes/oscillator";
+import Oscillator from "./src/Oscillator";
 import Visualiser from "./src/nodes/Visualiser";
 import Spectroscope from "./src/Spectroscope";
 import { analyser } from "./src/audioNodes/analyser";
@@ -69,7 +68,7 @@ export const webAudioNodes: PluginConfig = {
     { type: "gain", node: Gain, audioNode: gain },
     { type: "filter", node: Filter, audioNode: filter },
     ParameterComponent,
-    { type: "oscillator", node: Oscillator, audioNode: oscillator },
+    Oscillator,
     { type: "visualiser", node: Visualiser, audioNode: analyser },
     Delay,
   ],
