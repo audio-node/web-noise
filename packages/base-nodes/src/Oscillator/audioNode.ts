@@ -1,16 +1,14 @@
 import { WNAudioNode } from "@web-noise/core";
-
-export interface OscillatorValues {
-  frequency?: number;
-  type?: OscillatorType;
-}
+import { OscillatorValues, OscillatorData } from "./types";
 
 export interface Oscillator extends WNAudioNode {
-  oscillator: OscillatorNode;
   setValues: (values?: OscillatorValues) => void;
 }
 
-export const oscillator = (audioContext: AudioContext): Oscillator => {
+export const oscillator = async (
+  audioContext: AudioContext,
+  data?: OscillatorData
+): Promise<Oscillator> => {
   const oscillator = audioContext.createOscillator();
   oscillator.frequency.value = 0;
   oscillator.start();
@@ -31,14 +29,11 @@ export const oscillator = (audioContext: AudioContext): Oscillator => {
     destroy: () => {
       oscillator.stop();
     },
-    setValues: ({ frequency, type } = {}) => {
-      typeof frequency !== 'undefined' &&
-        oscillator.frequency.setValueAtTime(
-          frequency,
-          audioContext.currentTime
-        );
+    setValues: ({ type } = {}) => {
       type && (oscillator.type = type);
     },
     oscillator,
   };
 };
+
+export default oscillator;
