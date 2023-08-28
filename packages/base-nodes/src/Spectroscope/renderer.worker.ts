@@ -57,7 +57,7 @@ const render = () => {
 
   let x = 0;
   for (let i = 0; i < bufferLength; i++) {
-    const barHeight = scale(magnitudes[i], 0, 255, 0, height);
+    const barHeight = scale(magnitudes[i], 0, 255, 0, height * 2);
     canvasContext.fillStyle = color;
     canvasContext.fillRect(
       x,
