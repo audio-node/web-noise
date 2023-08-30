@@ -2,10 +2,22 @@ interface ExpressionArguments {
   A: number;
   B: number;
   C: number;
+  X: number;
+  Y: number;
+  Z: number;
   INPUT: number;
 }
 
-export class MathProcessor extends AudioWorkletProcessor {
+interface Parameters {
+  A: Float32Array;
+  B: Float32Array;
+  C: Float32Array;
+  X: Float32Array;
+  Y: Float32Array;
+  Z: Float32Array;
+}
+
+export class MathNodeProcessor extends AudioWorkletProcessor {
   expressionFn: (values: ExpressionArguments) => number = () => 0;
   hasError = false;
 
@@ -65,7 +77,7 @@ export class MathProcessor extends AudioWorkletProcessor {
   process(
     inputs: Float32Array[][],
     outputs: Float32Array[][],
-    parameters: Record<string, Float32Array>
+    parameters: Parameters
   ) {
     const output = outputs[0];
     const input = inputs[0];
@@ -80,9 +92,18 @@ export class MathProcessor extends AudioWorkletProcessor {
             A: parameters.A[0],
             B: parameters.B[0],
             C: parameters.C[0],
-            X: parameters.X.length === 1 ? parameters.X[0] : parameters.X[sampleIndex],
-            Y: parameters.Y.length === 1 ? parameters.Y[0] : parameters.Y[sampleIndex],
-            Z: parameters.Z.length === 1 ? parameters.Z[0] : parameters.Z[sampleIndex],
+            X:
+              parameters.X.length === 1
+                ? parameters.X[0]
+                : parameters.X[sampleIndex],
+            Y:
+              parameters.Y.length === 1
+                ? parameters.Y[0]
+                : parameters.Y[sampleIndex],
+            Z:
+              parameters.Z.length === 1
+                ? parameters.Z[0]
+                : parameters.Z[sampleIndex],
             INPUT: input[channelIndex]?.[sampleIndex],
           };
           outputChannel[sampleIndex] = this.expressionFn(args);
@@ -98,4 +119,4 @@ export class MathProcessor extends AudioWorkletProcessor {
 }
 
 //@ts-ignore
-registerProcessor("math-processor", MathProcessor);
+registerProcessor("math-node-processor", MathNodeProcessor);
