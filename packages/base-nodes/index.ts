@@ -53,8 +53,8 @@ import DataRecorder from "./src/nodes/DataRecorder";
 import { dataRecorder } from "./src/audioNodes/dataRecorder";
 import MidiNote from "./src/MidiNote";
 
-import Inlet from "./src/nodes/Inlet";
-import Outlet from "./src/nodes/Outlet";
+import Inlet from "./src/Inlet";
+import Outlet from "./src/Outlet";
 import { passThrough } from "./src/audioNodes/passThrough";
 
 export const webAudioNodes: PluginConfig = {
@@ -142,8 +142,8 @@ export const baseNodes: PluginConfig = {
 export const patchNodes: PluginConfig = {
   components: [
     Patch,
-    { type: "inlet", node: Inlet, audioNode: passThrough },
-    { type: "outlet", node: Outlet, audioNode: passThrough },
+    Inlet,
+    Outlet,
   ],
   name: "Patch nodes",
 };
