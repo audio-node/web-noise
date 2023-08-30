@@ -41,8 +41,7 @@ import {
 import { Script, WorkletScript } from "./src/Script";
 import { Gate } from "./src/Gate";
 import { Select } from "./src/Select";
-import MathNode from "./src/nodes/MathNode";
-import { math } from "./src/audioNodes/math";
+import MathNode from "./src/MathNode";
 import { midiToFrequency } from "./src/audioNodes/midiToFrequency";
 import AudioTrack from "./src/nodes/AudioTrack";
 import audioTrack from "./src/audioNodes/audioTrack";
@@ -112,11 +111,7 @@ export const baseNodes: PluginConfig = {
     WorkletScript,
     Gate,
     Select,
-    {
-      type: "mathNode",
-      node: MathNode,
-      audioNode: math,
-    },
+    MathNode,
     {
       type: "midiToFrequency",
       node: WNNode,

@@ -1,19 +1,18 @@
 import { WNAudioNode } from "@web-noise/core";
+import { MathNodeValues, MathNodeData } from "./types";
 
-const sciptNodeWorklet = new URL('./worklet.ts', import.meta.url);
-
-export interface MathNodeValues {
-  expression?: string;
-}
+const mathNodeWorklet = new URL("./worklet.ts", import.meta.url);
 
 export interface MathNode extends WNAudioNode {
-  mathNode: AudioWorkletNode;
   setValues: (values?: MathNodeValues) => void;
 }
 
-export const math = async (audioContext: AudioContext): Promise<MathNode> => {
-  await audioContext.audioWorklet.addModule(sciptNodeWorklet);
-  const mathNode = new AudioWorkletNode(audioContext, "math-processor");
+export const mathNode = async (
+  audioContext: AudioContext,
+  data?: MathNodeData
+): Promise<MathNode> => {
+  await audioContext.audioWorklet.addModule(mathNodeWorklet);
+  const mathNode = new AudioWorkletNode(audioContext, "math-node-processor");
 
   return {
     outputs: {
@@ -54,4 +53,4 @@ export const math = async (audioContext: AudioContext): Promise<MathNode> => {
   };
 };
 
-export default math;
+export default mathNode;
