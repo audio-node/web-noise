@@ -1,4 +1,4 @@
-import conf from "./.storybook/webpack.config";
+import conf from "./webpack.config";
 
 export default {
   webpack: {
