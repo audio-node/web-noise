@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import styled from "@emotion/styled";
 import { WNAudioNode, WNNodeProps, useTheme, Theme } from "@web-noise/core";
-import { OscillatorValues, OscillatorConfig, OscillatorData } from "./types";
+import { OscillatorData } from "./types";
 import { SawToothIcon, SineIcon, SquareIcon, TriangleIcon } from "./icons";
 
 const OscillatorWrapper = styled.div<{ theme: Theme }>`
@@ -11,6 +11,7 @@ const OscillatorWrapper = styled.div<{ theme: Theme }>`
   height: 100%;
   padding: 0.2rem 0.4rem;
   box-sizing: border-box;
+  overflow: hidden;
 `;
 
 const IconsWrapper = styled.div<{ theme: Theme }>`
