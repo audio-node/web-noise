@@ -31,7 +31,7 @@
   },
   "scripts": {
     "start": "craco start",
-    "build": "PUBLIC_URL=/ BUILD_PATH=docs craco build",
+    "build": "PUBLIC_URL=/web-noise BUILD_PATH=docs craco build",
     "test": "craco test",
     "eject": "react-scripts eject"
   },
