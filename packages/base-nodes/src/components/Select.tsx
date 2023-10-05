@@ -51,7 +51,7 @@ interface SelectOption {
 
 interface SelectProps {
   options: Array<SelectOption>;
-  value: SelectOption["value"];
+  value?: SelectOption["value"];
   placeholder?: string;
   onChange?: (value: SelectOption["value"]) => void;
 }

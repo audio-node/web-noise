@@ -12,8 +12,7 @@ import Gain from "./src/nodes/Gain";
 import { gain } from "./src/audioNodes/gain";
 import Destination from "./src/nodes/Destination";
 import { destination } from "./src/audioNodes/destination";
-import Filter from "./src/nodes/Filter";
-import { filter } from "./src/audioNodes/filter";
+import Filter from "./src/Filter";
 import Oscillator from "./src/Oscillator";
 import StereoPanner from "./src/StereoPanner";
 import Visualiser from "./src/nodes/Visualiser";
@@ -66,7 +65,7 @@ export const webAudioNodes: PluginConfig = {
       audioNode: destination,
     },
     { type: "gain", node: Gain, audioNode: gain },
-    { type: "filter", node: Filter, audioNode: filter },
+    Filter,
     ParameterComponent,
     Oscillator,
     StereoPanner,
@@ -142,10 +141,6 @@ export const baseNodes: PluginConfig = {
 };
 
 export const patchNodes: PluginConfig = {
-  components: [
-    Patch,
-    Inlet,
-    Outlet,
-  ],
+  components: [Patch, Inlet, Outlet],
   name: "Patch nodes",
 };
