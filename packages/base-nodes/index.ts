@@ -6,6 +6,7 @@ import AudioInputComponent from "./src/AudioInput";
 import FrequencyMeter from "./src/FrequencyMeter";
 import Scale from "./src/Scale";
 import Delay from "./src/Delay";
+import DynamicsCompressor from "./src/DynamicsCompressor";
 import Quantizer from "./src/Quantizer";
 import Patch from "./src/Patch";
 import Gain from "./src/nodes/Gain";
@@ -71,6 +72,7 @@ export const webAudioNodes: PluginConfig = {
     StereoPanner,
     { type: "visualiser", node: Visualiser, audioNode: analyser },
     Delay,
+    DynamicsCompressor,
   ],
   name: "Web Audio Api base nodes",
 };
