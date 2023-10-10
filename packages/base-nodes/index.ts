@@ -19,8 +19,7 @@ import StereoPanner from "./src/StereoPanner";
 import Visualiser from "./src/nodes/Visualiser";
 import Spectroscope from "./src/Spectroscope";
 import { analyser } from "./src/audioNodes/analyser";
-import Reverb from "./src/nodes/Reverb";
-import { reverb } from "./src/audioNodes/reverb";
+import Reverb from "./src/Reverb";
 import ADSR from "./src/nodes/ADSR";
 import { adsr } from "./src/audioNodes/adsr";
 import Clock from "./src/nodes/Clock";
@@ -79,7 +78,7 @@ export const webAudioNodes: PluginConfig = {
 
 export const baseNodes: PluginConfig = {
   components: [
-    { type: "reverb", node: Reverb, audioNode: reverb },
+    Reverb,
     { type: "adsr", node: ADSR, audioNode: adsr },
     { type: "clock", node: Clock, audioNode: clock },
     { type: "whiteNoise", node: WNNode, audioNode: whiteNoise },
