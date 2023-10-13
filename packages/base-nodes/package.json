@@ -16,6 +16,7 @@
     "monaco-editor": "^0.38.0",
     "pitchfinder": "^2.3.2",
     "prismjs": "^1.29.0",
+    "rc-slider": "^10.3.0",
     "re-resizable": "^6.9.9",
     "react-envelope-graph": "^0.1.4",
     "react-piano": "^3.1.3",
