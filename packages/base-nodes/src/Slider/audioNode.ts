@@ -12,6 +12,7 @@ export const slider = async (
 ): Promise<Slider> => {
 
   const constantSource = audioContext.createConstantSource();
+  constantSource.offset.value = data?.values?.value ?? 0;
   constantSource.start();
 
   return {
