@@ -1,9 +1,13 @@
 import { WNAudioNode } from "@web-noise/core";
 
-const scaleWorklet = new URL("./worklet.ts", import.meta.url);
+//@ts-ignore
+import scaleWorkletUrl from "worklet:./worklet.ts";
+
+const scaleWorklet = new URL(scaleWorkletUrl);
+
 
 export const scale = async (
-  audioContext: AudioContext
+  audioContext: AudioContext,
 ): Promise<WNAudioNode> => {
   await audioContext.audioWorklet.addModule(scaleWorklet);
   const workletNode = new AudioWorkletNode(audioContext, "scale-processor", {

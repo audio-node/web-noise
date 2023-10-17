@@ -1,9 +1,9 @@
 import { WNAudioNode } from "@web-noise/core";
 
-const passThroughWorker = new URL(
-  "../audioNodes/passThrough/worklet.ts",
-  import.meta.url
-);
+//@ts-ignore
+import scaleWorkletUrl from "worklet:../audioNodes/passThrough/worklet.ts";
+
+const passThroughWorklet = new URL(scaleWorkletUrl, import.meta.url);
 
 export interface AudioInputValues {
   currentInput?: MediaDeviceInfo["deviceId"] | null;
@@ -43,7 +43,7 @@ const getAudioStream = async (deviceId: string) => {
 };
 
 const audioInput = async (audioContext: AudioContext): Promise<AudioInput> => {
-  await audioContext.audioWorklet.addModule(passThroughWorker);
+  await audioContext.audioWorklet.addModule(passThroughWorklet);
   const output = new AudioWorkletNode(audioContext, "pass-through-processor");
   let inputsChangeHandler: InputsChangeHandler = () => {};
 

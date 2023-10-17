@@ -1,6 +1,9 @@
 import { WNAudioNode } from "@web-noise/core";
 
-const midiInputWorklet = new URL("./worklet.ts", import.meta.url);
+//@ts-ignore
+import midiInputWorkletUrl from "worklet:./worklet.ts";
+
+const midiInputWorklet = new URL(midiInputWorkletUrl, import.meta.url);
 
 export interface MidiValues {
   currentInput?: string;
@@ -17,7 +20,7 @@ export interface MidiInput extends WNAudioNode {
 }
 
 export const midiInput = async (
-  audioContext: AudioContext
+  audioContext: AudioContext,
 ): Promise<MidiInput> => {
   await audioContext.audioWorklet.addModule(midiInputWorklet);
   const midiInputNode = new AudioWorkletNode(
@@ -25,7 +28,7 @@ export const midiInput = async (
     "midi-input-processor",
     {
       numberOfOutputs: 3,
-    }
+    },
   );
   let inputsChangeHandler: InputsChangeHandler = () => {};
 

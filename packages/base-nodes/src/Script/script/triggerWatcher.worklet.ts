@@ -41,5 +41,7 @@ export class TriggerWatcherProcessor extends AudioWorkletProcessor {
   }
 }
 
-//@ts-ignore
-registerProcessor("trigger-watcher-processor", TriggerWatcherProcessor);
+try {
+  //@ts-ignore
+  registerProcessor("trigger-watcher-processor", TriggerWatcherProcessor);
+} catch (e) {}

@@ -1,9 +1,14 @@
-import { Scale, Note } from "@tonaljs/tonal";
+import notes from "../../MidiNote/notes";
+import notesRange from "./notesRange";
+
+const notesRecord = notes.reduce<Record<string, number>>(
+  (acc, { key, value }) => ({ ...acc, [key]: value }),
+  {},
+);
 
 const TRIGGER_THRESHOLD = 0.5;
 
 export class SequencerProcessor extends AudioWorkletProcessor {
-  currentFrequency: number = 0;
   currentMidiNumber: number = 0;
   notesRange: Array<string | undefined>;
 
@@ -11,18 +16,13 @@ export class SequencerProcessor extends AudioWorkletProcessor {
 
   constructor() {
     super();
-    const range = Scale.rangeOf("C major");
-    this.notesRange = range("A2", "A6");
+    this.notesRange = notesRange;
   }
 
   onTick() {
     const randomIndex = Math.floor(Math.random() * this.notesRange.length);
     const note = this.notesRange[randomIndex] || "C2";
-    const freq = Note.freq(note);
-    if (freq) {
-      this.currentFrequency = freq;
-    }
-    const midi = Note.midi(note);
+    const midi = notesRecord[note];
     if (midi) {
       this.currentMidiNumber = midi;
     }
@@ -44,21 +44,11 @@ export class SequencerProcessor extends AudioWorkletProcessor {
     channel.forEach((item) => this.checkTrigger(item));
   }
 
-  process(
-    inputs: Float32Array[][],
-    outputs: Float32Array[][],
-    parameters: Record<string, Array<any>>
-  ) {
+  process(inputs: Float32Array[][], outputs: Float32Array[][]) {
     const input = inputs[0];
     input.forEach((channel) => this.checkChannel(channel));
 
-    const [frequencyOutput, midiOutput] = outputs;
-
-    frequencyOutput.forEach((channel: any) => {
-      for (let i = 0; i < channel.length; i++) {
-        channel[i] = this.currentFrequency;
-      }
-    });
+    const [midiOutput] = outputs;
 
     midiOutput.forEach((channel: any) => {
       for (let i = 0; i < channel.length; i++) {
@@ -70,5 +60,7 @@ export class SequencerProcessor extends AudioWorkletProcessor {
   }
 }
 
-//@ts-ignore
-registerProcessor("random-sequencer-processor", SequencerProcessor);
+try {
+  //@ts-ignore
+  registerProcessor("random-sequencer-processor", SequencerProcessor);
+} catch (e) {}

@@ -1,6 +1,9 @@
 import { WNAudioNode } from "@web-noise/core";
 
-const sciptNodeWorklet = new URL('../MathNode//worklet.ts', import.meta.url);
+//@ts-ignore
+import sciptNodeWorkletUrl from "worklet:../MathNode/worklet.ts";
+
+const sciptNodeWorklet = new URL(sciptNodeWorkletUrl, import.meta.url);
 
 export const midiToFrequency = async (audioContext: AudioContext): Promise<WNAudioNode> => {
   await audioContext.audioWorklet.addModule(sciptNodeWorklet);

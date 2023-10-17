@@ -1,6 +1,9 @@
 import { WNAudioNode } from "@web-noise/core";
 
-const clockWorklet = new URL('./worklet.ts', import.meta.url);
+//@ts-ignore
+import clockWorkletUrl from "worklet:./worklet.ts";
+
+const clockWorklet = new URL(clockWorkletUrl, import.meta.url);
 
 export interface ClockValues {
   bpm?: number;

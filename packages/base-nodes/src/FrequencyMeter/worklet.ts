@@ -1,4 +1,4 @@
-import Pitchfinder from 'pitchfinder';
+import Pitchfinder from "pitchfinder";
 import { createUseBuffer } from "../lib";
 
 const detectPitch = Pitchfinder.DynamicWavelet({ sampleRate: sampleRate });
@@ -27,5 +27,7 @@ export class FrequencyMeterProcessor extends AudioWorkletProcessor {
   }
 }
 
-//@ts-ignore
-registerProcessor("frequency-meter-processor", FrequencyMeterProcessor);
+try {
+  //@ts-ignore
+  registerProcessor("frequency-meter-processor", FrequencyMeterProcessor);
+} catch (e) {}

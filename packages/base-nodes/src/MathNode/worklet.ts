@@ -54,7 +54,7 @@ export class MathNodeProcessor extends AudioWorkletProcessor {
     //@ts-ignore
     this.expressionFn = new Function(
       "{ A, B, C, X, Y, Z, INPUT }",
-      `return ${expression || 0}`
+      `return ${expression || 0}`,
     );
   }
 
@@ -77,7 +77,7 @@ export class MathNodeProcessor extends AudioWorkletProcessor {
   process(
     inputs: Float32Array[][],
     outputs: Float32Array[][],
-    parameters: Parameters
+    parameters: Parameters,
   ) {
     const output = outputs[0];
     const input = inputs[0];
@@ -118,5 +118,7 @@ export class MathNodeProcessor extends AudioWorkletProcessor {
   }
 }
 
-//@ts-ignore
-registerProcessor("math-node-processor", MathNodeProcessor);
+try {
+  //@ts-ignore
+  registerProcessor("math-node-processor", MathNodeProcessor);
+} catch (e) {}

@@ -33,7 +33,7 @@ export class ClockProcessor extends AudioWorkletProcessor {
   process(
     _inputs: Float32Array[][],
     outputs: Float32Array[][],
-    parameters: Record<string, Float32Array>
+    parameters: Record<string, Float32Array>,
   ) {
     const isTicking = parameters.inputGate[0] === 1;
     const trigger = outputs[0];
@@ -76,5 +76,7 @@ export class ClockProcessor extends AudioWorkletProcessor {
   }
 }
 
-//@ts-ignore
-registerProcessor("clock-processor", ClockProcessor);
+try {
+  //@ts-ignore
+  registerProcessor("clock-processor", ClockProcessor);
+} catch (e) {}

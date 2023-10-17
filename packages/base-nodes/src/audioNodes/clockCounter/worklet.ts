@@ -23,7 +23,7 @@ export class ClockCounterProcessor extends AudioWorkletProcessor {
   process(
     inputs: Float32Array[][],
     _outputs: Float32Array[][],
-    _parameters: Record<string, Array<any>>
+    _parameters: Record<string, Array<any>>,
   ) {
     const input = inputs[0];
     input.forEach((channel) => this.checkChannel(channel));
@@ -31,5 +31,7 @@ export class ClockCounterProcessor extends AudioWorkletProcessor {
   }
 }
 
-//@ts-ignore
-registerProcessor("clock-counter-processor", ClockCounterProcessor);
+try {
+  //@ts-ignore
+  registerProcessor("clock-counter-processor", ClockCounterProcessor);
+} catch (e) {}

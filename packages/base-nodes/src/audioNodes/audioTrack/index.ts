@@ -1,6 +1,9 @@
 import { WNAudioNode } from "@web-noise/core";
 
-const audioTrackWorkletUrl = new URL("./worklet.ts", import.meta.url);
+//@ts-ignore
+import audioTrackWorkletUrl from "worklet:./worklet.ts";
+
+const audioTrackWorklet = new URL(audioTrackWorkletUrl, import.meta.url);
 
 export interface AudioTrackValues {
   src?: string;
@@ -46,7 +49,7 @@ const loadTrack = async (
 export const audioTrack = async (
   audioContext: AudioContext
 ): Promise<AudioTrack> => {
-  await audioContext.audioWorklet.addModule(audioTrackWorkletUrl);
+  await audioContext.audioWorklet.addModule(audioTrackWorklet);
   const audioTrack = new AudioWorkletNode(
     audioContext,
     "audio-track-processor",

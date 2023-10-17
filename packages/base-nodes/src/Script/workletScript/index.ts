@@ -1,6 +1,9 @@
 import { ScriptNode, ScriptNodeValues, ScriptNodeData } from "../types";
 
-const sciptNodeWorklet = new URL("./worklet.ts", import.meta.url);
+//@ts-ignore
+import sciptNodeWorkletUrl from "worklet:./worklet.ts";
+
+const sciptNodeWorklet = new URL(sciptNodeWorkletUrl, import.meta.url);
 
 export const scriptNode = async (
   audioContext: AudioContext,

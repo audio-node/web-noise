@@ -54,7 +54,7 @@ export class ScriptNodeProcessor extends AudioWorkletProcessor {
           //@ts-ignore
           this.expressionFn = new Function(
             "ProcessSandbox",
-            transpile(data.value)
+            transpile(data.value),
           );
         } catch (error) {
           this.expressionFn = () => {
@@ -93,7 +93,7 @@ export class ScriptNodeProcessor extends AudioWorkletProcessor {
   process(
     inputs: Float32Array[][],
     outputs: Float32Array[][],
-    parameters: Record<string, Float32Array>
+    parameters: Record<string, Float32Array>,
   ) {
     try {
       this.expressionFn({
@@ -112,5 +112,7 @@ export class ScriptNodeProcessor extends AudioWorkletProcessor {
   }
 }
 
-//@ts-ignore
-registerProcessor("script-node-processor", ScriptNodeProcessor);
+try {
+  //@ts-ignore
+  registerProcessor("script-node-processor", ScriptNodeProcessor);
+} catch (e) {}

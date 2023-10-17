@@ -54,7 +54,7 @@ export class ADSRProcessor extends AudioWorkletProcessor {
   process(
     _inputs: Float32Array[][],
     outputs: Float32Array[][],
-    parameters: Record<string, Array<any>>
+    parameters: Record<string, Array<any>>,
   ) {
     let output = outputs[0];
     const trigs = parameters.trigger;
@@ -90,5 +90,7 @@ export class ADSRProcessor extends AudioWorkletProcessor {
   }
 }
 
-//@ts-ignore
-registerProcessor("adsr-processor", ADSRProcessor);
+try {
+  //@ts-ignore
+  registerProcessor("adsr-processor", ADSRProcessor);
+} catch (e) {}

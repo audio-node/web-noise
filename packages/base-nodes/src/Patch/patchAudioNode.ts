@@ -1,5 +1,7 @@
-import {
-  createPatch,
+//@TODO find an elegant way to import createPatch without gaining bundle size
+import createPatch from "@web-noise/core/src/patch/createPatch";
+
+import type {
   EditorState,
   TWNNode,
   WNAudioNode,
@@ -16,7 +18,7 @@ export interface Patch extends WNAudioNode {
 
 export const patchNode = async (
   audioContext: AudioContext,
-  data?: WNNodeData<PatchValues>
+  data?: WNNodeData<PatchValues>,
 ): Promise<Patch> => {
   const patchData = data?.values?.patch;
   if (typeof patchData === "undefined") {
@@ -35,7 +37,7 @@ export const patchNode = async (
       }
       return acc;
     },
-    { inlets: [] as TWNNode[], outlets: [] as TWNNode[] }
+    { inlets: [] as TWNNode[], outlets: [] as TWNNode[] },
   );
 
   const patch = createPatch(audioContext);

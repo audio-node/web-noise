@@ -20,7 +20,7 @@ export class ScaleProcessor extends AudioWorkletProcessor {
           inMin[channelIndex]?.[sampleIndex] ?? -1,
           inMax[channelIndex]?.[sampleIndex] ?? 1,
           outMin[channelIndex]?.[sampleIndex] ?? -1,
-          outMax[channelIndex]?.[sampleIndex] ?? 1
+          outMax[channelIndex]?.[sampleIndex] ?? 1,
         );
       }
     });
@@ -29,5 +29,7 @@ export class ScaleProcessor extends AudioWorkletProcessor {
   }
 }
 
-//@ts-ignore
-registerProcessor("scale-processor", ScaleProcessor);
+try {
+  //@ts-ignore
+  registerProcessor("scale-processor", ScaleProcessor);
+} catch (e) {}

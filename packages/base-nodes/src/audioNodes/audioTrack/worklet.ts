@@ -97,7 +97,7 @@ export class AudioTrackProcessor extends AudioWorkletProcessor {
   useGate(
     channel: Float32Array,
     onPlayCallback: () => void,
-    onStopCallback: () => void
+    onStopCallback: () => void,
   ) {
     for (let i = 0; i < channel.length; i++) {
       const value = channel[i];
@@ -124,7 +124,7 @@ export class AudioTrackProcessor extends AudioWorkletProcessor {
       start: Float32Array;
       end: Float32Array;
       loop: Float32Array;
-    }
+    },
   ) {
     if (!this.data) {
       return true;
@@ -153,8 +153,8 @@ export class AudioTrackProcessor extends AudioWorkletProcessor {
           channel.set(
             this.data.channelData[index].slice(
               this.cursor,
-              this.cursor + bufferLength
-            )
+              this.cursor + bufferLength,
+            ),
           );
         });
 
@@ -174,11 +174,13 @@ export class AudioTrackProcessor extends AudioWorkletProcessor {
         });
         this.cursor = start[0] * sampleRate;
         this.emitProgressEvent();
-      }
+      },
     );
     return true;
   }
 }
 
-//@ts-ignore
-registerProcessor("audio-track-processor", AudioTrackProcessor);
+try {
+  //@ts-ignore
+  registerProcessor("audio-track-processor", AudioTrackProcessor);
+} catch (e) {}

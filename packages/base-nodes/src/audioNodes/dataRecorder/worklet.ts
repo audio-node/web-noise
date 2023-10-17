@@ -88,10 +88,7 @@ export class DataRecorderProcessor extends AudioWorkletProcessor {
     end: 0,
     endTimestamp: 0,
     endFrame: 0,
-    channels: [
-      new Float32Array(),
-      new Float32Array(),
-    ],
+    channels: [new Float32Array(), new Float32Array()],
   });
 
   emitEvent(event: PortEvent) {
@@ -115,7 +112,7 @@ export class DataRecorderProcessor extends AudioWorkletProcessor {
     _outputs: Float32Array[][],
     parameters: {
       gate: Float32Array;
-    }
+    },
   ) {
     const { gate } = parameters;
 
@@ -136,12 +133,11 @@ export class DataRecorderProcessor extends AudioWorkletProcessor {
           const inputChannel = inputs[i]?.[0] ?? new Float32Array(128); //@TODO: move this 128 somewhere
           this.data.channels[i] = float32Concat(
             this.data.channels[i],
-            inputChannel
+            inputChannel,
           );
         }
       },
-      onClosed: () => {
-      },
+      onClosed: () => {},
       onAfterClosed: () => {
         if (!this.data) {
           return;
@@ -160,5 +156,7 @@ export class DataRecorderProcessor extends AudioWorkletProcessor {
   }
 }
 
-//@ts-ignore
-registerProcessor("data-recorder-processor", DataRecorderProcessor);
+try {
+  //@ts-ignore
+  registerProcessor("data-recorder-processor", DataRecorderProcessor);
+} catch (e) {}

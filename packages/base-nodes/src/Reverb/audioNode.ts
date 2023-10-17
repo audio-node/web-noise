@@ -1,8 +1,14 @@
 import { WNAudioNode } from "@web-noise/core";
 
-const scaleWorklet = new URL("../Scale/worklet.ts", import.meta.url);
+//@ts-ignore
+import scaleWorkletUrl from "worklet:../Scale/worklet.ts";
+//@ts-ignore
+import reverbImpulseUrl from "blob-url:./impulse.wav";
 
-const reverbImpulse = new URL("./impulse.wav", import.meta.url);
+
+const scaleWorklet = new URL(scaleWorkletUrl, import.meta.url);
+
+const reverbImpulse = new URL(reverbImpulseUrl, import.meta.url);
 
 const loadImpulse = async (audioContext: AudioContext) => {
   const response = await fetch(reverbImpulse);

@@ -1,23 +1,13 @@
-import { PluginComponent, EditorState, TWNNode } from "@web-noise/core";
-import patchNode from "./patchAudioNode";
+import { PluginComponent } from "@web-noise/core";
+import containerNode from "./containerNode";
 import Patch from "./Patch";
+import patchNode from "./patchAudioNode";
 
 const plugin: PluginComponent = {
   type: "patch",
   node: Patch,
   audioNode: patchNode,
-  containerNode: async (node: TWNNode) => {
-    if (typeof node.data?.values?.url !== "string") {
-      return;
-    }
-    const data: EditorState = await fetch(node.data.values.url).then((r) =>
-      r.json()
-    );
-
-    //@TODO: validate data
-
-    return data;
-  },
+  containerNode,
 };
 
 export default plugin;

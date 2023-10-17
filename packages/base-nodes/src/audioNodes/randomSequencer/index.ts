@@ -1,8 +1,14 @@
-import { Note, Scale } from "@tonaljs/tonal";
+import Note from "@tonaljs/note";
+import Scale from "@tonaljs/scale";
 import { WNAudioNode } from "@web-noise/core";
 
-const clockCounterProcessor = new URL('../clockCounter/worklet.ts', import.meta.url);
-const randomSequencerWorkletProcessor = new URL('./worklet.ts', import.meta.url);
+//@ts-ignore
+import clockCounterProcessorUrl from "worklet:../clockCounter/worklet.ts";
+
+const clockCounterProcessor = new URL(
+  clockCounterProcessorUrl,
+  import.meta.url,
+);
 
 type NoteChangeHandler = (args: { note: string }) => void;
 
@@ -14,7 +20,7 @@ const range = Scale.rangeOf("C major");
 const notesRange = range("A2", "A6");
 
 export const randomSequencer = async (
-  audioContext: AudioContext
+  audioContext: AudioContext,
 ): Promise<RandomSequencer> => {
   await audioContext.audioWorklet.addModule(clockCounterProcessor);
   const clock = new AudioWorkletNode(audioContext, "clock-counter-processor");
@@ -69,42 +75,3 @@ export const randomSequencer = async (
   };
 };
 
-export const randomSequencerWorklet = async (
-  audioContext: AudioContext
-): Promise<RandomSequencer> => {
-  await audioContext.audioWorklet.addModule(randomSequencerWorkletProcessor);
-  const randomSequencer = new AudioWorkletNode(
-    audioContext,
-    "random-sequencer-processor",
-    {
-      numberOfOutputs: 2,
-    }
-  );
-
-  let noteChangeHandler: NoteChangeHandler = () => {};
-
-  randomSequencer.port.onmessage = ({
-    data: { name, note },
-  }: MessageEvent<{ name: string; note?: string }>) => {
-    if (name === "noteChange" && note) {
-      noteChangeHandler({ note });
-    }
-  };
-
-  return {
-    inputs: {
-      trigger: {
-        port: randomSequencer,
-      },
-    },
-    outputs: {
-      out: {
-        port: [randomSequencer, 0],
-      },
-      midi: {
-        port: [randomSequencer, 1],
-      },
-    },
-    onNoteChange: (fn) => (noteChangeHandler = fn),
-  };
-};

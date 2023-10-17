@@ -1,7 +1,7 @@
 const quantizeSample = (
   sample: number,
   bitDepth: number,
-  maxAbsValue: number
+  maxAbsValue: number,
 ): number => {
   const maxIntValue = Math.pow(2, bitDepth - 1) - 1;
   const scale = maxAbsValue / maxIntValue;
@@ -21,7 +21,7 @@ export class QuantizerProcessor extends AudioWorkletProcessor {
   process(
     inputs: [Float32Array[]],
     outputs: [Float32Array[]],
-    parameters: { bitDepth: Float32Array }
+    parameters: { bitDepth: Float32Array },
   ) {
     const input = inputs[0];
     const output = outputs[0];
@@ -41,7 +41,7 @@ export class QuantizerProcessor extends AudioWorkletProcessor {
         const quantizedValue = quantizeSample(
           inputChannel[i] ?? 0,
           bitDepth,
-          maxAbsValue
+          maxAbsValue,
         );
         outputChannel[i] = quantizedValue;
       }
@@ -51,5 +51,7 @@ export class QuantizerProcessor extends AudioWorkletProcessor {
   }
 }
 
-//@ts-ignore
-registerProcessor("quantizer-processor", QuantizerProcessor);
+try {
+  //@ts-ignore
+  registerProcessor("quantizer-processor", QuantizerProcessor);
+} catch (e) {}

@@ -23,7 +23,7 @@ export class SpectroscopeProcessor extends AudioWorkletProcessor {
   process(
     inputs: Float32Array[][],
     _outputs: Float32Array[][],
-    parameters: Record<string, Float32Array>
+    parameters: Record<string, Float32Array>,
   ) {
     const input = inputs[0][0];
 
@@ -53,7 +53,7 @@ export class SpectroscopeProcessor extends AudioWorkletProcessor {
       if (this.sampleIndex >= analysisWindowSize) {
         const phasors: Array<[number, number]> = fft(this.buffer);
         const frequencies = new Uint8Array(
-          fftUtil.fftFreq(phasors, sampleRate)
+          fftUtil.fftFreq(phasors, sampleRate),
         );
         const magnitudes = new Uint8Array(fftUtil.fftMag(phasors));
         this.broadcast({ phasors, frequencies, magnitudes });
@@ -65,5 +65,7 @@ export class SpectroscopeProcessor extends AudioWorkletProcessor {
   }
 }
 
-//@ts-ignore
-registerProcessor("spectroscope-processor", SpectroscopeProcessor);
+try {
+  //@ts-ignore
+  registerProcessor("spectroscope-processor", SpectroscopeProcessor);
+} catch (e) {}
