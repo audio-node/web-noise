@@ -6,11 +6,13 @@ import {
   DEFAULT_STEP_VALUE,
 } from "./constants";
 
+//@ts-ignore
+import clockCounterProcessorUrl from "worklet:../clockCounter/worklet.ts";
+
 const clockCounterProcessor = new URL(
-  "../clockCounter/worklet.ts",
-  import.meta.url
+  clockCounterProcessorUrl,
+  import.meta.url,
 );
-const stepSequencerWorkletProcessor = new URL("./worklet.ts", import.meta.url);
 
 type TickHandler = (args: { sequenceIndex: number }) => void;
 
@@ -33,7 +35,7 @@ export interface StepSequencer extends WNAudioNode {
 export { SEQUENCE_MODES, DEFAULT_SEQUENCE_MODE, DEFAULT_STEP_VALUE };
 
 export const stepSequencer = async (
-  audioContext: AudioContext
+  audioContext: AudioContext,
 ): Promise<StepSequencer> => {
   await audioContext.audioWorklet.addModule(clockCounterProcessor);
   const clock = new AudioWorkletNode(audioContext, "clock-counter-processor");
@@ -50,7 +52,7 @@ export const stepSequencer = async (
   let mode = SEQUENCE_MODES.forward;
   let stepsNumber = 16;
   let sequenceData: StepSequencerValues["sequenceData"] = new Array(
-    stepsNumber
+    stepsNumber,
   ).fill({ value: DEFAULT_STEP_VALUE, active: false });
   let counter = 0;
   let sequenceIndex = 0;
@@ -135,69 +137,3 @@ export const stepSequencer = async (
   };
 };
 
-export const stepSequencerWorklet = async (
-  audioContext: AudioContext
-): Promise<StepSequencer> => {
-  await audioContext.audioWorklet.addModule(stepSequencerWorkletProcessor);
-  const sequencer = new AudioWorkletNode(
-    audioContext,
-    "step-sequencer-processor",
-    {
-      numberOfOutputs: 4,
-    }
-  );
-
-  const modeParameter = sequencer.parameters.get("mode")!;
-
-  let tickHandler: TickHandler = () => {};
-
-  sequencer.port.onmessage = ({ data }: MessageEvent) => {
-    if (data.name === "tick") {
-      tickHandler({ sequenceIndex: data.sequenceIndex });
-    }
-  };
-
-  return {
-    inputs: {
-      trigger: {
-        port: sequencer,
-      },
-      mode: {
-        port: modeParameter,
-      },
-    },
-    outputs: {
-      freq: {
-        port: [sequencer, 0],
-      },
-      midi: {
-        port: [sequencer, 1],
-      },
-      gate: {
-        port: [sequencer, 2],
-      },
-      trigger: {
-        port: [sequencer, 3],
-      },
-    },
-    setValues: ({ sequenceData: sequenceDataValue, mode: modeValue } = {}) => {
-      if (typeof sequenceDataValue !== "undefined") {
-        sequencer.port.postMessage({
-          name: "sequence",
-          value: sequenceDataValue.map(({ value, active }) =>
-            active ? value : null
-          ),
-        });
-      }
-      if (typeof modeValue !== "undefined") {
-        modeParameter.setValueAtTime(modeValue, audioContext.currentTime);
-      }
-    },
-    onTick: (fn) => (tickHandler = fn),
-    resetCounter: () => {
-      sequencer.port.postMessage({
-        name: "resetCounter",
-      });
-    },
-  };
-};

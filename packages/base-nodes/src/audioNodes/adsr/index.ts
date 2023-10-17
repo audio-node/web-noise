@@ -1,7 +1,10 @@
 import { WNAudioNode } from "@web-noise/core";
 import { setParameterValue } from "../helpers";
 
-const adsrWorklet = new URL('./worklet.ts', import.meta.url);
+//@ts-ignore
+import adsrWorkletUrl from "worklet:./worklet.ts";
+
+const adsrWorklet = new URL(adsrWorkletUrl, import.meta.url);
 
 export interface ADSRValues {
   attack: number;
@@ -49,4 +52,3 @@ export const adsr = async (audioContext: AudioContext): Promise<ADSR> => {
     adsr,
   };
 };
-

@@ -6,7 +6,9 @@ import { WNAudioNode } from "@web-noise/core";
 import { <%= componentName %>Values, <%= componentName %>Data } from "./types";
 
 <% if(hasWorklet){ -%>
-const <%= componentType %>Worklet = new URL("./worklet.ts", import.meta.url);
+//@ts-ignore
+import <%= componentType %>WorkletUrl from "worklet:./worklet.ts";
+const <%= componentType %>Worklet = new URL(<%= componentType %>WorkletUrl, import.meta.url);
 <% } -%>
 
 export interface <%= componentName %> extends WNAudioNode {

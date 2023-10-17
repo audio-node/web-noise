@@ -1,14 +1,4 @@
-const fillOutput = (output: Float32Array[], value: number) => {
-  output.forEach((outputChannel) => {
-    for (
-      let sampleIndex = 0;
-      sampleIndex < outputChannel.length;
-      sampleIndex++
-    ) {
-      outputChannel[sampleIndex] = value;
-    }
-  });
-};
+import fillOutput from "../../lib/fillOutput";
 
 export class MidiInputProcessor extends AudioWorkletProcessor {
   lastMessageData: Uint8Array = new Uint8Array(3);
@@ -26,7 +16,7 @@ export class MidiInputProcessor extends AudioWorkletProcessor {
   process(
     _inputs: Float32Array[][],
     outputs: Float32Array[][],
-    _parameters: Record<string, Float32Array>
+    _parameters: Record<string, Float32Array>,
   ) {
     const [commandOutput, noteOutput, velocityOutput] = outputs;
     fillOutput(commandOutput, this.lastMessageData[0]);
@@ -36,5 +26,7 @@ export class MidiInputProcessor extends AudioWorkletProcessor {
   }
 }
 
-//@ts-ignore
-registerProcessor("midi-input-processor", MidiInputProcessor);
+try {
+  //@ts-ignore
+  registerProcessor("midi-input-processor", MidiInputProcessor);
+} catch (e) {}

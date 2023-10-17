@@ -6,7 +6,7 @@ import type {
   WNNode,
 } from "../types";
 
-import { getAudioNodeType } from "./audioNodeTypes";
+import { getAudioNodeType, setAudioNodeTypes } from "./audioNodeTypes";
 
 interface AudioNodeLoadingState {
   loading: true;
@@ -55,6 +55,7 @@ export interface Patch {
   registerAudioConnections: RegisterAudioConnections;
   unregisterAudioConnection: (edge: WNEdge) => void;
   unregisterAudioConnections: (edges: WNEdge[]) => void;
+  setAudioNodeTypes: typeof setAudioNodeTypes;
 }
 
 type CreatePatch = (audioContext?: AudioContext) => Patch;
@@ -134,12 +135,12 @@ const createPatch: CreatePatch = (audioContext = new AudioContext()) => {
     //disconnect all ports
     Object.values(node.inputs || {}).forEach(
       ({ port }) =>
-        port instanceof AudioNode && port.disconnect && port.disconnect()
+        port instanceof AudioNode && port.disconnect && port.disconnect(),
     );
 
     Object.values(node.outputs || {}).forEach(
       ({ port }) =>
-        port instanceof AudioNode && port.disconnect && port.disconnect()
+        port instanceof AudioNode && port.disconnect && port.disconnect(),
     );
 
     audioNodes.delete(id);
@@ -154,11 +155,11 @@ const createPatch: CreatePatch = (audioContext = new AudioContext()) => {
     const { node: sourceNode } = audioNodes.get(source) || {};
 
     if (!sourceNode) {
-      console.error(`can't find source node ${sourceNode}`);
+      console.error(`can't find source node ${source}`);
       return;
     }
     if (!sourceHandle) {
-      console.error(`source handle is not defined in node ${sourceNode}`);
+      console.error(`source handle is not defined in node ${source}`);
       return;
     }
     const outputNode = sourceNode.outputs?.[sourceHandle];
@@ -206,7 +207,7 @@ const createPatch: CreatePatch = (audioContext = new AudioContext()) => {
       outputNodePort[0].connect(
         inputNodePort[0],
         outputNodePort[1],
-        inputNodePort[1]
+        inputNodePort[1],
       );
     } else {
       console.log(outputNodePort, inputNodePort);
@@ -252,12 +253,12 @@ const createPatch: CreatePatch = (audioContext = new AudioContext()) => {
       outputNodePort[0].disconnect(
         inputNodePort[0],
         outputNodePort[1],
-        inputNodePort[1]
+        inputNodePort[1],
       );
     } else {
       console.log(outputNodePort, inputNodePort);
       throw new Error(
-        `output port can not be only AudioNode or AudioNodeChannel`
+        `output port can not be only AudioNode or AudioNodeChannel`,
       );
     }
     audioConnections.delete(id);
@@ -279,6 +280,7 @@ const createPatch: CreatePatch = (audioContext = new AudioContext()) => {
     registerAudioConnections,
     unregisterAudioConnection,
     unregisterAudioConnections,
+    setAudioNodeTypes,
   };
 };
 

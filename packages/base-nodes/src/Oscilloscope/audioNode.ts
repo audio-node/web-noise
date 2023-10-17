@@ -2,7 +2,10 @@ import { WNAudioNode } from "@web-noise/core";
 import { addBroadcastListener } from "../lib/useBroadcast";
 import { OscilloscopeData } from "./types";
 
-const oscilloscopeWorklet = new URL("./worklet.ts", import.meta.url);
+//@ts-ignore
+import oscilloscopeWorkletUrl from "worklet:./worklet.ts";
+
+const oscilloscopeWorklet = new URL(oscilloscopeWorkletUrl, import.meta.url);
 
 export type Ports = [MessagePort, MessagePort];
 

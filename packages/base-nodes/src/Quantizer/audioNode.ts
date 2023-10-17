@@ -1,6 +1,9 @@
 import { WNAudioNode } from "@web-noise/core";
 
-const quantizerWorklet = new URL("./worklet.ts", import.meta.url);
+//@ts-ignore
+import quantizerWorkletUrl from "worklet:./worklet.ts";
+
+const quantizerWorklet = new URL(quantizerWorkletUrl, import.meta.url);
 
 export const quantizer = async (
   audioContext: AudioContext,

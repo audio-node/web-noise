@@ -2,7 +2,7 @@ export class PassThroughProcessor extends AudioWorkletProcessor {
   process(
     inputs: Float32Array[][],
     outputs: Float32Array[][],
-    _parameters: Record<string, Float32Array>
+    _parameters: Record<string, Float32Array>,
   ) {
     try {
       inputs[0].forEach((channel, index) => outputs[0][index].set(channel));
@@ -14,5 +14,7 @@ export class PassThroughProcessor extends AudioWorkletProcessor {
   }
 }
 
-//@ts-ignore
-registerProcessor("pass-through-processor", PassThroughProcessor);
+try {
+  //@ts-ignore
+  registerProcessor("pass-through-processor", PassThroughProcessor);
+} catch (e) {}

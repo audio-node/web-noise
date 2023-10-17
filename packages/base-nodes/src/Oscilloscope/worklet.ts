@@ -18,7 +18,7 @@ export class AnalyserProcessor extends AudioWorkletProcessor {
     super();
     this.buffers = Array.from(
       { length: numberOfInputs },
-      () => new Float32Array()
+      () => new Float32Array(),
     );
     this.isActive = this.buffers.map(() => true);
     this.port.start();
@@ -27,7 +27,7 @@ export class AnalyserProcessor extends AudioWorkletProcessor {
   process(
     inputs: Float32Array[][],
     _outputs: Float32Array[][],
-    parameters: { fftSize: Float32Array }
+    parameters: { fftSize: Float32Array },
   ) {
     const inputsData = this.buffers.map((_, index) => inputs[index][0]);
 
@@ -36,7 +36,7 @@ export class AnalyserProcessor extends AudioWorkletProcessor {
 
     if (this.currentFftSize !== analysisWindowSize) {
       this.buffers = this.buffers.map(
-        () => new Float32Array(analysisWindowSize)
+        () => new Float32Array(analysisWindowSize),
       );
       this.currentFftSize = analysisWindowSize;
     }
@@ -54,7 +54,7 @@ export class AnalyserProcessor extends AudioWorkletProcessor {
 
     const samplesCount = inputsData.reduce(
       (acc, inputData) => inputData?.length ?? acc,
-      0
+      0,
     );
 
     for (let i = 0; i < samplesCount; i += 1) {
@@ -75,5 +75,7 @@ export class AnalyserProcessor extends AudioWorkletProcessor {
   }
 }
 
-//@ts-ignore
-registerProcessor("oscilloscope-processor", AnalyserProcessor);
+try {
+  //@ts-ignore
+  registerProcessor("oscilloscope-processor", AnalyserProcessor);
+} catch (e) {}

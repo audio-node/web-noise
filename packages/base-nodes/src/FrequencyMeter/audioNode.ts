@@ -1,6 +1,9 @@
 import { WNAudioNode } from "@web-noise/core";
 
-const worklet = new URL("./worklet.ts", import.meta.url);
+//@ts-ignore
+import workletUrl from "worklet:./worklet.ts";
+
+const worklet = new URL(workletUrl, import.meta.url);
 
 const frequencyMeter = async (
   audioContext: AudioContext

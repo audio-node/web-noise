@@ -2,7 +2,10 @@ import { theme } from "@web-noise/core";
 import { FC, useEffect, useMemo, useRef } from "react";
 import defaultConfig from "./defaultConfig";
 
-const rendererWorkerUrl = new URL("./renderer.worker.ts", import.meta.url);
+//@ts-ignore
+import rendererWorkerUrl from "worklet:./renderer.worker.ts";
+
+const rendererWorker = new URL(rendererWorkerUrl, import.meta.url);
 
 const Scope: FC<{
   port: MessagePort;
@@ -16,7 +19,7 @@ const Scope: FC<{
   maxValue = defaultConfig.maxValue,
 }) => {
   const worker = useMemo(() => {
-    return new Worker(rendererWorkerUrl);
+    return new Worker(rendererWorker);
   }, []);
 
   useEffect(() => {

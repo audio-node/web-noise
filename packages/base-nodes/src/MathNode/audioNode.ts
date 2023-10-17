@@ -1,7 +1,10 @@
 import { WNAudioNode } from "@web-noise/core";
 import { MathNodeValues, MathNodeData } from "./types";
 
-const mathNodeWorklet = new URL("./worklet.ts", import.meta.url);
+//@ts-ignore
+import mathNodeWorkletUrl from "worklet:./worklet.ts";
+
+const mathNodeWorklet = new URL(mathNodeWorkletUrl, import.meta.url);
 
 export interface MathNode extends WNAudioNode {
   setValues: (values?: MathNodeValues) => void;

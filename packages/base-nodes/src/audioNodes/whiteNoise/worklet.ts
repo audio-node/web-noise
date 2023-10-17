@@ -10,5 +10,7 @@ export class WhiteNoiseProcessor extends AudioWorkletProcessor {
   }
 }
 
-//@ts-ignore
-registerProcessor("white-noise-processor", WhiteNoiseProcessor);
+try {
+  //@ts-ignore
+  registerProcessor("white-noise-processor", WhiteNoiseProcessor);
+} catch (e) {}

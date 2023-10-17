@@ -2,7 +2,10 @@ import { WNAudioNode } from "@web-noise/core";
 import { addBroadcastListener } from "../lib/useBroadcast";
 import { SpectroscopeData } from "./types";
 
-const spectroscopeWorklet = new URL("./worklet.ts", import.meta.url);
+//@ts-ignore
+import spectroscopeWorkletUrl from "worklet:./worklet.ts";
+
+const spectroscopeWorklet = new URL(spectroscopeWorkletUrl, import.meta.url);
 
 export interface Spectroscope extends WNAudioNode {
   registerPort: (port: MessagePort) => void;

@@ -1,7 +1,10 @@
 import { WNAudioNode } from "@web-noise/core";
 import { addBroadcastListener } from "../lib/useBroadcast";
 
-const valueMeterWorklet = new URL("./worklet.ts", import.meta.url);
+//@ts-ignore
+import valueMeterWorkletUrl from "worklet:./worklet.ts";
+
+const valueMeterWorklet = new URL(valueMeterWorkletUrl, import.meta.url);
 
 export interface ValueMeter extends WNAudioNode {
   registerPort: (port: MessagePort) => void;

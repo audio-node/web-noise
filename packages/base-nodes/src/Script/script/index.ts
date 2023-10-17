@@ -1,12 +1,16 @@
 import { IncomingMessageData, ScriptNode, ScriptNodeData } from "../types";
 import transpile from "../transpile";
-const passThroughWorker = new URL(
-  "../../audioNodes/passThrough/worklet.ts",
-  import.meta.url
-);
+
+//@ts-ignore
+import passThroughWorkerUrl from "worklet:../../audioNodes/passThrough/worklet.ts";
+//@ts-ignore
+import triggerWatcherWorkletUrl from "worklet:./triggerWatcher.worklet.ts";
+
+
+const passThroughWorker = new URL(passThroughWorkerUrl, import.meta.url);
 const triggerWatcherWorklet = new URL(
-  "./triggerWatcher.worklet.ts",
-  import.meta.url
+  triggerWatcherWorkletUrl,
+  import.meta.url,
 );
 
 const INPUTS_COUNT = 4;
@@ -24,7 +28,7 @@ type TriggerWatcherPortEvent = { name: "triggered" } | { name: "untriggered" };
 
 export const scriptNode = async (
   audioContext: AudioContext,
-  data?: ScriptNodeData
+  data?: ScriptNodeData,
 ): Promise<ScriptNode> => {
   await Promise.all([
     audioContext.audioWorklet.addModule(passThroughWorker),
@@ -33,7 +37,7 @@ export const scriptNode = async (
 
   const triggerWatcher = new AudioWorkletNode(
     audioContext,
-    "trigger-watcher-processor"
+    "trigger-watcher-processor",
   );
 
   triggerWatcher.port.start();
@@ -58,13 +62,13 @@ export const scriptNode = async (
           currentOnUntriggeredCallback?.();
           break;
       }
-    }
+    },
   );
 
   const runExpression = async (expression: string) => {
     inputs.forEach((input, index) => input.disconnect(currentInputs[index]));
     currentOutputs.forEach((output, index) =>
-      output.disconnect(outputs[index])
+      output.disconnect(outputs[index]),
     );
 
     currentOnTriggeredCallback = null;
@@ -79,7 +83,7 @@ export const scriptNode = async (
     try {
       const expressionFn = new AsyncFunction(
         "ScriptSandbox",
-        transpile(expression)
+        transpile(expression),
       );
 
       await expressionFn({
@@ -125,12 +129,12 @@ export const scriptNode = async (
       },
       ...inputs.reduce(
         (acc, port, index) => ({ ...acc, [`input${index}`]: { port } }),
-        {}
+        {},
       ),
     },
     outputs: outputs.reduce(
       (acc, port, index) => ({ ...acc, [`output${index}`]: { port } }),
-      {}
+      {},
     ),
     destroy: () => {
       triggerWatcher.port.close();

@@ -29,15 +29,11 @@ import Oscilloscope from "./src/Oscilloscope";
 import VirtualKeyboard from "./src/nodes/VirtualKeyboard";
 import { virtualKeyboard } from "./src/audioNodes/virtualKeyboard";
 import RandomSequencer from "./src/nodes/RandomSequencer";
-import {
-  randomSequencer,
-  randomSequencerWorklet,
-} from "./src/audioNodes/randomSequencer";
+import { randomSequencer } from "./src/audioNodes/randomSequencer";
+import { randomSequencerWorklet } from "./src/audioNodes/randomSequencer/workletNode";
 import StepSequencer from "./src/nodes/StepSequencer";
-import {
-  stepSequencer,
-  stepSequencerWorklet,
-} from "./src/audioNodes/stepSequencer";
+import { stepSequencer } from "./src/audioNodes/stepSequencer";
+import { stepSequencerWorklet } from "./src/audioNodes/stepSequencer/workletNode";
 import { Script, WorkletScript } from "./src/Script";
 import { Gate } from "./src/Gate";
 import Slider from "./src/Slider";

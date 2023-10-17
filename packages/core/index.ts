@@ -31,6 +31,7 @@ import type {
   InputPort,
   OutputPort,
   EditorState,
+  AudioNodeTypes,
 } from "./src/types";
 import type { Theme } from "./src/theme";
 
@@ -49,6 +50,7 @@ export type {
   EditorState,
   InputPort,
   OutputPort,
+  AudioNodeTypes,
 };
 
 export {

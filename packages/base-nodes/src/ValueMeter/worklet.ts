@@ -12,9 +12,7 @@ export class ValueMeterProcessor extends AudioWorkletProcessor {
     this.port.start();
   }
 
-  process(
-    inputs: Float32Array[][],
-  ) {
+  process(inputs: Float32Array[][]) {
     const input = inputs[0][0];
 
     const analysisWindowSize = 1024;
@@ -47,5 +45,7 @@ export class ValueMeterProcessor extends AudioWorkletProcessor {
   }
 }
 
-//@ts-ignore
-registerProcessor("value-meter-processor", ValueMeterProcessor);
+try {
+  //@ts-ignore
+  registerProcessor("value-meter-processor", ValueMeterProcessor);
+} catch (e) {}

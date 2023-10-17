@@ -1,6 +1,9 @@
 import { WNAudioNode } from "@web-noise/core";
 
-const passThroughWorker = new URL("./worklet.ts", import.meta.url);
+//@ts-ignore
+import passThroughWorkerUrl from "worklet:./worklet.ts";
+
+const passThroughWorker = new URL(passThroughWorkerUrl, import.meta.url);
 
 export interface PassThrough extends WNAudioNode {}
 

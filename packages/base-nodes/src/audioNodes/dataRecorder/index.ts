@@ -1,7 +1,10 @@
 import { WNAudioNode } from "@web-noise/core";
 import type { PortEvent, ProgressEvent, StartEvent, StopEvent } from "./types";
 
-const worklet = new URL("./worklet.ts", import.meta.url);
+//@ts-ignore
+import dataRecorderWorkletUrl from "worklet:./worklet.ts";
+
+const dataRecorderWorklet = new URL(dataRecorderWorkletUrl, import.meta.url);
 
 export interface DataRecorderValues {
   bpm?: number;
@@ -24,7 +27,7 @@ export interface DataRecorder extends WNAudioNode {
 export const dataRecorder = async (
   audioContext: AudioContext
 ): Promise<DataRecorder> => {
-  await audioContext.audioWorklet.addModule(worklet);
+  await audioContext.audioWorklet.addModule(dataRecorderWorklet);
   const dataRecorder = new AudioWorkletNode(
     audioContext,
     "data-recorder-processor",

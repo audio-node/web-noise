@@ -1,10 +1,8 @@
-import { Midi } from "@tonaljs/tonal";
 import { SEQUENCE_MODES, DEFAULT_SEQUENCE_MODE } from "./constants";
 
 const TRIGGER_THRESHOLD = 0.5;
 
 export class StepSequencerProcessor extends AudioWorkletProcessor {
-  currentFrequency: number = 0;
   currentMidiNumber: number = 0;
   sequence: Array<number | null> = [];
   mode: SEQUENCE_MODES | null = null;
@@ -68,7 +66,6 @@ export class StepSequencerProcessor extends AudioWorkletProcessor {
     const midi = this.sequence[sequenceIndex];
     if (midi !== null) {
       this.currentMidiNumber = midi;
-      this.currentFrequency = Midi.midiToFreq(midi);
       this.isGateOpen = true;
       this.shouldExecuteTrigger = true;
     } else {
@@ -95,20 +92,14 @@ export class StepSequencerProcessor extends AudioWorkletProcessor {
   process(
     inputs: Float32Array[][],
     outputs: Float32Array[][],
-    parameters: Record<string, Array<any>>
+    parameters: Record<string, Array<any>>,
   ) {
     this.mode = parameters.mode[0];
 
     const input = inputs[0];
     input.forEach((channel) => this.checkChannel(channel));
 
-    const [frequencyOutput, midiOutput, gateOutput, triggerOutput] = outputs;
-
-    frequencyOutput.forEach((channel: any) => {
-      for (let i = 0; i < channel.length; i++) {
-        channel[i] = this.currentFrequency;
-      }
-    });
+    const [midiOutput, gateOutput, triggerOutput] = outputs;
 
     midiOutput.forEach((channel: any) => {
       for (let i = 0; i < channel.length; i++) {
@@ -136,5 +127,7 @@ export class StepSequencerProcessor extends AudioWorkletProcessor {
   }
 }
 
-//@ts-ignore
-registerProcessor("step-sequencer-processor", StepSequencerProcessor);
+try {
+  //@ts-ignore
+  registerProcessor("step-sequencer-processor", StepSequencerProcessor);
+} catch (e) {}
