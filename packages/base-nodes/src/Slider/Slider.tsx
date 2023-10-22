@@ -49,7 +49,7 @@ const Slider = ({ node: props, audioNode, updateNodeValues }: SliderProps) => {
 
     return Array.from(
       { length: scaleSteps },
-      (_, index) => index * step,
+      (_, index) => min + index * step,
     ).reduce(
       (acc, val) => ({
         ...acc,
