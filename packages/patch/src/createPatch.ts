@@ -2,11 +2,11 @@ import type {
   InputPort,
   OutputPort,
   WNAudioNode,
-  WNEdge,
-  WNNode,
-} from "../types";
+  TWNEdge as WNEdge,
+  TWNNode as WNNode,
+} from "@web-noise/core";
 
-import { getAudioNodeType, setAudioNodeTypes } from "./audioNodeTypes";
+import { getAudioNodeType } from "./audioNodeTypes";
 
 interface AudioNodeLoadingState {
   loading: true;
@@ -55,7 +55,6 @@ export interface Patch {
   registerAudioConnections: RegisterAudioConnections;
   unregisterAudioConnection: (edge: WNEdge) => void;
   unregisterAudioConnections: (edges: WNEdge[]) => void;
-  setAudioNodeTypes: typeof setAudioNodeTypes;
 }
 
 type CreatePatch = (audioContext?: AudioContext) => Patch;
@@ -74,10 +73,11 @@ const createPatch: CreatePatch = (audioContext = new AudioContext()) => {
       });
       return;
     }
-    const createNode = getAudioNodeType(type);
-    if (createNode === false) {
+    const nodeCreator = getAudioNodeType(type);
+    if (nodeCreator === false) {
       return;
     }
+    const createNode = nodeCreator;
     if (!createNode) {
       audioNodes.set(id, {
         loading: false,
@@ -280,7 +280,6 @@ const createPatch: CreatePatch = (audioContext = new AudioContext()) => {
     registerAudioConnections,
     unregisterAudioConnection,
     unregisterAudioConnections,
-    setAudioNodeTypes,
   };
 };
 

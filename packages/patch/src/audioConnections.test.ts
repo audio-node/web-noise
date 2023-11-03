@@ -1,7 +1,7 @@
 // @ts-nocheck
 
-import { CreateWNAudioNode } from "../../types";
-import { createPatch, setAudioNodeTypes } from ".";
+import type { CreateWNAudioNode } from "@web-noise/core";
+import { createPatch, setAudioNodeTypes } from "../";
 
 const baseNodeConfig = {
   data: { label: "test node" },

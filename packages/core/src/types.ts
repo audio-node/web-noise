@@ -19,9 +19,6 @@ export interface WNAudioNode extends Record<string, any> {
   setValues?: (values?: any) => void;
 }
 
-export interface AudioNodeTypes
-  extends Record<string, CreateWNAudioNode | false> {}
-
 export type CreateWNAudioNode<T = WNAudioNode> = (
   audioContext: AudioContext,
   data?: WNNodeData
@@ -70,10 +67,6 @@ export interface EditorState extends EditorStoreState {
   viewport: Viewport;
 }
 
-export type CreateWNContainerNode = (
-  node: WNNode
-) => GraphState | Promise<GraphState | void> | void;
-
 export interface ControlPanelNodeProps {
   node: WNNode;
   audioNode?: WNAudioNode | null;
@@ -89,7 +82,6 @@ export interface PluginComponent {
   type: string;
   node: any;
   audioNode: CreateWNAudioNode | false;
-  containerNode?: CreateWNContainerNode;
   controlPanelNode?: ControlPanelNode;
   configNode?: ConfigNode;
   defaultConfig?: any;

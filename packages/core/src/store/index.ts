@@ -1,9 +1,13 @@
 import { addEdge, getConnectedEdges, NodeTypes, OnConnect } from "reactflow";
 import { create, StateCreator } from "zustand";
-import patch, { setAudioNodeTypes } from "../patch";
+import {
+  Patch,
+  createPatch,
+  setAudioNodeTypes,
+  AudioNodeTypes,
+} from "@web-noise/patch";
 import { CONTROL_PANEL_GRID_CONFIG } from "../constants";
 import {
-  AudioNodeTypes,
   ControlPanelNode,
   ControlPanelNodes,
   PluginComponent,
@@ -25,6 +29,7 @@ interface EditorConfig {
 type NodesConfiguration = Record<string, PluginComponent>;
 
 type StoreState = NodesState & {
+  patch: Patch;
   setGraph: (elements: { nodes: WNNode[]; edges: WNEdge[] }) => Promise<void>;
   clearGraph: () => void;
   createNode: (node: WNNode) => Promise<void>;
@@ -60,8 +65,10 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
   const [set, get] = args;
   return {
     ...nodesStateCreator(...args),
+    patch: createPatch(),
     setGraph: async ({ nodes, edges }) => {
       const {
+        patch,
         createNodes,
         createEdges,
         setNodesAndEdges,
@@ -84,7 +91,7 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
       await Promise.all(nodes.map((node) => createNode(node)));
     },
     createNode: async (nodeData) => {
-      const { addNode, nodesConfiguration } = get();
+      const { patch, addNode, nodesConfiguration } = get();
 
       const { type, id, data } = nodeData;
 
@@ -103,19 +110,8 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
         },
       };
 
-      const createContainerNode = nodesConfiguration[type]?.containerNode;
-      if (createContainerNode) {
-        const patchData = await createContainerNode(node);
-        const extendedNode = {
-          ...node,
-          data: { ...node.data, values: { patch: patchData } },
-        };
-        await patch.registerAudioNode(extendedNode);
-        addNode(node);
-      } else {
-        await patch.registerAudioNode(node);
-        addNode(node);
-      }
+      await patch.registerAudioNode(node);
+      addNode(node);
     },
     removeNode: (node) => get().removeNodes([node]),
     removeNodes: (nodes) => {
@@ -128,7 +124,7 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
       } = get();
       const parentNodeIds = nodes.map(({ id }) => id);
       const children = currentNodes.filter(
-        ({ parentNode }) => parentNode && parentNodeIds.includes(parentNode)
+        ({ parentNode }) => parentNode && parentNodeIds.includes(parentNode),
       );
       const resultingNodes = [...nodes, ...children];
       removeNodesFromControlPanel(resultingNodes);
@@ -149,7 +145,7 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
       });
     },
     createEdges: (newEdges) => {
-      const { edges, setEdges } = get();
+      const { patch, edges, setEdges } = get();
       if (newEdges.length > edges.length) {
         patch.registerAudioConnections(newEdges.slice(edges.length));
       }
@@ -161,15 +157,17 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
       createEdges(newEdges);
     },
     onEdgesDelete: (edges) => {
+      const { patch } = get();
       patch.unregisterAudioConnections(edges);
     },
     onNodesDelete: async (nodes) => {
-      get().removeNodesFromControlPanel(nodes);
+      const { removeNodesFromControlPanel, patch } = get();
+      removeNodesFromControlPanel(nodes);
       patch.unregisterAudioNodes(nodes);
     },
     plugins: [],
     setPlugins: async (plugins) => {
-      const { setNodeTypes } = get();
+      const { setNodeTypes, patch } = get();
       set({ plugins });
 
       const nodesConf: NodesConfiguration = plugins.reduce((acc, plugin) => {
@@ -180,7 +178,7 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
               ...subAcc,
               [item.type]: item,
             }),
-            {}
+            {},
           ),
         };
       }, {});
@@ -192,7 +190,7 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
             [type]: nodesConf[type].node,
           };
         },
-        {}
+        {},
       );
 
       const audioNodeTypes: AudioNodeTypes = Object.keys(nodesConf).reduce(
@@ -202,7 +200,7 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
             [type]: nodesConf[type].audioNode,
           };
         },
-        {}
+        {},
       );
 
       setAudioNodeTypes(audioNodeTypes);
@@ -285,7 +283,7 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
       const nodeIds = nodes.map(({ id }) => id);
       set(({ controlPanel }) => {
         const nodes = controlPanel.nodes.filter(
-          ({ id }) => !nodeIds.includes(id)
+          ({ id }) => !nodeIds.includes(id),
         );
         return {
           controlPanel: {

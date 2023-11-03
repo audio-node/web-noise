@@ -1,44 +1,47 @@
-//@TODO find an elegant way to import createPatch without gaining bundle size
-import createPatch from "@web-noise/core/src/patch/createPatch";
-
-import type {
-  EditorState,
-  TWNNode,
-  WNAudioNode,
-  WNNodeData,
-} from "@web-noise/core";
-
-export interface PatchValues {
-  patch?: EditorState;
-}
+import type { EditorState, OutputPort, WNAudioNode } from "@web-noise/core";
+import { createPatch } from "@web-noise/patch";
+import { PatchData, PatchValues } from "./types";
 
 export interface Patch extends WNAudioNode {
-  patch?: EditorState;
+  patchData: EditorState;
 }
+
+export const getPatchData = async (
+  values: PatchValues,
+): Promise<EditorState> => {
+  const { url, patch } = values;
+
+  if (patch) {
+    return patch;
+  }
+
+  if (typeof url !== "string") {
+    throw new Error("patch url is not specified");
+  }
+
+  const data: EditorState = await fetch(url).then((r) => r.json());
+
+  if (typeof data === "undefined") {
+    throw new Error("patch data is undefined");
+  }
+
+  return data;
+};
 
 export const patchNode = async (
   audioContext: AudioContext,
-  data?: WNNodeData<PatchValues>,
-): Promise<Patch> => {
-  const patchData = data?.values?.patch;
-  if (typeof patchData === "undefined") {
+  data?: PatchData,
+): Promise<Patch | {}> => {
+  const values = data?.values;
+
+  if (!values) {
     return {};
   }
-  const nodes = patchData.nodes;
-  const edges = patchData.edges;
 
-  const { inlets, outlets } = nodes.reduce(
-    (acc, node) => {
-      if (node.type === "inlet") {
-        acc.inlets.push(node);
-      }
-      if (node.type === "outlet") {
-        acc.outlets.push(node);
-      }
-      return acc;
-    },
-    { inlets: [] as TWNNode[], outlets: [] as TWNNode[] },
-  );
+  const patchData = await getPatchData(values);
+
+  const { nodes, edges } = patchData;
+  const { nodes: controlPanelNodes } = values || {};
 
   const patch = createPatch(audioContext);
 
@@ -47,27 +50,43 @@ export const patchNode = async (
 
   const { audioNodes } = patch;
 
-  const inputs = inlets.reduce((acc, { id, data: { label } }) => {
-    const input = audioNodes?.get(id)?.node?.inputs?.in;
-    if (!input) {
-      return acc;
-    }
-    return {
-      ...acc,
-      [label || `in-${+new Date()}`]: input,
-    };
-  }, {});
+  const { inputs, outputs } = nodes.reduce(
+    (acc, node) => {
+      const { type, id, data } = node;
+      const { label } = data;
 
-  const outputs = outlets.reduce((acc, { id, data: { label } }) => {
-    const output = audioNodes?.get(id)?.node?.outputs?.out;
-    if (!output) {
+      if (type === "inlet") {
+        const input = audioNodes?.get(id)?.node?.inputs?.in;
+        if (!input) {
+          return acc;
+        }
+        return {
+          ...acc,
+          inputs: {
+            ...acc.inputs,
+            [label || `in-${+new Date()}`]: input,
+          },
+        };
+      }
+
+      if (node.type === "outlet") {
+        const output = audioNodes?.get(id)?.node?.outputs?.out;
+        if (!output) {
+          return acc;
+        }
+        return {
+          ...acc,
+          outputs: {
+            ...acc.outputs,
+            [label || `out-${+new Date()}`]: output,
+          },
+        };
+      }
+
       return acc;
-    }
-    return {
-      ...acc,
-      [label || `out-${+new Date()}`]: output,
-    };
-  }, {});
+    },
+    { inputs: [] as OutputPort[], outputs: [] as OutputPort[] },
+  );
 
   nodes.forEach(({ id, data: { values } }) => {
     const node = audioNodes.get(id);
@@ -77,14 +96,21 @@ export const patchNode = async (
     }
   });
 
+  Object.keys(controlPanelNodes || {}).forEach((id) => {
+    const values = controlPanelNodes?.[id];
+    const node = audioNodes.get(id);
+    node?.node?.setValues?.(values);
+  });
+
   return {
     inputs,
     outputs,
-    patch: patchData,
+    patchData: patchData,
     audioNodes,
     destroy: () => {
       //disconnect all nodes from each other
       //unregister all nodes
+      audioNodes.forEach(({ node }) => node?.destroy?.());
     },
   };
 };

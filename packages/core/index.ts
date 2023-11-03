@@ -17,7 +17,6 @@ import useAudioNode from "./src/hooks/useAudioNode";
 import useNode from "./src/hooks/useNode";
 import useTheme from "./src/hooks/useTheme";
 import useStore from "./src/store";
-import { createPatch } from "./src/patch";
 import theme from "./src/theme";
 import type {
   WNAudioNode,
@@ -31,13 +30,14 @@ import type {
   InputPort,
   OutputPort,
   EditorState,
-  AudioNodeTypes,
+  WNEdge as TWNEdge,
 } from "./src/types";
 import type { Theme } from "./src/theme";
 
 export type {
   WNAudioNode,
   TWNNode,
+  TWNEdge,
   WNNodeProps,
   WNNodeData,
   CreateWNAudioNode,
@@ -50,7 +50,6 @@ export type {
   EditorState,
   InputPort,
   OutputPort,
-  AudioNodeTypes,
 };
 
 export {
@@ -71,5 +70,4 @@ export {
   useNode,
   useTheme,
   useStore,
-  createPatch,
 };
