@@ -2,7 +2,7 @@
 
 import create from "zustand/vanilla";
 import { stateCreator } from ".";
-import patch, { setAudioNodeTypes } from "../patch";
+import { setAudioNodeTypes } from "@web-noise/patch";
 
 const syncNode: CreateWNAudioNode = (audioContext) => {
   const constantSourceNode = audioContext.createConstantSource();
@@ -25,7 +25,7 @@ setAudioNodeTypes({ syncNode });
 
 describe("createNode", () => {
   const { getState, setState } = create(stateCreator);
-  const { createNode } = getState();
+  const { createNode, patch } = getState();
 
   it("calls patch.registerAudioNode on createNode", async () => {
     jest.spyOn(patch, "registerAudioNode");
@@ -40,13 +40,11 @@ describe("createNode", () => {
     createNode(node);
     expect(patch.registerAudioNode).toHaveBeenCalledWith(node);
   });
-
-  it.todo("handles container node");
 });
 
 describe("removeNode", () => {
   const { getState, setState } = create(stateCreator);
-  const { createNode, removeNode } = getState();
+  const { createNode, removeNode, patch } = getState();
   const id = "sync-node-new";
   const nodeMock = {
     id,
@@ -63,7 +61,7 @@ describe("removeNode", () => {
 
 describe("createEdges", () => {
   const { getState } = create(stateCreator);
-  const { createNodes, createEdges } = getState();
+  const { createNodes, createEdges, patch } = getState();
   const nodesMock = [
     {
       id: "node1",
@@ -93,7 +91,7 @@ describe("createEdges", () => {
 
 describe("removeEdges", () => {
   const { getState } = create(stateCreator);
-  const { removeEdges } = getState();
+  const { removeEdges, patch } = getState();
   const edge = {
     id: "node1-node-port-2-node2-node-port",
     source: "node1",
@@ -110,9 +108,6 @@ describe("removeEdges", () => {
 });
 
 describe("removeNodes", () => {
-  jest.spyOn(patch, "unregisterAudioConnections");
-  jest.spyOn(patch, "unregisterAudioNodes");
-
   const node1 = {
     id: "node-1",
     type: "syncNode",
@@ -164,7 +159,10 @@ describe("removeNodes", () => {
   const nodesToRemove = [node2];
   const { getState } = create(stateCreator);
 
-  const { createNodes, createEdges, removeNodes } = getState();
+  const { createNodes, createEdges, removeNodes, patch } = getState();
+
+  jest.spyOn(patch, "unregisterAudioConnections");
+  jest.spyOn(patch, "unregisterAudioNodes");
 
   beforeAll(async () => {
     await createNodes([node1, node2, node3, node4]);
@@ -191,5 +189,4 @@ describe("removeNodes", () => {
 describe("setPlugins", () => {
   it.todo("sets node types");
   it.todo("sets audio node types");
-  it.todo("sets container node types");
 });

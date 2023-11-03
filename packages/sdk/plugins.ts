@@ -24,7 +24,6 @@ import Oscillator from "@web-noise/base-nodes/src/Oscillator/audioNode";
 import Oscilloscope from "@web-noise/base-nodes/src/Oscilloscope/audioNode";
 import ParameterComponent from "@web-noise/base-nodes/src/Parameter/constantSource";
 import Patch from "@web-noise/base-nodes/src/Patch/patchAudioNode";
-import PatchContainerNode from "@web-noise/base-nodes/src/Patch/containerNode";
 import Quantizer from "@web-noise/base-nodes/src/Quantizer/audioNode";
 import Reverb from "@web-noise/base-nodes/src/Reverb/audioNode";
 import Scale from "@web-noise/base-nodes/src/Scale/audioNode";
@@ -143,7 +142,6 @@ export const patchNodes: PluginConfig = {
       type: "patch",
       node: null,
       audioNode: Patch,
-      containerNode: PatchContainerNode,
     },
     { type: "inlet", node: null, audioNode: Inlet },
     { type: "outlet", node: null, audioNode: Outlet },

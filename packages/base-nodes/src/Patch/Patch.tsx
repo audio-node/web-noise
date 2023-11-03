@@ -6,7 +6,6 @@ import {
   useTheme,
   useNode,
   WNNode,
-  TWNNode,
   WNNodeProps,
 } from "@web-noise/core";
 import { FC, useCallback, useMemo } from "react";
@@ -15,6 +14,7 @@ import "react-grid-layout/css/styles.css";
 import Input from "../components/SubmitInput";
 import PanelNode from "./PanelNode";
 import { Patch as TPatch } from "./patchAudioNode";
+import { PatchData } from "./types";
 
 const NodeWrapper = styled.div<{ theme: Theme }>`
   background-color: ${({ theme }) => theme.colors.elevation2};
@@ -38,13 +38,6 @@ const PanelNodeTitle = styled.div<{ theme: Theme }>`
   white-space: nowrap;
 `;
 
-interface PatchData {
-  values?: {
-    url?: string;
-    nodes?: Record<TWNNode["id"], unknown>;
-  };
-}
-
 const Patch: FC<WNNodeProps<PatchData>> = (props) => {
   const { id, data } = props;
   const { url } = data.values || {};
@@ -57,8 +50,9 @@ const Patch: FC<WNNodeProps<PatchData>> = (props) => {
   const { updateNodeValues } = useNode(id);
 
   const { node: audioNode } = useAudioNode<TPatch>(id) || {};
-  const patchData = audioNode?.patch;
+  const patchData = audioNode?.patchData;
   const controlPanelNodes = patchData?.controlPanel?.nodes;
+  const width = patchData?.controlPanel?.size?.width ?? 200;
   const filteredNodes = useMemo(() => {
     const controlPanel = patchData?.controlPanel;
     const patchNodes = patchData?.nodes;
@@ -83,7 +77,7 @@ const Patch: FC<WNNodeProps<PatchData>> = (props) => {
       });
       removeNode(node);
     },
-    [createNode, removeNode, id, getNode]
+    [createNode, removeNode, id, getNode],
   );
 
   return (
@@ -94,7 +88,7 @@ const Patch: FC<WNNodeProps<PatchData>> = (props) => {
         </NodeWrapper>
       ) : null}
       {controlPanelNodes ? (
-        <div style={{ width: `${patchData.controlPanel.size.width + 1}px` }}>
+        <div style={{ width: `${width + 1}px` }}>
           <GridLayout
             layout={controlPanelNodes.map(
               ({ id: i, width, height, x, y }, index) => ({
@@ -103,12 +97,12 @@ const Patch: FC<WNNodeProps<PatchData>> = (props) => {
                 h: height || 6,
                 x: x || 0,
                 y: y || controlPanelNodes.length + index,
-              })
+              }),
             )}
             className="layout"
             cols={4}
             rowHeight={10}
-            width={patchData.controlPanel.size.width}
+            width={width}
             margin={[0, 0]}
             isResizable={false}
             isDraggable={false}
