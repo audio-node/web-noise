@@ -1,6 +1,6 @@
 ---
 skip_if: <%= !hasNode %>
-to: src/<%= componentFolder %>/<%= componentName %>.tsx
+to: <%= dir %>/<%= componentFolder %>/<%= componentName %>.tsx
 ---
 import { useEffect } from "react";
 import styled from "@emotion/styled";

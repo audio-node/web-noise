@@ -1,5 +1,5 @@
 ---
-to: src/<%= componentFolder %>/index.ts
+to: <%= dir %>/<%= componentFolder %>/index.ts
 ---
 import { PluginComponent } from "@web-noise/core";
 <% if(hasControlPanel){ -%>

@@ -1,6 +1,6 @@
 ---
 skip_if: <%= !hasNode %>
-to: src/<%= componentFolder %>/Node.tsx
+to: <%= dir %>/<%= componentFolder %>/Node.tsx
 ---
 import styled from "@emotion/styled";
 import {

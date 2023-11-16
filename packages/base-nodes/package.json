@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "scripts": {
     "test": "jest",
-    "generate:node": "hygen node-generator new"
+    "generate:node": "generate-node"
   },
   "dependencies": {
     "@emotion/css": "^11.11.2",
@@ -36,7 +36,6 @@
   },
   "devDependencies": {
     "benchmark": "^2.1.4",
-    "hygen": "^6.2.11",
     "microtime": "^3.1.1",
     "ts-jest": "^29.1.0"
   }

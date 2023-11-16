@@ -22,6 +22,7 @@
     "@web-noise/base-nodes": "workspace:^",
     "@web-noise/core": "workspace:^",
     "@web-noise/patch": "workspace:^",
+    "@web-noise/generator": "workspace:^",
     "react": "^17.0.2",
     "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^17.0.2",
