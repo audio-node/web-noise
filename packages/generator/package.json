@@ -1,0 +1,17 @@
+{
+  "name": "@web-noise/generator",
+  "version": "0.0.1",
+  "description": "",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "hygen": "^6.2.11"
+  },
+  "bin": {
+    "generate-node": "./generate.sh"
+  },
+  "scripts": {
+    "generate:node": "hygen node-generator new"
+  }
+}

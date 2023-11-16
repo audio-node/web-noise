@@ -1,7 +1,8 @@
 ---
-to: src/<%= componentFolder %>/audioNode.ts
+to: <%= dir %>/<%= componentFolder %>/audioNode.ts
 skip_if: <%= !hasAudioNode %>
 ---
+
 import { WNAudioNode } from "@web-noise/core";
 import { <%= componentName %>Values, <%= componentName %>Data } from "./types";
 
