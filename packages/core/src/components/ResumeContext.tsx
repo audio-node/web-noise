@@ -10,7 +10,7 @@ import { Theme } from "../theme";
 
 const Layout = styled.div<{ theme: Theme }>`
   position: fixed;
-  z-index: 10003;
+  z-index: ${({ theme }) => theme.zIndex.resumeContextLayout};
   width: 100%;
   height: 100%;
   top: 0;

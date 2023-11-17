@@ -42,7 +42,7 @@ const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
       setMousePosition({ x, y });
       setShowAddNode(true);
     },
-    [setShowAddNode]
+    [setShowAddNode],
   );
 
   const clearGraph = useStore(({ clearGraph }) => clearGraph);
@@ -53,8 +53,10 @@ const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
     (e) => {
       clearGraph();
     },
-    [clearGraph]
+    [clearGraph],
   );
+
+  const toggleHelp = useStore((store) => store.toggleHelp);
 
   const reactFlowInstance = useReactFlow();
 
@@ -64,8 +66,8 @@ const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
     const viewport = reactFlowInstance.getViewport();
     const data = {
       ...editorState,
-      viewport
-    }
+      viewport,
+    };
     downloadFile(JSON.stringify(data, null, 2), fileName);
   }, [getEditorState, reactFlowInstance]);
 
@@ -73,10 +75,14 @@ const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
     <>
       {/* @ts-ignore */}
       <GlobalHotKeys
-        keyMap={{ ADD_NODE: "command+shift+a" }}
+        keyMap={{ ADD_NODE: "command+shift+a", SHOW_HELP: "shift+?" }}
         handlers={{
           ADD_NODE: (e) => {
             addNodeHandler(50, 50);
+            e?.preventDefault();
+          },
+          SHOW_HELP: (e) => {
+            toggleHelp();
             e?.preventDefault();
           },
         }}
@@ -105,6 +111,8 @@ const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
         <ItemWrapper onClick={() => setShowUploadPatch(true)}>
           Upload patch
         </ItemWrapper>
+        <Separator />
+        <ItemWrapper onClick={toggleHelp}>Help (⇧+?)</ItemWrapper>
         <Separator />
         {editorContextMenu.map((item, index) => (
           <ItemWrapper key={index}>{item}</ItemWrapper>

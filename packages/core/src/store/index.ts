@@ -48,6 +48,8 @@ type StoreState = NodesState & {
   setConfig: (config: Partial<EditorConfig>) => void;
   getEditorState: () => EditorState;
   setEditorState: (state: EditorState) => Promise<void>;
+  isHelpShown: boolean;
+  toggleHelp: () => void;
   /* move to control panel store */
   getControlPanelNode: (node: WNNode) => ControlPanelNode | null;
   controlPanel: ControlPanelState;
@@ -228,6 +230,12 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
       set({
         controlPanel,
       });
+    },
+    isHelpShown: false,
+    showHelp: (showHelp) => set({ isHelpShown: showHelp }),
+    toggleHelp: () => {
+      const { isHelpShown: showHelp } = get();
+      set({ isHelpShown: !showHelp });
     },
     getControlPanelNode: (node) => {
       const { nodesConfiguration } = get();
