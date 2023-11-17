@@ -100,8 +100,8 @@ importers:
         specifier: ^2.10.0
         version: 2.10.1(@parcel/core@2.10.1)
       '@parcel/transformer-inline-string':
-        specifier: 2.10.0
-        version: 2.10.0(@parcel/core@2.10.1)
+        specifier: 2.10.1
+        version: 2.10.1(@parcel/core@2.10.1)
       '@parcel/transformer-typescript-types':
         specifier: 2.10.1
         version: 2.10.1(@parcel/core@2.10.1)(typescript@4.9.5)
@@ -247,6 +247,9 @@ importers:
       js-file-download:
         specifier: ^0.4.12
         version: 0.4.12
+      marked:
+        specifier: ^4.1.1
+        version: 4.3.0
       re-resizable:
         specifier: ^6.9.9
         version: 6.9.11(react-dom@17.0.2)(react@17.0.2)
@@ -1900,11 +1903,11 @@ packages:
       '@parcel/workers': 2.10.1(@parcel/core@2.10.1)
       nullthrows: 1.1.1
 
-  /@parcel/transformer-inline-string@2.10.0(@parcel/core@2.10.1):
-    resolution: {integrity: sha512-MBrQgcKZXZuHlo9cVwl1+GyWpaQLAPKAswNu8KCxmzEL1bpCk9qyG+HahVGgBW+LncBP029op+9h5KLjkQtZ3A==}
-    engines: {node: '>= 12.0.0', parcel: ^2.10.0}
+  /@parcel/transformer-inline-string@2.10.1(@parcel/core@2.10.1):
+    resolution: {integrity: sha512-Oiq5ASV48t4GNsikkvtmtHkNprd3PTMcCZes4+NfcpGgr1s7vdAVSTT2b6Jv/N9N67tPK+Mflcl91JtzaRvJPA==}
+    engines: {node: '>= 12.0.0', parcel: ^2.10.1}
     dependencies:
-      '@parcel/plugin': 2.10.0(@parcel/core@2.10.1)
+      '@parcel/plugin': 2.10.1(@parcel/core@2.10.1)
     transitivePeerDependencies:
       - '@parcel/core'
     dev: true

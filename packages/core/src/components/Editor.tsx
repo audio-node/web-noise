@@ -25,8 +25,9 @@ import NodeContextMenu, {
 import EdgeContextMenu, {
   useEdgeContextMenu,
 } from "./contextMenu/EdgeContextMenu";
-import ResumeContext from "./ResumeContext";
 import ToggleMinimap from "./ToggleMinimap";
+import ResumeContext from "./ResumeContext";
+import { HelpButton, HelpModal } from "./Help";
 import ControlPanel from "./ControlPanel";
 import Wire from "./Wire";
 
@@ -54,7 +55,7 @@ export const Editor = ({
     () => ({
       wire: Wire,
     }),
-    []
+    [],
   );
 
   const {
@@ -104,7 +105,7 @@ export const Editor = ({
         console.log("flow loaded:", rfi);
       }
     },
-    [reactflowInstance]
+    [reactflowInstance],
   );
 
   const { onContextMenu: onEditorContextMenu } = useEditorContextMenu();
@@ -159,10 +160,12 @@ export const Editor = ({
             showInteractive={false}
           >
             <ToggleMinimap />
+            <HelpButton />
           </Controls>
 
           <ResumeContext />
           <ControlPanel />
+          <HelpModal />
           <EditorContextMenu editorContextMenu={editorContextMenu} />
           <NodeContextMenu />
           <EdgeContextMenu />
