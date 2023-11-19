@@ -1,11 +1,6 @@
 import { addEdge, getConnectedEdges, NodeTypes, OnConnect } from "reactflow";
 import { create, StateCreator } from "zustand";
-import {
-  Patch,
-  createPatch,
-  setAudioNodeTypes,
-  AudioNodeTypes,
-} from "@web-noise/patch";
+import { setAudioNodeTypes, AudioNodeTypes } from "@web-noise/patch";
 import { CONTROL_PANEL_GRID_CONFIG } from "../constants";
 import {
   ControlPanelNode,
@@ -19,6 +14,11 @@ import {
   ControlPanelState,
 } from "../types";
 import nodesStateCreator, { NodesState } from "./nodesStore";
+import history, { historyStateCreator, HistoryState } from "./history";
+import audioPatch, {
+  AudioPatchState,
+  audioPatchStateCreator,
+} from "./audioPatch";
 
 export type { AudioNodeTypes, NodesState, GraphState };
 
@@ -28,46 +28,49 @@ interface EditorConfig {
 
 type NodesConfiguration = Record<string, PluginComponent>;
 
-type StoreState = NodesState & {
-  patch: Patch;
-  setGraph: (elements: { nodes: WNNode[]; edges: WNEdge[] }) => Promise<void>;
-  clearGraph: () => void;
-  createNode: (node: WNNode) => Promise<void>;
-  createNodes: (node: WNNode[]) => Promise<void>;
-  removeNode: (node: WNNode) => void;
-  removeNodes: (nodes: WNNode[]) => void;
-  removeEdges: (nodes: WNEdge[]) => void;
-  onConnect: OnConnect;
-  createEdges: (edge: WNEdge[]) => void;
-  onEdgesDelete: (edges: WNEdge[]) => void;
-  onNodesDelete: (nodes: WNNode[]) => Promise<void>;
-  plugins: Array<PluginConfig>;
-  setPlugins: (plugins: Array<PluginConfig>) => void;
-  nodesConfiguration: NodesConfiguration;
-  config: EditorConfig;
-  setConfig: (config: Partial<EditorConfig>) => void;
-  getEditorState: () => EditorState;
-  setEditorState: (state: EditorState) => Promise<void>;
-  isHelpShown: boolean;
-  toggleHelp: () => void;
-  /* move to control panel store */
-  getControlPanelNode: (node: WNNode) => ControlPanelNode | null;
-  controlPanel: ControlPanelState;
-  setControlPanelNodes: (nodes: ControlPanelNodes) => void;
-  showControlPanel: () => void;
-  hideControlPanel: () => void;
-  setControlPanelSize: (width: { width: number; height: number }) => void;
-  addNodeToControlPanel: (node: WNNode) => void;
-  removeNodeFromControlPanel: (node: WNNode) => void;
-  removeNodesFromControlPanel: (nodes: WNNode[]) => void;
-  /* / move to control panel store */
-};
+export type StoreState = NodesState &
+  HistoryState &
+  AudioPatchState & {
+    setGraph: (elements: { nodes: WNNode[]; edges: WNEdge[] }) => Promise<void>;
+    clearGraph: () => void;
+    createNode: (node: WNNode) => void;
+    createNodes: (node: WNNode[]) => Promise<void>;
+    removeNode: (node: WNNode) => void;
+    removeNodes: (nodes: WNNode[]) => void;
+    removeEdges: (nodes: WNEdge[]) => void;
+    onConnect: OnConnect;
+    createEdges: (edge: WNEdge[]) => void;
+    onEdgesDelete: (edges: WNEdge[]) => void;
+    onNodesDelete: (nodes: WNNode[]) => Promise<void>;
+    plugins: Array<PluginConfig>;
+    setPlugins: (plugins: Array<PluginConfig>) => void;
+    nodesConfiguration: NodesConfiguration;
+    config: EditorConfig;
+    setConfig: (config: Partial<EditorConfig>) => void;
+    getEditorState: () => EditorState;
+    setEditorState: (state: EditorState) => Promise<void>;
+    isHelpShown: boolean;
+    toggleHelp: () => void;
+    /* move to control panel store */
+    getControlPanelNode: (node: WNNode) => ControlPanelNode | null;
+    controlPanel: ControlPanelState;
+    setControlPanelNodes: (nodes: ControlPanelNodes) => void;
+    showControlPanel: () => void;
+    hideControlPanel: () => void;
+    setControlPanelSize: (width: { width: number; height: number }) => void;
+    addNodeToControlPanel: (node: WNNode) => void;
+    removeNodeFromControlPanel: (node: WNNode) => void;
+    removeNodesFromControlPanel: (nodes: WNNode[]) => void;
+    /* / move to control panel store */
+  };
 
 export const stateCreator: StateCreator<StoreState> = (...args) => {
   const [set, get] = args;
   return {
     ...nodesStateCreator(...args),
-    patch: createPatch(),
+    ...historyStateCreator(...args),
+    ...audioPatchStateCreator(...args),
+
     setGraph: async ({ nodes, edges }) => {
       const {
         patch,
@@ -78,8 +81,6 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
         edges: activeEdges,
       } = get();
       setNodesAndEdges({ nodes: [], edges: [] });
-      patch.unregisterAudioConnections(activeEdges);
-      patch.unregisterAudioNodes(activeNodes);
 
       await createNodes(nodes);
       createEdges(edges);
@@ -92,8 +93,8 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
       const { createNode } = get();
       await Promise.all(nodes.map((node) => createNode(node)));
     },
-    createNode: async (nodeData) => {
-      const { patch, addNode, nodesConfiguration } = get();
+    createNode: (nodeData) => {
+      const { addNode, nodesConfiguration } = get();
 
       const { type, id, data } = nodeData;
 
@@ -112,7 +113,6 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
         },
       };
 
-      await patch.registerAudioNode(node);
       addNode(node);
     },
     removeNode: (node) => get().removeNodes([node]),
@@ -149,7 +149,6 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
     createEdges: (newEdges) => {
       const { patch, edges, setEdges } = get();
       if (newEdges.length > edges.length) {
-        patch.registerAudioConnections(newEdges.slice(edges.length));
       }
       setEdges(newEdges);
     },
@@ -160,16 +159,14 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
     },
     onEdgesDelete: (edges) => {
       const { patch } = get();
-      patch.unregisterAudioConnections(edges);
     },
     onNodesDelete: async (nodes) => {
       const { removeNodesFromControlPanel, patch } = get();
       removeNodesFromControlPanel(nodes);
-      patch.unregisterAudioNodes(nodes);
     },
     plugins: [],
     setPlugins: async (plugins) => {
-      const { setNodeTypes, patch } = get();
+      const { setNodeTypes } = get();
       set({ plugins });
 
       const nodesConf: NodesConfiguration = plugins.reduce((acc, plugin) => {
@@ -232,7 +229,6 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
       });
     },
     isHelpShown: false,
-    showHelp: (showHelp) => set({ isHelpShown: showHelp }),
     toggleHelp: () => {
       const { isHelpShown: showHelp } = get();
       set({ isHelpShown: !showHelp });
@@ -324,6 +320,6 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
   };
 };
 
-const useStore = create<StoreState>(stateCreator);
+const useStore = create<StoreState>(audioPatch(history(stateCreator)));
 
 export default useStore;

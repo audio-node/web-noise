@@ -13,7 +13,7 @@
     "@tonaljs/note": "^4.10.0",
     "@tonaljs/range": "^4.8.1",
     "@tonaljs/scale": "^4.12.2",
-    "@tonaljs/tonal": "^4.6.5",
+    "@tonaljs/tonal": "^4.10.0",
     "@types/marked": "^4.0.7",
     "@types/webmidi": "^2.0.6",
     "fft-js": "^0.0.12",

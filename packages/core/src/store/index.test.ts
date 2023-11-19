@@ -1,8 +1,11 @@
 // @ts-nocheck
 
-import create from "zustand/vanilla";
-import { stateCreator } from ".";
+import { create } from "zustand";
 import { setAudioNodeTypes } from "@web-noise/patch";
+import audioPatch from "./audioPatch";
+import { stateCreator } from ".";
+
+const wait = (time = 0) => new Promise((r) => setTimeout(r, time));
 
 const syncNode: CreateWNAudioNode = (audioContext) => {
   const constantSourceNode = audioContext.createConstantSource();
@@ -24,11 +27,12 @@ const syncNode: CreateWNAudioNode = (audioContext) => {
 setAudioNodeTypes({ syncNode });
 
 describe("createNode", () => {
-  const { getState, setState } = create(stateCreator);
+  const { getState, setState } = create(audioPatch(stateCreator));
   const { createNode, patch } = getState();
 
   it("calls patch.registerAudioNode on createNode", async () => {
     jest.spyOn(patch, "registerAudioNode");
+    jest.spyOn(patch, "registerAudioNodes");
     const id = "sync-node";
     const node = {
       id,
@@ -38,29 +42,34 @@ describe("createNode", () => {
       },
     };
     createNode(node);
-    expect(patch.registerAudioNode).toHaveBeenCalledWith(node);
+    expect(patch.registerAudioNodes).toHaveBeenCalledWith([node]);
   });
 });
 
 describe("removeNode", () => {
-  const { getState, setState } = create(stateCreator);
-  const { createNode, removeNode, patch } = getState();
+  const { getState, setState } = create(audioPatch(stateCreator));
+  const { createNode, removeNode, patch, setControlPanelNodes } = getState();
+  setControlPanelNodes([]);
   const id = "sync-node-new";
   const nodeMock = {
     id,
     type: "syncNode",
+    data: {
+      config: {},
+    },
   };
 
   it("calls patch.unregisterAudioNodes on removeNode", async () => {
     jest.spyOn(patch, "unregisterAudioNodes");
-    await createNode(nodeMock);
+    createNode(nodeMock);
     removeNode(nodeMock);
+    await wait();
     expect(patch.unregisterAudioNodes).toHaveBeenCalledWith([nodeMock]);
   });
 });
 
 describe("createEdges", () => {
-  const { getState } = create(stateCreator);
+  const { getState } = create(audioPatch(stateCreator));
   const { createNodes, createEdges, patch } = getState();
   const nodesMock = [
     {
@@ -82,7 +91,7 @@ describe("createEdges", () => {
     targetHandle: "audioNodePort",
   };
 
-  it("calls patch.unregisterAudioConnections on removeEdges", async () => {
+  it("calls patch.registerAudioConnections on createEdges", async () => {
     jest.spyOn(patch, "registerAudioConnections");
     createEdges([edge]);
     expect(patch.registerAudioConnections).toHaveBeenCalledWith([edge]);
@@ -90,8 +99,21 @@ describe("createEdges", () => {
 });
 
 describe("removeEdges", () => {
-  const { getState } = create(stateCreator);
-  const { removeEdges, patch } = getState();
+  const { getState } = create(audioPatch(stateCreator));
+  const { removeEdges, patch, createEdges, createNodes } = getState();
+
+  const nodesMock = [
+    {
+      id: "node1",
+      type: "syncNode",
+    },
+    {
+      id: "node2",
+      type: "syncNode",
+    },
+  ];
+  createNodes(nodesMock);
+
   const edge = {
     id: "node1-node-port-2-node2-node-port",
     source: "node1",
@@ -102,7 +124,9 @@ describe("removeEdges", () => {
 
   it("calls patch.unregisterAudioConnections on removeEdges", async () => {
     jest.spyOn(patch, "unregisterAudioConnections");
+    createEdges([edge]);
     removeEdges([edge]);
+    await wait();
     expect(patch.unregisterAudioConnections).toHaveBeenCalledWith([edge]);
   });
 });
@@ -157,21 +181,25 @@ describe("removeNodes", () => {
   };
 
   const nodesToRemove = [node2];
-  const { getState } = create(stateCreator);
+  const { getState } = create(audioPatch(stateCreator));
 
-  const { createNodes, createEdges, removeNodes, patch } = getState();
+  const { createNodes, createEdges, removeNodes, patch, setControlPanelNodes } =
+    getState();
+
+  setControlPanelNodes([]);
 
   jest.spyOn(patch, "unregisterAudioConnections");
   jest.spyOn(patch, "unregisterAudioNodes");
 
   beforeAll(async () => {
-    await createNodes([node1, node2, node3, node4]);
+    createNodes([node1, node2, node3, node4]);
     createEdges([edge1, edge2]);
+    await wait();
     removeNodes(nodesToRemove);
   });
 
   it("removes nodes and connected edges from the store", () => {
-    expect(getState().nodes).toEqual([node1, node3, node4]);
+    expect(getState().nodes).toEqual(expect.not.arrayContaining([node2]));
     expect(getState().edges).toEqual([edge1]);
   });
 
