@@ -57,6 +57,10 @@ const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
   );
 
   const toggleHelp = useStore((store) => store.toggleHelp);
+  const historyBack = useStore((store) => store.history.back);
+  const historyForward = useStore((store) => store.history.forward);
+  const historyPointer = useStore((store) => store.history.pointer);
+  const buffer = useStore((store) => store.history.buffer);
 
   const reactFlowInstance = useReactFlow();
 
@@ -75,7 +79,12 @@ const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
     <>
       {/* @ts-ignore */}
       <GlobalHotKeys
-        keyMap={{ ADD_NODE: "command+shift+a", SHOW_HELP: "shift+?" }}
+        keyMap={{
+          ADD_NODE: "command+shift+a",
+          SHOW_HELP: "shift+?",
+          UNDO: "command+z",
+          REDO: "command+shift+z",
+        }}
         handlers={{
           ADD_NODE: (e) => {
             addNodeHandler(50, 50);
@@ -83,6 +92,14 @@ const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
           },
           SHOW_HELP: (e) => {
             toggleHelp();
+            e?.preventDefault();
+          },
+          UNDO: (e) => {
+            historyBack();
+            e?.preventDefault();
+          },
+          REDO: (e) => {
+            historyForward();
             e?.preventDefault();
           },
         }}
@@ -113,6 +130,16 @@ const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
         </ItemWrapper>
         <Separator />
         <ItemWrapper onClick={toggleHelp}>Help (⇧+?)</ItemWrapper>
+        <Separator />
+        <ItemWrapper disabled={historyPointer === 0} onClick={historyBack}>
+          Undo (⌘+z)
+        </ItemWrapper>
+        <ItemWrapper
+          disabled={historyPointer === buffer.length}
+          onClick={historyForward}
+        >
+          Redo (⌘+⇧+Z)
+        </ItemWrapper>
         <Separator />
         {editorContextMenu.map((item, index) => (
           <ItemWrapper key={index}>{item}</ItemWrapper>

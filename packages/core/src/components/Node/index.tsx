@@ -1,5 +1,12 @@
 import styled from "@emotion/styled";
-import React, { FC, useState, useCallback, useRef, useMemo } from "react";
+import React, {
+  FC,
+  useState,
+  useCallback,
+  useRef,
+  useMemo,
+  useEffect,
+} from "react";
 import { Handle, HandleProps, NodeProps, Position } from "reactflow";
 import { MdSettings as SettingsIcon } from "react-icons/md";
 import { Resizable } from "re-resizable";
@@ -91,7 +98,7 @@ export const PortsPanel = styled(Section)<{ theme: Theme }>(
   border-bottom: 1px solid ${theme.colors.elevation1};
   color: ${theme.colors.highlight3};
   font-size: 0.6rem;
-`
+`,
 );
 
 export const InputPorts = styled.div`
@@ -145,7 +152,7 @@ export interface WNNodeParameters extends NodeProps {
 
 const useConfigNode = (type: string) => {
   const ConfigNode = useStore(
-    (store) => store.nodesConfiguration[type]?.configNode
+    (store) => store.nodesConfiguration[type]?.configNode,
   );
 
   return {
@@ -161,7 +168,7 @@ export const WNNode = (props: WNNodeParameters) => {
 
   const isResizeable = useMemo(
     () => nodesConfiguration[props.type].resizable ?? false,
-    [nodesConfiguration, props.type]
+    [nodesConfiguration, props.type],
   );
 
   const { updateNodeLabel, updateNodeConfig } = useNode(id);
@@ -180,7 +187,7 @@ export const WNNode = (props: WNNodeParameters) => {
       event.target?.select();
       setLabelEditMode(true);
     },
-    [setLabelEditMode]
+    [setLabelEditMode],
   );
 
   const exitEditMode = useCallback(() => {
@@ -201,6 +208,13 @@ export const WNNode = (props: WNNodeParameters) => {
       labelInputRef.current.value = data.label;
     }
   }, [labelInputRef, exitEditMode, data]);
+
+  useEffect(() => {
+    if (!labelInputRef.current) {
+      return;
+    }
+    labelInputRef.current.value = data?.label ?? "No Name";
+  }, [data?.label, labelInputRef]);
 
   if (!audioNode) {
     return (
@@ -249,7 +263,6 @@ export const WNNode = (props: WNNodeParameters) => {
           ref={labelInputRef}
           type="text"
           readOnly={!labelEditMode}
-          defaultValue={data?.label || "No Name"}
           onDoubleClick={(event) => editNodeLabel(event)}
           onBlur={saveNodeLabel}
           onKeyDown={(event) => {
