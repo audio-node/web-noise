@@ -5,6 +5,8 @@ Web-Noise is a browser-based software offering an intuitive, modular, and visual
 - [ToneJs integration](https://audio-node.github.io/web-noise/?file=https://raw.githubusercontent.com/audio-node/web-noise-demos/main/misc/tonejs.json)
 - [Ukulelele Tuner](https://audio-node.github.io/web-noise/?file=https://raw.githubusercontent.com/audio-node/web-noise-demos/main/ukulele_tuner/index.json)
 - [WebAudioApi Overview](https://audio-node.github.io/web-noise/?file=https://raw.githubusercontent.com/audio-node/web-noise-demos/main/learningMaterials/learn_wab_audio_stand.json)
+- [Simple Synth](https://audio-node.github.io/web-noise/?file=https://raw.githubusercontent.com/audio-node/web-noise-demos/main/misc/simpleSynth.json)
+- [Advanced Synth](https://audio-node.github.io/web-noise/?file=https://raw.githubusercontent.com/audio-node/web-noise-demos/main/synth/index.json)
 
 # Quick start
 
