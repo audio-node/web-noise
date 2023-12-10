@@ -231,10 +231,10 @@ importers:
         version: 11.11.2
       '@emotion/react':
         specifier: ^11.11.1
-        version: 11.11.1(@types/react@17.0.71)(react@17.0.2)
+        version: 11.11.1(react@17.0.2)
       '@emotion/styled':
         specifier: ^11.11.0
-        version: 11.11.0(@emotion/react@11.11.1)(@types/react@17.0.71)(react@17.0.2)
+        version: 11.11.0(@emotion/react@11.11.1)(react@17.0.2)
       '@types/jest':
         specifier: ^29.2.4
         version: 29.5.11
@@ -244,6 +244,9 @@ importers:
       '@types/react-modal':
         specifier: ^3.13.1
         version: 3.16.3
+      hotkeys-js:
+        specifier: ^3.13.1
+        version: 3.13.1
       js-file-download:
         specifier: ^0.4.12
         version: 0.4.12
@@ -268,9 +271,6 @@ importers:
       react-grid-layout:
         specifier: ^1.3.4
         version: 1.4.4(react-dom@17.0.2)(react@17.0.2)
-      react-hotkeys:
-        specifier: ^2.0.0
-        version: 2.0.0(react@17.0.2)
       react-icons:
         specifier: ^4.10.1
         version: 4.12.0(react@17.0.2)
@@ -279,20 +279,20 @@ importers:
         version: 1.2.2(react@17.0.2)
       reactflow:
         specifier: ^11.5.6
-        version: 11.10.1(@types/react@17.0.71)(react-dom@17.0.2)(react@17.0.2)
+        version: 11.10.1(react-dom@17.0.2)(react@17.0.2)
       typescript:
         specifier: ^4.9.4
         version: 4.9.5
       zustand:
         specifier: ^4.4.1
-        version: 4.4.7(@types/react@17.0.71)(react@17.0.2)
+        version: 4.4.7(react@17.0.2)
     devDependencies:
       '@types/react-copy-to-clipboard':
         specifier: ^5.0.4
         version: 5.0.7
       jest:
         specifier: ^29.3.1
-        version: 29.7.0(@types/node@16.18.68)(ts-node@10.9.2)
+        version: 29.7.0
       ts-jest:
         specifier: ^29.0.3
         version: 29.1.1(@babel/core@7.23.5)(jest@29.7.0)(typescript@4.9.5)
@@ -814,6 +814,26 @@ packages:
       react: 17.0.2
     dev: false
 
+  /@emotion/react@11.11.1(react@17.0.2):
+    resolution: {integrity: sha512-5mlW1DquU5HaxjLkfkGN1GA/fvVGdyHURRiX/0FHl2cfIfRxSOfmxEH5YS43edp0OldZrZ+dkBKbngxcNCdZvA==}
+    peerDependencies:
+      '@types/react': '*'
+      react: '>=16.8.0'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.23.5
+      '@emotion/babel-plugin': 11.11.0
+      '@emotion/cache': 11.11.0
+      '@emotion/serialize': 1.1.2
+      '@emotion/use-insertion-effect-with-fallbacks': 1.0.1(react@17.0.2)
+      '@emotion/utils': 1.2.1
+      '@emotion/weak-memoize': 0.3.1
+      hoist-non-react-statics: 3.3.2
+      react: 17.0.2
+    dev: false
+
   /@emotion/serialize@1.1.2:
     resolution: {integrity: sha512-zR6a/fkFP4EAcCMQtLOhIgpprZOwNmCldtpaISpvz348+DP4Mz8ZoKaGGCQpbzepNIUWbq4w6hNZkwDyKoS+HA==}
     dependencies:
@@ -846,6 +866,26 @@ packages:
       '@emotion/use-insertion-effect-with-fallbacks': 1.0.1(react@17.0.2)
       '@emotion/utils': 1.2.1
       '@types/react': 17.0.71
+      react: 17.0.2
+    dev: false
+
+  /@emotion/styled@11.11.0(@emotion/react@11.11.1)(react@17.0.2):
+    resolution: {integrity: sha512-hM5Nnvu9P3midq5aaXj4I+lnSfNi7Pmd4EWk1fOZ3pxookaQTNew6bp4JaCBYM4HVFZF9g7UjJmsUmC2JlxOng==}
+    peerDependencies:
+      '@emotion/react': ^11.0.0-rc.0
+      '@types/react': '*'
+      react: '>=16.8.0'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.23.5
+      '@emotion/babel-plugin': 11.11.0
+      '@emotion/is-prop-valid': 1.2.1
+      '@emotion/react': 11.11.1(react@17.0.2)
+      '@emotion/serialize': 1.1.2
+      '@emotion/use-insertion-effect-with-fallbacks': 1.0.1(react@17.0.2)
+      '@emotion/utils': 1.2.1
       react: 17.0.2
     dev: false
 
@@ -895,6 +935,49 @@ packages:
       jest-message-util: 29.7.0
       jest-util: 29.7.0
       slash: 3.0.0
+    dev: true
+
+  /@jest/core@29.7.0:
+    resolution: {integrity: sha512-n7aeXWKMnGtDA48y8TLWJPJmLmmZ642Ceo78cYWEpiD7FzDgmNDV/GCVRorPABdXLJZ/9wzzgZAlHjXjxDHGsg==}
+    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
+    peerDependencies:
+      node-notifier: ^8.0.1 || ^9.0.0 || ^10.0.0
+    peerDependenciesMeta:
+      node-notifier:
+        optional: true
+    dependencies:
+      '@jest/console': 29.7.0
+      '@jest/reporters': 29.7.0
+      '@jest/test-result': 29.7.0
+      '@jest/transform': 29.7.0
+      '@jest/types': 29.6.3
+      '@types/node': 16.18.68
+      ansi-escapes: 4.3.2
+      chalk: 4.1.2
+      ci-info: 3.9.0
+      exit: 0.1.2
+      graceful-fs: 4.2.11
+      jest-changed-files: 29.7.0
+      jest-config: 29.7.0(@types/node@16.18.68)
+      jest-haste-map: 29.7.0
+      jest-message-util: 29.7.0
+      jest-regex-util: 29.6.3
+      jest-resolve: 29.7.0
+      jest-resolve-dependencies: 29.7.0
+      jest-runner: 29.7.0
+      jest-runtime: 29.7.0
+      jest-snapshot: 29.7.0
+      jest-util: 29.7.0
+      jest-validate: 29.7.0
+      jest-watcher: 29.7.0
+      micromatch: 4.0.5
+      pretty-format: 29.7.0
+      slash: 3.0.0
+      strip-ansi: 6.0.1
+    transitivePeerDependencies:
+      - babel-plugin-macros
+      - supports-color
+      - ts-node
     dev: true
 
   /@jest/core@29.7.0(ts-node@10.9.2):
@@ -2361,6 +2444,22 @@ packages:
       - immer
     dev: false
 
+  /@reactflow/background@11.3.6(react-dom@17.0.2)(react@17.0.2):
+    resolution: {integrity: sha512-06FPlSUOOMALEEs+2PqPAbpqmL7WDjrkbG2UsDr2d6mbcDDhHiV4tu9FYoz44SQvXo7ma9VRotlsaR4OiRcYsg==}
+    peerDependencies:
+      react: '>=17'
+      react-dom: '>=17'
+    dependencies:
+      '@reactflow/core': 11.10.1(react-dom@17.0.2)(react@17.0.2)
+      classcat: 5.0.4
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
+      zustand: 4.4.7(react@17.0.2)
+    transitivePeerDependencies:
+      - '@types/react'
+      - immer
+    dev: false
+
   /@reactflow/controls@11.2.6(@types/react@17.0.71)(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-4QHT92/ACVlZkvV+Hq44bAPV8WbMhkJl+/J0EbXcqQ1+an7cWJsF84eeelJw7R5J76RoaSSpKdsWsL2v7HAVlw==}
     peerDependencies:
@@ -2372,6 +2471,22 @@ packages:
       react: 17.0.2
       react-dom: 17.0.2(react@17.0.2)
       zustand: 4.4.7(@types/react@17.0.71)(react@17.0.2)
+    transitivePeerDependencies:
+      - '@types/react'
+      - immer
+    dev: false
+
+  /@reactflow/controls@11.2.6(react-dom@17.0.2)(react@17.0.2):
+    resolution: {integrity: sha512-4QHT92/ACVlZkvV+Hq44bAPV8WbMhkJl+/J0EbXcqQ1+an7cWJsF84eeelJw7R5J76RoaSSpKdsWsL2v7HAVlw==}
+    peerDependencies:
+      react: '>=17'
+      react-dom: '>=17'
+    dependencies:
+      '@reactflow/core': 11.10.1(react-dom@17.0.2)(react@17.0.2)
+      classcat: 5.0.4
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
+      zustand: 4.4.7(react@17.0.2)
     transitivePeerDependencies:
       - '@types/react'
       - immer
@@ -2399,6 +2514,28 @@ packages:
       - immer
     dev: false
 
+  /@reactflow/core@11.10.1(react-dom@17.0.2)(react@17.0.2):
+    resolution: {integrity: sha512-GIh3usY1W3eVobx//OO9+Cwm+5evQBBdPGxDaeXwm25UqPMWRI240nXQA5F/5gL5Mwpf0DUC7DR2EmrKNQy+Rw==}
+    peerDependencies:
+      react: '>=17'
+      react-dom: '>=17'
+    dependencies:
+      '@types/d3': 7.4.3
+      '@types/d3-drag': 3.0.7
+      '@types/d3-selection': 3.0.10
+      '@types/d3-zoom': 3.0.8
+      classcat: 5.0.4
+      d3-drag: 3.0.0
+      d3-selection: 3.0.0
+      d3-zoom: 3.0.0
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
+      zustand: 4.4.7(react@17.0.2)
+    transitivePeerDependencies:
+      - '@types/react'
+      - immer
+    dev: false
+
   /@reactflow/minimap@11.7.6(@types/react@17.0.71)(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-kJEtyeQkTZYViLGebVWHVUJROMAGcvejvT+iX4DqKnFb5yK8E8LWlXQpRx2FrL9gDy80mJJaciy7IxnnQKE1bg==}
     peerDependencies:
@@ -2414,6 +2551,26 @@ packages:
       react: 17.0.2
       react-dom: 17.0.2(react@17.0.2)
       zustand: 4.4.7(@types/react@17.0.71)(react@17.0.2)
+    transitivePeerDependencies:
+      - '@types/react'
+      - immer
+    dev: false
+
+  /@reactflow/minimap@11.7.6(react-dom@17.0.2)(react@17.0.2):
+    resolution: {integrity: sha512-kJEtyeQkTZYViLGebVWHVUJROMAGcvejvT+iX4DqKnFb5yK8E8LWlXQpRx2FrL9gDy80mJJaciy7IxnnQKE1bg==}
+    peerDependencies:
+      react: '>=17'
+      react-dom: '>=17'
+    dependencies:
+      '@reactflow/core': 11.10.1(react-dom@17.0.2)(react@17.0.2)
+      '@types/d3-selection': 3.0.10
+      '@types/d3-zoom': 3.0.8
+      classcat: 5.0.4
+      d3-selection: 3.0.0
+      d3-zoom: 3.0.0
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
+      zustand: 4.4.7(react@17.0.2)
     transitivePeerDependencies:
       - '@types/react'
       - immer
@@ -2437,6 +2594,24 @@ packages:
       - immer
     dev: false
 
+  /@reactflow/node-resizer@2.2.6(react-dom@17.0.2)(react@17.0.2):
+    resolution: {integrity: sha512-1Xb6q97uP7hRBLpog9sRCNfnsHdDgFRGEiU+lQqGgPEAeYwl4nRjWa/sXwH6ajniKxBhGEvrdzOgEFn6CRMcpQ==}
+    peerDependencies:
+      react: '>=17'
+      react-dom: '>=17'
+    dependencies:
+      '@reactflow/core': 11.10.1(react-dom@17.0.2)(react@17.0.2)
+      classcat: 5.0.4
+      d3-drag: 3.0.0
+      d3-selection: 3.0.0
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
+      zustand: 4.4.7(react@17.0.2)
+    transitivePeerDependencies:
+      - '@types/react'
+      - immer
+    dev: false
+
   /@reactflow/node-toolbar@1.3.6(@types/react@17.0.71)(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-JXDEuZ0wKjZ8z7qK2bIst0eZPzNyVEsiHL0e93EyuqT4fA9icoyE0fLq2ryNOOp7MXgId1h7LusnH6ta45F0yQ==}
     peerDependencies:
@@ -2448,6 +2623,22 @@ packages:
       react: 17.0.2
       react-dom: 17.0.2(react@17.0.2)
       zustand: 4.4.7(@types/react@17.0.71)(react@17.0.2)
+    transitivePeerDependencies:
+      - '@types/react'
+      - immer
+    dev: false
+
+  /@reactflow/node-toolbar@1.3.6(react-dom@17.0.2)(react@17.0.2):
+    resolution: {integrity: sha512-JXDEuZ0wKjZ8z7qK2bIst0eZPzNyVEsiHL0e93EyuqT4fA9icoyE0fLq2ryNOOp7MXgId1h7LusnH6ta45F0yQ==}
+    peerDependencies:
+      react: '>=17'
+      react-dom: '>=17'
+    dependencies:
+      '@reactflow/core': 11.10.1(react-dom@17.0.2)(react@17.0.2)
+      classcat: 5.0.4
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
+      zustand: 4.4.7(react@17.0.2)
     transitivePeerDependencies:
       - '@types/react'
       - immer
@@ -3904,6 +4095,25 @@ packages:
       path-type: 4.0.0
       typescript: 4.9.5
 
+  /create-jest@29.7.0:
+    resolution: {integrity: sha512-Adz2bdH0Vq3F53KEMJOoftQFutWCukm6J24wbPWRO4k1kMY7gS7ds/uoJkNuV8wDCtWWnuwGcJwpWcih+zEW1Q==}
+    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
+    hasBin: true
+    dependencies:
+      '@jest/types': 29.6.3
+      chalk: 4.1.2
+      exit: 0.1.2
+      graceful-fs: 4.2.11
+      jest-config: 29.7.0(@types/node@16.18.68)
+      jest-util: 29.7.0
+      prompts: 2.4.2
+    transitivePeerDependencies:
+      - '@types/node'
+      - babel-plugin-macros
+      - supports-color
+      - ts-node
+    dev: true
+
   /create-jest@29.7.0(@types/node@16.18.68)(ts-node@10.9.2):
     resolution: {integrity: sha512-Adz2bdH0Vq3F53KEMJOoftQFutWCukm6J24wbPWRO4k1kMY7gS7ds/uoJkNuV8wDCtWWnuwGcJwpWcih+zEW1Q==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
@@ -4587,6 +4797,10 @@ packages:
       react-is: 16.13.1
     dev: false
 
+  /hotkeys-js@3.13.1:
+    resolution: {integrity: sha512-GWOwjdd7B0BD+UGPFvXK5CxpeAXu/DzgsrAgvrNYQiNDllXpPUH4ZEWDIMH6CAuMhWtn9U3QizmuZdctTWtr7g==}
+    dev: false
+
   /html-escaper@2.0.2:
     resolution: {integrity: sha512-H2iMtd0I4Mt5eYiapRdIDjp+XzelXQ0tFE4JS7YFwFevXXMmOp9myNrUvCg0D6ws8iqkRPBfKHgbwig1SmlLfg==}
     dev: true
@@ -5055,6 +5269,34 @@ packages:
       - supports-color
     dev: true
 
+  /jest-cli@29.7.0:
+    resolution: {integrity: sha512-OVVobw2IubN/GSYsxETi+gOe7Ka59EFMR/twOU3Jb2GnKKeMGJB5SGUUrEz3SFVmJASUdZUzy83sLNNQ2gZslg==}
+    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
+    hasBin: true
+    peerDependencies:
+      node-notifier: ^8.0.1 || ^9.0.0 || ^10.0.0
+    peerDependenciesMeta:
+      node-notifier:
+        optional: true
+    dependencies:
+      '@jest/core': 29.7.0
+      '@jest/test-result': 29.7.0
+      '@jest/types': 29.6.3
+      chalk: 4.1.2
+      create-jest: 29.7.0
+      exit: 0.1.2
+      import-local: 3.1.0
+      jest-config: 29.7.0(@types/node@16.18.68)
+      jest-util: 29.7.0
+      jest-validate: 29.7.0
+      yargs: 17.7.2
+    transitivePeerDependencies:
+      - '@types/node'
+      - babel-plugin-macros
+      - supports-color
+      - ts-node
+    dev: true
+
   /jest-cli@29.7.0(@types/node@16.18.68)(ts-node@10.9.2):
     resolution: {integrity: sha512-OVVobw2IubN/GSYsxETi+gOe7Ka59EFMR/twOU3Jb2GnKKeMGJB5SGUUrEz3SFVmJASUdZUzy83sLNNQ2gZslg==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
@@ -5081,6 +5323,46 @@ packages:
       - babel-plugin-macros
       - supports-color
       - ts-node
+    dev: true
+
+  /jest-config@29.7.0(@types/node@16.18.68):
+    resolution: {integrity: sha512-uXbpfeQ7R6TZBqI3/TxCU4q4ttk3u0PJeC+E0zbfSoSjq6bJ7buBPxzQPL0ifrkY4DNu4JUdk0ImlBUYi840eQ==}
+    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
+    peerDependencies:
+      '@types/node': '*'
+      ts-node: '>=9.0.0'
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      ts-node:
+        optional: true
+    dependencies:
+      '@babel/core': 7.23.5
+      '@jest/test-sequencer': 29.7.0
+      '@jest/types': 29.6.3
+      '@types/node': 16.18.68
+      babel-jest: 29.7.0(@babel/core@7.23.5)
+      chalk: 4.1.2
+      ci-info: 3.9.0
+      deepmerge: 4.3.1
+      glob: 7.2.3
+      graceful-fs: 4.2.11
+      jest-circus: 29.7.0
+      jest-environment-node: 29.7.0
+      jest-get-type: 29.6.3
+      jest-regex-util: 29.6.3
+      jest-resolve: 29.7.0
+      jest-runner: 29.7.0
+      jest-util: 29.7.0
+      jest-validate: 29.7.0
+      micromatch: 4.0.5
+      parse-json: 5.2.0
+      pretty-format: 29.7.0
+      slash: 3.0.0
+      strip-json-comments: 3.1.1
+    transitivePeerDependencies:
+      - babel-plugin-macros
+      - supports-color
     dev: true
 
   /jest-config@29.7.0(@types/node@16.18.68)(ts-node@10.9.2):
@@ -5435,6 +5717,27 @@ packages:
       supports-color: 8.1.1
     dev: true
 
+  /jest@29.7.0:
+    resolution: {integrity: sha512-NIy3oAFp9shda19hy4HK0HRTWKtPJmGdnvywu01nOqNC2vZg+Z+fvJDxpMQA88eb2I9EcafcdjYgsDthnYTvGw==}
+    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
+    hasBin: true
+    peerDependencies:
+      node-notifier: ^8.0.1 || ^9.0.0 || ^10.0.0
+    peerDependenciesMeta:
+      node-notifier:
+        optional: true
+    dependencies:
+      '@jest/core': 29.7.0
+      '@jest/types': 29.6.3
+      import-local: 3.1.0
+      jest-cli: 29.7.0
+    transitivePeerDependencies:
+      - '@types/node'
+      - babel-plugin-macros
+      - supports-color
+      - ts-node
+    dev: true
+
   /jest@29.7.0(@types/node@16.18.68)(ts-node@10.9.2):
     resolution: {integrity: sha512-NIy3oAFp9shda19hy4HK0HRTWKtPJmGdnvywu01nOqNC2vZg+Z+fvJDxpMQA88eb2I9EcafcdjYgsDthnYTvGw==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
@@ -5507,6 +5810,7 @@ packages:
       chalk: 3.0.0
       diff-match-patch: 1.0.5
     dev: false
+    bundledDependencies: []
 
   /jsonfile@6.1.0:
     resolution: {integrity: sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==}
@@ -6384,15 +6688,6 @@ packages:
       resize-observer-polyfill: 1.5.1
     dev: false
 
-  /react-hotkeys@2.0.0(react@17.0.2):
-    resolution: {integrity: sha512-3n3OU8vLX/pfcJrR3xJ1zlww6KS1kEJt0Whxc4FiGV+MJrQ1mYSYI3qS/11d2MJDFm8IhOXMTFQirfu6AVOF6Q==}
-    peerDependencies:
-      react: '>= 0.14.0'
-    dependencies:
-      prop-types: 15.8.1
-      react: 17.0.2
-    dev: false
-
   /react-icons@4.12.0(react@17.0.2):
     resolution: {integrity: sha512-IBaDuHiShdZqmfc/TwHu6+d6k2ltNCf3AszxNmjJc1KUfXdEeRJOKyNvLmAHaarhzGmTSVygNdyu8/opXv2gaw==}
     peerDependencies:
@@ -6493,6 +6788,25 @@ packages:
       '@reactflow/minimap': 11.7.6(@types/react@17.0.71)(react-dom@17.0.2)(react@17.0.2)
       '@reactflow/node-resizer': 2.2.6(@types/react@17.0.71)(react-dom@17.0.2)(react@17.0.2)
       '@reactflow/node-toolbar': 1.3.6(@types/react@17.0.71)(react-dom@17.0.2)(react@17.0.2)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
+    transitivePeerDependencies:
+      - '@types/react'
+      - immer
+    dev: false
+
+  /reactflow@11.10.1(react-dom@17.0.2)(react@17.0.2):
+    resolution: {integrity: sha512-Q616fElAc5/N37tMwjuRkkgm/VgmnLLTNNCj61z5mvJxae+/VXZQMfot1K6a5LLz9G3SVKqU97PMb9Ga1PRXew==}
+    peerDependencies:
+      react: '>=17'
+      react-dom: '>=17'
+    dependencies:
+      '@reactflow/background': 11.3.6(react-dom@17.0.2)(react@17.0.2)
+      '@reactflow/controls': 11.2.6(react-dom@17.0.2)(react@17.0.2)
+      '@reactflow/core': 11.10.1(react-dom@17.0.2)(react@17.0.2)
+      '@reactflow/minimap': 11.7.6(react-dom@17.0.2)(react@17.0.2)
+      '@reactflow/node-resizer': 2.2.6(react-dom@17.0.2)(react@17.0.2)
+      '@reactflow/node-toolbar': 1.3.6(react-dom@17.0.2)(react@17.0.2)
       react: 17.0.2
       react-dom: 17.0.2(react@17.0.2)
     transitivePeerDependencies:
@@ -6966,7 +7280,7 @@ packages:
       '@babel/core': 7.23.5
       bs-logger: 0.2.6
       fast-json-stable-stringify: 2.1.0
-      jest: 29.7.0(@types/node@16.18.68)(ts-node@10.9.2)
+      jest: 29.7.0
       jest-util: 29.7.0
       json5: 2.2.3
       lodash.memoize: 4.1.2
@@ -7356,6 +7670,25 @@ packages:
         optional: true
     dependencies:
       '@types/react': 17.0.71
+      react: 17.0.2
+      use-sync-external-store: 1.2.0(react@17.0.2)
+    dev: false
+
+  /zustand@4.4.7(react@17.0.2):
+    resolution: {integrity: sha512-QFJWJMdlETcI69paJwhSMJz7PPWjVP8Sjhclxmxmxv/RYI7ZOvR5BHX+ktH0we9gTWQMxcne8q1OY8xxz604gw==}
+    engines: {node: '>=12.7.0'}
+    peerDependencies:
+      '@types/react': '>=16.8'
+      immer: '>=9.0'
+      react: '>=16.8'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      immer:
+        optional: true
+      react:
+        optional: true
+    dependencies:
       react: 17.0.2
       use-sync-external-store: 1.2.0(react@17.0.2)
     dev: false

@@ -1,9 +1,16 @@
 import downloadFile from "js-file-download";
-import { FC, ReactNode, useCallback, useState } from "react";
+import {
+  FC,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { Separator, useContextMenu } from "react-contexify";
 import "react-contexify/dist/ReactContexify.css";
-import { GlobalHotKeys } from "react-hotkeys";
 import { useReactFlow } from "reactflow";
+import hotkeys from "hotkeys-js";
 import useTheme from "../../hooks/useTheme";
 import useStore from "../../store";
 import AddNode from "../AddNode";
@@ -45,6 +52,16 @@ const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
     [setShowAddNode],
   );
 
+  const pasteBuffer = useStore((store) => store.pasteBuffer);
+  const { project } = useReactFlow();
+  const pasteBufferHandler = useCallback(
+    (mousePosition) => {
+      const { x, y } = project(mousePosition);
+      pasteBuffer(x, y);
+    },
+    [setShowAddNode, project],
+  );
+
   const clearGraph = useStore(({ clearGraph }) => clearGraph);
 
   const getEditorState = useStore((store) => store.getEditorState);
@@ -57,10 +74,19 @@ const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
   );
 
   const toggleHelp = useStore((store) => store.toggleHelp);
+
   const historyBack = useStore((store) => store.history.back);
   const historyForward = useStore((store) => store.history.forward);
   const historyPointer = useStore((store) => store.history.pointer);
-  const buffer = useStore((store) => store.history.buffer);
+  const historyBuffer = useStore((store) => store.history.buffer);
+
+  const copySelectedItems = useStore((store) => store.copySelectedItems);
+  const nodes = useStore((store) => store.nodes);
+  const selectedNodes = useMemo(
+    () => nodes.filter(({ selected }) => selected),
+    [nodes],
+  );
+  const currentCopyBuffer = useStore((store) => store.copyBuffer);
 
   const reactFlowInstance = useReactFlow();
 
@@ -75,35 +101,39 @@ const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
     downloadFile(JSON.stringify(data, null, 2), fileName);
   }, [getEditorState, reactFlowInstance]);
 
+  useEffect(() => {
+    hotkeys("command+shift+a", () => {
+      addNodeHandler(200, 50);
+      return false;
+    });
+    //@TODO: find more elegant way to handle ?
+    hotkeys("shift+/", () => {
+      toggleHelp();
+      return false;
+    });
+    hotkeys("command+z", () => {
+      historyBack();
+      return false;
+    });
+    hotkeys("command+shift+z", () => {
+      historyForward();
+      return false;
+    });
+    hotkeys("command+c", () => {
+      copySelectedItems();
+      return false;
+    });
+    hotkeys("command+v", () => {
+      pasteBufferHandler({ x: 200, y: 50 });
+      return false;
+    });
+    return () => {
+      hotkeys.unbind();
+    };
+  }, [addNodeHandler, pasteBufferHandler]);
+
   return (
     <>
-      {/* @ts-ignore */}
-      <GlobalHotKeys
-        keyMap={{
-          ADD_NODE: "command+shift+a",
-          SHOW_HELP: "shift+?",
-          UNDO: "command+z",
-          REDO: "command+shift+z",
-        }}
-        handlers={{
-          ADD_NODE: (e) => {
-            addNodeHandler(50, 50);
-            e?.preventDefault();
-          },
-          SHOW_HELP: (e) => {
-            toggleHelp();
-            e?.preventDefault();
-          },
-          UNDO: (e) => {
-            historyBack();
-            e?.preventDefault();
-          },
-          REDO: (e) => {
-            historyForward();
-            e?.preventDefault();
-          },
-        }}
-      ></GlobalHotKeys>
       <AddNode
         isOpen={showAddNode}
         closeMenu={() => setShowAddNode(false)}
@@ -135,10 +165,25 @@ const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
           Undo (⌘+z)
         </ItemWrapper>
         <ItemWrapper
-          disabled={historyPointer === buffer.length}
+          disabled={historyPointer === historyBuffer.length}
           onClick={historyForward}
         >
           Redo (⌘+⇧+Z)
+        </ItemWrapper>
+        <Separator />
+        <ItemWrapper
+          disabled={!selectedNodes.length}
+          onClick={copySelectedItems}
+        >
+          Copy Selected
+        </ItemWrapper>
+        <ItemWrapper
+          disabled={!currentCopyBuffer.nodes.length}
+          onClick={({ triggerEvent: { clientX: x, clientY: y } }) =>
+            pasteBufferHandler({ x, y })
+          }
+        >
+          Paste
         </ItemWrapper>
         <Separator />
         {editorContextMenu.map((item, index) => (
