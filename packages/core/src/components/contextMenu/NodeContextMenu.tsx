@@ -18,7 +18,7 @@ export const useNodeContextMenu = () => {
       event.stopPropagation();
       show(event, { props: { node } });
     },
-    []
+    [],
   );
 
   return { onContextMenu };
@@ -29,11 +29,12 @@ const NodeContextMenu: FC<{}> = (args) => {
 
   const removeNodes = useStore((store) => store.removeNodes);
   const addNodeToControlPanel = useStore(
-    (store) => store.addNodeToControlPanel
+    (store) => store.addNodeToControlPanel,
   );
   const removeNodeFromControlPanel = useStore(
-    (store) => store.removeNodeFromControlPanel
+    (store) => store.removeNodeFromControlPanel,
   );
+  const copy = useStore((store) => store.copy);
   const nodesConfiguration = useStore((store) => store.nodesConfiguration);
   const controlPanelNodes = useStore((store) => store.controlPanel.nodes);
 
@@ -44,7 +45,7 @@ const NodeContextMenu: FC<{}> = (args) => {
       }
       return !!controlPanelNodes.find(({ id }) => id === props.node.id);
     },
-    [controlPanelNodes]
+    [controlPanelNodes],
   );
 
   const hasControlPanelNode = useCallback(
@@ -55,7 +56,7 @@ const NodeContextMenu: FC<{}> = (args) => {
       const nodeConfiguration = nodesConfiguration[props.node.type];
       return !!nodeConfiguration?.controlPanelNode;
     },
-    [nodesConfiguration]
+    [nodesConfiguration],
   );
 
   return (
@@ -79,6 +80,11 @@ const NodeContextMenu: FC<{}> = (args) => {
           onClick={(event) => removeNodeFromControlPanel(event.props.node)}
         >
           Remove From Control Panel
+        </ItemWrapper>
+        <ItemWrapper
+          onClick={(event) => copy({ nodes: [event.props.node], edges: [] })}
+        >
+          Copy
         </ItemWrapper>
       </MenuWrapper>
     </>

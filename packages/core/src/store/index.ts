@@ -2,6 +2,7 @@ import { addEdge, getConnectedEdges, NodeTypes, OnConnect } from "reactflow";
 import { create, StateCreator } from "zustand";
 import { setAudioNodeTypes, AudioNodeTypes } from "@web-noise/patch";
 import { CONTROL_PANEL_GRID_CONFIG } from "../constants";
+import generateNodeId from "../helpers/generateNodeId";
 import {
   ControlPanelNode,
   ControlPanelNodes,
@@ -51,6 +52,10 @@ export type StoreState = NodesState &
     setEditorState: (state: EditorState) => Promise<void>;
     isHelpShown: boolean;
     toggleHelp: () => void;
+    copyBuffer: { nodes: WNNode[]; edges: WNEdge[] };
+    copy: (elements: { nodes: WNNode[]; edges: WNEdge[] }) => void;
+    copySelectedItems: () => void;
+    pasteBuffer: (x: number, y: number) => void;
     /* move to control panel store */
     getControlPanelNode: (node: WNNode) => ControlPanelNode | null;
     controlPanel: ControlPanelState;
@@ -148,8 +153,6 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
     },
     createEdges: (newEdges) => {
       const { patch, edges, setEdges } = get();
-      if (newEdges.length > edges.length) {
-      }
       setEdges(newEdges);
     },
     onConnect: async (connection) => {
@@ -232,6 +235,92 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
     toggleHelp: () => {
       const { isHelpShown: showHelp } = get();
       set({ isHelpShown: !showHelp });
+    },
+    copyBuffer: { nodes: [], edges: [] },
+    copy: (elements) => {
+      set({ copyBuffer: elements });
+    },
+    copySelectedItems: () => {
+      const { nodes: currentNodes, edges: currentEdges, copy } = get();
+      const nodes = currentNodes.filter(({ selected }) => selected);
+      const edges = currentEdges.filter(({ selected }) => selected);
+      if (!nodes.length) {
+        return;
+      }
+      copy({ nodes, edges });
+    },
+    pasteBuffer: (x = 0, y = 0) => {
+      const { copyBuffer, createNodes, setEdges, nodes, edges } = get();
+      const { nodes: nodesToCopy, edges: edgesToCopy } = copyBuffer;
+
+      if (!nodesToCopy.length) {
+        return;
+      }
+
+      set({
+        nodes: nodes.map((node) => ({ ...node, selected: false })),
+      });
+
+      const topLeftNode = nodesToCopy.reduce((acc, node) => {
+        if (!acc) {
+          return node;
+        }
+        if (
+          node.position.x < acc.position.x &&
+          node.position.y < acc.position.y
+        ) {
+          return node;
+        }
+        return acc;
+      });
+
+      const xDelta = topLeftNode.position.x - x;
+      const yDelta = topLeftNode.position.y - y;
+
+      const { nodes: newNodes, mapping } = nodesToCopy.reduce(
+        (acc, node) => {
+          const newNodeId = generateNodeId(node);
+          return {
+            nodes: [
+              ...acc.nodes,
+              {
+                ...node,
+                id: newNodeId,
+                position: {
+                  x: node.position.x - xDelta,
+                  y: node.position.y - yDelta,
+                },
+                selected: true,
+              },
+            ],
+            mapping: {
+              ...acc.mapping,
+              [node.id]: newNodeId,
+            },
+          };
+        },
+        { nodes: [], mapping: {} } as {
+          nodes: Array<WNNode>;
+          mapping: Record<WNNode["id"], WNNode["id"]>;
+        },
+      );
+      createNodes(newNodes);
+
+      const newEdges = edgesToCopy.map((edge) => {
+        const source = mapping[edge.source] || edge.source;
+        const target = mapping[edge.target] || edge.target;
+        return {
+          ...edge,
+          id: edge.id.replace(edge.source, source).replace(edge.target, target),
+          source,
+          target,
+          selected: true,
+        };
+      });
+      setEdges([
+        ...edges.map((edge) => ({ ...edge, selected: false })),
+        ...newEdges,
+      ]);
     },
     getControlPanelNode: (node) => {
       const { nodesConfiguration } = get();
