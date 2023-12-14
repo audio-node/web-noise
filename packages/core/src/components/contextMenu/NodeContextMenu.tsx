@@ -84,7 +84,7 @@ const NodeContextMenu: FC<{}> = (args) => {
         <ItemWrapper
           onClick={(event) => copy({ nodes: [event.props.node], edges: [] })}
         >
-          Copy
+          Copy (⌘+c)
         </ItemWrapper>
       </MenuWrapper>
     </>

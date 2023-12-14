@@ -61,7 +61,7 @@ const EditorWrapper: FC = () => {
         editorState={graphState}
         plugins={[baseNodes, webAudioNodes, patchNodes]}
         editorContextMenu={[
-          <span onClick={() => setShowSharePatch(true)}>Share patch</span>,
+          /*<span onClick={() => setShowSharePatch(true)}>Share patch</span>,*/
         ]}
       />
     ),

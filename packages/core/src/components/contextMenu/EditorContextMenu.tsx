@@ -159,8 +159,6 @@ const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
           Upload patch
         </ItemWrapper>
         <Separator />
-        <ItemWrapper onClick={toggleHelp}>Help (⇧+?)</ItemWrapper>
-        <Separator />
         <ItemWrapper disabled={historyPointer === 0} onClick={historyBack}>
           Undo (⌘+z)
         </ItemWrapper>
@@ -175,7 +173,7 @@ const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
           disabled={!selectedNodes.length}
           onClick={copySelectedItems}
         >
-          Copy Selected
+          Copy Selected (⌘+c)
         </ItemWrapper>
         <ItemWrapper
           disabled={!currentCopyBuffer.nodes.length}
@@ -183,12 +181,14 @@ const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
             pasteBufferHandler({ x, y })
           }
         >
-          Paste
+          Paste (⌘+v)
         </ItemWrapper>
         <Separator />
         {editorContextMenu.map((item, index) => (
           <ItemWrapper key={index}>{item}</ItemWrapper>
         ))}
+        <Separator />
+        <ItemWrapper onClick={toggleHelp}>Help (⇧+?)</ItemWrapper>
       </MenuWrapper>
     </>
   );
