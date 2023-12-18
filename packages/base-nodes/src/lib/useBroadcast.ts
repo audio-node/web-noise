@@ -1,6 +1,6 @@
 type PoolName = string | number;
 
-type Broadcast = (data: any, poolName?: PoolName) => void;
+type Broadcast = <T = unknown>(data: T, poolName?: PoolName) => void;
 
 interface AddListenerEvent {
   name: "ADD_LISTENER";

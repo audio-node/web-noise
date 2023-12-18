@@ -1,7 +1,7 @@
 import { PluginConfig } from "@web-noise/core/src/types";
 
 import AudioInputComponent from "@web-noise/base-nodes/src/AudioInput/audioNode";
-import { adsr } from "@web-noise/base-nodes/src/audioNodes/adsr";
+import ADSR from "@web-noise/base-nodes/src/ADSR/audioNode";
 import { analyser } from "@web-noise/base-nodes/src/audioNodes/analyser";
 import audioTrack from "@web-noise/base-nodes/src/audioNodes/audioTrack";
 import { clock } from "@web-noise/base-nodes/src/audioNodes/clock";
@@ -64,7 +64,7 @@ export const webAudioNodes: PluginConfig = {
 export const baseNodes: PluginConfig = {
   components: [
     { type: "reverb", node: null, audioNode: Reverb },
-    { type: "adsr", node: null, audioNode: adsr },
+    { type: "adsr", node: null, audioNode: ADSR },
     { type: "clock", node: null, audioNode: clock },
     { type: "whiteNoise", node: null, audioNode: whiteNoise },
     { type: "oscilloscope", node: null, audioNode: Oscilloscope },
