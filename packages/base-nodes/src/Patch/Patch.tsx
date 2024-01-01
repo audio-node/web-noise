@@ -70,12 +70,12 @@ const Patch: FC<WNNodeProps<PatchData>> = (props) => {
         console.error(`could not find node: #${id}`);
         return;
       }
+      removeNode(node);
       createNode({
         ...node,
         id: `${node.type}-${+new Date()}`,
         data: { ...node.data, values: { url } },
       });
-      removeNode(node);
     },
     [createNode, removeNode, id, getNode],
   );
