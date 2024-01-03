@@ -16,8 +16,14 @@ const frequencyMeter = async (
 
   return {
     inputs: {
+      method: {
+        port: frequencyMeter.parameters.get("method")!,
+      },
       fftSize: {
         port: frequencyMeter.parameters.get("fftSize")!,
+      },
+      hopSize: {
+        port: frequencyMeter.parameters.get("hopSize")!,
       },
       input: {
         port: frequencyMeter,

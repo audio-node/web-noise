@@ -1,45 +1,48 @@
-import Pitchfinder from "pitchfinder";
-import { createUseBuffer } from "../lib";
+import { PitchWorkletParameters } from "./types";
+import { createUseGetPitch, PITCH_METHODS } from "./useGetPitch";
 
-const detectPitch = Pitchfinder.DynamicWavelet({ sampleRate: sampleRate });
+type Parameters = { [key in PitchWorkletParameters]: Float32Array };
 
-const DEFAULT_FFT_SIZE = 1024;
+type Port = Float32Array[];
 
 export class FrequencyMeterProcessor extends AudioWorkletProcessor {
-  useBuffer = createUseBuffer(DEFAULT_FFT_SIZE);
-  currentFftSize = DEFAULT_FFT_SIZE;
+  useGetPitch = createUseGetPitch();
 
   static get parameterDescriptors() {
-    return [{ name: "fftSize" }];
+    return [
+      {
+        name: PitchWorkletParameters.method,
+        minValue: 0,
+        maxValue: PITCH_METHODS.length - 1,
+      },
+      { name: PitchWorkletParameters.fftSize },
+      { name: PitchWorkletParameters.hopSize },
+    ];
   }
 
-  process(
-    inputs: Float32Array[][],
-    outputs: Float32Array[][],
-    parameters: {
-      fftSize: Float32Array;
-    },
-  ) {
+  process(inputs: [Port], outputs: [Port], parameters: Parameters) {
     const [input] = inputs;
-
-    const fftSize = parameters.fftSize[0];
-    const analysisWindowSize = fftSize <= 0 ? DEFAULT_FFT_SIZE : fftSize;
-
-    if (this.currentFftSize !== analysisWindowSize) {
-      this.useBuffer = createUseBuffer(analysisWindowSize);
-      this.currentFftSize = analysisWindowSize;
-    }
 
     if (!input || !input.length) {
       return true;
     }
 
-    const buffer = this.useBuffer(input[0]);
-    const frequency = detectPitch(buffer);
+    const getPitch = this.useGetPitch({
+      method: parameters[PitchWorkletParameters.method][0],
+      bufferSize: parameters[PitchWorkletParameters.fftSize][0],
+      hopSize: parameters[PitchWorkletParameters.hopSize][0],
+      sampleRate,
+    });
+
+    if (!getPitch) {
+      return true;
+    }
+
+    const frequency = getPitch(input[0]);
 
     outputs[0].forEach((channel) => {
       for (let index in channel) {
-        channel[index] = frequency || 0;
+        channel[index] = frequency;
       }
     });
 
