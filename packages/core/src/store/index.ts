@@ -227,6 +227,8 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
     setEditorState: async ({ nodes, edges, controlPanel }) => {
       const { setGraph } = get();
       await setGraph({ nodes, edges });
+      // @TODO: remove this line once audio patch initialisation is reworked
+      await new Promise((r) => setTimeout(r, 1000));
       set({
         controlPanel,
       });
