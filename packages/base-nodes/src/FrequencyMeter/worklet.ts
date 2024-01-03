@@ -3,13 +3,33 @@ import { createUseBuffer } from "../lib";
 
 const detectPitch = Pitchfinder.DynamicWavelet({ sampleRate: sampleRate });
 
-const BUFFER_SIZE = 1024;
+const DEFAULT_FFT_SIZE = 1024;
 
 export class FrequencyMeterProcessor extends AudioWorkletProcessor {
-  useBuffer = createUseBuffer(BUFFER_SIZE);
+  useBuffer = createUseBuffer(DEFAULT_FFT_SIZE);
+  currentFftSize = DEFAULT_FFT_SIZE;
 
-  process(inputs: Float32Array[][], outputs: Float32Array[][]) {
+  static get parameterDescriptors() {
+    return [{ name: "fftSize" }];
+  }
+
+  process(
+    inputs: Float32Array[][],
+    outputs: Float32Array[][],
+    parameters: {
+      fftSize: Float32Array;
+    },
+  ) {
     const [input] = inputs;
+
+    const fftSize = parameters.fftSize[0];
+    const analysisWindowSize = fftSize <= 0 ? DEFAULT_FFT_SIZE : fftSize;
+
+    if (this.currentFftSize !== analysisWindowSize) {
+      this.useBuffer = createUseBuffer(analysisWindowSize);
+      this.currentFftSize = analysisWindowSize;
+    }
+
     if (!input || !input.length) {
       return true;
     }
