@@ -107,6 +107,7 @@ export const baseNodes: PluginConfig = {
     },
     { type: "audioTrack", node: null, audioNode: audioTrack },
     { type: "valueMeter", node: null, audioNode: ValueMeter },
+    { type: "gauge", node: null, audioNode: ValueMeter },
     { type: "sticker", node: null, audioNode: false },
     {
       type: "midiInput",

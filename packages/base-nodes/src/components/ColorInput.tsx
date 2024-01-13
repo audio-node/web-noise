@@ -24,9 +24,13 @@ export interface ColorInputProps {
   onChange?: (value: string) => void;
 }
 
-const ColorInput = ({ value, onChange = () => {} }: ColorInputProps) => {
+const ColorInput = ({
+  value,
+  onChange = () => {},
+  ...props
+}: ColorInputProps) => {
   return (
-    <StyledInputWrapper>
+    <StyledInputWrapper {...props}>
       <StyledInputInner
         type="color"
         value={value}
