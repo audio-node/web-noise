@@ -52,7 +52,7 @@ import MidiNote from "./src/MidiNote";
 
 import Inlet from "./src/Inlet";
 import Outlet from "./src/Outlet";
-import { passThrough } from "./src/audioNodes/passThrough";
+import PassThrough from "./src/PassThrough";
 
 export const webAudioNodes: PluginConfig = {
   components: [
@@ -136,6 +136,7 @@ export const baseNodes: PluginConfig = {
     FrequencyMeter,
     Quantizer,
     Scale,
+    PassThrough,
   ],
   name: "Web Noise base nodes",
 };

@@ -37,7 +37,7 @@ import Spectroscope from "@web-noise/base-nodes/src/Spectroscope/audioNode";
 import StereoPanner from "@web-noise/base-nodes/src/StereoPanner/audioNode";
 import ValueMeter from "@web-noise/base-nodes/src/ValueMeter/audioNode";
 
-import { passThrough } from "@web-noise/base-nodes/src/audioNodes/passThrough";
+import { passThrough } from "@web-noise/base-nodes/src/PassThrough/audioNode";
 
 const Inlet = passThrough;
 const Outlet = passThrough;

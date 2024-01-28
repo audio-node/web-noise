@@ -1,7 +1,7 @@
 import { WNAudioNode } from "@web-noise/core";
 
 //@ts-ignore
-import scaleWorkletUrl from "worklet:../audioNodes/passThrough/worklet.ts";
+import scaleWorkletUrl from "worklet:../PassThrough/worklet.ts";
 
 const passThroughWorklet = new URL(scaleWorkletUrl, import.meta.url);
 

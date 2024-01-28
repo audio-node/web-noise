@@ -1,11 +1,11 @@
-import { PluginComponent } from "@web-noise/core";
+import type { PluginComponent } from "@web-noise/core";
 import { WNNode as node } from "@web-noise/core";
-import { passThrough } from "../audioNodes/passThrough";
+import audioNode from "../PassThrough/audioNode";
 
 const plugin: PluginComponent = {
   type: "inlet",
   node,
-  audioNode: passThrough,
+  audioNode,
 };
 
 export default plugin;

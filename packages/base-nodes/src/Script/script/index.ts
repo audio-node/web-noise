@@ -2,10 +2,9 @@ import { IncomingMessageData, ScriptNode, ScriptNodeData } from "../types";
 import transpile from "../transpile";
 
 //@ts-ignore
-import passThroughWorkerUrl from "worklet:../../audioNodes/passThrough/worklet.ts";
+import passThroughWorkerUrl from "worklet:../../PassThrough/worklet.ts";
 //@ts-ignore
 import triggerWatcherWorkletUrl from "worklet:./triggerWatcher.worklet.ts";
-
 
 const passThroughWorker = new URL(passThroughWorkerUrl, import.meta.url);
 const triggerWatcherWorklet = new URL(
