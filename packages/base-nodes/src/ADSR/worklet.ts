@@ -75,7 +75,7 @@ export class ADSRProcessor extends AudioWorkletProcessor {
 
     let adjustedCurrentTime = currentTime;
 
-    for (let i = 0; i < output[0].length; ++i) {
+    for (let i = 0; i < output[0]?.length; ++i) {
       adjustedCurrentTime = currentTime + i / sampleRate;
 
       if (trigger > 0 && [PHASES.IDLE, PHASES.RELEASE].includes(this._phase)) {
