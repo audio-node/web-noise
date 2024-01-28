@@ -15,7 +15,7 @@ export class ADSRProcessor extends AudioWorkletProcessor {
     return [
       {
         name: ADSRParameters.A,
-        minValue: 0,
+        minValue: 1e-19,
         maxValue: 60,
         automationRate: "k-rate",
       },
@@ -27,7 +27,7 @@ export class ADSRProcessor extends AudioWorkletProcessor {
       },
       {
         name: ADSRParameters.D,
-        minValue: 0,
+        minValue: 1e-19,
         maxValue: 60,
         automationRate: "k-rate",
       },
@@ -39,7 +39,7 @@ export class ADSRProcessor extends AudioWorkletProcessor {
       },
       {
         name: ADSRParameters.R,
-        minValue: 0,
+        minValue: 1e-19,
         maxValue: 60,
         automationRate: "k-rate",
       },
@@ -104,6 +104,9 @@ export class ADSRProcessor extends AudioWorkletProcessor {
           if (this._value <= sustain) {
             this._value = sustain;
             this._phase = PHASES.SUSTAIN;
+          }
+          if (Number.isNaN(this._value)) {
+            debugger;
           }
           break;
 
