@@ -4,11 +4,17 @@ export class PassThroughProcessor extends AudioWorkletProcessor {
     outputs: Float32Array[][],
     _parameters: Record<string, Float32Array>,
   ) {
-    try {
-      inputs[0].forEach((channel, index) => outputs[0][index].set(channel));
-    } catch (e) {
-      console.error(e);
-    }
+    const output = outputs[0];
+    const input = inputs[0];
+    output.forEach((outputChannel, channelIndex) => {
+      for (
+        let sampleIndex = 0;
+        sampleIndex < outputChannel.length;
+        sampleIndex++
+      ) {
+        outputChannel[sampleIndex] = input[channelIndex]?.[sampleIndex] ?? 0;
+      }
+    });
 
     return true;
   }
