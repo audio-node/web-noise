@@ -15,7 +15,7 @@ export class ADSRProcessor extends AudioWorkletProcessor {
     return [
       {
         name: ADSRParameters.A,
-        minValue: 1e-19,
+        minValue: 0,
         maxValue: 60,
         automationRate: "k-rate",
       },
@@ -27,7 +27,7 @@ export class ADSRProcessor extends AudioWorkletProcessor {
       },
       {
         name: ADSRParameters.D,
-        minValue: 1e-19,
+        minValue: 0,
         maxValue: 60,
         automationRate: "k-rate",
       },
@@ -39,7 +39,7 @@ export class ADSRProcessor extends AudioWorkletProcessor {
       },
       {
         name: ADSRParameters.R,
-        minValue: 1e-19,
+        minValue: 0,
         maxValue: 60,
         automationRate: "k-rate",
       },
@@ -64,10 +64,10 @@ export class ADSRProcessor extends AudioWorkletProcessor {
     parameters: Parameters,
   ) {
     let output = outputs[0];
-    const attack = parameters[ADSRParameters.A][0];
-    const decay = parameters[ADSRParameters.D][0];
-    const sustain = parameters[ADSRParameters.S][0];
-    const release = parameters[ADSRParameters.R][0];
+    const attack = parameters[ADSRParameters.A][0] || 1e-19;
+    const decay = parameters[ADSRParameters.D][0] || 1e-19;
+    const sustain = parameters[ADSRParameters.S][0] || 1e-19;
+    const release = parameters[ADSRParameters.R][0] || 1e-19;
 
     const attackCurve = parameters[ADSRParameters.AttackCurve][0];
 
