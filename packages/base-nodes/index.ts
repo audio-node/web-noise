@@ -50,6 +50,7 @@ import DataRecorder from "./src/nodes/DataRecorder";
 import { dataRecorder } from "./src/audioNodes/dataRecorder";
 import MidiNote from "./src/MidiNote";
 import Convolver from "./src/Convolver";
+import WaveShaper from "./src/WaveShaper";
 
 import Inlet from "./src/Inlet";
 import Outlet from "./src/Outlet";
@@ -71,6 +72,7 @@ export const webAudioNodes: PluginConfig = {
     Delay,
     DynamicsCompressor,
     Convolver,
+    WaveShaper,
   ],
   name: "Web Audio Api base nodes",
 };

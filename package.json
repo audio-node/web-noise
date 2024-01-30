@@ -65,6 +65,7 @@
     "@parcel/transformer-webmanifest": "^2.10.1",
     "@parcel/transformer-worklet": "^2.10.1",
     "@types/prismjs": "^1.26.0",
+    "assert": "^2.0.0",
     "buffer": "^5.5.0||^6.0.0",
     "parcel": "^2.10.0",
     "path-browserify": "^1.0.0",
