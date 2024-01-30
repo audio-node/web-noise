@@ -1,4 +1,10 @@
-import { FC, KeyboardEventHandler, useState, useCallback } from "react";
+import {
+  FC,
+  KeyboardEventHandler,
+  useState,
+  useCallback,
+  HTMLProps,
+} from "react";
 import styled from "@emotion/styled";
 import { FaRegArrowAltCircleRight as SetUrlIcon } from "react-icons/fa";
 import { theme } from "@web-noise/core";
@@ -47,6 +53,7 @@ export interface InputProps {
   placeholder?: string;
   onChange?: (value: string) => void;
   type?: string;
+  inputProps?: Omit<HTMLProps<HTMLInputElement>, "as">;
 }
 
 const Input = ({
@@ -54,6 +61,7 @@ const Input = ({
   value,
   placeholder,
   onChange = () => {},
+  inputProps,
   ...props
 }: InputProps) => {
   return (
@@ -68,6 +76,7 @@ const Input = ({
         onChange={(event) => {
           onChange(event.target.value);
         }}
+        {...inputProps}
       />
     </InputWrapper>
   );

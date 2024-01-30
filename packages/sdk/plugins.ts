@@ -36,6 +36,7 @@ import Slider from "@web-noise/base-nodes/src/Slider/audioNode";
 import Spectroscope from "@web-noise/base-nodes/src/Spectroscope/audioNode";
 import StereoPanner from "@web-noise/base-nodes/src/StereoPanner/audioNode";
 import ValueMeter from "@web-noise/base-nodes/src/ValueMeter/audioNode";
+import Convolver from "@web-noise/base-nodes/src/Convolver/audioNode";
 
 import { passThrough } from "@web-noise/base-nodes/src/PassThrough/audioNode";
 
@@ -57,6 +58,7 @@ export const webAudioNodes: PluginConfig = {
     { type: "visualiser", node: null, audioNode: analyser },
     { type: "delay", node: null, audioNode: Delay },
     { type: "dynamicsCompressor", node: null, audioNode: DynamicsCompressor },
+    { type: "convolver", node: null, audioNode: Convolver },
   ],
   name: "Web Audio Api base nodes",
 };

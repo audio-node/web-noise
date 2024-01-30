@@ -12,6 +12,7 @@ const Gate: PluginComponent = {
   controlPanelNode,
   configNode,
   defaultConfig,
+  resizable: true,
 };
 
 export { Gate };

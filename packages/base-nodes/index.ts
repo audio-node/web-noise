@@ -49,6 +49,7 @@ import { midiInput } from "./src/audioNodes/midiInput";
 import DataRecorder from "./src/nodes/DataRecorder";
 import { dataRecorder } from "./src/audioNodes/dataRecorder";
 import MidiNote from "./src/MidiNote";
+import Convolver from "./src/Convolver";
 
 import Inlet from "./src/Inlet";
 import Outlet from "./src/Outlet";
@@ -69,6 +70,7 @@ export const webAudioNodes: PluginConfig = {
     { type: "visualiser", node: Visualiser, audioNode: analyser },
     Delay,
     DynamicsCompressor,
+    Convolver,
   ],
   name: "Web Audio Api base nodes",
 };

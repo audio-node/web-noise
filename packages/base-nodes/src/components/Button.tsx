@@ -2,7 +2,9 @@ import styled from "@emotion/styled";
 import { Theme } from "@web-noise/core";
 
 const Button = styled.button<{ theme: Theme }>`
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   outline: none;
   font-size: inherit;
   font-family: inherit;
