@@ -37,6 +37,7 @@ type MessageData =
 
 type MessageHandler = (args: MessageData) => void;
 
+// @TODO: use loadAudioBuffer from lib
 const loadTrack = async (
   url: string,
   audioContext: AudioContext
