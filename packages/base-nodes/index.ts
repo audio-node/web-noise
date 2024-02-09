@@ -11,8 +11,7 @@ import Quantizer from "./src/Quantizer";
 import Patch from "./src/Patch";
 import Gain from "./src/nodes/Gain";
 import { gain } from "./src/audioNodes/gain";
-import Destination from "./src/nodes/Destination";
-import { destination } from "./src/audioNodes/destination";
+import Destination from "./src/Destination";
 import Filter from "./src/Filter";
 import Oscillator from "./src/Oscillator";
 import StereoPanner from "./src/StereoPanner";
@@ -59,11 +58,7 @@ import PassThrough from "./src/PassThrough";
 
 export const webAudioNodes: PluginConfig = {
   components: [
-    {
-      type: "destination",
-      node: Destination,
-      audioNode: destination,
-    },
+    Destination,
     { type: "gain", node: Gain, audioNode: gain },
     Filter,
     ParameterComponent,
