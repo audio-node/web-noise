@@ -51,6 +51,7 @@ import { dataRecorder } from "./src/audioNodes/dataRecorder";
 import MidiNote from "./src/MidiNote";
 import Convolver from "./src/Convolver";
 import WaveShaper from "./src/WaveShaper";
+import PhaseVocoder from "./src/PhaseVocoder";
 
 import Inlet from "./src/Inlet";
 import Outlet from "./src/Outlet";
@@ -140,6 +141,7 @@ export const baseNodes: PluginConfig = {
     FrequencyMeter,
     Quantizer,
     Scale,
+    PhaseVocoder,
     PassThrough,
   ],
   name: "Web Noise base nodes",
