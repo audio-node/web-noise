@@ -192,6 +192,9 @@ importers:
       monaco-editor:
         specifier: ^0.38.0
         version: 0.38.0
+      phaze-vocoder:
+        specifier: github:olvb/phaze
+        version: github.com/olvb/phaze/841f37b822c955868075072a6abe8bfad782432e
       prismjs:
         specifier: ^1.29.0
         version: 1.29.0
@@ -4420,6 +4423,10 @@ packages:
       commander: 2.7.1
     dev: false
 
+  /fft.js@4.0.4:
+    resolution: {integrity: sha512-f9c00hphOgeQTlDyavwTtu6RiK8AIFjD6+jvXkNkpeQ7rirK3uFWVpalkoS4LAwbdX7mfZ8aoBfFVQX1Re/8aw==}
+    dev: false
+
   /file-selector@0.5.0:
     resolution: {integrity: sha512-s8KNnmIDTBoD0p9uJ9uD0XY38SCeBOtj0UMXyQSLg1Ypfrfj8+dAvwsLjYQkQ2GjhVtp2HrnF5cJzMhBjfD8HA==}
     engines: {node: '>= 10'}
@@ -7425,4 +7432,12 @@ packages:
     resolution: {tarball: https://codeload.github.com/jonathanlurie/splines/tar.gz/571665cfe15f5aa9aad338cb6f933c773e251073}
     name: splines
     version: 1.0.0
+    dev: false
+
+  github.com/olvb/phaze/841f37b822c955868075072a6abe8bfad782432e:
+    resolution: {tarball: https://codeload.github.com/olvb/phaze/tar.gz/841f37b822c955868075072a6abe8bfad782432e}
+    name: phaze-vocoder
+    version: 1.0.0
+    dependencies:
+      fft.js: 4.0.4
     dev: false
