@@ -53,13 +53,13 @@ const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
   );
 
   const pasteBuffer = useStore((store) => store.pasteBuffer);
-  const { project } = useReactFlow();
+  const { screenToFlowPosition } = useReactFlow();
   const pasteBufferHandler = useCallback(
     (mousePosition) => {
-      const { x, y } = project(mousePosition);
+      const { x, y } = screenToFlowPosition(mousePosition);
       pasteBuffer(x, y);
     },
-    [setShowAddNode, project],
+    [setShowAddNode, screenToFlowPosition],
   );
 
   const clearGraph = useStore(({ clearGraph }) => clearGraph);

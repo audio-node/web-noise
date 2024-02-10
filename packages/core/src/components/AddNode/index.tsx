@@ -35,7 +35,7 @@ const PluginsPanel = styled.div<{ theme: Theme }>`
 
 const AddNode: FC<AddNodeProps> = ({ isOpen, closeMenu, mousePosition }) => {
   const theme = useTheme();
-  const { project } = useReactFlow();
+  const { screenToFlowPosition } = useReactFlow();
 
   const { createNode } = useStore(({ createNode }) => ({
     createNode,
@@ -45,7 +45,7 @@ const AddNode: FC<AddNodeProps> = ({ isOpen, closeMenu, mousePosition }) => {
 
   const onComponentClick = useCallback(
     ({ type }: PluginComponent) => {
-      const { x, y } = project(mousePosition);
+      const { x, y } = screenToFlowPosition(mousePosition);
       const newNode = {
         //@TODO: generate node id in `createNode` function
         id: `${type}-${+new Date()}`,
@@ -61,7 +61,7 @@ const AddNode: FC<AddNodeProps> = ({ isOpen, closeMenu, mousePosition }) => {
       createNode(newNode);
       closeMenu();
     },
-    [mousePosition, project, createNode, closeMenu, mousePosition]
+    [mousePosition, screenToFlowPosition, createNode, closeMenu, mousePosition]
   );
 
   return isOpen ? (

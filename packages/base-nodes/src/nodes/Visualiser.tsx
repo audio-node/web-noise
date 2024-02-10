@@ -1,7 +1,6 @@
+import { useAudioNode, useTheme, WNNode, WNNodeProps } from "@web-noise/core";
 import { LevaPanel, useControls, useCreateStore } from "leva";
 import { FC, useCallback, useMemo, useRef } from "react";
-import { NodeProps } from "reactflow";
-import { useAudioNode, useTheme, WNNode, WNNodeProps } from "@web-noise/core";
 //@ts-ignore
 import useAnimationFrame from "use-animation-frame";
 import { Analyser } from "../audioNodes/analyser";
@@ -23,7 +22,7 @@ const Visualiser: FC<WNNodeProps> = (props) => {
     "settings",
     { color: { value: theme.colors.accent2 } },
     { collapsed: true, color: theme.colors.accent2 },
-    { store }
+    { store },
   );
 
   const canvasCtx = useMemo(() => {
