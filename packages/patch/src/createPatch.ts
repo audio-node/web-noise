@@ -60,6 +60,13 @@ export interface Patch {
 type CreatePatch = (audioContext?: AudioContext) => Patch;
 
 const createPatch: CreatePatch = (audioContext = new AudioContext()) => {
+  /*
+    * due to bug in chrome we need to kickstart worklet outputs
+    * by connecting it to an input
+    * */
+  const dumpNode = audioContext.createGain();
+  dumpNode.gain.value = 0;
+
   const audioNodes: AudioNodes = new Map();
   const audioConnections: AudioConnections = new Map();
 
@@ -97,6 +104,13 @@ const createPatch: CreatePatch = (audioContext = new AudioContext()) => {
         loading: false,
         error: null,
         node: audioNode,
+      });
+
+      Object.values(audioNode.outputs || []).forEach(({ port }) => {
+        if (!(port instanceof AudioWorkletNode)) {
+          return;
+        }
+        port.connect(dumpNode);
       });
     } catch (error) {
       audioNodes.set(id, {
