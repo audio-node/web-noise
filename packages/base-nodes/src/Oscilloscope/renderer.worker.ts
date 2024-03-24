@@ -12,18 +12,24 @@ interface SetColorEvent {
   color: string;
 }
 
+interface SetLineWidthEvent {
+  name: "SET_LINE_WIDTH";
+  width: number;
+}
+
 interface SetScaleEvent {
   name: "SET_SCALE";
   minValue: number;
   maxValue: number;
 }
 
-type WorkerEvent = MessageEvent<InitEvent | SetColorEvent | SetScaleEvent>;
+type WorkerEvent = MessageEvent<InitEvent | SetColorEvent | SetScaleEvent | SetLineWidthEvent>;
 
 //scope variables
 let canvas: any;
 let canvasContext: CanvasRenderingContext2D;
 let color = "red";
+let lineWidth = 1;
 let audioData: Float32Array;
 
 let minValue = -1;
@@ -56,7 +62,7 @@ const render = () => {
 
   canvasContext.clearRect(0, 0, width, height);
 
-  canvasContext.lineWidth = 1;
+  canvasContext.lineWidth = lineWidth;
   canvasContext.strokeStyle = color;
 
   canvasContext.beginPath();
@@ -89,6 +95,9 @@ onmessage = function ({ data }: WorkerEvent) {
   }
   if (data.name === "SET_COLOR") {
     color = data.color;
+  }
+  if (data.name === "SET_LINE_WIDTH") {
+    lineWidth = data.width;
   }
   if (data.name === "SET_SCALE") {
     minValue = data.minValue;

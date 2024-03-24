@@ -1,12 +1,5 @@
+import type { Points, SplineType } from "../lib/generateWave";
 import { WNNodeProps, WNNodeData } from "@web-noise/core";
-
-export interface Point {
-  x: number;
-  y: number;
-}
-export type Points = Array<{ x: number; y: number }>;
-
-export type SplineType = "monotonic" | "natural";
 
 export interface WaveShaperValues {
   points?: Points;

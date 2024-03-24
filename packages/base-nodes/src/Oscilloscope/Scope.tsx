@@ -10,11 +10,13 @@ const rendererWorker = new URL(rendererWorkerUrl, import.meta.url);
 const Scope: FC<{
   port: MessagePort;
   color?: string;
+  lineWidth?: number;
   minValue?: number;
   maxValue?: number;
 }> = ({
   port,
   color = theme.colors.accent2,
+  lineWidth,
   minValue = defaultConfig.minValue,
   maxValue = defaultConfig.maxValue,
 }) => {
@@ -46,6 +48,13 @@ const Scope: FC<{
     }
     worker.postMessage({ name: "SET_COLOR", color });
   }, [color, worker]);
+
+  useEffect(() => {
+    if (!worker || !lineWidth) {
+      return;
+    }
+    worker.postMessage({ name: "SET_LINE_WIDTH", width: lineWidth });
+  }, [lineWidth, worker]);
 
   useEffect(() => {
     if (!worker) {
