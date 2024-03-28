@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { useTheme, WNNodeProps } from "@web-noise/core";
 import { Oscilloscope as TOscilloscope } from "./audioNode";
 import Grid from "./Grid";
-import Scope from "./Scope";
+import Scope from "../components/Scope";
 import { OscilloscopeData } from "./types";
 
 export interface OscilloscopeProps {

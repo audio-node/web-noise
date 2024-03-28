@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import styled from "@emotion/styled";
 import { WNAudioNode, WNNodeProps, useTheme, Theme } from "@web-noise/core";
-import Scope from "../Oscilloscope/Scope";
+import Scope from "../components/Scope";
 import useMessageChannel from "../lib/hooks/useMessageChannel";
 
 const DistortionWrapper = styled.div<{ theme: Theme }>`

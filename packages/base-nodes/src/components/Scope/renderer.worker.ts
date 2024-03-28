@@ -1,4 +1,4 @@
-import scale from "../lib/scale";
+import scale from "../../lib/scale";
 
 //types
 interface InitEvent {

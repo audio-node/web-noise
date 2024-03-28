@@ -1,11 +1,16 @@
-import { theme } from "@web-noise/core";
 import { FC, useEffect, useMemo, useRef } from "react";
-import defaultConfig from "./defaultConfig";
 
 //@ts-ignore
 import rendererWorkerUrl from "worklet:./renderer.worker.ts";
 
 const rendererWorker = new URL(rendererWorkerUrl, import.meta.url);
+
+const defaultConfig = {
+  minValue: -1,
+  maxValue: 1,
+  lineWidth: 1,
+  color: "white",
+};
 
 const Scope: FC<{
   port: MessagePort;
@@ -15,8 +20,8 @@ const Scope: FC<{
   maxValue?: number;
 }> = ({
   port,
-  color = theme.colors.accent2,
-  lineWidth,
+  color = defaultConfig.color,
+  lineWidth = defaultConfig.lineWidth,
   minValue = defaultConfig.minValue,
   maxValue = defaultConfig.maxValue,
 }) => {
