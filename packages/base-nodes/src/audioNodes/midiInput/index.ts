@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { WNAudioNode } from "@web-noise/core";
 
 //@ts-ignore

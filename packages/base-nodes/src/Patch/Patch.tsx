@@ -9,6 +9,7 @@ import {
   WNNodeProps,
 } from "@web-noise/core";
 import { FC, useCallback, useMemo } from "react";
+// @ts-ignore
 import GridLayout from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import Input from "../components/SubmitInput";
@@ -47,6 +48,9 @@ const Patch: FC<WNNodeProps<PatchData>> = (props) => {
   const removeNode = useStore((store) => store.removeNode);
   const getNode = useStore((store) => store.getNode);
 
+  const projectFiles = useStore((store) => store.project.files);
+  const currentFileIndex = useStore((store) => store.currentFileIndex);
+
   const { updateNodeValues } = useNode(id);
 
   const { node: audioNode } = useAudioNode<TPatch>(id) || {};
@@ -84,7 +88,16 @@ const Patch: FC<WNNodeProps<PatchData>> = (props) => {
     <WNNode {...props}>
       {typeof url === "undefined" ? (
         <NodeWrapper theme={theme}>
-          <Input placeholder="patch url" onSubmit={setPatchUrl} />
+          <Input
+            placeholder="patch url"
+            onSubmit={setPatchUrl}
+            options={projectFiles
+              .filter((_, index) => index !== currentFileIndex)
+              .map(({ id, name }) => ({
+                value: `project://${id}`,
+                label: name,
+              }))}
+          />
         </NodeWrapper>
       ) : null}
       {controlPanelNodes ? (

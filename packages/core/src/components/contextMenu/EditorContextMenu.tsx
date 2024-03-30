@@ -15,6 +15,7 @@ import useTheme from "../../hooks/useTheme";
 import useStore from "../../store";
 import AddNode from "../AddNode";
 import UploadPatch from "../UploadPatch";
+import UploadProject from "../UploadProject";
 import { ItemWrapper, MenuWrapper } from "./styles";
 
 type MousePosition = {
@@ -43,6 +44,7 @@ const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
   });
   const [showAddNode, setShowAddNode] = useState(false);
   const [showUploadPatch, setShowUploadPatch] = useState(false);
+  const [showUploadProject, setShowUploadProject] = useState(false);
 
   const addNodeHandler = useCallback(
     (x, y) => {
@@ -65,6 +67,7 @@ const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
   const clearGraph = useStore(({ clearGraph }) => clearGraph);
 
   const getEditorState = useStore((store) => store.getEditorState);
+  const getProject = useStore((store) => store.getProject);
 
   const deleteAllHandler = useCallback(
     (e) => {
@@ -93,10 +96,17 @@ const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
   const downloadPatchHandler = useCallback(() => {
     const fileName = "web-noise-patch.json";
     const editorState = getEditorState();
-    const viewport = reactFlowInstance.getViewport();
     const data = {
       ...editorState,
-      viewport,
+    };
+    downloadFile(JSON.stringify(data, null, 2), fileName);
+  }, [getEditorState, reactFlowInstance]);
+
+  const downloadProjectHandler = useCallback(() => {
+    const fileName = "web-noise-project.json";
+    const projectState = getProject();
+    const data = {
+      ...projectState,
     };
     downloadFile(JSON.stringify(data, null, 2), fileName);
   }, [getEditorState, reactFlowInstance]);
@@ -143,6 +153,10 @@ const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
         isOpen={showUploadPatch}
         closeMenu={() => setShowUploadPatch(false)}
       />
+      <UploadProject
+        isOpen={showUploadProject}
+        closeMenu={() => setShowUploadProject(false)}
+      />
       <MenuWrapper id={MENU_ID} animation={false} colors={theme.colors}>
         <ItemWrapper
           onClick={({ triggerEvent: { clientX, clientY } }) =>
@@ -157,6 +171,13 @@ const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
         <ItemWrapper onClick={downloadPatchHandler}>Download patch</ItemWrapper>
         <ItemWrapper onClick={() => setShowUploadPatch(true)}>
           Upload patch
+        </ItemWrapper>
+        <Separator />
+        <ItemWrapper onClick={downloadProjectHandler}>
+          Download project
+        </ItemWrapper>
+        <ItemWrapper onClick={() => setShowUploadProject(true)}>
+          Upload project
         </ItemWrapper>
         <Separator />
         <ItemWrapper disabled={historyPointer === 0} onClick={historyBack}>

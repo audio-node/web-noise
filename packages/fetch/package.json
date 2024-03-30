@@ -1,0 +1,15 @@
+{
+  "name": "@web-noise/fetch",
+  "version": "1.0.0",
+  "description": "",
+  "source": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "minimatch": "^9.0.4"
+  }
+}

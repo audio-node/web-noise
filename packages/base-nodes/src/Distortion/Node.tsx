@@ -9,10 +9,9 @@ import {
   useTheme,
 } from "@web-noise/core";
 import Distortion from "./Distortion";
-import { DistortionData } from "./types";
 import { Distortion as TDistortion } from "./audioNode";
 
-export interface DistortionProps extends WNNodeProps<DistortionData> {}
+export interface DistortionProps extends WNNodeProps {}
 
 const DistortionNode = (props: DistortionProps) => {
   const { id, data } = props;

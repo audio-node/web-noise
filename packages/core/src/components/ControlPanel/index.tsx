@@ -24,7 +24,7 @@ const ControlPanelIconWrapper = styled.div<{ theme: Theme }>`
   z-index: 5;
   box-shadow: 0px 1px 2px ${({ theme }) => theme.colors.elevation2};
   left: 1rem;
-  top: 1rem;
+  top: 4rem;
   width: 2rem;
   height: 2rem;
   border-radius: 50%;
@@ -180,6 +180,7 @@ const ControlPanel: FC = () => {
         enableOverlay={false}
         style={{
           background: theme.colors.elevation1,
+          position: 'absolute',
         }}
       >
         <ControlPanelHeader theme={theme}>

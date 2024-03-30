@@ -21,7 +21,7 @@ export interface WNAudioNode extends Record<string, any> {
 
 export type CreateWNAudioNode<T = WNAudioNode> = (
   audioContext: AudioContext,
-  data?: WNNodeData
+  data?: WNNodeData,
 ) => T | Promise<T>;
 
 export type NodeDefaultConfig = {
@@ -30,7 +30,7 @@ export type NodeDefaultConfig = {
 
 export interface WNNodeData<
   Values = Record<string, unknown>,
-  Config = Record<string, unknown>
+  Config = Record<string, unknown>,
 > {
   label: string;
   values?: Values;
@@ -56,7 +56,7 @@ export type ControlPanelNodes = Array<{
 export interface ControlPanelState {
   show: boolean;
   nodes: ControlPanelNodes;
-  size: { width: number; height: number; }
+  size: { width: number; height: number };
 }
 
 export interface EditorStoreState extends GraphState {
@@ -65,6 +65,17 @@ export interface EditorStoreState extends GraphState {
 
 export interface EditorState extends EditorStoreState {
   viewport: Viewport;
+}
+
+export type ProjectFile = {
+  id: string;
+  name?: string;
+  type?: 'patch' | 'blob'
+  file: EditorState
+};
+
+export interface Project {
+  files: Array<ProjectFile>;
 }
 
 export interface ControlPanelNodeProps {

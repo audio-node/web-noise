@@ -9,6 +9,7 @@ const plugin: PluginComponent = {
   controlPanelNode: Parameter,
   node: ParameterNode,
   audioNode: constantSource,
+  // @ts-ignore
   configNode,
 };
 

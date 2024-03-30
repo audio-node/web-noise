@@ -1,9 +1,8 @@
-import Editor, { Elements } from "./src/components/Editor";
+import App from "./src/components/App";
 import Wire from "./src/components/Wire";
 import {
   WNNode,
   TitleBar,
-  TitleBarLabel,
   WNNodeProps,
   PortsPanel,
   OutputPorts,
@@ -13,6 +12,7 @@ import {
   Port,
 } from "./src/components/Node";
 import Modal from "./src/components/Modal";
+import EditableLabel from "./src/components/EditableLabel";
 import useAudioNode from "./src/hooks/useAudioNode";
 import useNode from "./src/hooks/useNode";
 import useTheme from "./src/hooks/useTheme";
@@ -30,6 +30,7 @@ import type {
   InputPort,
   OutputPort,
   EditorState,
+  Project,
   WNEdge as TWNEdge,
 } from "./src/types";
 import type { Theme } from "./src/theme";
@@ -44,22 +45,22 @@ export type {
   ControlPanelNodeProps,
   ControlPanelNode,
   Theme,
-  Elements,
   PluginConfig,
   PluginComponent,
   EditorState,
+  Project,
   InputPort,
   OutputPort,
 };
 
 export {
   theme,
-  Editor,
+  App as Editor,
   Modal,
   Wire,
   WNNode,
   TitleBar,
-  TitleBarLabel,
+  EditableLabel,
   PortsPanel,
   OutputPorts,
   OutputHandle,
