@@ -1,9 +1,13 @@
 {
   "extends": "@parcel/config-default",
   "transformers": {
+    "*.{ts,tsx}": ["@parcel/transformer-typescript-tsc"],
     "blob-url:*": ["...", "@parcel/transformer-inline-string"],
   },
   "optimizers": {
     "blob-url:*": ["...", "@parcel/optimizer-data-url"],
+  },
+  "validators": {
+    "*.{ts,tsx}": ["@parcel/validator-typescript"]
   }
 }

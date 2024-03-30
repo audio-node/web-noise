@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useCallback, useEffect, useRef, useState } from "react";
 //@ts-ignore
 import { CanvasSpliner } from "CanvasSpliner";

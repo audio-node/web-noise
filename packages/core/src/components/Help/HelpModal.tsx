@@ -1,5 +1,6 @@
 import { withTheme } from "@emotion/react";
 import styled from "@emotion/styled";
+// @ts-ignore
 import { marked } from "marked";
 import useStore from "../../store";
 import { Theme } from "../../theme";

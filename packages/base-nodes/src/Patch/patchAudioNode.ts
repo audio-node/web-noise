@@ -1,5 +1,6 @@
 import type { EditorState, OutputPort, WNAudioNode } from "@web-noise/core";
 import { createPatch } from "@web-noise/patch";
+import fetch from "@web-noise/fetch";
 import { PatchData, PatchValues } from "./types";
 
 export interface Patch extends WNAudioNode {

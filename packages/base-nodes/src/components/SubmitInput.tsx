@@ -1,4 +1,10 @@
-import { FC, KeyboardEventHandler, useState, useCallback } from "react";
+import {
+  FC,
+  KeyboardEventHandler,
+  useState,
+  useCallback,
+  useMemo,
+} from "react";
 import styled from "@emotion/styled";
 import { FaRegArrowAltCircleRight as SetUrlIcon } from "react-icons/fa";
 import { InputWrapper, InputInner } from "./Input";
@@ -22,11 +28,25 @@ const InputButton = styled.button`
   }
 `;
 
-const SubmitInput: FC<{
+interface InputOption {
+  value: string;
+  label?: string;
+}
+
+interface SubmitInputProps {
   value?: string;
   placeholder?: string;
   onSubmit?: (value: string) => void;
-}> = ({ value = "", placeholder = "", onSubmit = () => {} }) => {
+  options?: Array<InputOption>;
+}
+
+const SubmitInput: FC<SubmitInputProps> = ({
+  value = "",
+  placeholder = "",
+  onSubmit = () => {},
+  options = [],
+  ...props
+}) => {
   const [currentValue, setCurrentValue] = useState<string>(value);
 
   const applyCurrentValue = useCallback(() => {
@@ -44,16 +64,32 @@ const SubmitInput: FC<{
           break;
       }
     },
-    [applyCurrentValue, onSubmit]
+    [applyCurrentValue, onSubmit],
   );
+
+  const dataListId = useMemo(
+    () => "input-" + Math.floor(+new Date() * Math.random()),
+    [],
+  );
+
   return (
     <InputWrapper>
       <InputInner
+        {...props}
+        list={dataListId}
         value={currentValue}
         placeholder={placeholder}
         onKeyDown={handleKeyDown}
         onChange={(event) => setCurrentValue(event.target.value)}
       />
+
+      <datalist id={dataListId}>
+        {options.map(({ label, value }, index) => (
+          <option key={value + index} value={value}>
+            {label}
+          </option>
+        ))}
+      </datalist>
 
       <InputButton onClick={applyCurrentValue}>
         <SetUrlIcon />

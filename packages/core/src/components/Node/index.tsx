@@ -1,22 +1,16 @@
 import styled from "@emotion/styled";
-import React, {
-  FC,
-  useState,
-  useCallback,
-  useRef,
-  useMemo,
-  useEffect,
-} from "react";
-import { Handle, HandleProps, NodeProps, Position } from "reactflow";
-import { MdSettings as SettingsIcon } from "react-icons/md";
 import { Resizable } from "re-resizable";
+import { FC, useMemo, useState } from "react";
+import { MdSettings as SettingsIcon } from "react-icons/md";
+import { Handle, HandleProps, NodeProps, Position } from "reactflow";
 import { DRAG_HANDLE_CLASS } from "../../constants";
 import useAudioNode from "../../hooks/useAudioNode";
+import useNode from "../../hooks/useNode";
 import useTheme from "../../hooks/useTheme";
 import useStore from "../../store";
-import useNode from "../../hooks/useNode";
 import { Theme } from "../../theme";
 import { WNNodeData } from "../../types";
+import EditableLabel from "../EditableLabel";
 
 const NodeWrapper = styled.div`
   background-color: var(--leva-colors-elevation1);
@@ -57,37 +51,6 @@ export const TitleBarInner = styled(Section)`
   color: var(--leva-colors-highlight1);
   padding: 0 0.4rem;
   gap: 0.3rem;
-`;
-
-export const TitleBarLabel = styled.input`
-  width: 100%;
-  background: none;
-  border: none;
-  text-align: center;
-  color: var(--leva-colors-highlight1);
-  font-family: var(--leva-fonts-mono);
-  font-size: var(--leva-fontSizes-root);
-  cursor: inherit;
-  text-overflow: ellipsis;
-  outline: none;
-
-  &:focus {
-    box-shadow: 0 0 0 green var(--leva-colors-accent2);
-  }
-  &:focus-within {
-    box-shadow: 0 0 0 green var(--leva-colors-accent2);
-  }
-  &:focus-vissible {
-    box-shadow: 0 0 0 green var(--leva-colors-accent2);
-  }
-  &:not([readonly]):focus {
-    color: #fff;
-    appearance: none;
-    cursor: auto;
-    background-color: var(--leva-colors-elevation2);
-    padding: 0.3rem;
-    border-radius: 0.2rem;
-  }
 `;
 
 export const PortsPanel = styled(Section)<{ theme: Theme }>(
@@ -176,45 +139,7 @@ export const WNNode = (props: WNNodeParameters) => {
   const audioNode = useAudioNode(id);
   const { ConfigNode } = useConfigNode(rest.type);
 
-  const labelInputRef = useRef<HTMLInputElement>(null);
-
-  const [labelEditMode, setLabelEditMode] = useState(false);
   const [configMode, setShowConfigMode] = useState(false);
-
-  const editNodeLabel = useCallback(
-    (event: React.MouseEvent) => {
-      //@ts-ignore
-      event.target?.select();
-      setLabelEditMode(true);
-    },
-    [setLabelEditMode],
-  );
-
-  const exitEditMode = useCallback(() => {
-    window.getSelection()?.collapseToEnd();
-    setLabelEditMode(false);
-  }, [setLabelEditMode]);
-
-  const saveNodeLabel = useCallback(() => {
-    exitEditMode();
-    if (labelInputRef.current) {
-      updateNodeLabel(labelInputRef.current.value);
-    }
-  }, [labelInputRef, exitEditMode, updateNodeLabel]);
-
-  const cancelNodeLabelEdit = useCallback(() => {
-    exitEditMode();
-    if (labelInputRef.current && data?.label) {
-      labelInputRef.current.value = data.label;
-    }
-  }, [labelInputRef, exitEditMode, data]);
-
-  useEffect(() => {
-    if (!labelInputRef.current) {
-      return;
-    }
-    labelInputRef.current.value = data?.label ?? "No Name";
-  }, [data?.label, labelInputRef]);
 
   if (!audioNode) {
     return (
@@ -259,22 +184,9 @@ export const WNNode = (props: WNNodeParameters) => {
   return (
     <NodeWrapper>
       <TitleBar>
-        <TitleBarLabel
-          ref={labelInputRef}
-          type="text"
-          readOnly={!labelEditMode}
-          onDoubleClick={(event) => editNodeLabel(event)}
-          onBlur={saveNodeLabel}
-          onKeyDown={(event) => {
-            switch (event.key) {
-              case "Escape":
-                cancelNodeLabelEdit();
-                break;
-              case "Enter":
-                saveNodeLabel();
-                break;
-            }
-          }}
+        <EditableLabel
+          value={data?.label ?? "No Name"}
+          onChange={updateNodeLabel}
         />
         {ConfigNode && (
           <SettingsIconWrapper

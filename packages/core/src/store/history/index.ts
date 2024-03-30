@@ -11,6 +11,7 @@ export interface HistoryState {
     push: (changes: Delta) => void;
     back: () => void;
     forward: () => void;
+    clear: () => void;
   };
 }
 
@@ -115,6 +116,18 @@ export const historyStateCreator: StateCreator<HistoryState> = (set, get) => ({
         },
       });
     },
+    // @TODO: remove this method and store history per file
+    clear: () => {
+      const { history } = get();
+      set({
+        history: {
+          ...history,
+          buffer: [],
+          pointer: 0,
+          skipCollect: true,
+        },
+      });
+    },
   },
 });
 
@@ -154,6 +167,9 @@ export const createChangesCollector = (set: any, get: () => StoreState) => {
   let timer: any;
 
   return (state: StoreState, prevState: StoreState) => {
+    if (state.currentFileIndex !== prevState.currentFileIndex) {
+      get().history.clear();
+    }
     clearTimeout(timer);
     if (!oldState) {
       oldState = prevState;

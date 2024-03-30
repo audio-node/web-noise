@@ -1,6 +1,5 @@
 import { WNAudioNode } from "@web-noise/core";
 import { addBroadcastListener } from "../lib/useBroadcast";
-import { DistortionValues, DistortionData } from "./types";
 
 //@ts-ignore
 import distortionWorkletUrl from "worklet:./worklet.ts";

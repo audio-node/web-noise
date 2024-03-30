@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { FC } from "react";
 import styled from "@emotion/styled";
 import { Theme, useTheme } from "@web-noise/core";

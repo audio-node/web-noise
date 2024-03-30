@@ -10,13 +10,12 @@ import {
 } from "@web-noise/core";
 import Gauge from "./Gauge";
 import { GaugeData } from "./types";
-import { Gauge as TGauge } from "./audioNode";
 
 export interface GaugeProps extends WNNodeProps<GaugeData> {}
 
 const GaugeNode = (props: GaugeProps) => {
   const { id, data } = props;
-  const { node } = useAudioNode<TGauge>(id) || {};
+  const { node } = useAudioNode(id) || {};
   const { updateNodeValues } = useNode(id);
 
   return (

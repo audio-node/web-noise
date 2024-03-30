@@ -1,4 +1,10 @@
-import { addEdge, getConnectedEdges, NodeTypes, OnConnect } from "reactflow";
+import {
+  addEdge,
+  getConnectedEdges,
+  NodeTypes,
+  OnConnect,
+  Viewport,
+} from "reactflow";
 import { create, StateCreator } from "zustand";
 import { setAudioNodeTypes, AudioNodeTypes } from "@web-noise/patch";
 import { CONTROL_PANEL_GRID_CONFIG } from "../constants";
@@ -11,8 +17,9 @@ import {
   WNEdge,
   WNNode,
   GraphState,
-  EditorStoreState as EditorState,
+  EditorState,
   ControlPanelState,
+  EditorStoreState,
 } from "../types";
 import nodesStateCreator, { NodesState } from "./nodesStore";
 import history, { historyStateCreator, HistoryState } from "./history";
@@ -20,6 +27,7 @@ import audioPatch, {
   AudioPatchState,
   audioPatchStateCreator,
 } from "./audioPatch";
+import projectStateCreator, { ProjectState } from "./projectStore";
 
 export type { AudioNodeTypes, NodesState, GraphState };
 
@@ -31,6 +39,7 @@ type NodesConfiguration = Record<string, PluginComponent>;
 
 export type StoreState = NodesState &
   HistoryState &
+  ProjectState &
   AudioPatchState & {
     setGraph: (elements: { nodes: WNNode[]; edges: WNEdge[] }) => Promise<void>;
     clearGraph: () => void;
@@ -67,6 +76,8 @@ export type StoreState = NodesState &
     removeNodeFromControlPanel: (node: WNNode) => void;
     removeNodesFromControlPanel: (nodes: WNNode[]) => void;
     /* / move to control panel store */
+    viewport: Viewport;
+    setViewport: (viewport: Viewport) => void;
   };
 
 export const stateCreator: StateCreator<StoreState> = (...args) => {
@@ -75,6 +86,7 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
     ...nodesStateCreator(...args),
     ...historyStateCreator(...args),
     ...audioPatchStateCreator(...args),
+    ...projectStateCreator(...args),
 
     setGraph: async ({ nodes, edges }) => {
       const {
@@ -218,19 +230,21 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
       set(({ config }) => ({ config: { ...config, ...changes } }));
     },
     getEditorState: () => {
-      const { getNodesAndEdges, controlPanel } = get();
+      const { getNodesAndEdges, controlPanel, viewport } = get();
       return {
         ...getNodesAndEdges(),
         controlPanel,
+        viewport,
       };
     },
-    setEditorState: async ({ nodes, edges, controlPanel }) => {
+    setEditorState: async ({ nodes, edges, controlPanel, viewport }) => {
       const { setGraph } = get();
       await setGraph({ nodes, edges });
       // @TODO: remove this line once audio patch initialisation is reworked
       await new Promise((r) => setTimeout(r, 1000));
       set({
         controlPanel,
+        viewport,
       });
     },
     isHelpShown: false,
@@ -408,6 +422,9 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
         };
       });
     },
+
+    viewport: { x: 0, y: 0, zoom: 1 },
+    setViewport: (viewport) => set({ viewport }),
   };
 };
 

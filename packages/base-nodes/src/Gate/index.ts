@@ -10,6 +10,7 @@ const Gate: PluginComponent = {
   node,
   audioNode,
   controlPanelNode,
+  // @ts-ignore
   configNode,
   defaultConfig,
   resizable: true,
