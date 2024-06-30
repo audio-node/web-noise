@@ -6,7 +6,7 @@ import { analyser } from "@web-noise/base-nodes/src/audioNodes/analyser";
 import audioTrack from "@web-noise/base-nodes/src/audioNodes/audioTrack";
 import { clock } from "@web-noise/base-nodes/src/audioNodes/clock";
 import { dataRecorder } from "@web-noise/base-nodes/src/audioNodes/dataRecorder";
-import { destination } from "@web-noise/base-nodes/src/audioNodes/destination";
+import destination from "@web-noise/base-nodes/src/Destination/audioNode";
 import { gain } from "@web-noise/base-nodes/src/audioNodes/gain";
 import { midiInput } from "@web-noise/base-nodes/src/audioNodes/midiInput";
 import { midiToFrequency } from "@web-noise/base-nodes/src/audioNodes/midiToFrequency";
@@ -38,10 +38,10 @@ import StereoPanner from "@web-noise/base-nodes/src/StereoPanner/audioNode";
 import ValueMeter from "@web-noise/base-nodes/src/ValueMeter/audioNode";
 import Convolver from "@web-noise/base-nodes/src/Convolver/audioNode";
 
-import { passThrough } from "@web-noise/base-nodes/src/PassThrough/audioNode";
+import PassThrough from "@web-noise/base-nodes/src/PassThrough/audioNode";
 
-const Inlet = passThrough;
-const Outlet = passThrough;
+const Inlet = PassThrough;
+const Outlet = PassThrough;
 
 export const webAudioNodes: PluginConfig = {
   components: [
@@ -135,6 +135,7 @@ export const baseNodes: PluginConfig = {
     { type: "frequencyMeter", node: null, audioNode: FrequencyMeter },
     { type: "quantizer", node: null, audioNode: Quantizer },
     { type: "scale", node: null, audioNode: Scale },
+    { type: "passThrough", node: null, audioNode: PassThrough },
   ],
   name: "Web Noise base nodes",
 };
