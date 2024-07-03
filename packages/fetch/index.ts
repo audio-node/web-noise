@@ -1,4 +1,4 @@
-import { minimatch } from "minimatch";
+import { match } from './lib';
 
 type Fetch = typeof fetch;
 
@@ -14,8 +14,8 @@ export const registerFetcher: RegisterFetcher = (matcher, fetcher) => {
 };
 
 const getFetcher = (url: string): Fetch | void => {
-  return [...customFetchers].reverse().find(([matcher, fetcher]) => {
-    return minimatch(url, matcher);
+  return [...customFetchers].reverse().find(([matcher]) => {
+    return match(url, matcher);
   })?.[1];
 };
 

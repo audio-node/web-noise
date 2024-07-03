@@ -4,20 +4,19 @@
   "main": "dist/main.js",
   "module": "dist/module.js",
   "types": "dist/types.d.ts",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "targets": {
     "main": {
+      "isLibrary": true,
       "includeNodeModules": true
     },
     "module": {
+      "isLibrary": true,
       "includeNodeModules": true
     }
   },
   "scripts": {
     "start": "parcel index.html",
     "build": "parcel build --no-scope-hoist"
-  },
-  "devDependencies": {
-    "parcel": "^2.10.0"
   }
 }

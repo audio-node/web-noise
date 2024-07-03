@@ -3,13 +3,14 @@
  * @module sdk
  */
 
-import {
-  Patch as PatchAudioNode,
-  patchNode,
-} from "@web-noise/base-nodes/src/Patch/patchAudioNode";
-import type { EditorState, WNEdge, WNNode } from "@web-noise/core/src/types";
 
-import { Patch, setAudioNodeTypes } from "@web-noise/patch";
+import {
+  type Patch as PatchAudioNode,
+  patchNode,
+} from "../base-nodes/src/Patch/patchAudioNode";
+import type { EditorState, WNEdge, WNNode, EditorStoreState } from "../core/src/types";
+
+import { type Patch, setAudioNodeTypes } from "@web-noise/patch";
 import { flattenPorts, getPluginNodes } from "./helpers";
 import { plugins } from "./plugins";
 
@@ -70,4 +71,4 @@ export const createPatchNode: createPatchNode = async ({
   };
 };
 
-export type { WNEdge, WNNode, EditorState };
+export type { WNEdge, WNNode, EditorState, EditorStoreState };
