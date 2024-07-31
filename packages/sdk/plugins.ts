@@ -37,6 +37,9 @@ import Spectroscope from "@web-noise/base-nodes/src/Spectroscope/audioNode";
 import StereoPanner from "@web-noise/base-nodes/src/StereoPanner/audioNode";
 import ValueMeter from "@web-noise/base-nodes/src/ValueMeter/audioNode";
 import Convolver from "@web-noise/base-nodes/src/Convolver/audioNode";
+import WaveShaper from "@web-noise/base-nodes/src/WaveShaper/audioNode";
+import PhaseVocoder from "@web-noise/base-nodes/src/PhaseVocoder/audioNode";
+import Distortion from "@web-noise/base-nodes/src/Distortion/audioNode";
 
 import PassThrough from "@web-noise/base-nodes/src/PassThrough/audioNode";
 
@@ -59,6 +62,7 @@ export const webAudioNodes: PluginConfig = {
     { type: "delay", node: null, audioNode: Delay },
     { type: "dynamicsCompressor", node: null, audioNode: DynamicsCompressor },
     { type: "convolver", node: null, audioNode: Convolver },
+    { type: "waveShaper", node: null, audioNode: WaveShaper },
   ],
   name: "Web Audio Api base nodes",
 };
@@ -135,6 +139,8 @@ export const baseNodes: PluginConfig = {
     { type: "frequencyMeter", node: null, audioNode: FrequencyMeter },
     { type: "quantizer", node: null, audioNode: Quantizer },
     { type: "scale", node: null, audioNode: Scale },
+    { type: "phaseVocoder", node: null, audioNode: PhaseVocoder },
+    { type: "distortion", node: null, audioNode: Distortion },
     { type: "passThrough", node: null, audioNode: PassThrough },
   ],
   name: "Web Noise base nodes",
