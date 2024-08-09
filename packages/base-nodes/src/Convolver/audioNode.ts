@@ -37,7 +37,7 @@ export const convolver = async (
   };
 
   if (url) {
-    loadBuffer(url);
+    await loadBuffer(url);
   }
 
   return {
