@@ -41,6 +41,7 @@ import WaveShaper from "@web-noise/base-nodes/src/WaveShaper/audioNode";
 import PhaseVocoder from "@web-noise/base-nodes/src/PhaseVocoder/audioNode";
 import Distortion from "@web-noise/base-nodes/src/Distortion/audioNode";
 import Limiter from "@web-noise/base-nodes/src/Limiter/audioNode";
+import AudioOutput from "@web-noise/base-nodes/src/AudioOutput/audioNode";
 
 import PassThrough from "@web-noise/base-nodes/src/PassThrough/audioNode";
 
@@ -143,6 +144,7 @@ export const baseNodes: PluginConfig = {
     { type: "phaseVocoder", node: null, audioNode: PhaseVocoder },
     { type: "distortion", node: null, audioNode: Distortion },
     { type: "limiter", node: null, audioNode: Limiter },
+    { type: "audioOutput", node: null, audioNode: AudioOutput },
     { type: "passThrough", node: null, audioNode: PassThrough },
   ],
   name: "Web Noise base nodes",
