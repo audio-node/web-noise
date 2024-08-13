@@ -53,6 +53,7 @@ import WaveShaper from "./src/WaveShaper";
 import PhaseVocoder from "./src/PhaseVocoder";
 import Distortion from "./src/Distortion";
 import Limiter from "./src/Limiter";
+import AudioOutput from "./src/AudioOutput";
 
 import Inlet from "./src/Inlet";
 import Outlet from "./src/Outlet";
@@ -141,6 +142,7 @@ export const baseNodes: PluginConfig = {
     PhaseVocoder,
     Distortion,
     Limiter,
+    AudioOutput,
     PassThrough,
   ],
   name: "Web Noise base nodes",
