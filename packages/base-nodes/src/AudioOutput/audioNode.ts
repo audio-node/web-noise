@@ -1,5 +1,6 @@
+import EventBus from "../lib/EventBus";
 import { DEFAULT_OUTPUT } from "./constants";
-import { AudioOutput, AudioOutputData, OutputsChangeHandler } from "./types";
+import type { AudioOutput, AudioOutputData, ListEventHandler } from "./types";
 
 const getAudioOutputsList = async () => {
   return navigator.mediaDevices
@@ -15,6 +16,8 @@ export const audioOutput = async (
   audioContext: AudioContext,
   data?: AudioOutputData,
 ): Promise<AudioOutput> => {
+  const events = new EventBus();
+
   const destination = audioContext.createMediaStreamDestination();
 
   const audio = new Audio();
@@ -23,7 +26,6 @@ export const audioOutput = async (
 
   const output = audioContext.createGain();
   output.gain.value = 1;
-  let outputsChangeHandler: OutputsChangeHandler = () => {};
 
   let currentOutputDeviceId: MediaDeviceInfo["deviceId"] | null =
     data?.values?.currentOutput ?? DEFAULT_OUTPUT;
@@ -49,7 +51,7 @@ export const audioOutput = async (
       );
     if (!isEqual) {
       audioOutputs = newAudioOutputs;
-      outputsChangeHandler(audioOutputs);
+      events.trigger("list", audioOutputs);
       updateAudioOutputHandler();
     }
   });
@@ -62,9 +64,7 @@ export const audioOutput = async (
       },
     },
     audioOutputs,
-    onInputsChange: (fn) => {
-      outputsChangeHandler = fn;
-    },
+    addEventListener: (...args) => events.addEventListener(...args),
     setValues: ({ currentOutput: currentOutputValue } = {}) => {
       if (typeof currentOutputValue !== "undefined") {
         currentOutputDeviceId = currentOutputValue;
