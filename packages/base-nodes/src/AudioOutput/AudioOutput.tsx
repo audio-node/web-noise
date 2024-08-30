@@ -55,7 +55,12 @@ const AudioOutput = ({
       return;
     }
     outputsChangeHandler([...audioNode.audioOutputs]);
-    audioNode.onInputsChange(outputsChangeHandler);
+    const unSubscribe = audioNode.addEventListener(
+      "list",
+      outputsChangeHandler,
+    );
+
+    return () => unSubscribe();
   }, [audioNode, audioNode?.audioInputs, outputsChangeHandler]);
 
   useEffect(() => audioNode?.setValues(data.values), [audioNode, data]);
