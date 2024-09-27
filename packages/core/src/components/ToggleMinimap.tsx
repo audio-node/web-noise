@@ -1,10 +1,8 @@
-import type { FC } from "react";
-
-import { ControlButton } from "reactflow";
 import { FaMap, FaRegMap } from "react-icons/fa";
+import { ControlButton } from "reactflow";
 import useStore from "../store";
 
-const ToggleMinimap: FC = () => {
+const ToggleMinimap = () => {
   const setConfig = useStore(({ setConfig }) => setConfig);
   const { showMinimap } = useStore(({ config }) => config);
 

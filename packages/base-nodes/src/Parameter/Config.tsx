@@ -1,4 +1,3 @@
-import { FC } from "react";
 import styled from "@emotion/styled";
 import { Theme, useNode, useTheme, WNNodeProps } from "@web-noise/core";
 import NumberInput from "../components/NumberInput";

@@ -1,12 +1,5 @@
 import styled from "@emotion/styled";
-import {
-  FC,
-  MouseEvent,
-  useCallback,
-  useState,
-  useRef,
-  ChangeEvent,
-} from "react";
+import { useCallback, useRef } from "react";
 import { FileDrop } from "react-file-drop";
 import { FaFileUpload } from "react-icons/fa";
 import useTheme from "../hooks/useTheme";
@@ -85,7 +78,7 @@ const UploadProject = ({ isOpen, closeMenu }: UploadProjectProps) => {
         })
         .catch(console.error);
     },
-    [setProject, closeMenu]
+    [setProject, closeMenu],
   );
 
   const onTargetClick = () => {
