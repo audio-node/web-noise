@@ -23,7 +23,7 @@ export const useEdgeContextMenu = () => {
   return { onContextMenu };
 };
 
-const EdgeContextMenu: FC<{}> = ({}) => {
+const EdgeContextMenu = () => {
   const theme = useTheme();
 
   const removeEdges = useStore((store) => store.removeEdges);

@@ -22,11 +22,11 @@ export interface SelectProps {
 }
 
 
-const Select: FC<SelectProps> = ({
+const Select = ({
   node: props,
   audioNode,
   updateNodeValues,
-}) => {
+}: SelectProps) => {
   const { data } = props;
 
   const config = {

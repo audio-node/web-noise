@@ -9,13 +9,13 @@ interface GridProps {
   columns?: number;
 }
 
-const Grid: FC<GridProps> = ({
+const Grid = ({
   color,
   minValue = defaultConfig.minValue,
   maxValue = defaultConfig.maxValue,
   rows = defaultConfig.gridRows,
   columns = defaultConfig.gridColumns,
-}) => {
+}: GridProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {

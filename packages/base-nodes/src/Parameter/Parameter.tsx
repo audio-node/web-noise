@@ -1,15 +1,8 @@
 import styled from "@emotion/styled";
-import {
-  Theme,
-  useAudioNode,
-  useNode,
-  useTheme,
-  WNNodeProps,
-  WNAudioNode,
-} from "@web-noise/core";
-import { FC, useEffect } from "react";
+import { Theme, useTheme, WNAudioNode, WNNodeProps } from "@web-noise/core";
+import { useEffect } from "react";
 import NumberInput from "../components/NumberInput";
-import { ConstantSource, ConstantSourceValues } from "./constantSource";
+import { ConstantSourceValues } from "./constantSource";
 
 const InputWrapper = styled.div<{ theme: Theme }>`
   background: ${({ theme }) => theme.colors.elevation2};
@@ -72,11 +65,11 @@ export interface ParameterProps {
   updateNodeValues?: (param: any) => void;
 }
 
-const Parameter: FC<ParameterProps> = ({
+const Parameter = ({
   node: props,
   audioNode,
   updateNodeValues,
-}) => {
+}: ParameterProps) => {
   const { data } = props;
   const theme = useTheme();
 
