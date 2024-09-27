@@ -74,7 +74,7 @@ interface FiltersProps {
   onChange: (filters: FiltersState) => void;
 }
 
-const Filters: FC<FiltersProps> = ({ onChange, value }) => {
+const Filters = ({ onChange, value }: FiltersProps) => {
   const theme = useTheme();
   const plugins = useStore(({ plugins }) => plugins);
 

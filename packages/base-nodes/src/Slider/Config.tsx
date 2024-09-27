@@ -1,6 +1,6 @@
-import { FC } from "react";
-import styled from "@emotion/styled";
-import { Theme, useNode, useTheme, WNNodeProps } from "@web-noise/core";
+import { useNode, useTheme } from "@web-noise/core";
+import Checker from "../components/Checker";
+import ColorInput from "../components/ColorInput";
 import {
   ConfigPanel,
   ConfigRow,
@@ -8,12 +8,10 @@ import {
   ConfigRowLabel,
   ConfigRowSeparator,
 } from "../components/NodeConfig";
-import ColorInput from "../components/ColorInput";
 import NumberInput from "../components/NumberInput";
-import Checker from "../components/Checker";
 import { SliderProps } from "./types";
 
-const SliderConfig: FC<SliderProps> = ({ id, data }) => {
+const SliderConfig = ({ id, data }: SliderProps) => {
   const theme = useTheme();
   const { updateNodeConfig } = useNode(id);
 

@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { FC, MouseEvent, useCallback, useState } from "react";
+import { MouseEvent, useCallback, useState } from "react";
 import { Position, useReactFlow } from "reactflow";
 import useTheme from "../../hooks/useTheme";
 import useStore from "../../store";
@@ -33,7 +33,7 @@ const PluginsPanel = styled.div<{ theme: Theme }>`
   overflow-y: scroll;
 `;
 
-const AddNode: FC<AddNodeProps> = ({ isOpen, closeMenu, mousePosition }) => {
+const AddNode = ({ isOpen, closeMenu, mousePosition }: AddNodeProps) => {
   const theme = useTheme();
   const { screenToFlowPosition } = useReactFlow();
 
@@ -61,7 +61,7 @@ const AddNode: FC<AddNodeProps> = ({ isOpen, closeMenu, mousePosition }) => {
       createNode(newNode);
       closeMenu();
     },
-    [mousePosition, screenToFlowPosition, createNode, closeMenu, mousePosition]
+    [mousePosition, screenToFlowPosition, createNode, closeMenu, mousePosition],
   );
 
   return isOpen ? (

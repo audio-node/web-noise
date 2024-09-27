@@ -1,12 +1,5 @@
 import styled from "@emotion/styled";
-import {
-  FC,
-  MouseEvent,
-  useCallback,
-  useState,
-  useRef,
-  ChangeEvent,
-} from "react";
+import { MouseEvent, useCallback, useState, useRef, ChangeEvent } from "react";
 import { FileDrop } from "react-file-drop";
 import { FaFileUpload } from "react-icons/fa";
 import useTheme from "../hooks/useTheme";
@@ -65,11 +58,11 @@ const FileUploadMessage = styled.div`
   font-size: 2rem;
 `;
 
-const UploadPatch: FC<UploadPatchProps> = ({ isOpen, closeMenu }) => {
+const UploadPatch = ({ isOpen, closeMenu }: UploadPatchProps) => {
   const theme = useTheme();
 
   const setGraph = useStore(({ setGraph }) => setGraph);
-  const setEditorState = useStore(store => store.setEditorState);
+  const setEditorState = useStore((store) => store.setEditorState);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -85,7 +78,7 @@ const UploadPatch: FC<UploadPatchProps> = ({ isOpen, closeMenu }) => {
         })
         .catch(console.error);
     },
-    [setGraph, closeMenu]
+    [setGraph, closeMenu],
   );
 
   const onTargetClick = () => {

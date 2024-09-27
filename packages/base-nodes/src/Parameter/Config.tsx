@@ -45,7 +45,7 @@ const ConfigRowInner = styled.div<{ theme: Theme }>`
   }
 `;
 
-const ParameterConfig: FC<ParameterProps> = ({ id, data }) => {
+const ParameterConfig = ({ id, data }: ParameterProps) => {
   const theme = useTheme();
   const { updateNodeConfig } = useNode(id);
 

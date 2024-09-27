@@ -66,7 +66,7 @@ const FileUploadMessage = styled.div`
 `;
 
 // @TODO: unify with upload file
-const UploadProject: FC<UploadProjectProps> = ({ isOpen, closeMenu }) => {
+const UploadProject = ({ isOpen, closeMenu }: UploadProjectProps) => {
   const theme = useTheme();
 
   const setProject = useStore((store) => store.setProject);

@@ -19,7 +19,7 @@ export interface GateProps {
   updateNodeValues: (value: any) => void;
 }
 
-const Gate: FC<GateProps> = ({ node: props, audioNode, updateNodeValues }) => {
+const Gate = ({ node: props, audioNode, updateNodeValues }: GateProps) => {
   const { data } = props;
 
   const { isOpened = false } = data.values || {};
