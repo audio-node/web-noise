@@ -42,12 +42,12 @@ const Convolver = ({
   const channel = useMessageChannel();
 
   useEffect(() => {
-    if (!audioNode) {
+    if (!audioNode || !channel) {
       return;
     }
 
     audioNode.registerPort(channel.port1);
-  }, [audioNode]);
+  }, [audioNode, channel]);
 
   const { url } = data.values || {};
 
@@ -57,12 +57,14 @@ const Convolver = ({
 
   return (
     <ConvolverWrapper theme={theme}>
-      <Wave
-        port={channel.port2}
-        waveColor={theme.colors.accent2}
-        progressColor="transparent"
-        rangeColor="transparent"
-      />
+      {channel ? (
+        <Wave
+          port={channel.port2}
+          waveColor={theme.colors.accent2}
+          progressColor="transparent"
+          rangeColor="transparent"
+        />
+      ) : null}
     </ConvolverWrapper>
   );
 };

@@ -1,13 +1,6 @@
-import {
-  FC,
-  KeyboardEventHandler,
-  useState,
-  useCallback,
-  HTMLProps,
-} from "react";
 import styled from "@emotion/styled";
-import { FaRegArrowAltCircleRight as SetUrlIcon } from "react-icons/fa";
 import { theme } from "@web-noise/core";
+import { HTMLProps } from "react";
 
 export const InputWrapper = styled.div`
   display: flex;

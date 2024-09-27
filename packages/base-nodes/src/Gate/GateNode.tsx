@@ -1,10 +1,9 @@
 import { useAudioNode, useNode, useTheme, WNNode } from "@web-noise/core";
-import { FC } from "react";
 import { Gate as TGate } from "./audioNode";
 import Gate from "./Gate";
 import { GateProps } from "./types";
 
-const GateNode: FC<GateProps> = (props) => {
+const GateNode = (props: GateProps) => {
   const { id, data } = props;
   const theme = useTheme();
   const { node } = useAudioNode<TGate>(id) || {};

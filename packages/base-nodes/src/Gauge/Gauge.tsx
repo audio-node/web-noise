@@ -36,18 +36,18 @@ const Gauge = ({ node: props, audioNode }: GaugeProps) => {
   const channel = useMessageChannel();
 
   useEffect(() => {
-    if (!audioNode) {
+    if (!audioNode || !channel) {
       return;
     }
 
     audioNode.registerPort(channel.port1);
-  }, [audioNode]);
+  }, [audioNode, channel]);
 
   const { backgroundColor } = data.config || {};
 
   return (
     <GaugeWrapper theme={theme} backgroundColor={backgroundColor}>
-      <Scope port={channel.port2} config={data.config} />
+      {channel ? <Scope port={channel.port2} config={data.config} /> : null}
     </GaugeWrapper>
   );
 };

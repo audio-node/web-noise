@@ -6,14 +6,14 @@ import {
   WNNodeProps,
 } from "@web-noise/core";
 import { LevaPanel, useControls, useCreateStore } from "leva";
-import { FC, useEffect } from "react";
+import { useEffect } from "react";
 import { Gain as TGain, GainValues } from "../audioNodes/gain";
 
 interface GainData {
   values?: GainValues;
 }
 
-const Gain: FC<WNNodeProps<GainData>> = (props) => {
+const Gain = (props: WNNodeProps<GainData>) => {
   const { id, data } = props;
   const { updateNodeValues } = useNode(id);
   const { node } = useAudioNode<TGain>(id) || {};

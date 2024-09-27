@@ -1,4 +1,4 @@
-import { FC, useCallback } from "react";
+import { useCallback } from "react";
 import { useContextMenu, PredicateParams } from "react-contexify";
 import "react-contexify/dist/ReactContexify.css";
 import { WNNode } from "../../types";
@@ -14,7 +14,7 @@ export const useNodeContextMenu = () => {
   });
 
   const onContextMenu = useCallback(
-    (event: React.MouseEvent<Element, MouseEvent>, node) => {
+    (event: React.MouseEvent<Element, MouseEvent>, node: unknown) => {
       event.stopPropagation();
       show(event, { props: { node } });
     },
@@ -24,7 +24,7 @@ export const useNodeContextMenu = () => {
   return { onContextMenu };
 };
 
-const NodeContextMenu: FC<{}> = (args) => {
+const NodeContextMenu = (args: unknown) => {
   const theme = useTheme();
 
   const removeNodes = useStore((store) => store.removeNodes);

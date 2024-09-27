@@ -1,9 +1,10 @@
 import styled from "@emotion/styled";
 import Range from "@tonaljs/range";
+//@ts-ignore
 import { Midi } from "@tonaljs/tonal";
-import { LevaPanel, useControls, useCreateStore } from "leva";
-import { FC, useCallback, useMemo } from "react";
 import { useAudioNode, useTheme, WNNode, WNNodeProps } from "@web-noise/core";
+import { LevaPanel, useControls, useCreateStore } from "leva";
+import { useCallback, useMemo } from "react";
 //@ts-ignore
 import { KeyboardShortcuts, MidiNumbers, Piano } from "react-piano";
 import "react-piano/dist/styles.css";
@@ -19,7 +20,7 @@ const Keyboard = styled(Piano)`
   }
 `;
 
-const VirtualKeyboard: FC<WNNodeProps> = (props) => {
+const VirtualKeyboard = (props: WNNodeProps) => {
   const { id } = props;
   const { node } = useAudioNode<TVirtualKeyboard>(id) || {};
 
@@ -33,7 +34,7 @@ const VirtualKeyboard: FC<WNNodeProps> = (props) => {
       firstNote: {
         options: Range.chromatic(
           [MidiNumbers.MIN_MIDI_NUMBER, MidiNumbers.MAX_MIDI_NUMBER - 12],
-          { sharps: true }
+          { sharps: true },
         )
           .filter((note) => /[A-G]\d/.test(note))
           .reduce<Record<number, number>>(
@@ -41,7 +42,7 @@ const VirtualKeyboard: FC<WNNodeProps> = (props) => {
               ...acc,
               [note]: Midi.toMidi(note),
             }),
-            {}
+            {},
           ),
         value: MidiNumbers.fromNote("c4") as number,
       },
@@ -50,13 +51,13 @@ const VirtualKeyboard: FC<WNNodeProps> = (props) => {
       },
     },
     { collapsed: true, color: theme.colors.accent2 },
-    { store }
+    { store },
   );
 
   const firstNote = useMemo(() => values.firstNote, [values]);
   const lastNote = useMemo(
     () => Midi.toMidi(values.firstNote + values.size),
-    [values]
+    [values],
   );
 
   const keyboardShortcuts = useMemo(
@@ -66,7 +67,7 @@ const VirtualKeyboard: FC<WNNodeProps> = (props) => {
         lastNote: lastNote,
         keyboardConfig: KeyboardShortcuts.HOME_ROW,
       }),
-    [firstNote, lastNote]
+    [firstNote, lastNote],
   );
 
   const playNote = useCallback(
@@ -76,7 +77,7 @@ const VirtualKeyboard: FC<WNNodeProps> = (props) => {
       }
       requestAnimationFrame(() => node.play(midiNumber));
     },
-    [node]
+    [node],
   );
 
   const stopNote = useCallback(
@@ -86,7 +87,7 @@ const VirtualKeyboard: FC<WNNodeProps> = (props) => {
       }
       requestAnimationFrame(() => node.stop(midiNumber));
     },
-    [node]
+    [node],
   );
 
   return (

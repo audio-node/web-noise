@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from "react";
 import styled from "@emotion/styled";
 import { WNAudioNode, WNNodeProps, useTheme, Theme } from "@web-noise/core";
+import useMessageChannel from "../lib/hooks/useMessageChannel";
 import { ADSRData } from "./types";
 import Scope from "./Scope";
 
@@ -27,15 +28,6 @@ export interface ADSRProps {
   updateNodeValues: (value: any) => void;
 }
 
-const useMessageChannel = () => {
-  const channel = useMemo(() => {
-    const channel = new MessageChannel();
-    channel.port2.start();
-    return channel;
-  }, []);
-  return channel;
-};
-
 const ADSR = ({ node: props, audioNode }: ADSRProps) => {
   const { data } = props;
   const theme = useTheme();
@@ -43,18 +35,18 @@ const ADSR = ({ node: props, audioNode }: ADSRProps) => {
   const channel = useMessageChannel();
 
   useEffect(() => {
-    if (!audioNode) {
+    if (!audioNode || !channel) {
       return;
     }
 
     audioNode.registerPort(channel.port1);
-  }, [audioNode]);
+  }, [audioNode, channel]);
 
   const { backgroundColor, colors } = data.config || {};
 
   return (
     <ADSRWrapper backgroundColor={backgroundColor} theme={theme}>
-      <Scope port={channel.port2} colors={colors} />
+      {channel ? <Scope port={channel.port2} colors={colors} /> : null}
     </ADSRWrapper>
   );
 };

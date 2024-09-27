@@ -1,11 +1,11 @@
 import { useAudioNode, useTheme, WNNode, WNNodeProps } from "@web-noise/core";
 import { LevaPanel, useControls, useCreateStore } from "leva";
-import { FC, useCallback, useMemo, useRef } from "react";
+import { useCallback, useMemo, useRef } from "react";
 //@ts-ignore
 import useAnimationFrame from "use-animation-frame";
 import { Analyser } from "../audioNodes/analyser";
 
-const Visualiser: FC<WNNodeProps> = (props) => {
+const Visualiser = (props: WNNodeProps) => {
   const { data, id } = props;
   const analyserNode = useAudioNode<Analyser>(id);
   const { node } = analyserNode || {};

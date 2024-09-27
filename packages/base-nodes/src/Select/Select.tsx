@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { WNAudioNode, WNNodeProps } from "@web-noise/core";
-import { FC, useEffect } from "react";
-import SelectControl from '../components/Select';
+import { useEffect } from "react";
+import SelectControl from "../components/Select";
 import DEFAULT_CONFIG from "./defaultConfig";
 import { SelectData } from "./types";
 
@@ -14,19 +14,13 @@ const Section = styled.div`
   box-sizing: border-box;
 `;
 
-
 export interface SelectProps {
   node: WNNodeProps<SelectData>;
   audioNode?: WNAudioNode | null;
   updateNodeValues: (value: any) => void;
 }
 
-
-const Select: FC<SelectProps> = ({
-  node: props,
-  audioNode,
-  updateNodeValues,
-}) => {
+const Select = ({ node: props, audioNode, updateNodeValues }: SelectProps) => {
   const { data } = props;
 
   const config = {

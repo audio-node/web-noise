@@ -1,6 +1,6 @@
 import { useAudioNode, useNode, WNNode, WNNodeProps } from "@web-noise/core";
 import { Resizable } from "re-resizable";
-import { FC, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Editor from "../components/Editor";
 import {
   MessageData,
@@ -16,7 +16,7 @@ import {
   defaultValue as workletScriptDefaultValue,
 } from "./workletScript/editorConfig";
 
-const ScriptNode: FC<WNNodeProps<ScriptNodeData>> = (props) => {
+const ScriptNode = (props: WNNodeProps<ScriptNodeData>) => {
   const { data, id, type } = props;
 
   const { node } = useAudioNode<TScriptNode>(id) || {};

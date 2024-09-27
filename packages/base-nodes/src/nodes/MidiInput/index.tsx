@@ -8,7 +8,7 @@ import {
   WNNodeProps,
 } from "@web-noise/core";
 import { LevaPanel, useCreateStore } from "leva";
-import { FC, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   MidiInput as TMidiInput,
   MidiInputList as MidiInputDevices,
@@ -34,7 +34,7 @@ const NoMidiDevicesMessage = styled.div<{ theme: Theme }>`
   color: ${({ theme }) => theme.colors.highlight1};
 `;
 
-const MidiInput: FC<WNNodeProps<MidiData>> = (props) => {
+const MidiInput = (props: WNNodeProps<MidiData>) => {
   const { id, data } = props;
   const { node } = useAudioNode<TMidiInput>(id) || {};
   const { updateNodeValues } = useNode(id);

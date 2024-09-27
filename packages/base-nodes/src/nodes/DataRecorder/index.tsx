@@ -7,7 +7,7 @@ import {
   WNNodeProps,
 } from "@web-noise/core";
 import downloadFile from "js-file-download";
-import { FC, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaFileDownload as DownloadIcon } from "react-icons/fa";
 import { DataRecorder as TDataRecorder } from "../../audioNodes/dataRecorder";
 import type { RecorderData } from "../../audioNodes/dataRecorder/types";
@@ -53,7 +53,7 @@ const DownloadButton = styled.button`
   }
 `;
 
-const DataRecorder: FC<WNNodeProps<RecorderData>> = (props) => {
+const DataRecorder = (props: WNNodeProps<RecorderData>) => {
   const { id, data } = props;
   const { node } = useAudioNode<TDataRecorder>(id) || {};
   const [isRecording, setIsRecording] = useState(false);
@@ -118,9 +118,9 @@ const DataRecorder: FC<WNNodeProps<RecorderData>> = (props) => {
                   ],
                 },
                 null,
-                2
+                2,
               ),
-              fileName
+              fileName,
             );
           }}
         >

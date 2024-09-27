@@ -1,10 +1,15 @@
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
 
 const useMessageChannel = () => {
-  const channel = useMemo(() => {
-    const channel = new MessageChannel();
-    channel.port2.start();
-    return channel;
+  const [channel, setChannel] = useState<MessageChannel | null>(null);
+  useEffect(() => {
+    const newChannel = new MessageChannel();
+    newChannel.port2.start();
+    setChannel(newChannel);
+    return () => {
+      setChannel(null);
+      newChannel.port2.close();
+    };
   }, []);
   return channel;
 };

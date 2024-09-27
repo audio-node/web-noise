@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useThrottledCallback } from "use-debounce";
 import {
   DebugBlock,
@@ -26,14 +26,14 @@ export interface SequencerProps {
   columns?: number;
 }
 
-const Sequencer: FC<SequencerProps> = ({
+const Sequencer = ({
   options,
   sequence,
   activeStep,
   onChange,
   format,
   columns,
-}) => {
+}: SequencerProps) => {
   const [selectedStep, setSelectedStep] = useState<number | null>(null);
 
   const selectedStepOption = useMemo(() => {
@@ -78,7 +78,7 @@ const Sequencer: FC<SequencerProps> = ({
         updateStep(selectedStep, { value });
       }
     },
-    50
+    50,
   );
 
   const mouseWheelHandler = useCallback(
@@ -87,7 +87,7 @@ const Sequencer: FC<SequencerProps> = ({
       event.stopPropagation();
       updateStepNote(event);
     },
-    [updateStepNote]
+    [updateStepNote],
   );
 
   useEffect(() => {
@@ -134,7 +134,9 @@ const Sequencer: FC<SequencerProps> = ({
         </Grid>
       </GridWrapper>
       <DebugBlock>
-        <p>output: {currentStep}</p>
+        <p>
+          <>output: {currentStep}</>
+        </p>
         <p>sequence Index: {activeStep}</p>
         <p>selected step: {selectedStep}</p>
       </DebugBlock>
