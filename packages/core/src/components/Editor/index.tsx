@@ -1,4 +1,10 @@
-import { type ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import {
+  type ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import ReactFlow, {
   Background,
   BackgroundVariant,
@@ -72,7 +78,9 @@ export const EditorPane = ({
 
   const nodeTypes = useStore(({ nodeTypes }) => nodeTypes);
 
-  useEffect(() => setPlugins(plugins), [plugins]);
+  useEffect(() => {
+    setPlugins(plugins);
+  }, [plugins]);
 
   useEffect(() => {
     if (editorState) {
