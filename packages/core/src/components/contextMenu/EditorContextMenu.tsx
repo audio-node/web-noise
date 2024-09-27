@@ -1,7 +1,6 @@
 import downloadFile from "js-file-download";
 import {
-  FC,
-  ReactNode,
+  type ReactNode,
   useCallback,
   useEffect,
   useMemo,
@@ -9,7 +8,7 @@ import {
 } from "react";
 import { Separator, useContextMenu } from "react-contexify";
 import "react-contexify/dist/ReactContexify.css";
-import { useReactFlow } from "reactflow";
+import { useReactFlow, type XYPosition } from "reactflow";
 import hotkeys from "hotkeys-js";
 import useTheme from "../../hooks/useTheme";
 import useStore from "../../store";
@@ -33,8 +32,10 @@ export const useEditorContextMenu = () => {
   return { onContextMenu: show };
 };
 
-const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
+const EditorContextMenu = ({
   editorContextMenu = [],
+}: {
+  editorContextMenu?: Array<ReactNode>;
 }) => {
   const theme = useTheme();
 
@@ -47,7 +48,7 @@ const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
   const [showUploadProject, setShowUploadProject] = useState(false);
 
   const addNodeHandler = useCallback(
-    (x, y) => {
+    (x: number, y: number) => {
       setMousePosition({ x, y });
       setShowAddNode(true);
     },
@@ -57,7 +58,7 @@ const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
   const pasteBuffer = useStore((store) => store.pasteBuffer);
   const { screenToFlowPosition } = useReactFlow();
   const pasteBufferHandler = useCallback(
-    (mousePosition) => {
+    (mousePosition: XYPosition) => {
       const { x, y } = screenToFlowPosition(mousePosition);
       pasteBuffer(x, y);
     },
@@ -69,12 +70,9 @@ const EditorContextMenu: FC<{ editorContextMenu?: Array<ReactNode> }> = ({
   const getEditorState = useStore((store) => store.getEditorState);
   const getProject = useStore((store) => store.getProject);
 
-  const deleteAllHandler = useCallback(
-    (e) => {
-      clearGraph();
-    },
-    [clearGraph],
-  );
+  const deleteAllHandler = useCallback(() => {
+    clearGraph();
+  }, [clearGraph]);
 
   const toggleHelp = useStore((store) => store.toggleHelp);
 

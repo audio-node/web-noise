@@ -13,7 +13,7 @@ export const useEdgeContextMenu = () => {
   });
 
   const onContextMenu = useCallback(
-    (event: React.MouseEvent<Element, MouseEvent>, edge) => {
+    (event: React.MouseEvent<Element, MouseEvent>, edge: unknown) => {
       event.stopPropagation();
       show(event, { props: { edge } });
     },

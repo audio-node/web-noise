@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { Resizable } from "re-resizable";
-import { FC, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { MdSettings as SettingsIcon } from "react-icons/md";
 import { Handle, HandleProps, NodeProps, Position } from "reactflow";
 import { DRAG_HANDLE_CLASS } from "../../constants";
@@ -83,7 +83,7 @@ const StyledInputHandle = styled(Handle)`
   left: -3px;
 `;
 
-export const InputHandle: FC<Partial<HandleProps>> = (props) => (
+export const InputHandle = (props: Partial<HandleProps>) => (
   <StyledInputHandle {...props} type="target" position={Position.Left} />
 );
 
@@ -91,7 +91,7 @@ export const StyledOutputHandle = styled(Handle)`
   right: -3px;
 `;
 
-export const OutputHandle: FC<Partial<HandleProps>> = (props) => (
+export const OutputHandle = (props: Partial<HandleProps>) => (
   <StyledOutputHandle {...props} type="source" position={Position.Right} />
 );
 
@@ -99,10 +99,15 @@ export type WNNodeProps<T = Record<string, unknown>> = NodeProps<
   T & WNNodeData
 >;
 
-export const TitleBar: FC<{ className?: string }> = ({
+interface TitleBarProps {
+ className?: string;
+ [key: string]: unknown
+}
+
+export const TitleBar = ({
   className,
   ...props
-}) => (
+}: TitleBarProps) => (
   <TitleBarInner
     {...props}
     className={[className, DRAG_HANDLE_CLASS].join(" ")}
