@@ -22,7 +22,7 @@ const NoAudioInputsMessage = styled.div<{ theme: Theme }>`
   padding: 0.5rem;
 `;
 
-const AudioInput: FC<WNNodeProps<AudioInputData>> = (props) => {
+const AudioInput = (props: WNNodeProps<AudioInputData>) => {
   const { id, data } = props;
   const { node } = useAudioNode<TMidiInput>(id) || {};
   const { updateNodeValues } = useNode(id);

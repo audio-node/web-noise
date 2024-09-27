@@ -16,7 +16,7 @@ interface ClockData {
 const DEFAULT_BPM = 120;
 const DEFAULT_DURATION = 0.01;
 
-const Clock: FC<WNNodeProps<ClockData>> = (props) => {
+const Clock = (props: WNNodeProps<ClockData>) => {
   const { id, data } = props;
   const { node } = useAudioNode<TClock>(id) || {};
   const { updateNodeValues } = useNode(id);

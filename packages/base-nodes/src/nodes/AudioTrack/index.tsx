@@ -70,7 +70,7 @@ interface AudioTrackData {
   config?: AudioTrackConfig;
 }
 
-const AudioTrack: FC<WNNodeProps<AudioTrackData>> = (props) => {
+const AudioTrack = (props: WNNodeProps<AudioTrackData>) => {
   const { id, data } = props;
   const { updateNodeValues, updateNodeConfig } = useNode(id);
   const { node } = useAudioNode<TAudioTrack>(id) || {};
