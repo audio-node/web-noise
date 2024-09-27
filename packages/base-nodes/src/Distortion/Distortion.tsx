@@ -23,28 +23,28 @@ export interface DistortionProps {
   updateNodeValues: (value: any) => void;
 }
 
-const Distortion = ({
-  audioNode,
-}: DistortionProps) => {
+const Distortion = ({ audioNode }: DistortionProps) => {
   const theme = useTheme();
 
   const channel = useMessageChannel();
 
   useEffect(() => {
-    if (!audioNode) {
+    if (!audioNode || !channel) {
       return;
     }
 
     audioNode.registerPort(channel.port1);
-  }, [audioNode]);
+  }, [audioNode, channel]);
 
   return (
     <DistortionWrapper theme={theme}>
-      <Scope
-        port={channel.port2}
-        color={theme.colors.whitePrimary}
-        lineWidth={6}
-      />
+      {channel ? (
+        <Scope
+          port={channel.port2}
+          color={theme.colors.whitePrimary}
+          lineWidth={6}
+        />
+      ) : null}
     </DistortionWrapper>
   );
 };

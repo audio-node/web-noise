@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { FC, useMemo } from "react";
+import { useMemo } from "react";
 import useTheme from "../../hooks/useTheme";
 import useStore from "../../store";
 import { Theme } from "../../theme";
@@ -43,10 +43,10 @@ interface PluginsProps {
   onComponentClick: (component: PluginComponent) => void;
 }
 
-const Plugins: FC<PluginsProps> = ({
+const Plugins = ({
   onComponentClick,
   filters: { plugin, search },
-}) => {
+}: PluginsProps) => {
   const theme = useTheme();
   const plugins = useStore(({ plugins }) => plugins);
 
@@ -65,7 +65,7 @@ const Plugins: FC<PluginsProps> = ({
     return pluginsGroup.map((plugin) => ({
       ...plugin,
       components: plugin.components.filter(({ type }) =>
-        type.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+        type.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
       ),
     }));
   }, [pluginsGroup, search]);
@@ -82,7 +82,7 @@ const Plugins: FC<PluginsProps> = ({
             <NodesList theme={theme}>
               {components
                 .sort((a, b) =>
-                  a.type.toLowerCase() > b.type.toLowerCase() ? 1 : -1
+                  a.type.toLowerCase() > b.type.toLowerCase() ? 1 : -1,
                 )
                 .map((component, idx) => (
                   <li onClick={() => onComponentClick(component)} key={idx}>

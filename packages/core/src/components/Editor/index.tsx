@@ -1,5 +1,10 @@
-import { ThemeProvider } from "@emotion/react";
-import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import {
+  type ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import ReactFlow, {
   Background,
   BackgroundVariant,
@@ -8,11 +13,9 @@ import ReactFlow, {
   ReactFlowInstance,
   ReactFlowProvider,
   useOnViewportChange,
-  useViewport,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import useStore from "../../store";
-import defaultTheme, { Theme } from "../../theme";
 import type { EditorState, PluginConfig } from "../../types";
 import EdgeContextMenu, {
   useEdgeContextMenu,
@@ -75,7 +78,9 @@ export const EditorPane = ({
 
   const nodeTypes = useStore(({ nodeTypes }) => nodeTypes);
 
-  useEffect(() => setPlugins(plugins), [plugins]);
+  useEffect(() => {
+    setPlugins(plugins);
+  }, [plugins]);
 
   useEffect(() => {
     if (editorState) {
@@ -99,7 +104,7 @@ export const EditorPane = ({
   }, [nodes, edges, controlPanel, viewport]);
 
   const onInit = useCallback(
-    (rfi) => {
+    (rfi: ReactFlowInstance) => {
       if (!reactflowInstance) {
         setReactflowInstance(rfi);
         console.log("flow loaded:", rfi);

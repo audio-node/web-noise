@@ -2,6 +2,13 @@ type PoolName = string | number;
 
 type Broadcast = <T = unknown>(data: T, poolName?: PoolName) => void;
 
+export enum Events {
+  ADD_LISTENER = "ADD_LISTENER",
+  REMOVE_LISTENER = "REMOVE_LISTENER",
+}
+
+interface EventListener {}
+
 interface AddListenerEvent {
   name: "ADD_LISTENER";
   port: MessagePort;
@@ -18,6 +25,9 @@ type UseBroadcastEvent = AddListenerEvent | RemoveListenerEvent;
 
 const DEFAULT_POOL_NAME = "default";
 
+/**
+ * hook for usage inside a worklet
+ * */
 export const useBroadcast = (port: MessagePort): Broadcast => {
   const listeners: Record<PoolName, Array<MessagePort>> = {
     [DEFAULT_POOL_NAME]: [],
@@ -32,17 +42,28 @@ export const useBroadcast = (port: MessagePort): Broadcast => {
         }
         listeners[poolName].push(data.port);
       }
-    }
+      if (data.name === "REMOVE_LISTENER") {
+        const poolName = data.poolName ?? DEFAULT_POOL_NAME;
+        if (!listeners[poolName]) {
+          listeners[poolName] = [];
+        }
+        listeners[poolName].push(data.port);
+      }
+    },
   );
 
-  return (data, index = DEFAULT_POOL_NAME) =>
-    listeners[index]?.forEach((listener) => listener.postMessage(data));
+  return (data, index = DEFAULT_POOL_NAME) => {
+    return listeners[index]?.forEach((listener) => listener.postMessage(data));
+  };
 };
 
+/**
+ * helpers for usage outside or audio worklet
+ * */
 export const addBroadcastListener = (
   broadcastPort: MessagePort,
   listenerPort: MessagePort,
-  poolName?: PoolName
+  poolName?: PoolName,
 ) => {
   broadcastPort.postMessage(
     {
@@ -50,21 +71,21 @@ export const addBroadcastListener = (
       port: listenerPort,
       poolName,
     },
-    [listenerPort]
+    [listenerPort],
   );
 };
 
 export const removeBroadcastListener = (
   broadcastPort: MessagePort,
   listenerPort: MessagePort,
-  poolName?: PoolName
+  poolName?: PoolName,
 ) => {
   broadcastPort.postMessage(
     {
       name: "REMOVE_LISTENER",
-      port: listenerPort,
+      // port: listenerPort,
       poolName,
     },
-    [listenerPort]
+    [],
   );
 };

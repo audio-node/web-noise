@@ -1,4 +1,3 @@
-import { FC } from "react";
 import styled from "@emotion/styled";
 import { Theme, useNode, useTheme, WNNodeProps } from "@web-noise/core";
 import NumberInput from "../components/NumberInput";
@@ -45,7 +44,7 @@ const ConfigRowInner = styled.div<{ theme: Theme }>`
   }
 `;
 
-const ParameterConfig: FC<ParameterProps> = ({ id, data }) => {
+const ParameterConfig = ({ id, data }: ParameterProps) => {
   const theme = useTheme();
   const { updateNodeConfig } = useNode(id);
 

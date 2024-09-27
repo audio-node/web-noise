@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { FC, useEffect } from "react";
+import { type ReactNode, useEffect } from "react";
 import { MdClose as CloseIcon } from "react-icons/md";
 import useTheme from "../hooks/useTheme";
 import { Theme } from "../theme";
@@ -34,11 +34,12 @@ const ModalCloser = styled(CloseIcon)<{ theme: Theme }>`
   cursor: pointer;
 `;
 
-const Modal: FC<{ onClose?: () => void }> = ({
-  children,
-  onClose,
-  ...props
-}) => {
+interface ModalProps {
+  onClose?: () => void;
+  children: ReactNode;
+}
+
+const Modal = ({ children, onClose, ...props }: ModalProps) => {
   const theme = useTheme();
 
   useEffect(() => {

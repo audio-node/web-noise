@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { FC, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useThrottledCallback } from "use-debounce";
 
 const SampleInput = styled.span`
@@ -56,7 +56,7 @@ interface NumberInputProps {
   placeholder?: string;
 }
 
-const NumberInput: FC<NumberInputProps> = ({
+const NumberInput = ({
   max = Infinity,
   min = -Infinity,
   value,
@@ -64,7 +64,7 @@ const NumberInput: FC<NumberInputProps> = ({
   onChange = () => {},
   placeholder,
   ...props
-}) => {
+}: NumberInputProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const startChangedHandler = useThrottledCallback(
@@ -80,7 +80,7 @@ const NumberInput: FC<NumberInputProps> = ({
       }
       onChange(st);
     },
-    100
+    100,
   );
 
   useEffect(() => {

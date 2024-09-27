@@ -1,5 +1,3 @@
-import type { FC } from "react";
-
 import styled from "@emotion/styled";
 import { useState } from "react";
 import { FaVolumeOff as IconUnmute } from "react-icons/fa";
@@ -41,7 +39,7 @@ const Icon = styled(IconUnmute)`
   height: 7rem;
 `;
 
-const ResumeContext: FC = () => {
+const ResumeContext = () => {
   const theme = useTheme();
   const patch = useStore(({ patch }) => patch);
   const audioContext = patch.audioContext;

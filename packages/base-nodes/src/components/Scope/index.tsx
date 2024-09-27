@@ -1,4 +1,5 @@
-import { FC, useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef } from "react";
+import useWorker from "../../lib/hooks/useWorker";
 
 //@ts-ignore
 import rendererWorkerUrl from "worklet:./renderer.worker.ts";
@@ -12,36 +13,26 @@ const defaultConfig = {
   color: "white",
 };
 
-const Scope: FC<{
-  port: MessagePort;
-  color?: string;
-  lineWidth?: number;
-  minValue?: number;
-  maxValue?: number;
-}> = ({
+const Scope = ({
   port,
   color = defaultConfig.color,
   lineWidth = defaultConfig.lineWidth,
   minValue = defaultConfig.minValue,
   maxValue = defaultConfig.maxValue,
+}: {
+  port: MessagePort;
+  color?: string;
+  lineWidth?: number;
+  minValue?: number;
+  maxValue?: number;
 }) => {
-  const worker = useMemo(() => {
-    return new Worker(rendererWorker);
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      port.close();
-      worker?.terminate();
-    };
-  }, [worker]);
+  const worker = useWorker(rendererWorker);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvasElement = canvasRef.current;
     if (canvasElement && worker) {
-      //@ts-ignore
       const canvas = canvasElement.transferControlToOffscreen();
       worker.postMessage({ name: "INIT", canvas, port }, [canvas, port]);
     }

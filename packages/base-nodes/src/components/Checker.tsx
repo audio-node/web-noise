@@ -1,4 +1,3 @@
-import { FC } from "react";
 import styled from "@emotion/styled";
 import { Theme, useTheme } from "@web-noise/core";
 
@@ -55,14 +54,14 @@ interface CheckerProps extends CheckerItem {
   checked?: boolean;
 }
 
-const Checker: FC<CheckerProps> = ({
+const Checker = ({
   label,
   subtitle,
   name,
   type = "checkbox",
   onChange,
   checked = false,
-}) => {
+}: CheckerProps) => {
   const theme = useTheme();
 
   return (

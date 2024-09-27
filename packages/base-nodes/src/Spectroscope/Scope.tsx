@@ -1,4 +1,5 @@
-import { FC, useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
+import useWorker from "../lib/hooks/useWorker";
 import defaultConfig from "./defaultConfig";
 
 //@ts-ignore
@@ -6,23 +7,14 @@ import rendererWorkerUrl from "worklet:./renderer.worker.ts";
 
 const rendererWorker = new URL(rendererWorkerUrl, import.meta.url);
 
-const Scope: FC<{
-  port: MessagePort;
-  color?: string;
-}> = ({
+const Scope = ({
   port,
   color = defaultConfig.inputColor,
+}: {
+  port: MessagePort;
+  color?: string;
 }) => {
-  const worker = useMemo(() => {
-    return new Worker(rendererWorker);
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      port.close();
-      worker?.terminate();
-    };
-  }, [worker]);
+  const worker = useWorker(rendererWorker);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 

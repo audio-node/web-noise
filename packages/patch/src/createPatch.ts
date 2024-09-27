@@ -106,6 +106,7 @@ const createPatch: CreatePatch = (audioContext = new AudioContext()) => {
         node: audioNode,
       });
 
+      // Kickstart worklet outputs
       Object.values(audioNode.outputs || []).forEach(({ port }) => {
         if (!(port instanceof AudioWorkletNode)) {
           return;
