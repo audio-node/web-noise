@@ -1,7 +1,7 @@
-import { FC, KeyboardEventHandler, useState, useCallback } from "react";
 import styled from "@emotion/styled";
-import { FaRegArrowAltCircleRight as SetUrlIcon } from "react-icons/fa";
 import { theme } from "@web-noise/core";
+import { KeyboardEventHandler, useCallback, useState } from "react";
+import { FaRegArrowAltCircleRight as SetUrlIcon } from "react-icons/fa";
 
 const InputWrapper = styled.div`
   display: flex;
@@ -59,11 +59,15 @@ const InputInner = styled.input`
   }
 `;
 
-const Input: FC<{
+const Input = ({
+  value = "",
+  placeholder = "",
+  onSubmit = () => {},
+}: {
   value?: string;
   placeholder?: string;
   onSubmit?: (value: string) => void;
-}> = ({ value = "", placeholder = "", onSubmit = () => {} }) => {
+}) => {
   const [currentValue, setCurrentValue] = useState<string>(value);
 
   const applyCurrentValue = useCallback(() => {
@@ -81,7 +85,7 @@ const Input: FC<{
           break;
       }
     },
-    [applyCurrentValue, onSubmit]
+    [applyCurrentValue, onSubmit],
   );
   return (
     <InputWrapper>

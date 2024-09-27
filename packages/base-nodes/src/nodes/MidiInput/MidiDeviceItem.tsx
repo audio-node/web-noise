@@ -1,5 +1,4 @@
 // @ts-nocheck
-import { FC } from "react";
 import styled from "@emotion/styled";
 import { Theme, useTheme } from "@web-noise/core";
 
@@ -41,11 +40,15 @@ const MidiDeviceItemInner = styled.label`
   }
 `;
 
-const MidiDeviceItem: FC<{
+const MidiDeviceItem = ({
+  input: { id, name },
+  onChange,
+  checked = false,
+}: {
   input: { id: MidiDeviceItemId; name?: WebMidi.MIDIInput["name"] };
   onChange?: (inputId: MidiDeviceItemId) => void;
   checked?: boolean;
-}> = ({ input: { id, name }, onChange, checked = false }) => {
+}) => {
   const theme = useTheme();
 
   return (
