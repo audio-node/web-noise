@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import defaultConfig from "./defaultConfig";
 
 interface GridProps {

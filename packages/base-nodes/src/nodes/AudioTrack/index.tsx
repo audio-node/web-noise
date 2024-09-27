@@ -8,13 +8,13 @@ import {
   WNNodeProps,
 } from "@web-noise/core";
 import { LevaPanel, useControls, useCreateStore } from "leva";
-import { FC, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   AudioTrack as TAudioTrack,
   AudioTrackValues,
 } from "../../audioNodes/audioTrack";
-import NumberInput from "../../components/NumberInput";
 import Button from "../../components/Button";
+import NumberInput from "../../components/NumberInput";
 import Input from "./Input";
 import Wave from "./Wave";
 
@@ -116,7 +116,7 @@ const AudioTrack = (props: WNNodeProps<AudioTrackData>) => {
     },
     { collapsed: true, color: theme.colors.accent2 },
     { store },
-    [isActive, node, theme]
+    [isActive, node, theme],
   );
 
   useEffect(() => {

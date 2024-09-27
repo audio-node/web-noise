@@ -6,7 +6,7 @@ import {
   WNNodeProps,
 } from "@web-noise/core";
 import { button, folder, LevaPanel, useControls, useCreateStore } from "leva";
-import { FC, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Clock as TClock, ClockValues } from "../../audioNodes/clock";
 
 interface ClockData {
@@ -54,7 +54,7 @@ const Clock = (props: WNNodeProps<ClockData>) => {
             max: 10,
           },
         },
-        { collapsed: true, color: theme.colors.accent2 }
+        { collapsed: true, color: theme.colors.accent2 },
       ),
       ...(isActive
         ? {
@@ -66,7 +66,7 @@ const Clock = (props: WNNodeProps<ClockData>) => {
     },
 
     { store },
-    [isActive, node]
+    [isActive, node],
   );
 
   useEffect(() => node?.setValues(data.values), [node, data]);

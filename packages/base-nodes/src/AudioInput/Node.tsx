@@ -7,9 +7,9 @@ import {
   WNNode,
   WNNodeProps,
 } from "@web-noise/core";
-import { FC, useCallback, useEffect, useState } from "react";
-import { AudioInput as TMidiInput, AudioInputValues } from "./audioNode";
+import { useCallback, useEffect, useState } from "react";
 import RadioGroup from "../components/RadioGroup";
+import { AudioInput as TMidiInput, AudioInputValues } from "./audioNode";
 
 interface AudioInputData {
   values?: AudioInputValues;
@@ -35,7 +35,7 @@ const AudioInput = (props: WNNodeProps<AudioInputData>) => {
 
   const inputsChangeHandler = useCallback(
     (inputs: Array<MediaDeviceInfo>) => setAudioInputs(() => inputs),
-    []
+    [],
   );
 
   useEffect(() => {

@@ -1,9 +1,6 @@
-import { FC, useState } from "react";
-import Drawer from "react-modern-drawer";
-import "react-modern-drawer/dist/index.css";
 import styled from "@emotion/styled";
 import { Resizable } from "re-resizable";
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 import GridLayout from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import {
@@ -12,12 +9,14 @@ import {
 } from "react-icons/ai";
 import { MdClose as CloseIcon } from "react-icons/md";
 import { RxDashboard as ControlPanelIcon } from "react-icons/rx";
+import Drawer from "react-modern-drawer";
+import "react-modern-drawer/dist/index.css";
+import { CONTROL_PANEL_GRID_CONFIG } from "../../constants";
 import useTheme from "../../hooks/useTheme";
 import useStore from "../../store";
 import { Theme } from "../../theme";
 import ControlPanelItem from "./ControlPanelItem";
 import { IconsBar, IconWrapper, PanelTitle, TitleBarWrapper } from "./styles";
-import { CONTROL_PANEL_GRID_CONFIG } from "../../constants";
 
 const ControlPanelIconWrapper = styled.div<{ theme: Theme }>`
   position: fixed;
@@ -112,7 +111,7 @@ const ControlPanelItemWrapper = styled.div<{ theme: Theme }>`
   }
 `;
 
-const ControlPanel: FC = () => {
+const ControlPanel = () => {
   const theme = useTheme();
   const nodeRef = useRef(null);
   const nodes = useStore((store) => store.nodes);
@@ -134,7 +133,7 @@ const ControlPanel: FC = () => {
   const setControlPanelNodes = useStore((store) => store.setControlPanelNodes);
   const setControlPanelSize = useStore((store) => store.setControlPanelSize);
   const removeNodeFromControlPanel = useStore(
-    (store) => store.removeNodeFromControlPanel
+    (store) => store.removeNodeFromControlPanel,
   );
 
   const [isGridLocked, setGridLocked] = useState(true);
@@ -145,7 +144,7 @@ const ControlPanel: FC = () => {
         const Y = y + height;
         return Y > acc ? Y : acc;
       },
-      0
+      0,
     );
     return controlPanelNodes.map(({ id: i, width, height, x, y }) => {
       return {
@@ -180,7 +179,7 @@ const ControlPanel: FC = () => {
         enableOverlay={false}
         style={{
           background: theme.colors.elevation1,
-          position: 'absolute',
+          position: "absolute",
         }}
       >
         <ControlPanelHeader theme={theme}>
@@ -254,7 +253,7 @@ const ControlPanel: FC = () => {
                         height: h,
                         x,
                         y,
-                      }))
+                      })),
                     );
                   });
                 }}

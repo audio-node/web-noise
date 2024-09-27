@@ -6,10 +6,15 @@
  */
 
 import { Midi } from "@tonaljs/tonal";
+import {
+  useAudioNode,
+  useNode,
+  useTheme,
+  WNNode,
+  WNNodeProps,
+} from "@web-noise/core";
 import { button, LevaPanel, useControls, useCreateStore } from "leva";
-import { FC, useCallback, useEffect, useState } from "react";
-import { useAudioNode, WNNodeProps } from "@web-noise/core";
-import { useNode } from "@web-noise/core";
+import { useCallback, useEffect, useState } from "react";
 import {
   DEFAULT_SEQUENCE_MODE,
   DEFAULT_STEP_VALUE,
@@ -18,8 +23,6 @@ import {
   StepSequencer as NodeStepSequencer,
   StepSequencerValues,
 } from "../../audioNodes/stepSequencer";
-import { useTheme } from "@web-noise/core";
-import { WNNode } from "@web-noise/core";
 import Sequencer, { FormatNote } from "./Sequencer";
 
 const sequenceModesOptions: Record<string, SEQUENCE_MODES> = {
@@ -62,7 +65,7 @@ const StepSequencer = (props: WNNodeProps<StepSequencerData>) => {
     data.values || {};
 
   const setSequenceData = useCallback(
-    (data: StepSequencerValues['sequenceData']) => {
+    (data: StepSequencerValues["sequenceData"]) => {
       updateNodeValues({ sequenceData: data });
     },
     [updateNodeValues],
