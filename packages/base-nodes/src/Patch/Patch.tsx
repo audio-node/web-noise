@@ -68,7 +68,7 @@ const Patch: FC<WNNodeProps<PatchData>> = (props) => {
   }, [patchData]);
 
   const setPatchUrl = useCallback(
-    (url) => {
+    (url: string) => {
       const node = getNode(id);
       if (!node) {
         console.error(`could not find node: #${id}`);

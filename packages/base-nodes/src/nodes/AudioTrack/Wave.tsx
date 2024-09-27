@@ -88,7 +88,7 @@ const Wave: FC<{
   }, [stageRef.current]);
 
   const handleRangeResize = useCallback(
-    (event) => {
+    (event: any) => {
       if (
         !stageRef.current ||
         !svgPoint ||

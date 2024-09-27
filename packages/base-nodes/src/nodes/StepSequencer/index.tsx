@@ -49,7 +49,7 @@ const midiToNote: FormatNote<number, string> = (value) => {
   return Midi.midiToNoteName(value);
 };
 
-const StepSequencer: FC<WNNodeProps<StepSequencerData>> = (props) => {
+const StepSequencer = (props: WNNodeProps<StepSequencerData>) => {
   const { id, data } = props;
   const { node } = useAudioNode<NodeStepSequencer>(id) || {};
   const { updateNodeValues, updateNodeConfig } = useNode(id);
@@ -62,10 +62,10 @@ const StepSequencer: FC<WNNodeProps<StepSequencerData>> = (props) => {
     data.values || {};
 
   const setSequenceData = useCallback(
-    (data) => {
+    (data: StepSequencerValues['sequenceData']) => {
       updateNodeValues({ sequenceData: data });
     },
-    [updateNodeValues]
+    [updateNodeValues],
   );
 
   const store = useCreateStore();
@@ -115,21 +115,21 @@ const StepSequencer: FC<WNNodeProps<StepSequencerData>> = (props) => {
     },
     { collapsed: true, color: theme.colors.accent2 },
     { store },
-    [generateRandomSeq, clearSeq, node]
+    [generateRandomSeq, clearSeq, node],
   );
 
   useEffect(
     () => updateNodeConfig({ showMidiNumbers: controls.showMidiNumbers }),
-    [updateNodeConfig, controls.showMidiNumbers]
+    [updateNodeConfig, controls.showMidiNumbers],
   );
 
   useEffect(
     () => updateNodeValues({ mode: controls.mode, sequenceData }),
-    [updateNodeValues, controls.mode]
+    [updateNodeValues, controls.mode],
   );
   useEffect(
     () => node?.setValues({ sequenceData, mode }),
-    [sequenceData, mode, node]
+    [sequenceData, mode, node],
   );
 
   useEffect(() => {
