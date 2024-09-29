@@ -1,13 +1,7 @@
-import {
-  FC,
-  KeyboardEventHandler,
-  useState,
-  useCallback,
-  useMemo,
-} from "react";
 import styled from "@emotion/styled";
+import { KeyboardEventHandler, useCallback, useMemo, useState } from "react";
 import { FaRegArrowAltCircleRight as SetUrlIcon } from "react-icons/fa";
-import { InputWrapper, InputInner } from "./Input";
+import { InputInner, InputWrapper } from "./Input";
 
 const InputButton = styled.button`
   position: absolute;
@@ -40,13 +34,13 @@ interface SubmitInputProps {
   options?: Array<InputOption>;
 }
 
-const SubmitInput: FC<SubmitInputProps> = ({
+const SubmitInput = ({
   value = "",
   placeholder = "",
   onSubmit = () => {},
   options = [],
   ...props
-}) => {
+}: SubmitInputProps) => {
   const [currentValue, setCurrentValue] = useState<string>(value);
 
   const applyCurrentValue = useCallback(() => {

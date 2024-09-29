@@ -6,7 +6,7 @@ import {
   WNNodeProps,
 } from "@web-noise/core";
 import { LevaPanel, useControls, useCreateStore } from "leva";
-import { FC, useEffect } from "react";
+import { useEffect } from "react";
 // @ts-ignore
 import EnvelopeGraph from "react-envelope-graph";
 import { ADSR as TADSR, ADSRValues } from "../audioNodes/adsr";
@@ -19,7 +19,7 @@ const MAX_ATTACK_VALUE = 10;
 const MAX_DECAY_VALUE = 10;
 const MAX_RELEASE_VALUE = 10;
 
-const ADSR: FC<WNNodeProps<ADSRData>> = (props) => {
+const ADSR = (props: WNNodeProps<ADSRData>) => {
   const { id, data } = props;
   const { updateNodeValues } = useNode(id);
   const { node } = useAudioNode<TADSR>(id) || {};

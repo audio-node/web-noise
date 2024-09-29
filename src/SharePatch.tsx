@@ -1,9 +1,7 @@
 import styled from "@emotion/styled";
 import { Modal, theme as defaultTheme, Theme, useStore } from "@web-noise/core";
-import { FC } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import QRCode from "react-qr-code";
-import { CopyToClipboard } from "react-copy-to-clipboard";
 
 interface SharePatchProps {
   isOpen: boolean;
@@ -40,11 +38,11 @@ export const getLink = ({ nodes, edges }: any) => {
   return url.toString();
 };
 
-const SharePatch: FC<SharePatchProps> = ({
+const SharePatch = ({
   isOpen,
   closeMenu,
   theme = defaultTheme,
-}) => {
+}: SharePatchProps) => {
   const nodes = useStore(({ nodes }) => nodes);
   const edges = useStore(({ edges }) => edges);
 

@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
-import { WNAudioNode, WNNodeProps, useTheme } from "@web-noise/core";
-import { FC, useEffect } from "react";
+import { WNAudioNode, WNNodeProps } from "@web-noise/core";
+import { useEffect } from "react";
 import { ToggleButton, TriggerButton } from "./GateButtons";
-import { GateConfig, GateData } from "./types";
+import { GateData } from "./types";
 
 const Section = styled.div`
   font-family: var(--leva-fonts-mono);
@@ -19,7 +19,7 @@ export interface GateProps {
   updateNodeValues: (value: any) => void;
 }
 
-const Gate: FC<GateProps> = ({ node: props, audioNode, updateNodeValues }) => {
+const Gate = ({ node: props, audioNode, updateNodeValues }: GateProps) => {
   const { data } = props;
 
   const { isOpened = false } = data.values || {};

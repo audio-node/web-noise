@@ -1,12 +1,5 @@
 import styled from "@emotion/styled";
-import {
-  FC,
-  MouseEvent,
-  useCallback,
-  useState,
-  useRef,
-  ChangeEvent,
-} from "react";
+import { useCallback, useRef } from "react";
 import { FileDrop } from "react-file-drop";
 import { FaFileUpload } from "react-icons/fa";
 import useTheme from "../hooks/useTheme";
@@ -66,7 +59,7 @@ const FileUploadMessage = styled.div`
 `;
 
 // @TODO: unify with upload file
-const UploadProject: FC<UploadProjectProps> = ({ isOpen, closeMenu }) => {
+const UploadProject = ({ isOpen, closeMenu }: UploadProjectProps) => {
   const theme = useTheme();
 
   const setProject = useStore((store) => store.setProject);
@@ -85,7 +78,7 @@ const UploadProject: FC<UploadProjectProps> = ({ isOpen, closeMenu }) => {
         })
         .catch(console.error);
     },
-    [setProject, closeMenu]
+    [setProject, closeMenu],
   );
 
   const onTargetClick = () => {

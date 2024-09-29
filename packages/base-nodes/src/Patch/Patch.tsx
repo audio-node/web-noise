@@ -8,7 +8,7 @@ import {
   WNNode,
   WNNodeProps,
 } from "@web-noise/core";
-import { FC, useCallback, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 // @ts-ignore
 import GridLayout from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
@@ -39,7 +39,7 @@ const PanelNodeTitle = styled.div<{ theme: Theme }>`
   white-space: nowrap;
 `;
 
-const Patch: FC<WNNodeProps<PatchData>> = (props) => {
+const Patch = (props: WNNodeProps<PatchData>) => {
   const { id, data } = props;
   const { url } = data.values || {};
   const theme = useTheme();
@@ -68,7 +68,7 @@ const Patch: FC<WNNodeProps<PatchData>> = (props) => {
   }, [patchData]);
 
   const setPatchUrl = useCallback(
-    (url) => {
+    (url: string) => {
       const node = getNode(id);
       if (!node) {
         console.error(`could not find node: #${id}`);

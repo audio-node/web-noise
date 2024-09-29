@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { Theme, useTheme } from "@web-noise/core";
-import { FC, useEffect, useState } from "react";
+import { useEffect } from "react";
 import useEditor from "./useEditor";
 
 // loader.config({ monaco: MonacoEditor });
@@ -54,14 +54,14 @@ interface ScriptEditorProps {
   onExecute?: (compiledValue: string) => void;
 }
 
-const ScriptEditor: FC<ScriptEditorProps> = ({
+const ScriptEditor = ({
   value,
   defaultValue,
   error,
   onUpdate,
   editorTypes,
   onExecute,
-}) => {
+}: ScriptEditorProps) => {
   const theme = useTheme();
 
   const {

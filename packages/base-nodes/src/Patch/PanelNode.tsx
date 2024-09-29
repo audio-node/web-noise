@@ -1,8 +1,8 @@
 import { ControlPanelNodeProps, useStore } from "@web-noise/core";
-import { FC, useMemo } from "react";
+import { useMemo } from "react";
 import "react-grid-layout/css/styles.css";
 
-const PanelNode: FC<ControlPanelNodeProps> = (props) => {
+const PanelNode = (props: ControlPanelNodeProps) => {
   const { node } = props;
 
   const getControlPanelNode = useStore((store) => store.getControlPanelNode);

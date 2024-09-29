@@ -1,4 +1,3 @@
-import type { FC } from "react";
 import { useMemo } from "react";
 
 import styled from "@emotion/styled";
@@ -19,7 +18,7 @@ const ControlPanelNodeWrapper = styled.div<{ theme: Theme }>`
   grid-template-rows: auto 1fr;
 `;
 
-const PanelNode: FC<ControlPanelNodeProps> = (props) => {
+const PanelNode = (props: ControlPanelNodeProps) => {
   const { node } = props;
 
   const getControlPanelNode = useStore((store) => store.getControlPanelNode);
@@ -39,7 +38,7 @@ interface ControlPanelItemProps {
   onDelete: (node: WNNode) => void;
 }
 
-const ControlPanelItem: FC<ControlPanelItemProps> = (props) => {
+const ControlPanelItem = (props: ControlPanelItemProps) => {
   const { node, showControls, onDelete } = props;
   const theme = useTheme();
 

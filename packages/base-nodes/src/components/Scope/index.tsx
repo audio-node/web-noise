@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 //@ts-ignore
 import rendererWorkerUrl from "worklet:./renderer.worker.ts";
@@ -12,18 +12,18 @@ const defaultConfig = {
   color: "white",
 };
 
-const Scope: FC<{
-  port: MessagePort;
-  color?: string;
-  lineWidth?: number;
-  minValue?: number;
-  maxValue?: number;
-}> = ({
+const Scope = ({
   port,
   color = defaultConfig.color,
   lineWidth = defaultConfig.lineWidth,
   minValue = defaultConfig.minValue,
   maxValue = defaultConfig.maxValue,
+}: {
+  port: MessagePort;
+  color?: string;
+  lineWidth?: number;
+  minValue?: number;
+  maxValue?: number;
 }) => {
   const worker = useMemo(() => {
     return new Worker(rendererWorker);

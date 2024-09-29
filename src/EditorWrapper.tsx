@@ -1,11 +1,11 @@
-import { baseNodes, webAudioNodes, patchNodes } from "@web-noise/base-nodes";
-import { Editor, theme, useStore, type Project } from "@web-noise/core";
+import { baseNodes, patchNodes, webAudioNodes } from "@web-noise/base-nodes";
+import { Editor, theme } from "@web-noise/core";
 import { EDITOR_DEFAULTS } from "@web-noise/core/src/components/App";
-import { FC, ReactNode, useEffect, useMemo, useState } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 import SharePatch from "./SharePatch";
 
-const EditorWrapper: FC = () => {
-  const [project, setProject] = useState()
+const EditorWrapper = () => {
+  const [project, setProject] = useState();
   const [showSharePatch, setShowSharePatch] = useState(false);
 
   useEffect(() => {

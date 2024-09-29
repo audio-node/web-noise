@@ -1,10 +1,9 @@
+import { useAudioNode, WNNode, WNNodeProps } from "@web-noise/core";
 import { LevaPanel, useControls, useCreateStore } from "leva";
-import { useEffect, FC } from "react";
-import { useAudioNode, WNNodeProps } from "@web-noise/core";
+import { useEffect } from "react";
 import { RandomSequencer as TRandomSequencer } from "../audioNodes/randomSequencer";
-import { WNNode } from "@web-noise/core";
 
-const RandomSequencer: FC<WNNodeProps> = (props) => {
+const RandomSequencer = (props: WNNodeProps) => {
   const { id, data } = props;
   const { node } = useAudioNode<TRandomSequencer>(id) || {};
 
@@ -18,7 +17,7 @@ const RandomSequencer: FC<WNNodeProps> = (props) => {
         disabled: true,
       },
     }),
-    { store }
+    { store },
   );
 
   useEffect(() => {

@@ -1,5 +1,4 @@
-import type { FC, ReactNode } from "react";
-import { Node, Edge, Viewport } from "reactflow";
+import { Edge, Node, Viewport } from "reactflow";
 import { WNNodeProps } from "./components/Node";
 
 export type AudioNodeChannel = [AudioNode, number];
@@ -70,8 +69,8 @@ export interface EditorState extends EditorStoreState {
 export type ProjectFile = {
   id: string;
   name?: string;
-  type?: 'patch' | 'blob'
-  file: EditorState
+  type?: "patch" | "blob";
+  file: EditorState;
 };
 
 export interface Project {

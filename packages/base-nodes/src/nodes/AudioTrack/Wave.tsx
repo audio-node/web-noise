@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { FC, useEffect, useRef, useState, useMemo, useCallback } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 const WaveWrapper = styled.div`
   width: 100%;
@@ -8,7 +8,15 @@ const WaveWrapper = styled.div`
   text-align: center;
 `;
 
-const RangeEdge: FC<{
+const RangeEdge = ({
+  start,
+  color,
+  width,
+  height,
+  align,
+  onResizeStart,
+  onResizeEnd,
+}: {
   start: number;
   width: number;
   height: number;
@@ -16,7 +24,7 @@ const RangeEdge: FC<{
   align: "left" | "right";
   onResizeStart: () => void;
   onResizeEnd: () => void;
-}> = ({ start, color, width, height, align, onResizeStart, onResizeEnd }) => {
+}) => {
   const resizeHandleX = align === "left" ? width : start;
   return (
     <>
@@ -55,20 +63,20 @@ const RangeEdge: FC<{
   );
 };
 
-const Wave: FC<{
-  waveColor?: string;
-  rangeColor?: string;
-  progressColor?: string;
-  range?: [number, number];
-  port: MessagePort;
-  onRangeChange?: (range: [number, number]) => void;
-}> = ({
+const Wave = ({
   waveColor = "blue",
   rangeColor = "red",
   progressColor = "grey",
   range = [0, 0],
   port,
   onRangeChange = () => {},
+}: {
+  waveColor?: string;
+  rangeColor?: string;
+  progressColor?: string;
+  range?: [number, number];
+  port: MessagePort;
+  onRangeChange?: (range: [number, number]) => void;
 }) => {
   const [max, setMax] = useState<number | null>(null);
 
@@ -88,7 +96,7 @@ const Wave: FC<{
   }, [stageRef.current]);
 
   const handleRangeResize = useCallback(
-    (event) => {
+    (event: any) => {
       if (
         !stageRef.current ||
         !svgPoint ||
@@ -113,7 +121,7 @@ const Wave: FC<{
         onRangeChange(newRange);
       }
     },
-    [svgPoint, maxWidth, max, range, stageRef.current, activeRangeEdge]
+    [svgPoint, maxWidth, max, range, stageRef.current, activeRangeEdge],
   );
 
   const progressRef = useRef<SVGLineElement>(null);
@@ -154,7 +162,7 @@ const Wave: FC<{
           break;
       }
     },
-    [progressRef.current, waveRef.current, setMax]
+    [progressRef.current, waveRef.current, setMax],
   );
 
   useEffect(() => {

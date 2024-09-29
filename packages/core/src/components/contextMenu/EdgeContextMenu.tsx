@@ -1,4 +1,4 @@
-import { FC, useCallback } from "react";
+import { useCallback } from "react";
 import { useContextMenu } from "react-contexify";
 import "react-contexify/dist/ReactContexify.css";
 import useTheme from "../../hooks/useTheme";
@@ -13,17 +13,17 @@ export const useEdgeContextMenu = () => {
   });
 
   const onContextMenu = useCallback(
-    (event: React.MouseEvent<Element, MouseEvent>, edge) => {
+    (event: React.MouseEvent<Element, MouseEvent>, edge: unknown) => {
       event.stopPropagation();
       show(event, { props: { edge } });
     },
-    [show]
+    [show],
   );
 
   return { onContextMenu };
 };
 
-const EdgeContextMenu: FC<{}> = ({}) => {
+const EdgeContextMenu = () => {
   const theme = useTheme();
 
   const removeEdges = useStore((store) => store.removeEdges);
