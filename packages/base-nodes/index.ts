@@ -53,6 +53,8 @@ import PhaseVocoder from "./src/PhaseVocoder";
 import Distortion from "./src/Distortion";
 import Limiter from "./src/Limiter";
 import AudioOutput from "./src/AudioOutput";
+import ChannelSplitter from "./src/ChannelSplitter";
+import ChannelMerger from "./src/ChannelMerger";
 
 import Inlet from "./src/Inlet";
 import Outlet from "./src/Outlet";
@@ -71,6 +73,8 @@ export const webAudioNodes: PluginConfig = {
     DynamicsCompressor,
     Convolver,
     WaveShaper,
+    ChannelSplitter,
+    ChannelMerger,
   ],
   name: "Web Audio Api base nodes",
 };
