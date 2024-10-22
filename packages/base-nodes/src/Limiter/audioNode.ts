@@ -5,23 +5,18 @@ import { LimiterValues, LimiterData } from "./types";
 import limiterWorkletUrl from "worklet:./worklet/index.ts";
 const limiterWorklet = new URL(limiterWorkletUrl, import.meta.url);
 
-export interface Limiter extends WNAudioNode {
-}
+export interface Limiter extends WNAudioNode {}
 
 export const limiter = async (
   audioContext: AudioContext,
-  data?: LimiterData
+  data?: LimiterData,
 ): Promise<Limiter> => {
   await audioContext.audioWorklet.addModule(limiterWorklet);
-  const workletNode = new AudioWorkletNode(
-    audioContext,
-    "limiter-processor",
-    {
-      channelCountMode: "explicit",
-      outputChannelCount: [1],
-      channelCount: 1,
-    }
-  );
+  const workletNode = new AudioWorkletNode(audioContext, "limiter-processor", {
+    channelCountMode: "explicit",
+    outputChannelCount: [2],
+    channelCount: 2,
+  });
 
   return {
     inputs: {
