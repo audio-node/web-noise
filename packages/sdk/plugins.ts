@@ -41,6 +41,8 @@ import PhaseVocoder from "@web-noise/base-nodes/src/PhaseVocoder/audioNode";
 import Distortion from "@web-noise/base-nodes/src/Distortion/audioNode";
 import Limiter from "@web-noise/base-nodes/src/Limiter/audioNode";
 import AudioOutput from "@web-noise/base-nodes/src/AudioOutput/audioNode";
+import ChannelMerger from "@web-noise/base-nodes/src/ChannelMerger/audioNode";
+import ChannelSplitter from "@web-noise/base-nodes/src/ChannelSplitter/audioNode";
 
 import PassThrough from "@web-noise/base-nodes/src/PassThrough/audioNode";
 
@@ -64,6 +66,8 @@ export const webAudioNodes: PluginConfig = {
     { type: "dynamicsCompressor", node: null, audioNode: DynamicsCompressor },
     { type: "convolver", node: null, audioNode: Convolver },
     { type: "waveShaper", node: null, audioNode: WaveShaper },
+    { type: "channelMerger", node: null, audioNode: ChannelMerger },
+    { type: "channelSplitter", node: null, audioNode: ChannelSplitter },
   ],
   name: "Web Audio Api base nodes",
 };
