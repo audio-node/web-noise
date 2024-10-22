@@ -1,13 +1,12 @@
 import { WNNodeProps, WNNodeData } from "@web-noise/core";
 
-export interface ChannelMergerValues {
-  value?: number;
-}
+export interface ChannelMergerValues {}
 
-export interface ChannelMergerConfig {
-  //your config here
-}
+export interface ChannelMergerConfig {}
 
-export type ChannelMergerData = WNNodeData<ChannelMergerValues, ChannelMergerConfig>;
+export type ChannelMergerData = WNNodeData<
+  ChannelMergerValues,
+  ChannelMergerConfig
+>;
 
-export interface ChannelMergerProps extends WNNodeProps<ChannelMergerData> {};
+export interface ChannelMergerProps extends WNNodeProps<ChannelMergerData> {}
