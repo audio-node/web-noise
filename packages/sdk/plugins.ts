@@ -25,7 +25,6 @@ import Oscilloscope from "@web-noise/base-nodes/src/Oscilloscope/audioNode";
 import ParameterComponent from "@web-noise/base-nodes/src/Parameter/constantSource";
 import Patch from "@web-noise/base-nodes/src/Patch/patchAudioNode";
 import Quantizer from "@web-noise/base-nodes/src/Quantizer/audioNode";
-import Reverb from "@web-noise/base-nodes/src/Reverb/audioNode";
 import Scale from "@web-noise/base-nodes/src/Scale/audioNode";
 import {
   default as MidiNote,
@@ -71,7 +70,6 @@ export const webAudioNodes: PluginConfig = {
 
 export const baseNodes: PluginConfig = {
   components: [
-    { type: "reverb", node: null, audioNode: Reverb },
     { type: "adsr", node: null, audioNode: ADSR },
     { type: "clock", node: null, audioNode: clock },
     { type: "whiteNoise", node: null, audioNode: whiteNoise },

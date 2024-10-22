@@ -18,7 +18,6 @@ import StereoPanner from "./src/StereoPanner";
 import Visualiser from "./src/nodes/Visualiser";
 import Spectroscope from "./src/Spectroscope";
 import { analyser } from "./src/audioNodes/analyser";
-import Reverb from "./src/Reverb";
 import ADSR from "./src/ADSR";
 import Gauge from "./src/Gauge";
 import Clock from "./src/nodes/Clock";
@@ -78,7 +77,6 @@ export const webAudioNodes: PluginConfig = {
 
 export const baseNodes: PluginConfig = {
   components: [
-    Reverb,
     ADSR,
     Gauge,
     { type: "clock", node: Clock, audioNode: clock },
