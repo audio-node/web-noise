@@ -1,5 +1,5 @@
-import { WNAudioNode } from "@web-noise/core";
-import { ChannelMergerValues, ChannelMergerData } from "./types";
+import type { InputPort, WNAudioNode } from "@web-noise/core";
+import type { ChannelMergerData } from "./types";
 
 export interface ChannelMerger extends WNAudioNode {}
 
@@ -10,10 +10,10 @@ export const channelMerger = async (
   const merger = audioContext.createChannelMerger();
 
   return {
-    //@ts-ignore
-    inputs: Array.from({ length: merger.numberOfInputs }).reduce(
+    inputs: Array.from({ length: merger.numberOfInputs }).reduce<
+      Record<string, InputPort>
+    >(
       (acc, item, index) => ({
-        //@ts-ignore
         ...acc,
         [`input${index}`]: {
           port: [merger, index],
