@@ -3,16 +3,21 @@
  * @module sdk
  */
 
-
+// @TODO: export types in components
+import { Patch as PatchAudioNode } from "@web-noise/base-nodes/src/patchNodes/Patch/patchAudioNode";
+import patchPlugin from "@web-noise/base-nodes/src/patchNodes/Patch/base";
 import {
-  type Patch as PatchAudioNode,
-  patchNode,
-} from "../base-nodes/src/Patch/patchAudioNode";
-import type { EditorState, WNEdge, WNNode, EditorStoreState } from "../core/src/types";
+  type EditorState,
+  type TWNNode as WNNode,
+  type TWNEdge as WNEdge,
+  type EditorStoreState,
+} from "@web-noise/core";
 
 import { type Patch, setAudioNodeTypes } from "@web-noise/patch";
 import { flattenPorts, getPluginNodes } from "./helpers";
 import { plugins } from "./plugins";
+
+const { audioNode: patchNode } = patchPlugin;
 
 setAudioNodeTypes(getPluginNodes(plugins));
 

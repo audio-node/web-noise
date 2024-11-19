@@ -28,3 +28,5 @@ build-storybook.log
 
 .parcel-cache/
 dist/
+.crush/
+CRUSH.md

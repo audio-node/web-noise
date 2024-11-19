@@ -5,34 +5,34 @@
   "workspaces": [
     "packages/*"
   ],
+  "targets": {
+    "site": {
+      "source": "src/index.html",
+      "distDir": "./docs",
+      "publicUrl": "/web-noise",
+      "scopeHoist": false
+    }
+  },
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.16.7",
-    "@emotion/css": "^11.7.1",
-    "@emotion/react": "^11.8.2",
-    "@emotion/styled": "^11.8.1",
-    "@parcel/config-default": "^2.10.1",
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^12.0.0",
-    "@testing-library/user-event": "^13.2.1",
-    "@types/audioworklet": "^0.0.23",
-    "@types/jest": "^27.0.1",
-    "@types/node": "^16.7.13",
-    "@web-noise/base-nodes": "workspace:^",
-    "@web-noise/core": "workspace:^",
-    "@web-noise/fetch": "workspace:^",
-    "@web-noise/generator": "workspace:^",
-    "@web-noise/patch": "workspace:^",
+    "@emotion/css": "^11.11.2",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@web-noise/core": "*",
+    "@web-noise/base-nodes": "*",
+    "@web-noise/fetch": "*",
+    "@web-noise/generator": "*",
+    "@web-noise/patch": "*",
     "react": "^18.3.1",
     "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^18.3.1",
     "react-qr-code": "^2.0.8",
-    "typescript": "^4.7.4",
-    "web-vitals": "^2.1.0",
-    "worklet-loader": "^2.0.0"
+    "web-vitals": "^2.1.0"
   },
   "scripts": {
     "start": "parcel src/index.html",
-    "build": "parcel build src/index.html --public-url /web-noise --dist-dir ./docs --no-scope-hoist"
+    "build": "parcel build --target site",
+    "clean": "rm -rf node_modules .parcel-cache yarn.lock packages/**/dist/"
   },
   "eslintConfig": {
     "extends": [
@@ -75,6 +75,14 @@
     "prettier": "^3.0.3",
     "process": "^0.11.10",
     "ts-loader": "^9.3.1",
-    "webpack": "^5.69.1"
+    "@parcel/config-default": "^2.10.1",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^12.0.0",
+    "@testing-library/user-event": "^13.2.1",
+    "@types/audioworklet": "^0.0.23",
+    "@types/jest": "^27.0.1",
+    "@types/node": "^16.7.13",
+    "typescript": "^5.6.3",
+    "worklet-loader": "^2.0.0"
   }
 }

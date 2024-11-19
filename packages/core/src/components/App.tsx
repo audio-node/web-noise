@@ -1,4 +1,4 @@
-import { ThemeProvider, withTheme } from "@emotion/react";
+import { css, Global, ThemeProvider, withTheme } from "@emotion/react";
 import styled from "@emotion/styled";
 import { nanoid } from "nanoid";
 import { ReactNode, useEffect, useMemo, useState } from "react";
@@ -188,6 +188,66 @@ export const App = ({
 
   return (
     <ThemeProvider theme={theme || defaultTheme}>
+      <Global
+        styles={css`
+          :root {
+            --leva-colors-elevation1: #292d39;
+            --leva-colors-elevation2: #181c20;
+            --leva-colors-elevation3: #373c4b;
+            --leva-colors-accent1: #0066dc;
+            --leva-colors-accent2: #007bff;
+            --leva-colors-accent3: #3c93ff;
+            --leva-colors-highlight1: #535760;
+            --leva-colors-highlight2: #8c92a4;
+            --leva-colors-highlight3: #fefefe;
+            --leva-colors-vivid1: #ffcc00;
+            --leva-colors-folderWidgetColor: var(--leva-colors-highlight2);
+            --leva-colors-folderTextColor: var(--leva-colors-highlight3);
+            --leva-colors-toolTipBackground: var(--leva-colors-highlight3);
+            --leva-colors-toolTipText: var(--leva-colors-elevation2);
+            --leva-radii-xs: 2px;
+            --leva-radii-sm: 3px;
+            --leva-radii-lg: 10px;
+            --leva-space-xs: 3px;
+            --leva-space-sm: 6px;
+            --leva-space-md: 10px;
+            --leva-space-rowGap: 7px;
+            --leva-space-colGap: 7px;
+            --leva-fonts-mono:
+              ui-monospace, SFMono-Regular, Menlo, "Roboto Mono", monospace;
+            --leva-fonts-sans: system-ui, sans-serif;
+            --leva-fontSizes-root: 11px;
+            --leva-fontSizes-toolTip: var(--leva-fontSizes-root);
+            --leva-sizes-rootWidth: 280px;
+            --leva-sizes-controlWidth: 160px;
+            --leva-sizes-numberInputMinWidth: 38px;
+            --leva-sizes-scrubberWidth: 8px;
+            --leva-sizes-scrubberHeight: 16px;
+            --leva-sizes-rowHeight: 24px;
+            --leva-sizes-folderTitleHeight: 20px;
+            --leva-sizes-checkboxSize: 16px;
+            --leva-sizes-joystickWidth: 100px;
+            --leva-sizes-joystickHeight: 100px;
+            --leva-sizes-colorPickerWidth: var(--leva-sizes-controlWidth);
+            --leva-sizes-colorPickerHeight: 100px;
+            --leva-sizes-imagePreviewWidth: var(--leva-sizes-controlWidth);
+            --leva-sizes-imagePreviewHeight: 100px;
+            --leva-sizes-monitorHeight: 60px;
+            --leva-sizes-titleBarHeight: 39px;
+            --leva-shadows-level1: 0 0 9px 0 #00000088;
+            --leva-shadows-level2: 0 4px 14px #00000033;
+            --leva-borderWidths-root: 0px;
+            --leva-borderWidths-input: 1px;
+            --leva-borderWidths-focus: 1px;
+            --leva-borderWidths-hover: 1px;
+            --leva-borderWidths-active: 1px;
+            --leva-borderWidths-folder: 1px;
+            --leva-fontWeights-label: normal;
+            --leva-fontWeights-folder: normal;
+            --leva-fontWeights-button: normal;
+          }
+        `}
+      />
       <AppWrapper>
         <TabsContainer>
           {project.files.map((file, index) => (

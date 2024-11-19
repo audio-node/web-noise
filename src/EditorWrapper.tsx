@@ -1,8 +1,13 @@
-import { baseNodes, patchNodes, webAudioNodes } from "@web-noise/base-nodes";
+import {
+  baseNodes,
+  patchNodes,
+  webAudioNodes,
+  scriptNodes,
+} from "@web-noise/base-nodes";
 import { Editor, theme } from "@web-noise/core";
 import { EDITOR_DEFAULTS } from "@web-noise/core/src/components/App";
 import { ReactNode, useEffect, useMemo, useState } from "react";
-import SharePatch from "./SharePatch";
+// import SharePatch from "./SharePatch";
 
 const EditorWrapper = () => {
   const [project, setProject] = useState();
@@ -43,7 +48,7 @@ const EditorWrapper = () => {
       <Editor
         projectState={project}
         theme={theme}
-        plugins={[baseNodes, webAudioNodes, patchNodes]}
+        plugins={[baseNodes, webAudioNodes, patchNodes, scriptNodes]}
         editorContextMenu={
           [
             /*<span onClick={() => setShowSharePatch(true)}>Share patch</span>,*/
@@ -54,16 +59,7 @@ const EditorWrapper = () => {
     [theme, baseNodes, webAudioNodes, project],
   );
 
-  return (
-    <>
-      {EditorMemoised}
-      <SharePatch
-        theme={theme}
-        isOpen={showSharePatch}
-        closeMenu={() => setShowSharePatch(false)}
-      />
-    </>
-  );
+  return <>{EditorMemoised}</>;
 };
 
 export default EditorWrapper;

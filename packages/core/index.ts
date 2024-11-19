@@ -1,9 +1,9 @@
-import App from "./src/components/App";
-import Wire from "./src/components/Wire";
-import {
+export { default as Editor } from "./src/components/App";
+export { default as Wire } from "./src/components/Wire";
+export {
   WNNode,
   TitleBar,
-  WNNodeProps,
+  type WNNodeProps,
   PortsPanel,
   OutputPorts,
   OutputHandle,
@@ -11,14 +11,15 @@ import {
   InputHandle,
   Port,
 } from "./src/components/Node";
-import Modal from "./src/components/Modal";
-import EditableLabel from "./src/components/EditableLabel";
-import useAudioNode from "./src/hooks/useAudioNode";
-import useNode from "./src/hooks/useNode";
-import useTheme from "./src/hooks/useTheme";
-import useStore from "./src/store";
-import theme from "./src/theme";
-import type {
+export { default as Modal } from "./src/components/Modal";
+export { default as EditableLabel } from "./src/components/EditableLabel";
+export { default as useAudioNode } from "./src/hooks/useAudioNode";
+export { default as useNode } from "./src/hooks/useNode";
+export { default as useTheme } from "./src/hooks/useTheme";
+export { default as useStore } from "./src/store";
+export { default as theme } from "./src/theme";
+
+export type {
   WNAudioNode,
   CreateWNAudioNode,
   ControlPanelNodeProps,
@@ -32,43 +33,6 @@ import type {
   EditorState,
   Project,
   WNEdge as TWNEdge,
+  EditorStoreState,
 } from "./src/types";
-import type { Theme } from "./src/theme";
-
-export type {
-  WNAudioNode,
-  TWNNode,
-  TWNEdge,
-  WNNodeProps,
-  WNNodeData,
-  CreateWNAudioNode,
-  ControlPanelNodeProps,
-  ControlPanelNode,
-  Theme,
-  PluginConfig,
-  PluginComponent,
-  EditorState,
-  Project,
-  InputPort,
-  OutputPort,
-};
-
-export {
-  theme,
-  App as Editor,
-  Modal,
-  Wire,
-  WNNode,
-  TitleBar,
-  EditableLabel,
-  PortsPanel,
-  OutputPorts,
-  OutputHandle,
-  InputPorts,
-  InputHandle,
-  Port,
-  useAudioNode,
-  useNode,
-  useTheme,
-  useStore,
-};
+export type { Theme } from "./src/theme";

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 const useEditor = ({ value }: { value?: string }) => {
   const ref = useRef(null);
+  const isInitialised = useRef(false);
 
   const [currentValue, setCurrentValue] = useState(value);
 
@@ -12,14 +13,21 @@ const useEditor = ({ value }: { value?: string }) => {
   const [currentEditor, setCurrentEditor] =
     useState<MonacoEditor.editor.IStandaloneCodeEditor | null>(null);
 
-  const [currentMonaco, setCurrentMonaco] =
-    useState<typeof MonacoEditor | null>(null);
+  const [currentMonaco, setCurrentMonaco] = useState<
+    typeof MonacoEditor | null
+  >(null);
 
   useEffect(() => {
+    if (!ref.current) {
+      return;
+    }
+
     (async () => {
-      if (!ref.current) {
+      if (isInitialised.current) {
         return;
       }
+      isInitialised.current = true;
+
       loader.config({});
       const monaco = (await loader.init()) as typeof MonacoEditor;
 
@@ -35,10 +43,10 @@ const useEditor = ({ value }: { value?: string }) => {
         diagnosticCodesToIgnore: [1375, 2792, 2451],
       });
 
-      const uri = monaco.Uri.parse("file://model-" + (+new Date()));
+      const uri = monaco.Uri.parse("file://model-" + +new Date());
       const model = monaco.editor.createModel(value || "", "typescript", uri);
 
-      const editor = monaco.editor.create(ref.current, {
+      const editor = monaco.editor.create(ref.current!, {
         model,
         theme: "vs-dark",
         minimap: {
@@ -67,6 +75,14 @@ const useEditor = ({ value }: { value?: string }) => {
       setCurrentMonaco(monaco);
       setCurrentEditor(editor);
     })();
+
+    return () => {
+      if (!ref.current) {
+        return;
+      }
+      // @ts-ignore
+      ref.current.innerHTML = "";
+    };
   }, [ref]);
 
   return {

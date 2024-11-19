@@ -235,6 +235,7 @@ const ControlPanel = () => {
             }}
           >
             <ControlPanelBody theme={theme}>
+              {/* @ts-ignore */}
               <GridLayout
                 layout={layout}
                 className="layout"

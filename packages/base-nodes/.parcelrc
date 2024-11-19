@@ -1,0 +1,9 @@
+{
+  "extends": "../../.parcelrc",
+  "transformers": {
+    "worklet:*": ["...", "@parcel/transformer-inline-string"],
+  },
+  "optimizers": {
+    "worklet:*": ["...", "@parcel/optimizer-data-url"],
+  }
+}

@@ -1,7 +1,8 @@
+import { withTheme } from "@emotion/react";
 import styled from "@emotion/styled";
 import { Theme, useTheme } from "@web-noise/core";
 
-const SelectWrapper = styled.div<{ theme: Theme }>`
+const SelectWrapper = withTheme(styled.div<{ theme: Theme }>`
   display: flex;
   align-items: center;
   position: relative;
@@ -42,7 +43,7 @@ const SelectWrapper = styled.div<{ theme: Theme }>`
     background-color: ${({ theme }) => theme.colors.highlight3};
     clip-path: polygon(100% 0%, 0 0%, 50% 100%);
   }
-`;
+`);
 
 interface SelectOption {
   value: string;
@@ -56,10 +57,15 @@ interface SelectProps {
   onChange?: (value: SelectOption["value"]) => void;
 }
 
-const Select = ({ options, placeholder, value, onChange }: SelectProps) => {
-  const theme = useTheme();
+const Select = ({
+  options,
+  placeholder,
+  value,
+  onChange,
+  ...props
+}: SelectProps) => {
   return (
-    <SelectWrapper theme={theme}>
+    <SelectWrapper {...props}>
       <select
         value={value || ""}
         onChange={(event) => onChange?.(event.target.value)}
