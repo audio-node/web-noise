@@ -3,18 +3,13 @@ to: <%= dir %>/<%= componentFolder %>/audioNode.ts
 skip_if: <%= !hasAudioNode %>
 ---
 
-import { WNAudioNode } from "@web-noise/core";
-import { <%= componentName %>Values, <%= componentName %>Data } from "./types";
+import { <%= componentName %>Values, <%= componentName %>Data, <%= componentName %> } from "./types";
 
 <% if(hasWorklet){ -%>
 //@ts-ignore
 import <%= componentType %>WorkletUrl from "worklet:./worklet.ts";
 const <%= componentType %>Worklet = new URL(<%= componentType %>WorkletUrl, import.meta.url);
 <% } -%>
-
-export interface <%= componentName %> extends WNAudioNode {
-  setValues: (values?: <%= componentName %>Values) => void;
-}
 
 export const <%= componentType %> = async (
   audioContext: AudioContext,

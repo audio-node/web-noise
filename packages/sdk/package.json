@@ -4,7 +4,7 @@
   "main": "dist/main.js",
   "module": "dist/module.js",
   "types": "dist/types.d.ts",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "targets": {
     "main": {
       "isLibrary": true,
@@ -20,6 +20,11 @@
   "scripts": {
     "start": "parcel index.html",
     "build": "parcel build --no-scope-hoist"
+  },
+  "peerDependencies": {
+    "@web-noise/core": "*",
+    "@web-noise/base-nodes": "*",
+    "@web-noise/patch": "*"
   },
   "devDependencies": {
     "@parcel/compressor-brotli": "^2.12.0",

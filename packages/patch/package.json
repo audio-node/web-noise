@@ -2,12 +2,32 @@
   "name": "@web-noise/patch",
   "version": "0.0.1",
   "description": "",
+  "source": "index.ts",
+  "main": "dist/main.js",
+  "module": "dist/module.js",
+  "types": "dist/types.d.ts",
+  "targets": {
+    "main": {
+      "isLibrary": true,
+      "includeNodeModules": true,
+      "optimize": true
+    },
+    "module": {
+      "isLibrary": true,
+      "includeNodeModules": true,
+      "optimize": true
+    }
+  },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "parcel build --no-scope-hoist --no-cache"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "peerDependencies": {
+    "@web-noise/core": "*"
+  },
   "devDependencies": {
     "jest": "^29.3.1",
     "ts-jest": "^29.1.1",

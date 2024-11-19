@@ -8,6 +8,10 @@ import type {
 
 import { getAudioNodeType } from "./audioNodeTypes";
 
+//@ts-ignore
+import dumpNodeWorkletUrl from "worklet:./dumpNodeWorklet.ts";
+const dumpNodeWorklet = new URL(dumpNodeWorkletUrl, import.meta.url);
+
 interface AudioNodeLoadingState {
   loading: true;
   error: null;
@@ -61,11 +65,14 @@ type CreatePatch = (audioContext?: AudioContext) => Patch;
 
 const createPatch: CreatePatch = (audioContext = new AudioContext()) => {
   /*
-    * due to bug in chrome we need to kickstart worklet outputs
-    * by connecting it to an input
-    * */
-  const dumpNode = audioContext.createGain();
-  dumpNode.gain.value = 0;
+   * due to bug in chrome we need to kickstart worklet outputs
+   * by connecting it to an input
+   * */
+  const dumpNodePromise: Promise<AudioWorkletNode> = audioContext.audioWorklet
+    .addModule(dumpNodeWorklet)
+    .then(() => {
+      return new AudioWorkletNode(audioContext, "dump-node-processor");
+    });
 
   const audioNodes: AudioNodes = new Map();
   const audioConnections: AudioConnections = new Map();
@@ -100,6 +107,7 @@ const createPatch: CreatePatch = (audioContext = new AudioContext()) => {
     });
     try {
       const audioNode = await createNode(audioContext, data);
+      const dumpNode = await dumpNodePromise;
       audioNodes.set(id, {
         loading: false,
         error: null,
@@ -108,10 +116,15 @@ const createPatch: CreatePatch = (audioContext = new AudioContext()) => {
 
       // Kickstart worklet outputs
       Object.values(audioNode.outputs || []).forEach(({ port }) => {
-        if (!(port instanceof AudioWorkletNode)) {
+        if (!dumpNode) {
           return;
         }
-        port.connect(dumpNode);
+        if (port instanceof AudioWorkletNode) {
+          port.connect(dumpNode);
+        }
+        if (Array.isArray(port) && port[0] instanceof AudioWorkletNode) {
+          port[0].connect(dumpNode, port[1]);
+        }
       });
     } catch (error) {
       audioNodes.set(id, {

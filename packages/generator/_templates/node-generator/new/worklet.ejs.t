@@ -24,5 +24,7 @@ export class <%= componentName %>Processor extends AudioWorkletProcessor {
   }
 }
 
-//@ts-ignore
-registerProcessor("<%= componentType %>-processor", <%= componentName %>Processor);
+try {
+  //@ts-ignore
+  registerProcessor("<%= componentType %>-processor", <%= componentName %>Processor);
+} catch (e) {}

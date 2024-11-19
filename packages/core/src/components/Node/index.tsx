@@ -99,15 +99,12 @@ export type WNNodeProps<T = Record<string, unknown>> = NodeProps<
   T & WNNodeData
 >;
 
-interface TitleBarProps {
- className?: string;
- [key: string]: unknown
+export interface TitleBarProps {
+  className?: string;
+  [key: string]: unknown;
 }
 
-export const TitleBar = ({
-  className,
-  ...props
-}: TitleBarProps) => (
+export const TitleBar = ({ className, ...props }: TitleBarProps) => (
   <TitleBarInner
     {...props}
     className={[className, DRAG_HANDLE_CLASS].join(" ")}
