@@ -101,6 +101,9 @@
       "optimize": false
     }
   },
+  "files": [
+    "dist/*"
+  ],
   "scripts": {
     "test": "jest",
     "generate:node": "generate-node",
