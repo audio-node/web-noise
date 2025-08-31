@@ -1,6 +1,7 @@
 import type { StateCreator } from "zustand";
 import type { StoreState } from "../";
-import jsondiffpatch, { Delta, FilterContext } from "jsondiffpatch";
+import * as jsondiffpatch from "jsondiffpatch";
+import type { Delta, FilterContext } from "jsondiffpatch";
 
 export interface HistoryState {
   history: {
