@@ -1,5 +1,5 @@
 import {
-  baseNodes,
+  webNoiseNodes,
   patchNodes,
   webAudioNodes,
   scriptNodes,
@@ -48,7 +48,7 @@ const EditorWrapper = () => {
       <Editor
         projectState={project}
         theme={theme}
-        plugins={[baseNodes, webAudioNodes, patchNodes, scriptNodes]}
+        plugins={[webNoiseNodes, webAudioNodes, patchNodes, scriptNodes]}
         editorContextMenu={
           [
             /*<span onClick={() => setShowSharePatch(true)}>Share patch</span>,*/
@@ -56,7 +56,7 @@ const EditorWrapper = () => {
         }
       />
     ),
-    [theme, baseNodes, webAudioNodes, project],
+    [project],
   );
 
   return <>{EditorMemoised}</>;
