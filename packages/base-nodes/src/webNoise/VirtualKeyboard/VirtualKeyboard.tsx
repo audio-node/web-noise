@@ -8,7 +8,6 @@ import {
   Theme,
   useAudioNode,
 } from "@web-noise/core";
-import { Midi } from "@tonaljs/tonal";
 // @ts-ignore
 import { KeyboardShortcuts, MidiNumbers, Piano } from "react-piano";
 import "react-piano/dist/styles.css";
@@ -52,11 +51,9 @@ const VirtualKeyboard = ({
 
   const firstNote = config?.firstNote;
   const lastNote = useMemo(
-    () => Midi.toMidi((config?.firstNote || 0) + (config?.keyboardSize || 0)),
+    () => (config?.firstNote || 0) + (config?.keyboardSize || 0),
     [values],
   );
-
-  console.log(firstNote, lastNote, config);
 
   const keyboardShortcuts = useMemo(
     () =>
