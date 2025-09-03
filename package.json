@@ -32,6 +32,11 @@
   "scripts": {
     "start": "parcel src/index.html",
     "build": "parcel build --target site",
+    "build:core": "cd packages/core && yarn build",
+    "build:base-nodes": "cd packages/base-nodes && yarn build",
+    "build:patch": "cd packages/patch && yarn build",
+    "build:fetch": "cd packages/fetch && yarn build",
+    "build:packages": "yarn build:core && yarn build:base-nodes && yarn build:patch && yarn build:fetch",
     "clean": "rm -rf node_modules .parcel-cache yarn.lock packages/**/dist/"
   },
   "eslintConfig": {

@@ -1,6 +1,6 @@
 {
   "name": "@web-noise/base-nodes",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "source": "index.ts",
   "type": "module",
   "main": "dist/main.js",
@@ -27,14 +27,14 @@
       "source": "src/webAudio/index.ts",
       "distDir": "dist",
       "isLibrary": true,
-      "includeNodeModules": true,
+      "includeNodeModules": false,
       "optimize": false
     },
     "webAudioBase": {
       "source": "src/webAudio/base.ts",
       "distDir": "dist/base",
       "isLibrary": true,
-      "includeNodeModules": true,
+      "includeNodeModules": false,
       "optimize": false
     },
     "patch": {
@@ -55,42 +55,56 @@
       "source": "src/webNoise/index.ts",
       "distDir": "dist",
       "isLibrary": true,
-      "includeNodeModules": true,
+      "includeNodeModules": [
+        "phaze-vocoder"
+      ],
       "optimize": false
     },
     "webNoiseBase": {
       "source": "src/webNoise/base.ts",
       "distDir": "dist/base",
       "isLibrary": true,
-      "includeNodeModules": true,
+      "includeNodeModules": [
+        "phaze-vocoder"
+      ],
       "optimize": false
     },
     "scriptNodes": {
       "source": "src/scriptNodes/index.ts",
       "distDir": "dist",
       "isLibrary": true,
-      "includeNodeModules": true,
+      "includeNodeModules": [
+        "typescript"
+      ],
       "optimize": false
     },
     "scriptNodesBase": {
       "source": "src/scriptNodes/base.ts",
       "distDir": "dist/base",
       "isLibrary": true,
-      "includeNodeModules": true,
+      "includeNodeModules": [
+        "typescript"
+      ],
       "optimize": false
-    },
-    "main": {
-      "source": "index.ts",
-      "distDir": "dist",
-      "isLibrary": true,
-      "includeNodeModules": true,
-      "optimize": true
     },
     "module": {
       "source": "index.ts",
       "distDir": "dist",
       "isLibrary": true,
-      "includeNodeModules": true,
+      "includeNodeModules": [
+        "phaze-vocoder",
+        "typescript"
+      ],
+      "optimize": true
+    },
+    "main": {
+      "source": "index.ts",
+      "distDir": "dist",
+      "isLibrary": true,
+      "includeNodeModules": [
+        "phaze-vocoder",
+        "typescript"
+      ],
       "optimize": true
     },
     "types": {
@@ -101,8 +115,35 @@
       "optimize": false
     }
   },
+  "exports": {
+    ".": {
+      "import": "./dist/module.js",
+      "require": "./dist/main.js",
+      "types": "./dist/types.d.ts"
+    },
+    "./webAudio": {
+      "import": "./dist/webAudio.js",
+      "types": "./dist/webAudio.d.ts"
+    },
+    "./base/webAudio": {
+      "import": "./dist/base/webAudio.js",
+      "types": "./dist/base/webAudio.d.ts"
+    },
+    "./webNoise": {
+      "import": "./dist/webNoise.js",
+      "types": "./dist/webNoise.d.ts"
+    },
+    "./patch": {
+      "import": "./dist/patch.js",
+      "types": "./dist/patch.d.ts"
+    },
+    "./scriptNodes": {
+      "import": "./dist/scriptNodes.js",
+      "types": "./dist/scriptNodes.d.ts"
+    }
+  },
   "files": [
-    "dist/*"
+    "dist/**/*"
   ],
   "scripts": {
     "test": "jest",
@@ -142,13 +183,16 @@
     "ts-jest": "^29.1.0"
   },
   "peerDependencies": {
-    "@emotion/css": "^11.11.2",
-    "@emotion/react": "^11.11.1",
-    "@emotion/styled": "^11.11.0",
+    "@web-noise/fetch": "*",
+    "@web-noise/patch": "*",
+    "@web-noise/core": "*",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "@types/react": "^19.1.12",
     "@types/react-dom": "^19.1.9",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "@emotion/css": "^11.11.2",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0"
   }
 }

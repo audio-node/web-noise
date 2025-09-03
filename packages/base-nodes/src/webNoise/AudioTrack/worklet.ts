@@ -154,6 +154,7 @@ export class AudioTrackProcessor extends AudioWorkletProcessor {
       parameters;
     const [output, gateOutput, durationOutput, currentTimeOutput] = outputs;
 
+    // handle range change
     if (start[0] !== this.prevStart || end[0] !== this.prevEnd) {
       this.prevStart = start[0];
       this.prevEnd = end[0];
@@ -254,6 +255,7 @@ export class AudioTrackProcessor extends AudioWorkletProcessor {
         this.emitProgressEvent();
       },
     );
+
     currentTimeOutput.forEach((outputChannel, channelIndex) => {
       for (
         let sampleIndex = 0;
@@ -263,6 +265,7 @@ export class AudioTrackProcessor extends AudioWorkletProcessor {
         outputChannel[sampleIndex] = this.cursor / sampleRate;
       }
     });
+
     return true;
   }
 }

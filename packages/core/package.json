@@ -1,14 +1,19 @@
 {
   "name": "@web-noise/core",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "source": "index.ts",
   "main": "dist/main.js",
   "module": "dist/module.js",
   "types": "dist/types.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/module.js",
+      "require": "./dist/main.js",
+      "types": "./dist/types.d.ts"
+    }
+  },
   "files": [
-    "dist/main.js",
-    "dist/module.js",
-    "dist/types.d.ts"
+    "dist/**/*"
   ],
   "targets": {
     "main": {
@@ -17,7 +22,8 @@
         "@web-noise/fetch",
         "@web-noise/patch"
       ],
-      "optimize": true
+      "optimize": true,
+      "outputFormat": "commonjs"
     },
     "module": {
       "isLibrary": true,
@@ -25,7 +31,12 @@
         "@web-noise/fetch",
         "@web-noise/patch"
       ],
-      "optimize": true
+      "optimize": true,
+      "outputFormat": "esmodule"
+    },
+    "types": {
+      "source": "index.ts",
+      "isLibrary": true
     }
   },
   "dependencies": {
@@ -49,7 +60,7 @@
   },
   "scripts": {
     "test": "jest",
-    "build": "parcel build --no-scope-hoist"
+    "build": "parcel build --no-scope-hoist --no-cache"
   },
   "devDependencies": {
     "@types/jest": "^29.2.4",
