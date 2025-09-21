@@ -76,7 +76,7 @@ const Wave = ({
   const [range, setRange] = useState([0, 0]);
   const startWidth = range[0] * maxWidth;
   const endPosition = range[1] * maxWidth;
-  const endWidth = viewPortWidth - endPosition;
+  const endWidth = Math.max(viewPortWidth - endPosition, 0);
 
   const stageRef = useRef<SVGSVGElement>(null);
 

@@ -1,6 +1,6 @@
 {
   "name": "@web-noise/base-nodes",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "source": "index.ts",
   "type": "module",
   "main": "dist/main.js",
@@ -158,6 +158,7 @@
     "@tonaljs/tonal": "^4.10.0",
     "CanvasSpliner": "github:jonathanlurie/CanvasSpliner",
     "aubiojs": "^0.2.1",
+    "audiobuffer-to-wav": "^1.0.0",
     "fft-js": "^0.0.12",
     "js-file-download": "^0.4.12",
     "marked": "^4.1.1",
@@ -183,16 +184,16 @@
     "ts-jest": "^29.1.0"
   },
   "peerDependencies": {
-    "@web-noise/fetch": "*",
-    "@web-noise/patch": "*",
-    "@web-noise/core": "*",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
-    "@types/react": "^19.1.12",
-    "@types/react-dom": "^19.1.9",
-    "typescript": "^5.6.3",
     "@emotion/css": "^11.11.2",
     "@emotion/react": "^11.11.1",
-    "@emotion/styled": "^11.11.0"
+    "@emotion/styled": "^11.11.0",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9",
+    "@web-noise/core": "*",
+    "@web-noise/fetch": "*",
+    "@web-noise/patch": "*",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "typescript": "^5.6.3"
   }
 }

@@ -1,5 +1,5 @@
 import { useBroadcast } from "../../lib/useBroadcast";
-import { RangeEvent, TimeEvent, TrackEvent } from "./types";
+import { MessageData, RangeEvent, TimeEvent, TrackEvent } from "./types";
 
 interface TrackData {
   duration: AudioBuffer["duration"];
@@ -73,15 +73,40 @@ export class AudioTrackProcessor extends AudioWorkletProcessor {
     super();
     this.port.start();
 
-    this.port.onmessage = ({
-      data,
-    }: MessageEvent<{ name: "track"; data: TrackData }>) => {
+    this.port.onmessage = ({ data }: MessageEvent<MessageData>) => {
       if (data.name === "track") {
         this.data = data.data;
 
         this.broadcast<TrackEvent>({
           name: "track",
           data: data.data,
+        });
+      }
+
+      if (data.name === "data-chunk") {
+        if (!this.data) {
+          this.data = {
+            duration: 0,
+            length: 0,
+            sampleRate: sampleRate,
+            channelData: [new Float32Array(0), new Float32Array(0)],
+          };
+        }
+
+        this.data.channelData.forEach((channel, index) => {
+          const newChannel = data.data[index] || data.data[0];
+          const combined = new Float32Array(channel.length + newChannel.length);
+          combined.set(channel);
+          combined.set(newChannel, channel.length);
+          this.data!.channelData[index] = combined;
+        });
+
+        this.data.length = this.data.channelData[0].length;
+        this.data.duration = this.data.length / this.data.sampleRate;
+
+        this.broadcast<TrackEvent>({
+          name: "track",
+          data: this.data,
         });
       }
     };
