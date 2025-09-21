@@ -40,6 +40,7 @@ export interface AudioTrack extends WNAudioNode {
   loadBuffer: (url: string) => void;
   registerPort: (port: MessagePort) => MessagePort;
   addEventListener: StatusEventListener;
+  audioTrackWorklet: AudioWorkletNode;
 }
 
 export interface TimeEvent {
@@ -54,6 +55,11 @@ export interface TrackEvent {
   data: TrackData;
 }
 
+export interface ChunkEvent {
+  name: "data-chunk";
+  data: [Float32Array, Float32Array];
+}
+
 export interface RangeEvent {
   name: "range";
   data: [number, number];
@@ -63,4 +69,5 @@ export type MessageData =
   | { name: "buffer"; buffer: AudioBuffer; duration: number }
   | TrackEvent
   | TimeEvent
-  | RangeEvent;
+  | RangeEvent
+  | ChunkEvent;

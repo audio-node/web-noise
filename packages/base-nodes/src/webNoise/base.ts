@@ -28,6 +28,7 @@ import MidiInput from "./MidiInput/base";
 import RandomSequencer from "./RandomSequencer/base";
 import Sequencer from "./Sequencer/base";
 import VirtualKeyboard from "./VirtualKeyboard/base";
+import AudioRecorder from "./AudioRecorder/base";
 import PassThrough from "./PassThrough/base";
 
 export const webNoiseNodes: PluginConfig = {
@@ -60,6 +61,7 @@ export const webNoiseNodes: PluginConfig = {
     Distortion,
     Limiter,
     AudioOutput,
+    AudioRecorder,
     PassThrough,
   ],
   name: "Web Noise base nodes",
