@@ -1,4 +1,4 @@
-import { WNAudioNode } from "@web-noise/core";
+import { PortType, WNAudioNode } from "@web-noise/core";
 
 export interface Gain extends WNAudioNode {}
 
@@ -10,13 +10,18 @@ export const gain = async (audioContext: AudioContext): Promise<Gain> => {
     inputs: {
       in: {
         port: gain,
+        type: PortType.Any,
       },
       gain: {
         port: gain.gain,
+        type: PortType.Number,
+        range: [gain.gain.minValue, gain.gain.maxValue],
+        defaultValue: gain.gain.value,
       },
     },
     outputs: {
       out: {
+        type: PortType.Any,
         port: gain,
       },
     },

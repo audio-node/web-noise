@@ -1,4 +1,4 @@
-import { WNAudioNode } from "@web-noise/core";
+import { PortType, WNAudioNode } from "@web-noise/core";
 
 export const stereoPanner = async (
   audioContext: AudioContext,
@@ -9,14 +9,19 @@ export const stereoPanner = async (
     inputs: {
       input: {
         port: panner,
+        type: PortType.Audio,
       },
       pan: {
         port: panner.pan,
+        type: PortType.Number,
+        range: [panner.pan.minValue, panner.pan.maxValue],
+        defaultValue: panner.pan.value,
       },
     },
     outputs: {
       output: {
         port: panner,
+        type: PortType.Audio,
       },
     },
   };

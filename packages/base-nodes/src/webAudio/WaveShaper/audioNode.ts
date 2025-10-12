@@ -1,4 +1,4 @@
-import { WNAudioNode } from "@web-noise/core";
+import { PortType, WNAudioNode } from "@web-noise/core";
 
 import { WaveShaperValues, WaveShaperData } from "./types";
 import {
@@ -31,11 +31,13 @@ export const waveShaper = async (
     inputs: {
       input: {
         port: waveShaper,
+        type: PortType.Audio,
       },
     },
     outputs: {
       output: {
         port: waveShaper,
+        type: PortType.Audio,
       },
     },
     setValues: ({ points, splineType, oversample } = {}) => {

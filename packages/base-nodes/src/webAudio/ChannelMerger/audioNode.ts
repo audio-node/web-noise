@@ -1,4 +1,4 @@
-import type { InputPort, WNAudioNode } from "@web-noise/core";
+import { PortType, type InputPort, type WNAudioNode } from "@web-noise/core";
 import type { ChannelMergerData } from "./types";
 
 export interface ChannelMerger extends WNAudioNode {}
@@ -17,6 +17,7 @@ export const channelMerger = async (
         ...acc,
         [`input${index}`]: {
           port: [merger, index],
+          type: PortType.Audio,
         },
       }),
       {},
@@ -24,6 +25,7 @@ export const channelMerger = async (
     outputs: {
       output: {
         port: merger,
+        type: PortType.Audio,
       },
     },
   };

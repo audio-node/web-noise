@@ -1,4 +1,4 @@
-import type { OutputPort, WNAudioNode } from "@web-noise/core";
+import { PortType, type OutputPort, type WNAudioNode } from "@web-noise/core";
 import type { ChannelSplitterData } from "./types";
 
 export interface ChannelSplitter extends WNAudioNode {}
@@ -13,6 +13,7 @@ export const channelSplitter = async (
     inputs: {
       input: {
         port: splitter,
+        type: PortType.Audio,
       },
     },
     outputs: Array.from({ length: splitter.numberOfOutputs }).reduce<
@@ -22,6 +23,7 @@ export const channelSplitter = async (
         ...acc,
         [`output${index}`]: {
           port: [splitter, index],
+          type: PortType.Audio,
         },
       }),
       {},

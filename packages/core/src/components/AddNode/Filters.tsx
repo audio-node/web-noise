@@ -48,6 +48,7 @@ const FiltersWrapper = styled.div<{ theme: Theme }>`
   padding: 0.6rem;
   gap: 0.6rem;
   border-right: 1px solid ${({ theme }) => theme.colors.elevation3};
+  min-width: 14rem;
 `;
 
 const PluginName = styled.label<{ theme: Theme }>`

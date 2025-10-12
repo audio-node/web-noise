@@ -1,4 +1,4 @@
-import { WNAudioNode } from "@web-noise/core";
+import { PortType, WNAudioNode } from "@web-noise/core";
 import { OscillatorValues, OscillatorData } from "./types";
 
 export interface Oscillator extends WNAudioNode {
@@ -7,23 +7,31 @@ export interface Oscillator extends WNAudioNode {
 
 export const oscillator = async (
   audioContext: AudioContext,
-  data?: OscillatorData
+  data?: OscillatorData,
 ): Promise<Oscillator> => {
   const oscillator = audioContext.createOscillator();
   oscillator.frequency.value = 0;
   oscillator.start();
+
   return {
     inputs: {
       frequency: {
         port: oscillator.frequency,
+        type: PortType.Number,
+        range: [oscillator.frequency.minValue, oscillator.frequency.maxValue],
+        defaultValue: oscillator.frequency.value,
       },
       detune: {
         port: oscillator.detune,
+        type: PortType.Number,
+        range: [oscillator.detune.minValue, oscillator.detune.maxValue],
+        defaultValue: oscillator.detune.value,
       },
     },
     outputs: {
       out: {
         port: oscillator,
+        type: PortType.Any,
       },
     },
     destroy: () => {

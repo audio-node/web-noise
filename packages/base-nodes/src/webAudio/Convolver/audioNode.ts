@@ -1,4 +1,4 @@
-import { WNAudioNode } from "@web-noise/core";
+import { PortType, WNAudioNode } from "@web-noise/core";
 import { ConvolverValues, ConvolverData } from "./types";
 import loadAudioBuffer from "../../lib/loadAudioBuffer";
 import { addBroadcastListener, useBroadcast } from "../../lib/useBroadcast";
@@ -44,11 +44,13 @@ export const convolver = async (
     inputs: {
       input: {
         port: convolverNode,
+        type: PortType.Audio,
       },
     },
     outputs: {
       output: {
         port: convolverNode,
+        type: PortType.Audio,
       },
     },
     setValues: ({ url } = {}) => {

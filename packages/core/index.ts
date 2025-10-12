@@ -19,6 +19,8 @@ export { default as useTheme } from "./src/hooks/useTheme";
 export { default as useStore } from "./src/store";
 export { default as theme } from "./src/theme";
 
+export { PortType } from "./src/types";
+
 export type {
   WNAudioNode,
   CreateWNAudioNode,
