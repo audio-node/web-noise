@@ -1,13 +1,28 @@
 import { Edge, Node, Viewport } from "reactflow";
 import { WNNodeProps } from "./components/Node";
 
+export enum PortType {
+  Gate = "gate",
+  Number = "number",
+  Audio = "audio",
+  Any = "any",
+}
+
 export type AudioNodeChannel = [AudioNode, number];
 
-export interface InputPort {
+export interface AudioPort {
+  aliases?: string[];
+  type?: PortType | PortType[];
+  range?: [number, number];
+  defaultValue?: number;
+  mono?: boolean;
+}
+
+export interface InputPort extends AudioPort {
   port: AudioNode | AudioNodeChannel | AudioParam;
 }
 
-export interface OutputPort {
+export interface OutputPort extends AudioPort {
   port: AudioNode | AudioNodeChannel;
 }
 
@@ -97,7 +112,13 @@ export interface PluginComponent {
   defaultConfig?: any;
   resizable?: boolean;
   description?: string;
+  portsDescription?: {
+    inputs?: Record<string, string>;
+    outputs?: Record<string, string>;
+  };
   name?: string;
+  info?: string;
+  tags?: string[];
 }
 
 export interface PluginConfig {

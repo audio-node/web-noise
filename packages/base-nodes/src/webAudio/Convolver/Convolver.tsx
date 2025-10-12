@@ -5,8 +5,22 @@ import useMessageChannel from "../../lib/hooks/useMessageChannel";
 import Config from "./Config";
 import { ConvolverData } from "./types";
 import Wave from "../../webNoise/AudioTrack/Wave";
+import { withTheme } from "@emotion/react";
 
-const ConvolverWrapper = styled.div<{ theme: Theme }>`
+const ConvolverConfigWrapper = withTheme(styled.div<{ theme: Theme }>`
+  height: 100%;
+  width: 100%;
+  display: flex;
+  > * {
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+`);
+
+const ConvolverWrapper = withTheme(styled.div<{ theme: Theme }>`
   position: relative;
   height: 100%;
   width: 100%;
@@ -17,7 +31,7 @@ const ConvolverWrapper = styled.div<{ theme: Theme }>`
     right: 0;
     margin: auto;
   }
-`;
+`);
 
 export interface ConvolverProps {
   node: WNNodeProps<ConvolverData>;
@@ -51,11 +65,15 @@ const Convolver = ({
   const { url } = data.values || {};
 
   if (!url) {
-    return <Config {...props} />;
+    return (
+      <ConvolverConfigWrapper>
+        <Config {...props} />
+      </ConvolverConfigWrapper>
+    );
   }
 
   return (
-    <ConvolverWrapper theme={theme}>
+    <ConvolverWrapper>
       {channel ? (
         <Wave
           port={channel.port2}

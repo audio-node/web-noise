@@ -1,6 +1,6 @@
 {
   "name": "@web-noise/base-nodes",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "source": "index.ts",
   "type": "module",
   "main": "dist/main.js",
@@ -20,7 +20,7 @@
       "source": "base.ts",
       "distDir": "dist/base",
       "isLibrary": true,
-      "includeNodeModules": true,
+      "includeNodeModules": false,
       "optimize": false
     },
     "webAudio": {

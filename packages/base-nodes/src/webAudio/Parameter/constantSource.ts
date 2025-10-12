@@ -1,4 +1,4 @@
-import { WNAudioNode } from "@web-noise/core";
+import { PortType, WNAudioNode } from "@web-noise/core";
 
 export interface ConstantSourceValues {
   value?: number;
@@ -18,11 +18,15 @@ export const constantSource = (audioContext: AudioContext): ConstantSource => {
     inputs: {
       offset: {
         port: constantSource.offset,
+        type: PortType.Number,
+        range: [constantSource.offset.minValue, constantSource.offset.maxValue],
+        defaultValue: constantSource.offset.value,
       },
     },
     outputs: {
       out: {
         port: constantSource,
+        type: PortType.Number,
       },
     },
     constantSource,

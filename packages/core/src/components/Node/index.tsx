@@ -1,7 +1,10 @@
 import styled from "@emotion/styled";
 import { Resizable } from "re-resizable";
-import { useMemo, useState } from "react";
-import { MdSettings as SettingsIcon } from "react-icons/md";
+import { ComponentProps, useMemo, useState } from "react";
+import {
+  MdSettings as SettingsIcon,
+  MdInfoOutline as InfoIcon,
+} from "react-icons/md";
 import { Handle, HandleProps, NodeProps, Position } from "reactflow";
 import { DRAG_HANDLE_CLASS } from "../../constants";
 import useAudioNode from "../../hooks/useAudioNode";
@@ -9,8 +12,9 @@ import useNode from "../../hooks/useNode";
 import useTheme from "../../hooks/useTheme";
 import useStore from "../../store";
 import { Theme } from "../../theme";
-import { WNNodeData } from "../../types";
+import { AudioPort, PortType, WNNodeData } from "../../types";
 import EditableLabel from "../EditableLabel";
+import NodeInfoModal from "../NodeInfoModal";
 
 const NodeWrapper = styled.div`
   background-color: var(--leva-colors-elevation1);
@@ -25,6 +29,16 @@ const NodeErrorWrapper = styled(NodeWrapper)`
 `;
 
 const SettingsIconWrapper = styled(SettingsIcon)`
+  font-size: 1.2rem;
+  opacity: 0.4;
+  width: 1rem;
+  &:hover {
+    opacity: 1;
+    cursor: pointer;
+  }
+`;
+
+const InfoIconWrapper = styled(InfoIcon)`
   font-size: 1.2rem;
   opacity: 0.4;
   width: 1rem;
@@ -79,21 +93,52 @@ export const Port = styled.div`
   padding: 5px 10px;
 `;
 
-const StyledInputHandle = styled(Handle)`
+const portColors = {
+  [PortType.Audio]: "#4ade80", // vibrant green
+  [PortType.Gate]: "#c084fc", // rich purple
+  [PortType.Number]: "#38bdf8", // bright blue
+  [PortType.Any]: "#fb923c", // warm orange
+};
+
+const StyledInputHandle = styled(Handle, {
+  shouldForwardProp: (prop) => prop !== "portType",
+})<{ portType?: AudioPort["type"] }>`
   left: -3px;
+  background: ${(props) => {
+    if (!props.portType) return "none";
+    if (Array.isArray(props.portType)) {
+      const colors = props.portType.map((type) => portColors[type]);
+      return `linear-gradient(0.25turn, ${colors.join(", ")});`;
+    } else {
+      return portColors[props.portType];
+    }
+  }};
 `;
 
-export const InputHandle = (props: Partial<HandleProps>) => (
+export const InputHandle = ({
+  ...props
+}: Partial<HandleProps & ComponentProps<typeof StyledInputHandle>>) => (
   <StyledInputHandle {...props} type="target" position={Position.Left} />
 );
 
-export const StyledOutputHandle = styled(Handle)`
+export const StyledOutputHandle = styled(Handle, {
+  shouldForwardProp: (prop) => prop !== "portType",
+})<{ portType?: AudioPort["type"] }>`
   right: -3px;
+  background: ${(props) => {
+    if (!props.portType) return "none";
+    if (Array.isArray(props.portType)) {
+      const colors = props.portType.map((type) => portColors[type]);
+      return `linear-gradient(0.25turn, ${colors.join(", ")});`;
+    } else {
+      return portColors[props.portType];
+    }
+  }};
 `;
 
-export const OutputHandle = (props: Partial<HandleProps>) => (
-  <StyledOutputHandle {...props} type="source" position={Position.Right} />
-);
+export const OutputHandle = (
+  props: Partial<HandleProps & ComponentProps<typeof StyledOutputHandle>>,
+) => <StyledOutputHandle {...props} type="source" position={Position.Right} />;
 
 export type WNNodeProps<T = Record<string, unknown>> = NodeProps<
   T & WNNodeData
@@ -115,10 +160,14 @@ export interface WNNodeParameters extends NodeProps {
   children?: any;
 }
 
+const useNodeManifest = (type: string) => {
+  const data = useStore((store) => store.nodesConfiguration[type]);
+
+  return data;
+};
+
 const useConfigNode = (type: string) => {
-  const ConfigNode = useStore(
-    (store) => store.nodesConfiguration[type]?.configNode,
-  );
+  const { configNode: ConfigNode } = useNodeManifest(type);
 
   return {
     ConfigNode,
@@ -130,6 +179,10 @@ export const WNNode = (props: WNNodeParameters) => {
   const theme = useTheme();
   const getNode = useStore(({ getNode }) => getNode);
   const nodesConfiguration = useStore((store) => store.nodesConfiguration);
+
+  const [isInfoModalShown, setIsInfoModalShown] = useState(false);
+
+  const { info } = useNodeManifest(props.type);
 
   const isResizeable = useMemo(
     () => nodesConfiguration[props.type].resizable ?? false,
@@ -186,6 +239,9 @@ export const WNNode = (props: WNNodeParameters) => {
   return (
     <NodeWrapper>
       <TitleBar>
+        {info && (
+          <InfoIconWrapper onClickCapture={() => setIsInfoModalShown(true)} />
+        )}
         <EditableLabel
           value={data?.label ?? "No Name"}
           onChange={updateNodeLabel}
@@ -201,7 +257,7 @@ export const WNNode = (props: WNNodeParameters) => {
           {inputs
             ? Object.keys(inputs).map((key, index) => (
                 <Port key={index}>
-                  <InputHandle id={key} />
+                  <InputHandle id={key} portType={inputs[key].type} />
                   <span>{key}</span>
                 </Port>
               ))
@@ -211,7 +267,7 @@ export const WNNode = (props: WNNodeParameters) => {
           {outputs
             ? Object.keys(outputs).map((key, index) => (
                 <Port key={index}>
-                  <OutputHandle id={key} />
+                  <OutputHandle id={key} portType={outputs[key].type} />
                   <span>{key}</span>
                 </Port>
               ))
@@ -248,6 +304,12 @@ export const WNNode = (props: WNNodeParameters) => {
       ) : (
         children
       )}
+      <NodeInfoModal
+        isOpen={isInfoModalShown}
+        type={props.type}
+        onClose={() => setIsInfoModalShown(false)}
+        node={audioNode.node}
+      />
     </NodeWrapper>
   );
 };

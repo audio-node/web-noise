@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { type ReactNode, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { MdClose as CloseIcon } from "react-icons/md";
 import useTheme from "../hooks/useTheme";
 import { Theme } from "../theme";
@@ -54,7 +55,7 @@ const Modal = ({ children, onClose, ...props }: ModalProps) => {
     };
   }, [onClose]);
 
-  return (
+  return createPortal(
     <ModalOuter theme={theme} onClick={onClose}>
       <ModalInner
         {...props}
@@ -66,7 +67,8 @@ const Modal = ({ children, onClose, ...props }: ModalProps) => {
         {children}
         <ModalCloser theme={theme} onClick={onClose} />
       </ModalInner>
-    </ModalOuter>
+    </ModalOuter>,
+    document.body,
   );
 };
 

@@ -28,7 +28,8 @@ const webAudioNodes: PluginConfig = {
     ChannelSplitter,
     ChannelMerger,
   ],
-  name: "Web Audio Api base nodes",
+  name: "Web Audio Api nodes",
+  description: "Basic nodes provided by the Web Audio API",
 };
 
 export default webAudioNodes;

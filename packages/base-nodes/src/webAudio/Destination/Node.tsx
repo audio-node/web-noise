@@ -25,7 +25,7 @@ const DestinationNode = (props: DestinationProps) => {
         audioNode={node}
         updateNodeValues={updateNodeValues}
       />
-      <InputHandle id="in" />
+      <InputHandle id="in" portType={node?.inputs?.in.type} />
     </DestinationNodeWrapper>
   );
 };
