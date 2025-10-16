@@ -1,4 +1,5 @@
-import { RecorderData, Recorder } from "./types";
+import { PortType } from "@web-noise/core/constants";
+import { RecorderData, Recorder, RecorderParameters } from "./types";
 
 //@ts-ignore
 import recorderWorkletUrl from "worklet:./worklet.ts";
@@ -23,8 +24,8 @@ export const audioRecorder = async (
     audioTrack.setValues({ src: data.values.src });
   }
 
-  const record = recorderNode.parameters.get("record")!;
-  const erase = recorderNode.parameters.get("erase")!;
+  const record = recorderNode.parameters.get(RecorderParameters.Record)!;
+  const erase = recorderNode.parameters.get(RecorderParameters.Erase)!;
 
   recorderNode.port.start();
 
@@ -41,12 +42,19 @@ export const audioRecorder = async (
     inputs: {
       input: {
         port: recorderNode,
+        type: PortType.Audio,
       },
       record: {
         port: record,
+        type: PortType.Gate,
+        range: [record.minValue, record.maxValue],
+        defaultValue: record.value,
       },
       erase: {
         port: erase,
+        type: PortType.Gate,
+        range: [erase.minValue, erase.maxValue],
+        defaultValue: erase.value,
       },
       play: audioTrack.inputs!.gate,
       // @TODO: iterate over predefined inputs

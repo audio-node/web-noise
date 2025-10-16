@@ -1,4 +1,4 @@
-import { WNNodeProps, WNNodeData, WNAudioNode } from "@web-noise/core";
+import type { WNNodeProps, WNNodeData, WNAudioNode } from "@web-noise/core";
 
 export interface AudioInputValues {
   currentInput?: MediaDeviceInfo["deviceId"] | null;

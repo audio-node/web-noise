@@ -1,4 +1,4 @@
-import { WNNodeProps, WNNodeData } from "@web-noise/core";
+import type { WNNodeProps, WNNodeData } from "@web-noise/core";
 
 export interface SliderValues {
   value?: number;
@@ -16,4 +16,4 @@ export interface SliderConfig {
 
 export type SliderData = WNNodeData<SliderValues, SliderConfig>;
 
-export interface SliderProps extends WNNodeProps<SliderData> {};
+export interface SliderProps extends WNNodeProps<SliderData> {}

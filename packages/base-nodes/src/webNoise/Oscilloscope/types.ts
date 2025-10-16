@@ -1,4 +1,8 @@
-import { WNNodeProps, WNNodeData } from "@web-noise/core";
+import type { WNNodeProps, WNNodeData } from "@web-noise/core";
+
+export enum OscilloscopeParameters {
+  FFTSize = "fftSize",
+}
 
 export type AnalyserEventHandler = (event: { data: Float32Array }) => void;
 

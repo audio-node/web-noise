@@ -1,7 +1,7 @@
-import { PitchWorkletParameters } from "./types";
+import { FrequencyMeterParameters } from "./types";
 import { createUseGetPitch, PITCH_METHODS } from "./useGetPitch";
 
-type Parameters = { [key in PitchWorkletParameters]: Float32Array };
+type Parameters = { [key in FrequencyMeterParameters]: Float32Array };
 
 type Port = Float32Array[];
 
@@ -11,12 +11,16 @@ export class FrequencyMeterProcessor extends AudioWorkletProcessor {
   static get parameterDescriptors() {
     return [
       {
-        name: PitchWorkletParameters.method,
+        name: FrequencyMeterParameters.Method,
         minValue: 0,
         maxValue: PITCH_METHODS.length - 1,
       },
-      { name: PitchWorkletParameters.fftSize },
-      { name: PitchWorkletParameters.hopSize },
+      {
+        name: FrequencyMeterParameters.FFTSize,
+      },
+      {
+        name: FrequencyMeterParameters.HopSize,
+      },
     ];
   }
 
@@ -28,9 +32,9 @@ export class FrequencyMeterProcessor extends AudioWorkletProcessor {
     }
 
     const getPitch = this.useGetPitch({
-      method: parameters[PitchWorkletParameters.method][0],
-      bufferSize: parameters[PitchWorkletParameters.fftSize][0],
-      hopSize: parameters[PitchWorkletParameters.hopSize][0],
+      method: parameters[FrequencyMeterParameters.Method][0],
+      bufferSize: parameters[FrequencyMeterParameters.FFTSize][0],
+      hopSize: parameters[FrequencyMeterParameters.HopSize][0],
       sampleRate,
     });
 

@@ -1,7 +1,6 @@
 import { type PluginConfig } from "@web-noise/core";
 
 import ADSR from "./ADSR";
-import AudioInputPlugin from "./AudioInput";
 import AudioOutput from "./AudioOutput";
 import Distortion from "./Distortion";
 import FrequencyMeter from "./FrequencyMeter";
@@ -53,7 +52,6 @@ export const webNoiseNodes: PluginConfig = {
     MidiInput,
     DataRecorder,
     MidiNote,
-    AudioInputPlugin,
     FrequencyMeter,
     Quantizer,
     Scale,
@@ -65,6 +63,8 @@ export const webNoiseNodes: PluginConfig = {
     PassThrough,
   ],
   name: "Web Noise base nodes",
+  description:
+    "Advanced synthesis tools, effects processors, sequencers, and utilities for modular audio production",
 };
 
 export default webNoiseNodes;

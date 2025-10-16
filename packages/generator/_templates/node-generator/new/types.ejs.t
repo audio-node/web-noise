@@ -1,7 +1,7 @@
 ---
 to: <%= dir %>/<%= componentFolder %>/types.ts
 ---
-import { WNNodeProps, WNNodeData, WNAudioNode } from "@web-noise/core";
+import type { WNNodeProps, WNNodeData, WNAudioNode } from "@web-noise/core";
 
 export interface <%= componentName %>Values {
   value?: number;

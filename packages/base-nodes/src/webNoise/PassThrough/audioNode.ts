@@ -1,4 +1,5 @@
 import type { WNAudioNode } from "@web-noise/core";
+import { PortType } from "@web-noise/core/constants";
 
 export interface PassThrough extends WNAudioNode {}
 
@@ -12,11 +13,13 @@ export const passThrough = async (
     inputs: {
       in: {
         port: passThroughNode,
+        type: PortType.Any,
       },
     },
     outputs: {
       out: {
         port: passThroughNode,
+        type: PortType.Any,
       },
     },
   };

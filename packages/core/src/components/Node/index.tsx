@@ -7,13 +7,13 @@ import {
   MdInfoOutline as InfoIcon,
 } from "react-icons/md";
 import { Handle, HandleProps, NodeProps, Position } from "reactflow";
-import { DRAG_HANDLE_CLASS } from "../../constants";
+import { DRAG_HANDLE_CLASS, PortType } from "../../constants";
 import useAudioNode from "../../hooks/useAudioNode";
 import useNode from "../../hooks/useNode";
 import useTheme from "../../hooks/useTheme";
 import useStore from "../../store";
 import { Theme } from "../../theme";
-import { AudioPort, PortType, WNNodeData } from "../../types";
+import { AudioPort, WNNodeData } from "../../types";
 import EditableLabel from "../EditableLabel";
 import NodeInfoModal from "../NodeInfoModal";
 

@@ -1,3 +1,5 @@
+import type { AudioPort } from "@web-noise/core";
+import { PortType } from "@web-noise/core/constants";
 import { ScriptNode, ScriptNodeValues, ScriptNodeData } from "../types";
 
 //@ts-ignore
@@ -31,45 +33,76 @@ const scriptNode = async (
   const { expression } = data?.values || {};
   expression && runExpression(expression);
 
+  const A = scriptNode.parameters.get("A")!;
+  const B = scriptNode.parameters.get("B")!;
+  const C = scriptNode.parameters.get("C")!;
+  const X = scriptNode.parameters.get("X")!;
+  const Y = scriptNode.parameters.get("Y")!;
+  const Z = scriptNode.parameters.get("Z")!;
+
   return {
     outputs: {
       output0: {
         port: [scriptNode, 0],
+        type: PortType.Audio,
       },
       output1: {
         port: [scriptNode, 1],
+        type: PortType.Audio,
       },
       output2: {
         port: [scriptNode, 2],
+        type: PortType.Audio,
       },
       output3: {
         port: [scriptNode, 3],
+        type: PortType.Audio,
       },
     },
     inputs: {
       A: {
-        port: scriptNode.parameters.get("A")!,
+        port: A,
+        range: [A.minValue, A.maxValue],
+        defaultValue: A.value,
+        type: PortType.Number,
       },
       B: {
-        port: scriptNode.parameters.get("B")!,
+        port: B,
+        range: [B.minValue, B.maxValue],
+        defaultValue: B.value,
+        type: PortType.Number,
       },
       C: {
-        port: scriptNode.parameters.get("C")!,
+        port: C,
+        range: [C.minValue, C.maxValue],
+        defaultValue: C.value,
+        type: PortType.Number,
       },
       X: {
-        port: scriptNode.parameters.get("X")!,
+        port: X,
+        range: [X.minValue, X.maxValue],
+        defaultValue: X.value,
+        type: PortType.Number,
       },
       Y: {
-        port: scriptNode.parameters.get("Y")!,
+        port: Y,
+        range: [Y.minValue, Y.maxValue],
+        defaultValue: Y.value,
+        type: PortType.Number,
       },
       Z: {
-        port: scriptNode.parameters.get("Z")!,
+        port: Z,
+        range: [Z.minValue, Z.maxValue],
+        defaultValue: Z.value,
+        type: PortType.Number,
       },
       input0: {
         port: [scriptNode, 0],
+        type: PortType.Any,
       },
       input1: {
         port: [scriptNode, 1],
+        type: PortType.Any,
       },
     },
     channel: scriptNode.port,

@@ -1,5 +1,10 @@
-import { WNNodeProps, WNNodeData, WNAudioNode } from "@web-noise/core";
+import type { WNNodeProps, WNNodeData, WNAudioNode } from "@web-noise/core";
 import { AudioTrack } from "../AudioTrack/types";
+
+export enum RecorderParameters {
+  Record = "record",
+  Erase = "erase",
+}
 
 export interface RecorderValues {
   src?: string;

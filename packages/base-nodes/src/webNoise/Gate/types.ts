@@ -1,4 +1,4 @@
-import { WNNodeProps } from "@web-noise/core";
+import type { WNNodeProps } from "@web-noise/core";
 
 export interface GateValues {
   isOpened?: boolean;

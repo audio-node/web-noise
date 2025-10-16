@@ -1,3 +1,4 @@
+import { PortType } from "@web-noise/core/constants";
 import EventBus from "../../lib/EventBus";
 import { MidiInputData, MidiInput } from "./types";
 
@@ -62,12 +63,21 @@ export const midiInput = async (
     outputs: {
       command: {
         port: [midiInputNode, 0],
+        type: PortType.Number,
+        range: [144, 224],
+        defaultValue: 144,
       },
       note: {
         port: [midiInputNode, 1],
+        type: PortType.Number,
+        range: [0, 127],
+        defaultValue: 0,
       },
       velocity: {
         port: [midiInputNode, 2],
+        type: PortType.Number,
+        range: [0, 127],
+        defaultValue: 0,
       },
     },
     midiInputs,

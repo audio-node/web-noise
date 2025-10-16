@@ -1,4 +1,5 @@
-import { WNNodeData, WNAudioNode } from "@web-noise/core";
+import type { WNNodeData, WNAudioNode } from "@web-noise/core";
+import { PortType } from "@web-noise/core/constants";
 import { SelectValues, SelectConfig, SelectData } from "./types";
 
 export interface Select extends WNAudioNode {
@@ -8,7 +9,7 @@ export interface Select extends WNAudioNode {
 
 export const select = async (
   audioContext: AudioContext,
-  data?: SelectData
+  data?: SelectData,
 ): Promise<Select> => {
   let currentOptions = data?.config?.options;
   let currentValue = data?.values?.value;
@@ -39,6 +40,9 @@ export const select = async (
     outputs: {
       out: {
         port: constantSource,
+        type: PortType.Number,
+        range: [constantSource.offset.minValue, constantSource.offset.maxValue],
+        defaultValue: constantSource.offset.value,
       },
     },
     setValues: ({ value } = {}) => {

@@ -1,4 +1,8 @@
-import { WNNodeProps, WNNodeData, WNAudioNode } from "@web-noise/core";
+import type { WNNodeProps, WNNodeData, WNAudioNode } from "@web-noise/core";
+
+export enum DataRecorderParameters {
+  Gate = "gate",
+}
 
 export interface DataRecorderValues {}
 

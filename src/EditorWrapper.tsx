@@ -5,7 +5,7 @@ import {
   scriptNodes,
 } from "@web-noise/base-nodes";
 import { Editor, theme } from "@web-noise/core";
-import { EDITOR_DEFAULTS } from "@web-noise/core/src/components/App";
+import { EDITOR_DEFAULTS } from "@web-noise/core";
 import { ReactNode, useEffect, useMemo, useState } from "react";
 // import SharePatch from "./SharePatch";
 

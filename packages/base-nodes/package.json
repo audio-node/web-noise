@@ -1,6 +1,6 @@
 {
   "name": "@web-noise/base-nodes",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "source": "index.ts",
   "type": "module",
   "main": "dist/main.js",
@@ -20,8 +20,8 @@
       "source": "base.ts",
       "distDir": "dist/base",
       "isLibrary": true,
-      "includeNodeModules": false,
-      "optimize": false
+      "includeNodeModules": true,
+      "optimize": true
     },
     "webAudio": {
       "source": "src/webAudio/index.ts",
@@ -34,8 +34,8 @@
       "source": "src/webAudio/base.ts",
       "distDir": "dist/base",
       "isLibrary": true,
-      "includeNodeModules": false,
-      "optimize": false
+      "includeNodeModules": true,
+      "optimize": true
     },
     "patch": {
       "source": "src/patchNodes/index.ts",
@@ -49,7 +49,7 @@
       "distDir": "dist/base",
       "isLibrary": true,
       "includeNodeModules": true,
-      "optimize": false
+      "optimize": true
     },
     "webNoise": {
       "source": "src/webNoise/index.ts",
@@ -64,10 +64,8 @@
       "source": "src/webNoise/base.ts",
       "distDir": "dist/base",
       "isLibrary": true,
-      "includeNodeModules": [
-        "phaze-vocoder"
-      ],
-      "optimize": false
+      "includeNodeModules": true,
+      "optimize": true
     },
     "scriptNodes": {
       "source": "src/scriptNodes/index.ts",
@@ -82,10 +80,8 @@
       "source": "src/scriptNodes/base.ts",
       "distDir": "dist/base",
       "isLibrary": true,
-      "includeNodeModules": [
-        "typescript"
-      ],
-      "optimize": false
+      "includeNodeModules": true,
+      "optimize": true
     },
     "module": {
       "source": "index.ts",

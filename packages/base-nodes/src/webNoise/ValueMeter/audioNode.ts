@@ -1,4 +1,5 @@
 import { WNAudioNode } from "@web-noise/core";
+import { PortType } from "@web-noise/core/constants";
 import { addBroadcastListener } from "../../lib/useBroadcast";
 
 //@ts-ignore
@@ -23,6 +24,7 @@ export const valueMeter = async (
     inputs: {
       input: {
         port: workletNode,
+        type: PortType.Any,
       },
     },
     registerPort: (port) => {

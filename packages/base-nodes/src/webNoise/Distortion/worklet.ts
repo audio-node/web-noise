@@ -1,4 +1,5 @@
 import { useBroadcast } from "../../lib/useBroadcast";
+import { DistortionParameters } from "./types";
 import { generators } from "./waveGenerators";
 
 export class DistortionProcessor extends AudioWorkletProcessor {
@@ -9,7 +10,7 @@ export class DistortionProcessor extends AudioWorkletProcessor {
   static get parameterDescriptors() {
     return [
       {
-        name: "type",
+        name: DistortionParameters.Type,
         minValue: 0,
         maxValue: generators.length - 1,
       },
@@ -34,9 +35,7 @@ export class DistortionProcessor extends AudioWorkletProcessor {
   process(
     inputs: Float32Array[][],
     _outputs: Float32Array[][],
-    parameters: {
-      type: Float32Array;
-    },
+    parameters: Record<DistortionParameters, Float32Array>,
   ) {
     const inputChannel = inputs?.[0]?.[0];
 
@@ -46,7 +45,7 @@ export class DistortionProcessor extends AudioWorkletProcessor {
       return true;
     }
 
-    const generatorType = parameters.type[0];
+    const generatorType = parameters[DistortionParameters.Type][0];
     if (generatorType !== this._currentType) {
       this._currentType = generatorType;
       this.onChange();

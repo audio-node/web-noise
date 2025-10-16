@@ -1,4 +1,4 @@
-import { PortType } from "@web-noise/core";
+import { PortType } from "@web-noise/core/constants";
 
 export const delay = async (audioContext: AudioContext) => {
   const delay = audioContext.createDelay();

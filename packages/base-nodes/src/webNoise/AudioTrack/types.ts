@@ -1,4 +1,14 @@
-import { WNNodeProps, WNNodeData, WNAudioNode } from "@web-noise/core";
+import type { WNNodeProps, WNNodeData, WNAudioNode } from "@web-noise/core";
+
+export enum AudioTrackParameters {
+  Gate = "gate",
+  Restart = "restart",
+  Loop = "loop",
+  Start = "start",
+  End = "end",
+  Detune = "detune",
+  PlaybackRate = "playbackRate",
+}
 
 export interface AudioTrackValues {
   src?: string;

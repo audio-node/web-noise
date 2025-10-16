@@ -1,4 +1,9 @@
-import type { DataRecorderData, DataRecorder } from "./types";
+import { PortType } from "@web-noise/core/constants";
+import {
+  DataRecorderData,
+  DataRecorder,
+  DataRecorderParameters,
+} from "./types";
 
 //@ts-ignore
 import dataRecorderWorkletUrl from "worklet:./worklet.ts";
@@ -18,7 +23,7 @@ export const dataRecorder = async (
     },
   );
 
-  const gate = dataRecorder.parameters.get("gate")!;
+  const gate = dataRecorder.parameters.get(DataRecorderParameters.Gate)!;
 
   dataRecorder.port.start();
 
@@ -26,12 +31,17 @@ export const dataRecorder = async (
     inputs: {
       gate: {
         port: gate,
+        type: PortType.Gate,
+        range: [gate.minValue, gate.maxValue],
+        defaultValue: gate.defaultValue,
       },
       "0": {
         port: [dataRecorder, 0],
+        type: PortType.Any,
       },
       "1": {
         port: [dataRecorder, 1],
+        type: PortType.Any,
       },
     },
     destroy: () => {

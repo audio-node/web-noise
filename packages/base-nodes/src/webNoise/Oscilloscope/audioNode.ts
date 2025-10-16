@@ -1,6 +1,7 @@
-import { WNAudioNode } from "@web-noise/core";
+import type { WNAudioNode } from "@web-noise/core";
+import { PortType } from "@web-noise/core/constants";
 import { addBroadcastListener } from "../../lib/useBroadcast";
-import { OscilloscopeData } from "./types";
+import { OscilloscopeData, OscilloscopeParameters } from "./types";
 
 //@ts-ignore
 import oscilloscopeWorkletUrl from "worklet:./worklet.ts";
@@ -30,15 +31,22 @@ export const oscilloscope = async (
   );
   analyser.port.start();
 
+  const fftSize = analyser.parameters.get(OscilloscopeParameters.FFTSize)!;
+
   return {
     inputs: {
       fftSize: {
-        port: analyser.parameters.get("fftSize")!,
+        port: fftSize,
+        type: PortType.Number,
+        defaultValue: fftSize.value,
       },
       ...[null, null].reduce(
         (acc, port, index) => ({
           ...acc,
-          [`input${index + 1}`]: { port: [analyser, index] },
+          [`input${index + 1}`]: {
+            port: [analyser, index],
+            type: PortType.Any,
+          },
         }),
         {},
       ),

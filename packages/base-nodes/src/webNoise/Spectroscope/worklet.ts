@@ -13,7 +13,7 @@ export class SpectroscopeProcessor extends AudioWorkletProcessor {
   broadcast = useBroadcast(this.port);
 
   static get parameterDescriptors() {
-    return [{ name: "fftSize" }];
+    return [{ name: "fftSize", minValue: 0 }];
   }
 
   constructor() {

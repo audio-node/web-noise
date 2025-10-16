@@ -58,7 +58,7 @@ const NodeInfoModal = ({
   const { info, portsDescription } = useNodeManifest(nodeType);
 
   const portsInfo = useMemo(() => {
-    const parts = [];
+    const parts: string[] = [];
 
     const inputPorts = node.inputs;
     if (inputPorts) {

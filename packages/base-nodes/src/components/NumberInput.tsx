@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { useEffect, useRef } from "react";
+// @ts-ignore
 import { useThrottledCallback } from "use-debounce";
 
 const SampleInput = styled.span`

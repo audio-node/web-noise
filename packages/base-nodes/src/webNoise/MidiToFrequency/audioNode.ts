@@ -1,4 +1,9 @@
-import { MidiToFrequencyData, MidiToFrequency } from "./types";
+import { PortType } from "@web-noise/core/constants";
+import {
+  MidiToFrequencyData,
+  MidiToFrequency,
+  MidiToFrequencyParameters,
+} from "./types";
 
 //@ts-ignore
 import sciptNodeWorkletUrl from "worklet:../MathNode/worklet.ts";
@@ -15,18 +20,28 @@ export const midiToFrequency = async (
     },
   });
 
+  const midi = mathNode.parameters.get(MidiToFrequencyParameters.Midi)!;
+  const tune = mathNode.parameters.get(MidiToFrequencyParameters.Tune)!;
+
   return {
     outputs: {
       out: {
         port: mathNode,
+        type: PortType.Number,
       },
     },
     inputs: {
       midi: {
-        port: mathNode.parameters.get("A")!,
+        port: midi,
+        type: PortType.Number,
+        range: [midi.minValue, midi.maxValue],
+        defaultValue: midi.value,
       },
       tune: {
-        port: mathNode.parameters.get("B")!,
+        port: tune,
+        type: PortType.Number,
+        range: [tune.minValue, tune.maxValue],
+        defaultValue: 440,
       },
     },
   };

@@ -1,4 +1,5 @@
-import { WNAudioNode } from "@web-noise/core";
+import type { WNAudioNode } from "@web-noise/core";
+import { PortType } from "@web-noise/core/constants";
 
 //@ts-ignore
 import phaseVocoderWorkletUrl from "worklet:phaze-vocoder";
@@ -18,6 +19,8 @@ export const phaseVocoder = async (
     "phase-vocoder-processor",
   );
 
+  const pitch = phaseVocoderNode.parameters.get("pitchFactor")!;
+
   const gainNode = audioContext.createGain();
   gainNode.gain.value = 1;
 
@@ -27,14 +30,19 @@ export const phaseVocoder = async (
     inputs: {
       input: {
         port: phaseVocoderNode,
+        type: PortType.Audio,
       },
       pitch: {
-        port: phaseVocoderNode.parameters.get("pitchFactor")!,
+        port: pitch,
+        type: PortType.Number,
+        range: [pitch.minValue, pitch.maxValue],
+        defaultValue: pitch.value,
       },
     },
     outputs: {
       output: {
         port: gainNode,
+        type: PortType.Audio,
       },
     },
   };

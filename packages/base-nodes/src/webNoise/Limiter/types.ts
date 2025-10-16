@@ -1,4 +1,4 @@
-import { WNNodeProps, WNNodeData } from "@web-noise/core";
+import type { WNNodeProps, WNNodeData } from "@web-noise/core";
 
 export interface LimiterValues {
   value?: number;
@@ -10,4 +10,4 @@ export interface LimiterConfig {
 
 export type LimiterData = WNNodeData<LimiterValues, LimiterConfig>;
 
-export interface LimiterProps extends WNNodeProps<LimiterData> {};
+export interface LimiterProps extends WNNodeProps<LimiterData> {}
