@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { withTheme } from "@emotion/react";
 import { Resizable } from "re-resizable";
 import { ComponentProps, useMemo, useState } from "react";
 import {
@@ -100,12 +101,11 @@ const portColors = {
   [PortType.Any]: "#fb923c", // warm orange
 };
 
-const StyledInputHandle = styled(Handle, {
+const StyledHandle = withTheme(styled(Handle, {
   shouldForwardProp: (prop) => prop !== "portType",
-})<{ portType?: AudioPort["type"] }>`
-  left: -3px;
-  background: ${(props) => {
-    if (!props.portType) return "none";
+})<{ portType?: AudioPort["type"]; theme: Theme }>`
+  --port-color: ${(props) => {
+    if (!props.portType) return props.theme.colors.highlight2;
     if (Array.isArray(props.portType)) {
       const colors = props.portType.map((type) => portColors[type]);
       return `linear-gradient(0.25turn, ${colors.join(", ")});`;
@@ -113,7 +113,14 @@ const StyledInputHandle = styled(Handle, {
       return portColors[props.portType];
     }
   }};
-`;
+  border-color: var(--port-color);
+  background: var(--port-color);
+  box-shadow: 0px 0px 0px 1px ${({ theme }) => theme.colors.elevation2} inset;
+`);
+
+const StyledInputHandle = withTheme(styled(StyledHandle)`
+  left: -3px;
+`);
 
 export const InputHandle = ({
   ...props
@@ -121,20 +128,9 @@ export const InputHandle = ({
   <StyledInputHandle {...props} type="target" position={Position.Left} />
 );
 
-export const StyledOutputHandle = styled(Handle, {
-  shouldForwardProp: (prop) => prop !== "portType",
-})<{ portType?: AudioPort["type"] }>`
+export const StyledOutputHandle = withTheme(styled(StyledHandle)`
   right: -3px;
-  background: ${(props) => {
-    if (!props.portType) return "none";
-    if (Array.isArray(props.portType)) {
-      const colors = props.portType.map((type) => portColors[type]);
-      return `linear-gradient(0.25turn, ${colors.join(", ")});`;
-    } else {
-      return portColors[props.portType];
-    }
-  }};
-`;
+`);
 
 export const OutputHandle = (
   props: Partial<HandleProps & ComponentProps<typeof StyledOutputHandle>>,
