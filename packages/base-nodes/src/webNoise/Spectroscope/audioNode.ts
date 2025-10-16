@@ -1,4 +1,5 @@
-import { WNAudioNode } from "@web-noise/core";
+import type { WNAudioNode } from "@web-noise/core";
+import { PortType } from "@web-noise/core/constants";
 import { addBroadcastListener } from "../../lib/useBroadcast";
 import { SpectroscopeData } from "./types";
 
@@ -21,13 +22,19 @@ export const spectroscope = async (
     "spectroscope-processor",
   );
 
+  const fftSize = workletNode.parameters.get("fftSize")!;
+
   return {
     inputs: {
       fftSize: {
-        port: workletNode.parameters.get("fftSize")!,
+        port: fftSize,
+        type: PortType.Number,
+        range: [fftSize.minValue, fftSize.maxValue],
+        defaultValue: 2048,
       },
       input: {
         port: workletNode,
+        type: PortType.Any,
       },
     },
     registerPort: (port) => {

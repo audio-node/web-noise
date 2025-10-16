@@ -1,4 +1,5 @@
-import { PortType, type InputPort, type WNAudioNode } from "@web-noise/core";
+import { type InputPort, type WNAudioNode } from "@web-noise/core";
+import { PortType } from "@web-noise/core/constants";
 import type { ChannelMergerData } from "./types";
 
 export interface ChannelMerger extends WNAudioNode {}

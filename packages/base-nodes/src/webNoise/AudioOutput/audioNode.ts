@@ -1,6 +1,7 @@
+import { PortType } from "@web-noise/core/constants";
 import EventBus from "../../lib/EventBus";
 import { DEFAULT_OUTPUT } from "./constants";
-import type { AudioOutput, AudioOutputData, ListEventHandler } from "./types";
+import type { AudioOutput, AudioOutputData } from "./types";
 
 const getAudioOutputsList = async () => {
   return navigator.mediaDevices
@@ -39,7 +40,7 @@ export const audioOutput = async (
     await audio.setSinkId(currentOutputDeviceId);
   };
 
-  navigator.mediaDevices.addEventListener("devicechange", async (event) => {
+  navigator.mediaDevices.addEventListener("devicechange", async () => {
     const newAudioOutputs = await getAudioOutputsList();
 
     // For some reason 'devicechange' event gets fired twice
@@ -61,6 +62,7 @@ export const audioOutput = async (
     inputs: {
       input: {
         port: destination,
+        type: PortType.Audio,
       },
     },
     audioOutputs,

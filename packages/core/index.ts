@@ -1,4 +1,4 @@
-export { default as Editor } from "./src/components/App";
+export { default as Editor, EDITOR_DEFAULTS } from "./src/components/App";
 export { default as Wire } from "./src/components/Wire";
 export {
   WNNode,
@@ -19,7 +19,7 @@ export { default as useTheme } from "./src/hooks/useTheme";
 export { default as useStore } from "./src/store";
 export { default as theme } from "./src/theme";
 
-export { PortType } from "./src/types";
+export { PortType } from "./src/constants";
 
 export type {
   WNAudioNode,
@@ -37,4 +37,5 @@ export type {
   WNEdge as TWNEdge,
   EditorStoreState,
 } from "./src/types";
+
 export type { Theme } from "./src/theme";

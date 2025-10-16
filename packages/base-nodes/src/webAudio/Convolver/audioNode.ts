@@ -1,4 +1,5 @@
-import { PortType, WNAudioNode } from "@web-noise/core";
+import { type WNAudioNode } from "@web-noise/core";
+import { PortType } from "@web-noise/core/constants";
 import { ConvolverValues, ConvolverData } from "./types";
 import loadAudioBuffer from "../../lib/loadAudioBuffer";
 import { addBroadcastListener, useBroadcast } from "../../lib/useBroadcast";

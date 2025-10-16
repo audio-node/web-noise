@@ -1,3 +1,5 @@
+import { ClockParameters } from "./types";
+
 export class ClockProcessor extends AudioWorkletProcessor {
   lastTickTime: number | null = null;
   isTicking: boolean = false;
@@ -10,14 +12,12 @@ export class ClockProcessor extends AudioWorkletProcessor {
   static get parameterDescriptors() {
     return [
       {
-        name: "bpm",
+        name: ClockParameters.BPM,
         minValue: 0,
-        // maxValue: 500,
         automationRate: "a-rate",
       },
       {
-        name: "duty",
-        // defaultValue: 0.0001,
+        name: ClockParameters.Duty,
         minValue: 0,
         maxValue: 0.99,
         automationRate: "k-rate",
@@ -28,20 +28,20 @@ export class ClockProcessor extends AudioWorkletProcessor {
   process(
     _inputs: Float32Array[][],
     outputs: Float32Array[][],
-    parameters: Record<string, Float32Array>,
+    parameters: Record<ClockParameters, Float32Array>,
   ) {
     const trigger = outputs[0];
-    const bpm = parameters["bpm"][0] || 1e-9;
+    const bpm = parameters[ClockParameters.BPM][0] || 1e-9;
     const freq = bpm / 60;
 
-    const duty = parameters["duty"][0] || 0.5;
+    const duty = parameters[ClockParameters.Duty][0] || 0.5;
 
     const startDeg = 180.0 * duty;
     const digitizeThrd = Math.cos(startDeg * (Math.PI / 180));
 
     trigger.forEach((channel) => {
       for (let i = 0; i < channel.length; i++) {
-        // Calculate the current time based on the global `currentTime` and the frame index.
+        // Calculate the current time based on the global \`currentTime\` and the frame index.
         const currentTimeLocal = currentTime + i / sampleRate;
 
         // Generate the sine wave value.

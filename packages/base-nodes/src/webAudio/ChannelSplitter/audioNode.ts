@@ -1,4 +1,5 @@
-import { PortType, type OutputPort, type WNAudioNode } from "@web-noise/core";
+import { type OutputPort, type WNAudioNode } from "@web-noise/core";
+import { PortType } from "@web-noise/core/constants";
 import type { ChannelSplitterData } from "./types";
 
 export interface ChannelSplitter extends WNAudioNode {}

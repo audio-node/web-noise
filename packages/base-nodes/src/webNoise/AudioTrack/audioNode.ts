@@ -1,7 +1,7 @@
-import { WNAudioNode } from "@web-noise/core";
+import { PortType } from "@web-noise/core/constants";
 import EventBus from "../../lib/EventBus";
-import { addBroadcastListener, useBroadcast } from "../../lib/useBroadcast";
-import { AudioTrackValues, AudioTrackData, AudioTrack } from "./types";
+import { addBroadcastListener } from "../../lib/useBroadcast";
+import { AudioTrackData, AudioTrack, AudioTrackParameters } from "./types";
 
 //@ts-ignore
 import audioTrackWorkletUrl from "worklet:./worklet.ts";
@@ -31,13 +31,15 @@ export const audioTrack = async (
 
   const events = new EventBus();
 
-  const gate = audioTrack.parameters.get("gate")!;
-  const restart = audioTrack.parameters.get("restart")!;
-  const loop = audioTrack.parameters.get("loop")!;
-  const start = audioTrack.parameters.get("start")!;
-  const end = audioTrack.parameters.get("end")!;
-  const detune = audioTrack.parameters.get("detune")!;
-  const playbackRate = audioTrack.parameters.get("playbackRate")!;
+  const gate = audioTrack.parameters.get(AudioTrackParameters.Gate)!;
+  const restart = audioTrack.parameters.get(AudioTrackParameters.Restart)!;
+  const loop = audioTrack.parameters.get(AudioTrackParameters.Loop)!;
+  const start = audioTrack.parameters.get(AudioTrackParameters.Start)!;
+  const end = audioTrack.parameters.get(AudioTrackParameters.End)!;
+  const detune = audioTrack.parameters.get(AudioTrackParameters.Detune)!;
+  const playbackRate = audioTrack.parameters.get(
+    AudioTrackParameters.PlaybackRate,
+  )!;
 
   audioTrack.port.start();
 
@@ -68,38 +70,63 @@ export const audioTrack = async (
     inputs: {
       gate: {
         port: gate,
+        type: PortType.Gate,
+        range: [gate.minValue, gate.maxValue],
+        defaultValue: gate.defaultValue,
       },
       restart: {
         port: restart,
+        type: PortType.Gate,
+        range: [restart.minValue, restart.maxValue],
+        defaultValue: restart.defaultValue,
       },
       loop: {
         port: loop,
+        type: PortType.Gate,
+        range: [loop.minValue, loop.maxValue],
+        defaultValue: loop.defaultValue,
       },
       start: {
         port: start,
+        type: PortType.Number,
+        range: [start.minValue, start.maxValue],
+        defaultValue: start.defaultValue,
       },
       end: {
         port: end,
+        type: PortType.Number,
+        range: [end.minValue, end.maxValue],
+        defaultValue: end.defaultValue,
       },
       detune: {
         port: detune,
+        type: PortType.Number,
+        range: [detune.minValue, detune.maxValue],
+        defaultValue: detune.defaultValue,
       },
       playbackRate: {
         port: playbackRate,
+        type: PortType.Number,
+        range: [playbackRate.minValue, playbackRate.maxValue],
+        defaultValue: playbackRate.defaultValue,
       },
     },
     outputs: {
       out: {
         port: [audioTrack, 0],
+        type: PortType.Audio,
       },
       gate: {
         port: [audioTrack, 1],
+        type: PortType.Gate,
       },
       duration: {
         port: [audioTrack, 2],
+        type: PortType.Number,
       },
       time: {
         port: [audioTrack, 3],
+        type: PortType.Number,
       },
     },
     setValues: ({ src: srcValue } = {}) => {

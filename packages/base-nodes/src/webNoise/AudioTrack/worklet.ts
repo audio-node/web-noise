@@ -1,5 +1,11 @@
 import { useBroadcast } from "../../lib/useBroadcast";
-import { MessageData, RangeEvent, TimeEvent, TrackEvent } from "./types";
+import {
+  AudioTrackParameters,
+  MessageData,
+  RangeEvent,
+  TimeEvent,
+  TrackEvent,
+} from "./types";
 
 interface TrackData {
   duration: AudioBuffer["duration"];
@@ -26,44 +32,44 @@ export class AudioTrackProcessor extends AudioWorkletProcessor {
   static get parameterDescriptors() {
     return [
       {
-        name: "gate",
+        name: AudioTrackParameters.Gate,
         automationRate: "a-rate",
         defaultValue: 0,
         minValue: 0,
         maxValue: 1,
       },
       {
-        name: "restart",
+        name: AudioTrackParameters.Restart,
         automationRate: "k-rate",
         defaultValue: 0,
         minValue: 0,
         maxValue: 1,
       },
       {
-        name: "loop",
+        name: AudioTrackParameters.Loop,
         automationRate: "k-rate",
         defaultValue: 0,
         minValue: 0,
       },
       {
-        name: "start",
+        name: AudioTrackParameters.Start,
         automationRate: "k-rate",
         defaultValue: 0,
         minValue: 0,
       },
       {
-        name: "end",
+        name: AudioTrackParameters.End,
         automationRate: "k-rate",
         defaultValue: 0,
         minValue: 0,
       },
       {
-        name: "detune",
+        name: AudioTrackParameters.Detune,
         automationRate: "k-rate",
         defaultValue: 0,
       },
       {
-        name: "playbackRate",
+        name: AudioTrackParameters.PlaybackRate,
         automationRate: "k-rate",
       },
     ];
@@ -162,21 +168,19 @@ export class AudioTrackProcessor extends AudioWorkletProcessor {
   process(
     inputs: Float32Array[][],
     outputs: Float32Array[][],
-    parameters: {
-      gate: Float32Array;
-      restart: Float32Array;
-      start: Float32Array;
-      end: Float32Array;
-      loop: Float32Array;
-      detune: Float32Array;
-      playbackRate: Float32Array;
-    },
+    parameters: Record<AudioTrackParameters, Float32Array>,
   ) {
     if (!this.data) {
       return true;
     }
-    const { gate, loop, start, end, restart, detune, playbackRate } =
-      parameters;
+    const gate = parameters[AudioTrackParameters.Gate];
+    const loop = parameters[AudioTrackParameters.Loop];
+    const start = parameters[AudioTrackParameters.Start];
+    const end = parameters[AudioTrackParameters.End];
+    const restart = parameters[AudioTrackParameters.Restart];
+    const detune = parameters[AudioTrackParameters.Detune];
+    const playbackRate = parameters[AudioTrackParameters.PlaybackRate];
+
     const [output, gateOutput, durationOutput, currentTimeOutput] = outputs;
 
     // handle range change

@@ -5,8 +5,8 @@ export interface PitchParams {
   sampleRate: number;
 }
 
-export enum PitchWorkletParameters {
-  method = 'method',
-  fftSize = 'fftSize',
-  hopSize = 'hopSize',
+export enum FrequencyMeterParameters {
+  Method = "method",
+  FFTSize = "fftSize",
+  HopSize = "hopSize",
 }

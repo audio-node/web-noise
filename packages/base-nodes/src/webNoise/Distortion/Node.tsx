@@ -9,7 +9,7 @@ import {
   useTheme,
 } from "@web-noise/core";
 import Distortion from "./Distortion";
-import { Distortion as TDistortion } from "./audioNode";
+import { Distortion as TDistortion } from "./types";
 
 export interface DistortionProps extends WNNodeProps {}
 

@@ -1,6 +1,7 @@
 import { useBroadcast } from "../../lib/useBroadcast";
 import { createUseGate } from "../../lib/useGate";
 import type { RecorderData, PortEvent } from "./types";
+import { DataRecorderParameters } from "./types";
 
 const GATE_THRESHOLD = 0.5;
 
@@ -27,7 +28,7 @@ export class DataRecorderProcessor extends AudioWorkletProcessor {
   static get parameterDescriptors() {
     return [
       {
-        name: "gate",
+        name: DataRecorderParameters.Gate,
         automationRate: "a-rate",
         defaultValue: 0,
         minValue: 0,
@@ -71,11 +72,9 @@ export class DataRecorderProcessor extends AudioWorkletProcessor {
   process(
     inputs: Float32Array[][],
     _outputs: Float32Array[][],
-    parameters: {
-      gate: Float32Array;
-    },
+    parameters: Record<DataRecorderParameters, Float32Array>,
   ) {
-    const { gate } = parameters;
+    const gate = parameters[DataRecorderParameters.Gate];
 
     this.useGate({
       channel: gate,

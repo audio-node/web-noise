@@ -1,4 +1,5 @@
-import { PortType, WNAudioNode } from "@web-noise/core";
+import { type WNAudioNode } from "@web-noise/core";
+import { PortType } from "@web-noise/core/constants";
 
 import { WaveShaperValues, WaveShaperData } from "./types";
 import {

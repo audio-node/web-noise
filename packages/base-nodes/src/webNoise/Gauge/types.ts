@@ -1,4 +1,4 @@
-import { WNNodeProps, WNNodeData } from "@web-noise/core";
+import type { WNNodeProps, WNNodeData } from "@web-noise/core";
 
 export enum WorkerEventNames {
   INIT = "INIT",

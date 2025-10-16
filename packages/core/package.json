@@ -1,6 +1,6 @@
 {
   "name": "@web-noise/core",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "source": "index.ts",
   "main": "dist/main.js",
   "module": "dist/module.js",
@@ -10,6 +10,11 @@
       "import": "./dist/module.js",
       "require": "./dist/main.js",
       "types": "./dist/types.d.ts"
+    },
+    "./constants": {
+      "import": "./dist/constants.js",
+      "require": "./dist/constants.js",
+      "types": "./dist/constants.d.ts"
     }
   },
   "files": [
@@ -36,6 +41,10 @@
     },
     "types": {
       "source": "index.ts",
+      "isLibrary": true
+    },
+    "constants": {
+      "source": "constants.ts",
       "isLibrary": true
     }
   },

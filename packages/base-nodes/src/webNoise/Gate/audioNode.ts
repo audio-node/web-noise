@@ -1,4 +1,9 @@
-import { WNNodeData, WNAudioNode, CreateWNAudioNode } from "@web-noise/core";
+import type {
+  WNNodeData,
+  WNAudioNode,
+  CreateWNAudioNode,
+} from "@web-noise/core";
+import { PortType } from "@web-noise/core/constants";
 import { GateValues } from "./types";
 
 export interface Gate extends WNAudioNode {
@@ -9,7 +14,7 @@ export interface Gate extends WNAudioNode {
 
 export const gate = (
   audioContext: AudioContext,
-  data?: WNNodeData<GateValues>
+  data?: WNNodeData<GateValues>,
 ): Gate => {
   const constantSource = audioContext.createConstantSource();
   constantSource.offset.value = +(data?.values?.isOpened ?? false);
@@ -19,13 +24,16 @@ export const gate = (
     outputs: {
       out: {
         port: constantSource,
+        type: PortType.Gate,
+        range: [0, 1],
+        defaultValue: 0,
       },
     },
     setValues: ({ isOpened } = {}) => {
       typeof isOpened !== "undefined" &&
         constantSource.offset.setValueAtTime(
           +isOpened,
-          audioContext.currentTime
+          audioContext.currentTime,
         );
     },
     open: () => {},

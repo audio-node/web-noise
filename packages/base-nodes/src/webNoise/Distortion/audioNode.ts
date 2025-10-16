@@ -1,13 +1,10 @@
-import { WNAudioNode } from "@web-noise/core";
+import { PortType } from "@web-noise/core";
 import { addBroadcastListener } from "../../lib/useBroadcast";
+import { Distortion, DistortionParameters } from "./types";
 
 //@ts-ignore
 import distortionWorkletUrl from "worklet:./worklet.ts";
 const distortionWorklet = new URL(distortionWorkletUrl, import.meta.url);
-
-export interface Distortion extends WNAudioNode {
-  registerPort: (port: MessagePort) => void;
-}
 
 export const distortion = async (
   audioContext: AudioContext,
@@ -33,21 +30,31 @@ export const distortion = async (
     waveShaper.curve = data;
   });
 
+  const type = curveGeneratorNode.parameters.get(DistortionParameters.Type)!;
+
   return {
     inputs: {
       input: {
         port: waveShaper,
+        type: PortType.Audio,
       },
       drive: {
         port: curveGeneratorNode,
+        type: PortType.Number,
+        range: [0, 2],
+        defaultValue: 0,
       },
       type: {
-        port: curveGeneratorNode.parameters.get('type')!,
+        port: type,
+        type: PortType.Number,
+        range: [type.minValue, type.maxValue],
+        defaultValue: type.defaultValue,
       },
     },
     outputs: {
       output: {
         port: waveShaper,
+        type: PortType.Audio,
       },
     },
     registerPort: (port) => {

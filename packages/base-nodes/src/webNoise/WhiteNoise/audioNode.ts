@@ -1,4 +1,5 @@
-import { WNAudioNode } from "@web-noise/core";
+import type { WNAudioNode } from "@web-noise/core";
+import { PortType } from "@web-noise/core/constants";
 
 //@ts-ignore
 import whiteNoiseWorkletUrl from "worklet:./worklet.ts";
@@ -20,6 +21,7 @@ export const whiteNoise = async (
     outputs: {
       out: {
         port: whiteNoise,
+        type: PortType.Audio,
       },
     },
   };

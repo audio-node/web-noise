@@ -1,4 +1,4 @@
-import { PortType } from "@web-noise/core";
+import { PortType } from "@web-noise/core/constants";
 import { Destination } from "./types";
 
 const destination = (audioContext: AudioContext): Destination => {

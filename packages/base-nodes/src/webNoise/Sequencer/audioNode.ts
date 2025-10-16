@@ -1,3 +1,4 @@
+import { PortType } from "@web-noise/core/constants";
 import { addBroadcastListener } from "../../lib/useBroadcast";
 import { SequencerValues, SequencerData, Sequencer } from "./types";
 
@@ -18,24 +19,42 @@ export const sequencer = async (
     },
   );
 
+  const gate = workletNode.parameters.get("gate")!;
+  const reset = workletNode.parameters.get("reset")!;
+
   return {
     inputs: {
       gate: {
-        port: workletNode.parameters.get("gate")!,
+        port: gate,
+        type: PortType.Gate,
+        range: [gate.minValue, gate.maxValue],
+        defaultValue: gate.value,
       },
       reset: {
-        port: workletNode.parameters.get("reset")!,
+        port: reset,
+        type: PortType.Gate,
+        range: [reset.minValue, reset.maxValue],
+        defaultValue: reset.value,
       },
     },
     outputs: {
       gate: {
         port: [workletNode, 0],
+        type: PortType.Gate,
+        range: [0, 1],
+        defaultValue: 0,
       },
       note: {
         port: [workletNode, 1],
+        type: PortType.Number,
+        range: [0, 127],
+        defaultValue: 0,
       },
       index: {
         port: [workletNode, 2],
+        type: PortType.Number,
+        range: [0, Infinity],
+        defaultValue: 0,
       },
     },
     registerPort: (port) => {

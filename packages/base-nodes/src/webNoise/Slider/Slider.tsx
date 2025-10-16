@@ -75,7 +75,7 @@ const Slider = ({ node: props, audioNode, updateNodeValues }: SliderProps) => {
         onChange={(value) => {
           updateNodeValues?.({ value });
         }}
-        onAfterChange={(value) => {
+        onChangeComplete={(value) => {
           updateNodeValues?.({ value });
         }}
       />

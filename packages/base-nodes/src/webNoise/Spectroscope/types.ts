@@ -1,7 +1,6 @@
-import { WNNodeProps, WNNodeData } from "@web-noise/core";
+import type { WNNodeProps, WNNodeData } from "@web-noise/core";
 
-export interface SpectroscopeValues {
-}
+export interface SpectroscopeValues {}
 
 export interface SpectroscopeConfig {
   backgroundColor?: string;
@@ -9,6 +8,9 @@ export interface SpectroscopeConfig {
   size?: { width: number; height: number };
 }
 
-export type SpectroscopeData = WNNodeData<SpectroscopeValues, SpectroscopeConfig>;
+export type SpectroscopeData = WNNodeData<
+  SpectroscopeValues,
+  SpectroscopeConfig
+>;
 
-export interface SpectroscopeProps extends WNNodeProps<SpectroscopeData> {};
+export interface SpectroscopeProps extends WNNodeProps<SpectroscopeData> {}

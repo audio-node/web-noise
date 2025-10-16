@@ -1,3 +1,5 @@
+import type { AudioPort } from "@web-noise/core";
+import { PortType } from "@web-noise/core/constants";
 import { IncomingMessageData, ScriptNode, ScriptNodeData } from "../types";
 import transpile from "../transpile";
 
@@ -125,14 +127,27 @@ const scriptNode = async (
     inputs: {
       trigger: {
         port: triggerWatcher,
+        type: PortType.Gate,
       },
       ...inputs.reduce(
-        (acc, port, index) => ({ ...acc, [`input${index}`]: { port } }),
+        (acc, port, index) => ({
+          ...acc,
+          [`input${index}`]: {
+            port,
+            type: PortType.Any,
+          },
+        }),
         {},
       ),
     },
     outputs: outputs.reduce(
-      (acc, port, index) => ({ ...acc, [`output${index}`]: { port } }),
+      (acc, port, index) => ({
+        ...acc,
+        [`output${index}`]: {
+          port,
+          type: PortType.Any,
+        },
+      }),
       {},
     ),
     destroy: () => {

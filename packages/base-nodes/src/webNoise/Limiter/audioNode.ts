@@ -1,5 +1,6 @@
-import { WNAudioNode } from "@web-noise/core";
-import { LimiterValues, LimiterData } from "./types";
+import type { WNAudioNode } from "@web-noise/core";
+import { PortType } from "@web-noise/core/constants";
+import { LimiterData } from "./types";
 
 //@ts-ignore
 import limiterWorkletUrl from "worklet:./worklet/index.ts";
@@ -22,11 +23,13 @@ export const limiter = async (
     inputs: {
       input: {
         port: workletNode,
+        type: PortType.Audio,
       },
     },
     outputs: {
       output: {
         port: workletNode,
+        type: PortType.Audio,
       },
     },
   };

@@ -1,8 +1,9 @@
 import { useBroadcast } from "../../lib/useBroadcast";
+import { OscilloscopeParameters } from "./types";
 
 const DEFAULT_FFT_SIZE = 1024;
 
-export class AnalyserProcessor extends AudioWorkletProcessor {
+export class OscilloscopeProcessor extends AudioWorkletProcessor {
   buffers: Array<Float32Array>;
   isActive: Array<boolean>;
   sampleIndex = 0;
@@ -11,7 +12,7 @@ export class AnalyserProcessor extends AudioWorkletProcessor {
   broadcast = useBroadcast(this.port);
 
   static get parameterDescriptors() {
-    return [{ name: "fftSize" }];
+    return [{ name: OscilloscopeParameters.FFTSize }];
   }
 
   constructor({ numberOfInputs }: { numberOfInputs: number }) {
@@ -27,11 +28,11 @@ export class AnalyserProcessor extends AudioWorkletProcessor {
   process(
     inputs: Float32Array[][],
     _outputs: Float32Array[][],
-    parameters: { fftSize: Float32Array },
+    parameters: Record<OscilloscopeParameters, Float32Array>,
   ) {
     const inputsData = this.buffers.map((_, index) => inputs[index][0]);
 
-    const fftSize = parameters.fftSize[0];
+    const fftSize = parameters[OscilloscopeParameters.FFTSize][0];
     const analysisWindowSize = fftSize <= 0 ? DEFAULT_FFT_SIZE : fftSize;
 
     if (this.currentFftSize !== analysisWindowSize) {
@@ -77,5 +78,5 @@ export class AnalyserProcessor extends AudioWorkletProcessor {
 
 try {
   //@ts-ignore
-  registerProcessor("oscilloscope-processor", AnalyserProcessor);
+  registerProcessor("oscilloscope-processor", OscilloscopeProcessor);
 } catch (e) {}

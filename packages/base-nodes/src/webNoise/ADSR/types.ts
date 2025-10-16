@@ -1,4 +1,4 @@
-import { WNNodeProps, WNNodeData } from "@web-noise/core";
+import type { WNNodeProps, WNNodeData } from "@web-noise/core";
 
 export enum ADSRParameters {
   A = "attack",
@@ -27,8 +27,8 @@ export interface ADSREventData {
 }
 
 export enum WorkerEventNames {
-  INIT = 'INIT',
-  SET_COLORS = 'SET_COLORS'
+  INIT = "INIT",
+  SET_COLORS = "SET_COLORS",
 }
 
 export interface InitEvent {

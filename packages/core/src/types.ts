@@ -1,12 +1,6 @@
 import { Edge, Node, Viewport } from "reactflow";
 import { WNNodeProps } from "./components/Node";
-
-export enum PortType {
-  Gate = "gate",
-  Number = "number",
-  Audio = "audio",
-  Any = "any",
-}
+import { PortType } from "./constants";
 
 export type AudioNodeChannel = [AudioNode, number];
 

@@ -1,3 +1,5 @@
+import { MathNodeParameters } from "./types";
+
 interface ExpressionArguments {
   A: number;
   B: number;
@@ -8,14 +10,7 @@ interface ExpressionArguments {
   INPUT: number;
 }
 
-interface Parameters {
-  A: Float32Array;
-  B: Float32Array;
-  C: Float32Array;
-  X: Float32Array;
-  Y: Float32Array;
-  Z: Float32Array;
-}
+type Parameters = Record<MathNodeParameters, Float32Array>;
 
 export class MathNodeProcessor extends AudioWorkletProcessor {
   expressionFn: (values: ExpressionArguments) => number = () => 0;
@@ -24,27 +19,27 @@ export class MathNodeProcessor extends AudioWorkletProcessor {
   static get parameterDescriptors() {
     return [
       {
-        name: "A",
+        name: MathNodeParameters.A,
         automationRate: "a-rate",
       },
       {
-        name: "B",
+        name: MathNodeParameters.B,
         automationRate: "a-rate",
       },
       {
-        name: "C",
+        name: MathNodeParameters.C,
         automationRate: "a-rate",
       },
       {
-        name: "X",
+        name: MathNodeParameters.X,
         automationRate: "k-rate",
       },
       {
-        name: "Y",
+        name: MathNodeParameters.Y,
         automationRate: "k-rate",
       },
       {
-        name: "Z",
+        name: MathNodeParameters.Z,
         automationRate: "k-rate",
       },
     ];

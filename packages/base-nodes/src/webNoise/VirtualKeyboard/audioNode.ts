@@ -1,3 +1,5 @@
+import type { WNAudioNode } from "@web-noise/core";
+import { PortType } from "@web-noise/core/constants";
 import { Midi } from "@tonaljs/tonal";
 import {
   VirtualKeyboardValues,
@@ -25,12 +27,21 @@ export const virtualKeyboard = async (
     outputs: {
       command: {
         port: commandNode,
+        type: PortType.Number,
+        range: [0, 255],
+        defaultValue: commandNode.offset.value,
       },
       note: {
         port: noteNode,
+        type: PortType.Number,
+        range: [0, 127],
+        defaultValue: noteNode.offset.value,
       },
-      valocity: {
+      velocity: {
         port: velocityNode,
+        type: PortType.Number,
+        range: [0, 127],
+        defaultValue: velocityNode.offset.value,
       },
     },
     midi: velocityNode,

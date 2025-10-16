@@ -14,6 +14,7 @@ export class QuantizerProcessor extends AudioWorkletProcessor {
     return [
       {
         name: "bitDepth",
+        minValue: 0,
       },
     ];
   }

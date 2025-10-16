@@ -6,6 +6,7 @@ import Outlet from "./Outlet";
 export const patchNodes: PluginConfig = {
   components: [Patch, Inlet, Outlet],
   name: "Patch nodes",
+  description: "Nodes for creating reusable patches with inlets and outlets",
 };
 
 export default patchNodes;
