@@ -24,6 +24,7 @@
   },
   "include": [
     "src",
-    "packages/base-nodes/src/"
+    "packages/base-nodes/src/",
+    "packages/core/src/",
   ]
 }

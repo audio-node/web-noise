@@ -51,6 +51,7 @@ export const EditorPane = ({
   plugins = [],
   editorContextMenu = [],
   onChange = () => {},
+  ...props
 }: EditorProps) => {
   const edgeTypes = useMemo(
     () => ({
@@ -68,7 +69,6 @@ export const EditorPane = ({
     onEdgesChange,
     onEdgesDelete,
     onConnect,
-    setEditorState,
     setPlugins,
     setViewport,
     viewport,
@@ -81,12 +81,6 @@ export const EditorPane = ({
   useEffect(() => {
     setPlugins(plugins);
   }, [plugins]);
-
-  useEffect(() => {
-    if (editorState) {
-      setEditorState(editorState);
-    }
-  }, [editorState, setEditorState]);
 
   const [reactflowInstance, setReactflowInstance] =
     useState<ReactFlowInstance | null>(null);

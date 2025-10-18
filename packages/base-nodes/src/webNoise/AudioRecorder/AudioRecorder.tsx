@@ -3,9 +3,16 @@ import { withTheme } from "@emotion/react";
 import { useEffect, useRef, useState } from "react";
 import downloadFile from "js-file-download";
 import { FaFileDownload as DownloadIcon } from "react-icons/fa";
+import { FaFileExport as AddToProjectIcon } from "react-icons/fa";
 //@ts-ignore
 import toWav from "audiobuffer-to-wav";
-import { WNAudioNode, WNNodeProps, useTheme, Theme } from "@web-noise/core";
+import {
+  WNAudioNode,
+  WNNodeProps,
+  useTheme,
+  Theme,
+  useStore,
+} from "@web-noise/core";
 import { RecorderValues, RecorderConfig, RecorderData } from "./types";
 import useMessageChannel from "../../lib/hooks/useMessageChannel";
 import { durationToTime } from "../../lib/format";
@@ -22,6 +29,7 @@ const RecorderStatusPanel = withTheme(styled.div<{ theme: Theme }>`
   box-sizing: border-box;
   width: 100%;
   padding: 0 0.5rem;
+  gap: 0.5rem;
 `);
 
 const RecordingIndicator = withTheme(styled.span<{
@@ -52,7 +60,7 @@ const RecrodingTime = withTheme(styled.input<{
   width: 100%;
 `);
 
-const DownloadButton = withTheme(styled.button`
+const ActionButton = withTheme(styled.button`
   display: flex;
   background: none;
   outline: none;
@@ -113,6 +121,7 @@ const Recorder = ({
   updateNodeValues,
 }: RecorderProps) => {
   const { id, data } = props;
+  const addFile = useStore((store) => store.addFile);
 
   const progressDisplayRef = useRef<HTMLInputElement>(null);
   const progressTimeRef = useRef<number>(null);
@@ -213,7 +222,25 @@ const Recorder = ({
           disabled
           defaultValue={durationToTime(0)}
         />
-        <DownloadButton
+        <ActionButton
+          disabled={isRecording || !data.values?.src}
+          onClick={() => {
+            const src = data.values?.src;
+            if (!src) {
+              return;
+            }
+            addFile({
+              type: "audio",
+              // @TODO: use nanoid here
+              id: `audio-file-${+new Date()}`,
+              name: `recording-${+new Date()}.wav`,
+              file: src,
+            });
+          }}
+        >
+          <AddToProjectIcon />
+        </ActionButton>
+        <ActionButton
           disabled={
             isRecording || !recorderData.current || !recorderData.current.length
           }
@@ -230,7 +257,7 @@ const Recorder = ({
           }}
         >
           <DownloadIcon />
-        </DownloadButton>
+        </ActionButton>
       </RecorderStatusPanel>
       <div style={{ position: "relative", cursor: "default" }}>
         {audioNode && playerChannel && (

@@ -1,6 +1,7 @@
 import { StateCreator } from "zustand";
 import type { EditorState, Project, ProjectFile } from "../types";
 import type { StoreState } from "./";
+import { isAudio } from "../helpers/projectFile";
 
 export interface ProjectState {
   project: Project;
@@ -8,6 +9,7 @@ export interface ProjectState {
   getProject: () => Project;
 
   pullEditorChanges: () => void;
+  syncEditorWithCurrentFile: () => void;
 
   //@TODO: move inside project
   currentFileIndex: number;
@@ -32,10 +34,23 @@ const projectStateCreator: StateCreator<ProjectState> = (set, get) => ({
     const { getEditorState, currentFileIndex, updateFileContent, project } =
       get() as StoreState;
     const currentFile = project.files[currentFileIndex];
+    if (isAudio(currentFile)) {
+      return;
+    }
     updateFileContent(currentFileIndex, {
       ...currentFile,
       file: getEditorState(),
     });
+  },
+
+  syncEditorWithCurrentFile: () => {
+    const { currentFileIndex, setEditorState, project } = get() as StoreState;
+    const currentFile = project.files[currentFileIndex];
+    if (currentFile.type === "audio") {
+      console.log("audio file. skipping");
+      return;
+    }
+    setEditorState(currentFile.file);
   },
 
   currentFileIndex: 0,
@@ -90,7 +105,6 @@ const projectStateCreator: StateCreator<ProjectState> = (set, get) => ({
         ...project,
         files,
       },
-      currentFileIndex: files.length - 1,
     });
   },
   deleteFile: (fileIndex) => {
