@@ -98,7 +98,7 @@ const portColors = {
   [PortType.Audio]: "#4ade80", // vibrant green
   [PortType.Gate]: "#c084fc", // rich purple
   [PortType.Number]: "#38bdf8", // bright blue
-  [PortType.Any]: "#fb923c", // warm orange
+  [PortType.Any]: "#ffffff", // white
 };
 
 const StyledHandle = withTheme(styled(Handle, {

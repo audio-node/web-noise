@@ -1,3 +1,5 @@
+import fetch from "@web-noise/fetch";
+
 export default async (
   url: string,
   audioContext: AudioContext,

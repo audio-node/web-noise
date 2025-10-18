@@ -1,7 +1,7 @@
 import { css, Global, ThemeProvider, withTheme } from "@emotion/react";
 import styled from "@emotion/styled";
 import { nanoid } from "nanoid";
-import { ReactNode, useEffect, useMemo, useState } from "react";
+import { ComponentProps, ReactNode, useEffect, useMemo, useState } from "react";
 import { FaPlus as IconAdd } from "react-icons/fa6";
 import { MdClose } from "react-icons/md";
 import "reactflow/dist/style.css";
@@ -9,9 +9,16 @@ import { registerFetcher } from "@web-noise/fetch";
 import useStore from "../store";
 import "../styles";
 import defaultTheme, { Theme } from "../theme";
-import type { EditorState, PluginConfig, Project, ProjectFile } from "../types";
+import type {
+  EditorFile,
+  EditorState,
+  PluginConfig,
+  Project,
+  ProjectFile,
+} from "../types";
 import { Editor } from "./Editor";
 import EditableLabel from "./EditableLabel";
+import { isAudio, isPatch } from "../helpers/projectFile";
 
 // @TODO: move default state to editor
 export const EDITOR_DEFAULTS = {
@@ -35,11 +42,19 @@ export const AppWrapper = withTheme(styled.div<{ theme: Theme }>`
   width: 100%;
 `);
 
-export const EditorContainer = withTheme(styled.div<{ theme: Theme }>`
+export const EditorContainerWrapper = withTheme(styled.div<{ theme: Theme }>`
   height: 100%;
   width: 100%;
   display: flex;
   position: relative;
+`);
+
+export const AudioTabWrapper = withTheme(styled.div<{ theme: Theme }>`
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  background: ${({ theme }) => theme.colors.elevation3};
 `);
 
 export const EditorLoadingOverlay = withTheme(styled.div<{
@@ -61,6 +76,49 @@ export const EditorLoadingOverlay = withTheme(styled.div<{
   justify-content: center;
   font-size: 6rem;
 `);
+
+type EditorContainerProps = AppProps & {
+  file: ProjectFile;
+};
+
+export const EditorContainer = (props: EditorContainerProps) => {
+  const pullEditorChanges = useStore((store) => store.pullEditorChanges);
+  const currentFileIndex = useStore((store) => store.currentFileIndex);
+
+  const [showLoader, setShowLoader] = useState(true);
+
+  useEffect(() => {
+    setShowLoader(true);
+    setTimeout(() => {
+      setShowLoader(false);
+    }, 1600);
+  }, [currentFileIndex]);
+
+  const { file } = props;
+  if (!file) return null;
+
+  if (file.type === "audio") {
+    return (
+      <AudioTabWrapper>
+        <audio src={file.file} controls />
+      </AudioTabWrapper>
+    );
+  }
+
+  return (
+    <>
+      <Editor
+        {...props}
+        onChange={(state) => {
+          pullEditorChanges();
+        }}
+        editorState={(file as EditorFile).file || EDITOR_DEFAULTS}
+      />
+
+      <EditorLoadingOverlay show={showLoader}>Loading...</EditorLoadingOverlay>
+    </>
+  );
+};
 
 export const TabsContainer = withTheme(styled.div<{ theme: Theme }>`
   height: 2rem;
@@ -128,31 +186,35 @@ const generateEmptyFile = (): ProjectFile => ({
   id: generateId(),
 });
 
-export const App = ({
-  ...props
-}: {
+interface AppProps {
   projectState?: Project;
   plugins?: Array<PluginConfig>;
   editorContextMenu?: Array<ReactNode>;
   onChange?: ({ nodes, edges, controlPanel }: EditorState) => void;
   theme?: Theme;
-}) => {
+}
+
+export const App = ({ ...props }: AppProps) => {
   const { projectState, theme } = props;
   const currentFileIndex = useStore((store) => store.currentFileIndex);
+  const currentFile = useStore(
+    (store) => store.project.files[store.currentFileIndex],
+  );
   const setCurrentFileIndex = useStore((store) => store.setCurrentFileIndex);
 
   const project = useStore((store) => store.project);
   const setProject = useStore((store) => store.setProject);
   const getProject = useStore((store) => store.getProject);
   const updateFileName = useStore((store) => store.updateFileName);
-  const pullEditorChanges = useStore((store) => store.pullEditorChanges);
 
   const addFile = useStore((store) => store.addFile);
   const deleteFile = useStore((store) => store.deleteFile);
+  const syncEditorWithCurrentFile = useStore(
+    (store) => store.syncEditorWithCurrentFile,
+  );
 
   const setEditorState = useStore((store) => store.setEditorState);
-
-  const [showLoader, setShowLoader] = useState(false);
+  const pullEditorChanges = useStore((store) => store.pullEditorChanges);
 
   useEffect(() => {
     setProject(
@@ -160,7 +222,8 @@ export const App = ({
         files: [generateEmptyFile()],
       },
     );
-    projectState && setEditorState(projectState.files[0].file);
+    const file = projectState?.files[0];
+    file?.file && file?.type !== "audio" && setEditorState(file.file);
   }, [projectState]);
 
   // EXPERIMENTAL CODE
@@ -170,7 +233,20 @@ export const App = ({
       const files = getProject().files;
       const index = request.url.replace("project://", "");
       const file = files.find(({ id }) => id === index);
-      return new Response(JSON.stringify(file?.file ?? null));
+
+      if (!file) {
+        return new Response(`File not found: ${request.url}`, { status: 404 });
+      }
+
+      if (isPatch(file)) {
+        return new Response(JSON.stringify(file.file ?? null));
+      }
+
+      if (isAudio(file)) {
+        return fetch(file.file);
+      }
+
+      return new Response(null);
     };
     registerFetcher("project://*", fetcher);
     return () => {
@@ -179,12 +255,8 @@ export const App = ({
   }, [getProject]);
 
   useEffect(() => {
-    setShowLoader(true);
-    setEditorState(getProject().files[currentFileIndex]?.file);
-    setTimeout(() => {
-      setShowLoader(false);
-    }, 1600);
-  }, [currentFileIndex, setEditorState]);
+    syncEditorWithCurrentFile();
+  }, [currentFileIndex, syncEditorWithCurrentFile]);
 
   return (
     <ThemeProvider theme={theme || defaultTheme}>
@@ -252,7 +324,9 @@ export const App = ({
         <TabsContainer>
           {project.files.map((file, index) => (
             <Tab
-              onClick={() => setCurrentFileIndex(index)}
+              onClick={() => {
+                setCurrentFileIndex(index);
+              }}
               key={index}
               active={index === currentFileIndex}
             >
@@ -273,22 +347,18 @@ export const App = ({
               />
             </Tab>
           ))}
-          <TabIconWrapper onClick={() => addFile(generateEmptyFile())}>
+          <TabIconWrapper
+            onClick={() => {
+              addFile(generateEmptyFile());
+              setCurrentFileIndex(project.files.length);
+            }}
+          >
             <AddFileIcon />
           </TabIconWrapper>
         </TabsContainer>
-        <EditorContainer>
-          <Editor
-            {...props}
-            onChange={(state) => {
-              pullEditorChanges();
-            }}
-            editorState={EDITOR_DEFAULTS}
-          />
-          <EditorLoadingOverlay show={showLoader}>
-            Loading...
-          </EditorLoadingOverlay>
-        </EditorContainer>
+        <EditorContainerWrapper>
+          <EditorContainer file={currentFile!} {...props} />
+        </EditorContainerWrapper>
       </AppWrapper>
     </ThemeProvider>
   );

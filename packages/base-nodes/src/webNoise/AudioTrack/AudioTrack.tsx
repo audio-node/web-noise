@@ -7,6 +7,8 @@ import {
   useTheme,
   Theme,
   useNode,
+  useStore,
+  isAudio,
 } from "@web-noise/core";
 import {
   AudioTrackValues,
@@ -16,7 +18,7 @@ import {
   MessageData,
   StatusEventHandler,
 } from "./types";
-import Input from "./Input";
+import Input from "../../components/SubmitInput";
 import Wave from "./Wave";
 import NumberInput from "../../components/NumberInput";
 import Button from "../../components/Button";
@@ -64,6 +66,8 @@ const AudioTrack = ({
   updateNodeValues,
 }: AudioTrackProps) => {
   const { id, data } = props;
+  const projectFiles = useStore((store) => store.project.files);
+
   const [isLoading, setLoading] = useState(false);
   const channel = useMessageChannel();
 
@@ -118,6 +122,12 @@ const AudioTrack = ({
           onSubmit={(src: string) => {
             updateNodeValues({ src });
           }}
+          options={projectFiles
+            .filter((file) => isAudio(file))
+            .map(({ id, name, file }) => ({
+              value: `project://${id}`,
+              label: name,
+            }))}
         />
       </Section>
 

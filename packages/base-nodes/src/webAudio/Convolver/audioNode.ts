@@ -23,18 +23,32 @@ export const convolver = async (
   const broadcast = useBroadcast(channel.port1);
 
   const loadBuffer = async (url: string) => {
-    const buffer = await loadAudioBuffer(url, audioContext);
-    convolverNode.buffer = buffer;
-    const event = {
-      name: "track",
-      data: {
-        sampleRate: buffer.sampleRate,
-        length: buffer.length,
-        duration: buffer.duration,
-        channelData: [buffer.getChannelData(0), buffer.getChannelData(1)],
-      },
-    };
-    broadcast(event);
+    try {
+      const buffer = await loadAudioBuffer(url, audioContext);
+      convolverNode.buffer = buffer;
+      const event = {
+        name: "track",
+        data: {
+          sampleRate: buffer.sampleRate,
+          length: buffer.length,
+          duration: buffer.duration,
+          channelData: [buffer.getChannelData(0), buffer.getChannelData(1)],
+        },
+      };
+      broadcast(event);
+    } catch (error) {
+      // @TODO: should broadcast an error event
+      const event = {
+        name: "track",
+        data: {
+          sampleRate: audioContext.sampleRate,
+          length: 0,
+          duration: 0,
+          channelData: [new Float32Array(), new Float32Array()],
+        },
+      };
+      broadcast(event);
+    }
   };
 
   if (url) {
