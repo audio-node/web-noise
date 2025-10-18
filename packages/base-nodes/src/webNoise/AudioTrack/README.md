@@ -1,7 +1,5 @@
 # Audio Track Node
 
-[Web Audio API Reference](https://developer.mozilla.org/en-US/docs/Web/API/AudioWorkletNode)
-
 ## Overview
 
 The Audio Track node is designed to play back audio from a specified URL. It loads an audio file into a buffer and provides extensive control over its playback, including looping, playback rate, and defining specific start and end points. This makes it a versatile tool for handling audio samples, loops, and backing tracks within a Web Noise patch.

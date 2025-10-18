@@ -1,4 +1,4 @@
-import { PortType } from "@web-noise/core";
+import { PortType } from "@web-noise/core/constants";
 import { addBroadcastListener } from "../../lib/useBroadcast";
 import { Distortion, DistortionParameters } from "./types";
 

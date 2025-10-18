@@ -75,12 +75,21 @@ export interface EditorState extends EditorStoreState {
   viewport: Viewport;
 }
 
-export type ProjectFile = {
+export interface EditorFile {
   id: string;
   name?: string;
-  type?: "patch" | "blob";
+  type: "patch" | never;
   file: EditorState;
-};
+}
+
+export interface AudioFile {
+  id: string;
+  name?: string;
+  type: "audio";
+  file: string;
+}
+
+export type ProjectFile = EditorFile | AudioFile;
 
 export interface Project {
   files: Array<ProjectFile>;

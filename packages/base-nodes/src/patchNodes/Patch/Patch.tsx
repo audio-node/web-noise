@@ -7,6 +7,7 @@ import {
   useNode,
   WNNode,
   WNNodeProps,
+  isPatch,
 } from "@web-noise/core";
 import { useCallback, useMemo } from "react";
 // @ts-ignore
@@ -92,7 +93,9 @@ const Patch = (props: WNNodeProps<PatchData>) => {
             placeholder="patch url"
             onSubmit={setPatchUrl}
             options={projectFiles
-              .filter((_, index) => index !== currentFileIndex)
+              .filter(
+                (file, index) => index !== currentFileIndex && isPatch(file),
+              )
               .map(({ id, name }) => ({
                 value: `project://${id}`,
                 label: name,

@@ -1,3 +1,4 @@
+import fetch from "@web-noise/fetch";
 import { PortType } from "@web-noise/core/constants";
 import EventBus from "../../lib/EventBus";
 import { addBroadcastListener } from "../../lib/useBroadcast";

@@ -18,6 +18,7 @@ export { default as useNode } from "./src/hooks/useNode";
 export { default as useTheme } from "./src/hooks/useTheme";
 export { default as useStore } from "./src/store";
 export { default as theme } from "./src/theme";
+export { isAudio, isPatch } from "./src/helpers/projectFile";
 
 export { PortType } from "./src/constants";
 

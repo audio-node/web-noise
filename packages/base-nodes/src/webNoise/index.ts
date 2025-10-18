@@ -2,6 +2,7 @@ import { type PluginConfig } from "@web-noise/core";
 
 import ADSR from "./ADSR";
 import AudioOutput from "./AudioOutput";
+import AudioInput from "./AudioInput";
 import Distortion from "./Distortion";
 import FrequencyMeter from "./FrequencyMeter";
 import Gate from "./Gate";
@@ -59,6 +60,7 @@ export const webNoiseNodes: PluginConfig = {
     Distortion,
     Limiter,
     AudioOutput,
+    AudioInput,
     AudioRecorder,
     PassThrough,
   ],
