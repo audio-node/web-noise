@@ -1,6 +1,6 @@
 {
   "name": "@web-noise/core",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "source": "index.ts",
   "main": "dist/main.js",
   "module": "dist/module.js",
@@ -45,7 +45,9 @@
     },
     "constants": {
       "source": "constants.ts",
-      "isLibrary": true
+      "isLibrary": true,
+      "optimize": true,
+      "outputFormat": "commonjs"
     }
   },
   "dependencies": {
