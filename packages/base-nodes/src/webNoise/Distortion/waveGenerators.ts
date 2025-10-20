@@ -78,4 +78,8 @@ export const generateFuzzWave = (
   return generateWave(points, "monotonic", bufferSize);
 };
 
-export const generators = [generateClipperWave, generateAnalogWarmWave, generateFuzzWave];
+export const generators = [
+  generateClipperWave,
+  generateAnalogWarmWave,
+  generateFuzzWave,
+];

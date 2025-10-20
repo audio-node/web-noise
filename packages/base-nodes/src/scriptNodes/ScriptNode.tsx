@@ -1,7 +1,7 @@
 import { useAudioNode, useNode, WNNode, WNNodeProps } from "@web-noise/core";
 import { Resizable } from "re-resizable";
 import { useEffect, useState } from "react";
-import Editor from "../components/Editor";
+import Editor from "./Editor";
 import {
   MessageData,
   ScriptNode as TScriptNode,

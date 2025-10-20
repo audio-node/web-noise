@@ -1,11 +1,11 @@
 import { useNode, useTheme } from "@web-noise/core";
-import ColorInput from "../../components/ColorInput";
 import {
+  ColorInput,
   ConfigPanel,
   ConfigRow,
   ConfigRowControl,
   ConfigRowLabel,
-} from "../../components/NodeConfig";
+} from "@web-noise/core/components";
 import { SpectroscopeProps } from "./types";
 
 const SpectroscopeConfig = ({ id, data }: SpectroscopeProps) => {

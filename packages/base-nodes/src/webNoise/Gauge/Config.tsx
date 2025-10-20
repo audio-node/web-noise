@@ -1,17 +1,17 @@
 import styled from "@emotion/styled";
 import { Theme, useNode, useTheme } from "@web-noise/core";
 import { MdDelete as DeleteIcon } from "react-icons/md";
-import Button from "../../components/Button";
-import ColorInput from "../../components/ColorInput";
-import Input from "../../components/Input";
 import {
+  ColorInput,
+  Input,
+  Button,
+  NumberInput,
   ConfigPanel,
   ConfigRow,
   ConfigRowControl,
   ConfigRowLabel,
   ConfigRowSeparator,
-} from "../../components/NodeConfig";
-import NumberInput from "../../components/NumberInput";
+} from "@web-noise/core/components";
 import { GaugeProps } from "./types";
 
 const OptionsRow = styled(ConfigRowControl)`
@@ -240,7 +240,7 @@ const GaugeConfig = ({ id, data }: GaugeProps) => {
                 />
                 <OptionLabelInput
                   placeholder={"label"}
-                  value={label || ''}
+                  value={label || ""}
                   onChange={(newValue) => {
                     updateNodeConfig?.({
                       ...config,
@@ -253,7 +253,7 @@ const GaugeConfig = ({ id, data }: GaugeProps) => {
                   }}
                 />
                 <OptionLabelColor
-                  value={color || ''}
+                  value={color || ""}
                   onChange={(newValue) => {
                     updateNodeConfig?.({
                       ...config,

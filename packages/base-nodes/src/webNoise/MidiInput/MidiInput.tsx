@@ -9,14 +9,13 @@ import {
   useAudioNode,
   useNode,
 } from "@web-noise/core";
+import { RadioGroup, Select } from "@web-noise/core/components";
 import {
   MidiInputData,
   MidiInput as TMidiInput,
   MidiInputList as MidiInputDevices,
   MessageEventHandler,
 } from "./types";
-import Select from "../../components/Select";
-import RadioGroup from "../../components/RadioGroup";
 
 const MidiInputWrapper = withTheme(styled.div<{ theme: Theme }>``);
 

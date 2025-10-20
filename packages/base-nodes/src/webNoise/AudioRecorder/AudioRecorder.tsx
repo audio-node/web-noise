@@ -13,8 +13,8 @@ import {
   Theme,
   useStore,
 } from "@web-noise/core";
+import { useMessageChannel } from "@web-noise/core/lib";
 import { RecorderValues, RecorderConfig, RecorderData } from "./types";
-import useMessageChannel from "../../lib/hooks/useMessageChannel";
 import { durationToTime } from "../../lib/format";
 import Wave from "../AudioTrack/Wave";
 import { TrackData, TrackEvent } from "../AudioTrack/types";

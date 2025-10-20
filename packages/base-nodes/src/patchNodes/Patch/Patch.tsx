@@ -13,7 +13,7 @@ import { useCallback, useMemo } from "react";
 // @ts-ignore
 import GridLayout from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
-import Input from "../../components/SubmitInput";
+import { DropdownInput } from "@web-noise/core/components";
 import PanelNode from "./PanelNode";
 import { Patch as TPatch } from "./patchAudioNode";
 import { PatchData } from "./types";
@@ -89,7 +89,7 @@ const Patch = (props: WNNodeProps<PatchData>) => {
     <WNNode {...props}>
       {typeof url === "undefined" ? (
         <NodeWrapper theme={theme}>
-          <Input
+          <DropdownInput
             placeholder="patch url"
             onSubmit={setPatchUrl}
             options={projectFiles

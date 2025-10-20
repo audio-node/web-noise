@@ -1,12 +1,12 @@
 import { useNode, useTheme } from "@web-noise/core";
-import ColorInput from "../../components/ColorInput";
 import {
+  ColorInput,
   ConfigPanel,
   ConfigRow,
   ConfigRowControl,
   ConfigRowLabel,
   ConfigRowSeparator,
-} from "../../components/NodeConfig";
+} from "@web-noise/core/components";
 import { WaveShaperProps } from "./types";
 
 const WaveShaperConfig = ({ id, data }: WaveShaperProps) => {

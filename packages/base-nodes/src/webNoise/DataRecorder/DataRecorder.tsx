@@ -4,6 +4,7 @@ import { withTheme } from "@emotion/react";
 import downloadFile from "js-file-download";
 import { FaFileDownload as DownloadIcon } from "react-icons/fa";
 import { WNAudioNode, WNNodeProps, useTheme, Theme } from "@web-noise/core";
+import { useMessageChannel } from "@web-noise/core/lib";
 import {
   DataRecorderValues,
   DataRecorderConfig,
@@ -12,7 +13,6 @@ import {
   PortEvent,
   DataRecorder as TDataRecorder,
 } from "./types";
-import useMessageChannel from "../../lib/hooks/useMessageChannel";
 
 const DataRecorderWrapper = withTheme(styled.div<{
   theme: Theme;

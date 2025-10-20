@@ -1,16 +1,16 @@
 import { useAudioNode, useNode, useTheme, Theme } from "@web-noise/core";
 import styled from "@emotion/styled";
 import { MdDelete as DeleteIcon } from "react-icons/md";
-import Input from "../../components/Input";
-import NumberInput from "../../components/NumberInput";
-import Button from "../../components/Button";
 import {
+  Input,
+  NumberInput,
+  Button,
   ConfigPanel,
   ConfigRow,
   ConfigRowControl,
   ConfigRowLabel,
   ConfigRowSeparator,
-} from "../../components/NodeConfig";
+} from "@web-noise/core/components";
 import { SelectProps } from "./types";
 import { Select as TSelect } from "./audioNode";
 import { useEffect } from "react";
@@ -121,7 +121,7 @@ const ConfigMode = ({ id, data }: SelectProps) => {
                       options: options.map((item, index) =>
                         index === optionIndex
                           ? { ...item, key: newValue }
-                          : item
+                          : item,
                       ),
                     });
                   }}
@@ -135,7 +135,7 @@ const ConfigMode = ({ id, data }: SelectProps) => {
                       options: options.map((item, index) =>
                         index === optionIndex
                           ? { ...item, value: newValue }
-                          : item
+                          : item,
                       ),
                     });
                   }}
@@ -144,7 +144,7 @@ const ConfigMode = ({ id, data }: SelectProps) => {
                   theme={theme}
                   onClick={() => {
                     const filteredOptions = options.filter(
-                      (_item, index) => index !== optionIndex
+                      (_item, index) => index !== optionIndex,
                     );
 
                     updateNodeConfig?.({
@@ -153,7 +153,7 @@ const ConfigMode = ({ id, data }: SelectProps) => {
                     });
 
                     const newValue = filteredOptions.find(
-                      (item) => item.key === key
+                      (item) => item.key === key,
                     )?.key;
 
                     updateNodeValues({ value: newValue });

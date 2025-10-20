@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { Theme, useTheme } from "@web-noise/core";
 import { useCallback } from "react";
-import Button from "../../components/Button";
+import { Button } from "@web-noise/core/components";
 import { GateConfig } from "./types";
 
 const StyledButton = styled(Button)<{

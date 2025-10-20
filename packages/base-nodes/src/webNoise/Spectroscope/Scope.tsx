@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef } from "react";
-import useWorker from "../../lib/hooks/useWorker";
+import { useWorker } from "@web-noise/core/lib";
 import defaultConfig from "./defaultConfig";
 
 //@ts-ignore

@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from "react";
 import styled from "@emotion/styled";
 import { WNAudioNode, WNNodeProps, useTheme, Theme } from "@web-noise/core";
-import useMessageChannel from "../../lib/hooks/useMessageChannel";
+import { useMessageChannel } from "@web-noise/core/lib";
 import { ADSRData } from "./types";
 import Scope from "./Scope";
 

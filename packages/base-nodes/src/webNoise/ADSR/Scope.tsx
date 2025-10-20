@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
+import { useWorker } from "@web-noise/core/lib";
 import defaultConfig from "./defaultConfig";
-import useWorker from "../../lib/hooks/useWorker";
 
 import {
   ADSRColors,

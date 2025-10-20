@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { Theme, useTheme, WNAudioNode, WNNodeProps } from "@web-noise/core";
 import { useEffect } from "react";
-import NumberInput from "../../components/NumberInput";
+import { NumberInput } from "@web-noise/core/components";
 import { ConstantSourceValues } from "./constantSource";
 
 const InputWrapper = styled.div<{ theme: Theme }>`

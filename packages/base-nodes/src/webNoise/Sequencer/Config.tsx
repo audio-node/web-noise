@@ -1,13 +1,13 @@
 import { useNode, useTheme } from "@web-noise/core";
 import {
+  ColorInput,
+  NumberInput,
   ConfigPanel,
   ConfigRow,
   ConfigRowControl,
   ConfigRowLabel,
   ConfigRowSeparator,
-} from "../../components/NodeConfig";
-import NumberInput from "../../components/NumberInput";
-import ColorInput from "../../components/ColorInput";
+} from "@web-noise/core/components";
 import { SequencerProps } from "./types";
 
 const SequencerConfig = ({ id, data }: SequencerProps) => {

@@ -23,7 +23,9 @@ interface SetScaleEvent {
   maxValue: number;
 }
 
-type WorkerEvent = MessageEvent<InitEvent | SetColorEvent | SetScaleEvent | SetLineWidthEvent>;
+type WorkerEvent = MessageEvent<
+  InitEvent | SetColorEvent | SetScaleEvent | SetLineWidthEvent
+>;
 
 //scope variables
 let canvas: any;

@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { Theme, useTheme, WNAudioNode, WNNodeProps } from "@web-noise/core";
 import { useEffect } from "react";
-import useMessageChannel from "../../lib/hooks/useMessageChannel";
+import { useMessageChannel } from "@web-noise/core/lib";
 import Config from "./Config";
 import { ConvolverData } from "./types";
 import Wave from "../../webNoise/AudioTrack/Wave";

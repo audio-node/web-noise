@@ -1,14 +1,14 @@
 import { useNode, useTheme } from "@web-noise/core";
-import ColorInput from "../../components/ColorInput";
-import Input from "../../components/Input";
-import Checker from "../../components/Checker";
 import {
+  Checker,
+  Input,
+  ColorInput,
   ConfigPanel,
   ConfigRow,
   ConfigRowControl,
   ConfigRowLabel,
   ConfigRowSeparator,
-} from "../../components/NodeConfig";
+} from "@web-noise/core/components";
 import { GateProps } from "./types";
 
 const ConfigMode = ({ id, data }: GateProps) => {

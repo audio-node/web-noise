@@ -2,14 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import styled from "@emotion/styled";
 import { withTheme } from "@emotion/react";
 import { WNAudioNode, WNNodeProps, useTheme, Theme } from "@web-noise/core";
+import { Input } from "@web-noise/core/components";
+import { useMessageChannel } from "@web-noise/core/lib";
 import {
   RandomSequencerValues,
   RandomSequencerConfig,
   RandomSequencerData,
   NoteChangeEvent,
 } from "./types";
-import Input from "../../components/Input";
-import useMessageChannel from "../../lib/hooks/useMessageChannel";
 
 const RandomSequencerWrapper = withTheme(styled.div<{ theme: Theme }>`
   background: ${({ theme }) => theme.colors.elevation2};

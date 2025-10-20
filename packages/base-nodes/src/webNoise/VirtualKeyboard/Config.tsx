@@ -1,14 +1,14 @@
 import { useNode, useTheme } from "@web-noise/core";
 import {
+  Select,
   ConfigPanel,
   ConfigRow,
   ConfigRowControl,
   ConfigRowLabel,
   ConfigRowSeparator,
-} from "../../components/NodeConfig";
-import { VirtualKeyboardProps } from "./types";
-import Select from "../../components/Select";
+} from "@web-noise/core/components";
 import notes from "../MidiNote/notes";
+import { VirtualKeyboardProps } from "./types";
 import defaultConfig from "./defaultConfig";
 
 const FIRST_NOTE_OPTIONS: Array<{ value: string; label: string }> = notes.map(

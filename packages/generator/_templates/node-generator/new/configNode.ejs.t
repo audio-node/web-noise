@@ -9,7 +9,7 @@ import {
   ConfigRowControl,
   ConfigRowLabel,
   ConfigRowSeparator,
-} from "../components/NodeConfig";
+} from "@web-noise/core/components";
 import { <%= componentName %>Props } from "./types";
 
 const <%= componentName %>Config = ({ id, data }: <%= componentName %>Props) => {
