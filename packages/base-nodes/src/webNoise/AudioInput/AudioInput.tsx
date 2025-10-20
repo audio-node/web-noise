@@ -1,15 +1,14 @@
+import { useCallback, useEffect, useMemo, useState } from "react";
 import styled from "@emotion/styled";
 import { withTheme } from "@emotion/react";
 import { WNAudioNode, WNNodeProps, useTheme, Theme } from "@web-noise/core";
+import { RadioGroup, Select } from "@web-noise/core/components";
 import {
   AudioInputData,
   AudioInputList,
   MessageEventHandler,
   AudioInput as TAudioInput,
 } from "./types";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import RadioGroup from "../../components/RadioGroup";
-import Select from "../../components/Select";
 
 const AudioInputWrapper = withTheme(styled.div<{ theme: Theme }>`
   display: flex;

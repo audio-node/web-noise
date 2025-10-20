@@ -1,13 +1,13 @@
 import { useNode, useTheme } from "@web-noise/core";
 import {
+  ColorInput,
   ConfigPanel,
   ConfigRow,
   ConfigRowControl,
   ConfigRowLabel,
   ConfigRowSeparator,
-} from "../../components/NodeConfig";
+} from "@web-noise/core/components";
 import { AudioTrackProps } from "./types";
-import ColorInput from "../../components/ColorInput";
 
 const AudioTrackConfig = ({ id, data }: AudioTrackProps) => {
   const theme = useTheme();

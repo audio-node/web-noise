@@ -4,8 +4,7 @@ import styled from "@emotion/styled";
 import { WNAudioNode, WNNodeProps, useTheme, Theme } from "@web-noise/core";
 //@ts-ignore
 import { CanvasSpliner } from "CanvasSpliner";
-import Select from "../../components/Select";
-import SplineEditor from "../../components/SplineEditor";
+import { Select, SplineEditor } from "@web-noise/core/components";
 import { WaveShaperValues, WaveShaperConfig, WaveShaperData } from "./types";
 
 class Spliner extends CanvasSpliner {

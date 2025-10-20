@@ -5,7 +5,7 @@ import {
   ConfigRowControl,
   ConfigRowLabel,
   ConfigRowSeparator,
-} from "../../components/NodeConfig";
+} from "@web-noise/core/components";
 import { RecorderProps } from "./types";
 
 const RecorderConfig = ({ id, data }: RecorderProps) => {

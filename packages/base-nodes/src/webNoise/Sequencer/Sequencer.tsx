@@ -1,6 +1,8 @@
 import styled from "@emotion/styled";
 import { withTheme } from "@emotion/react";
 import { WNAudioNode, WNNodeProps, useTheme, Theme } from "@web-noise/core";
+import { Select } from "@web-noise/core/components";
+import { useMessageChannel } from "@web-noise/core/lib";
 import {
   SequencerValues,
   SequencerConfig,
@@ -9,10 +11,7 @@ import {
   PortEvent,
 } from "./types";
 import { useEffect, useRef, useState } from "react";
-import Select from "../../components/Select";
-import Button from "../../components/Button";
 import notes from "../MidiNote/notes";
-import useMessageChannel from "../../lib/hooks/useMessageChannel";
 
 const SequencerWrapper = withTheme(styled.div<{ theme: Theme }>`
   display: flex;

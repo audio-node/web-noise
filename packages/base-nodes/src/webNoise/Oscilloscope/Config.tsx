@@ -1,15 +1,15 @@
 import styled from "@emotion/styled";
 import { Theme, useNode, useTheme } from "@web-noise/core";
 import {
+  Checker,
+  ColorInput,
+  NumberInput,
   ConfigPanel,
   ConfigRow,
   ConfigRowControl,
   ConfigRowLabel,
   ConfigRowSeparator,
-} from "../../components/NodeConfig";
-import ColorInput from "../../components/ColorInput";
-import Checker from "../../components/Checker";
-import NumberInput from "../../components/NumberInput";
+} from "@web-noise/core/components";
 import { OscilloscopeProps } from "./types";
 
 const NumberInputStyled = styled(NumberInput)<{ theme: Theme }>`

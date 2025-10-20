@@ -1,12 +1,12 @@
 import { useNode, useTheme } from "@web-noise/core";
-import Checker from "../../components/Checker";
-import ColorInput from "../../components/ColorInput";
 import {
+  Checker,
+  ColorInput,
   ConfigPanel,
   ConfigRow,
   ConfigRowControl,
   ConfigRowLabel,
-} from "../../components/NodeConfig";
+} from "@web-noise/core/components";
 import { StickerProps } from "./types";
 
 const StickerConfig = ({ id, data }: StickerProps) => {

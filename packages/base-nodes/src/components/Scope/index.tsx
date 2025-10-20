@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import useWorker from "../../lib/hooks/useWorker";
+import { useWorker } from "@web-noise/core/lib";
 
 //@ts-ignore
 import rendererWorkerUrl from "worklet:./renderer.worker.ts";

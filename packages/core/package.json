@@ -1,6 +1,6 @@
 {
   "name": "@web-noise/core",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "source": "index.ts",
   "main": "dist/main.js",
   "module": "dist/module.js",
@@ -15,6 +15,16 @@
       "import": "./dist/constants.js",
       "require": "./dist/constants.js",
       "types": "./dist/constants.d.ts"
+    },
+    "./components": {
+      "import": "./dist/components.js",
+      "require": "./dist/components.js",
+      "types": "./dist/components.d.ts"
+    },
+    "./lib": {
+      "import": "./dist/lib.js",
+      "require": "./dist/lib.js",
+      "types": "./dist/lib.d.ts"
     }
   },
   "files": [
@@ -45,6 +55,21 @@
     },
     "constants": {
       "source": "constants.ts",
+      "distDir": "dist",
+      "isLibrary": true,
+      "optimize": true,
+      "outputFormat": "commonjs"
+    },
+    "components": {
+      "source": "components.ts",
+      "distDir": "dist",
+      "isLibrary": true,
+      "optimize": true,
+      "outputFormat": "commonjs"
+    },
+    "lib": {
+      "source": "lib.ts",
+      "distDir": "dist",
       "isLibrary": true,
       "optimize": true,
       "outputFormat": "commonjs"

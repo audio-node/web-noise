@@ -2,8 +2,7 @@ import { withTheme } from "@emotion/react";
 import styled from "@emotion/styled";
 import { Theme, useTheme, WNNodeProps } from "@web-noise/core";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import RadioGroup from "../../components/RadioGroup";
-import Select from "../../components/Select";
+import { RadioGroup, Select } from "@web-noise/core/components";
 import { DEFAULT_OUTPUT } from "./constants";
 import { AudioOutput as TAudioOutput, AudioOutputData } from "./types";
 

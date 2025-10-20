@@ -10,6 +10,8 @@ import {
   useStore,
   isAudio,
 } from "@web-noise/core";
+import { DropdownInput } from "@web-noise/core/components";
+import { useMessageChannel } from "@web-noise/core/lib";
 import {
   AudioTrackValues,
   AudioTrackConfig,
@@ -18,11 +20,7 @@ import {
   MessageData,
   StatusEventHandler,
 } from "./types";
-import Input from "../../components/SubmitInput";
 import Wave from "./Wave";
-import NumberInput from "../../components/NumberInput";
-import Button from "../../components/Button";
-import useMessageChannel from "../../lib/hooks/useMessageChannel";
 
 const AudioTrackWrapper = withTheme(styled.div<{ theme: Theme }>``);
 
@@ -116,7 +114,7 @@ const AudioTrack = ({
   return (
     <AudioTrackWrapper>
       <Section>
-        <Input
+        <DropdownInput
           value={src}
           placeholder="place URL here"
           onSubmit={(src: string) => {

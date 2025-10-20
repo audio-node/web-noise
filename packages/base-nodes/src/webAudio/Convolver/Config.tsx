@@ -1,6 +1,9 @@
 import { isAudio, useNode, useStore, useTheme } from "@web-noise/core";
-import Input from "../../components/SubmitInput";
-import { ConfigPanel, ConfigRow } from "../../components/NodeConfig";
+import {
+  DropdownInput,
+  ConfigPanel,
+  ConfigRow,
+} from "@web-noise/core/components";
 import { ConvolverProps } from "./types";
 
 const ConvolverConfig = ({ id, data }: ConvolverProps) => {
@@ -13,7 +16,7 @@ const ConvolverConfig = ({ id, data }: ConvolverProps) => {
   return (
     <ConfigPanel theme={theme}>
       <ConfigRow oneLineLabels theme={theme}>
-        <Input
+        <DropdownInput
           value={values.url}
           placeholder="place URL here"
           onSubmit={(url: string) => {

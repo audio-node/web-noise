@@ -1,12 +1,12 @@
 import { useNode, useTheme } from "@web-noise/core";
-import ColorInput from "../../components/ColorInput";
 import {
+  ColorInput,
   ConfigPanel,
   ConfigRow,
   ConfigRowControl,
   ConfigRowLabel,
   ConfigRowSeparator,
-} from "../../components/NodeConfig";
+} from "@web-noise/core/components";
 import { ADSRProps } from "./types";
 
 const ADSRConfig = ({ id, data }: ADSRProps) => {

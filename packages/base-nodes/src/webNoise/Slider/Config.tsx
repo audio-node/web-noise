@@ -1,14 +1,14 @@
 import { useNode, useTheme } from "@web-noise/core";
-import Checker from "../../components/Checker";
-import ColorInput from "../../components/ColorInput";
 import {
+  Checker,
+  ColorInput,
+  NumberInput,
   ConfigPanel,
   ConfigRow,
   ConfigRowControl,
   ConfigRowLabel,
   ConfigRowSeparator,
-} from "../../components/NodeConfig";
-import NumberInput from "../../components/NumberInput";
+} from "@web-noise/core/components";
 import { SliderProps } from "./types";
 
 const SliderConfig = ({ id, data }: SliderProps) => {

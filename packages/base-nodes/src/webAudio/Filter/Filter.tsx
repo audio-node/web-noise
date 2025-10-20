@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import styled from "@emotion/styled";
 import { WNAudioNode, WNNodeProps, useTheme, Theme } from "@web-noise/core";
-import Select from "../../components/Select";
+import { Select } from "@web-noise/core/components";
 import { FilterData } from "./types";
 
 const FilterWrapper = styled.div<{ theme: Theme }>`

@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { WNAudioNode, WNNodeProps } from "@web-noise/core";
 import { useEffect } from "react";
-import SelectControl from "../../components/Select";
+import { Select as SelectControl } from "@web-noise/core/components";
 import DEFAULT_CONFIG from "./defaultConfig";
 import { SelectData } from "./types";
 
