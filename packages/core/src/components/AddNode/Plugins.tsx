@@ -51,6 +51,29 @@ const NodeDescription = withTheme(styled.div<{ theme: Theme }>`
   font-size: 12px;
 `);
 
+export const TagsList = withTheme(styled.div<{ theme: Theme }>`
+  display: flex;
+  gap: 0.2rem;
+  flex-wrap: wrap;
+`);
+
+export const PluginTag = withTheme(styled.span<{
+  theme: Theme;
+  isActive?: boolean;
+}>`
+  cursor: pointer;
+  font-size: 10px;
+  background: ${({ theme, isActive }) =>
+    isActive ? theme.colors.highlight1 : theme.colors.elevation3};
+  border-radius: 2px;
+  padding: 0.1rem 0.2rem;
+  border: 1px solid;
+  border-color: ${({ theme }) => theme.colors.elevation2};
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.accent2};
+  }
+`);
+
 const PluginHeader = withTheme(styled.div<{ theme: Theme }>``);
 
 const PluginTitle = withTheme(styled.div<{ theme: Theme }>`
@@ -67,11 +90,13 @@ const PluginDescription = withTheme(styled.div<{ theme: Theme }>`
 interface PluginsProps {
   filters: FiltersState;
   onComponentClick: (component: PluginComponent) => void;
+  onTagClick: (tag: string) => void;
 }
 
 const Plugins = ({
   onComponentClick,
-  filters: { plugin, search },
+  filters: { plugin, search = "", tags },
+  onTagClick,
 }: PluginsProps) => {
   const plugins = useStore(({ plugins }) => plugins);
 
@@ -80,14 +105,21 @@ const Plugins = ({
       return plugins;
     }
     return plugins.filter(({ name }) => name === plugin);
-    // return plugins.filter(({ type }) => type === )
   }, [plugins, plugin]);
 
   const filteredPlugins = useMemo(() => {
-    if (!search) {
+    if (!search && !tags?.length) {
       return pluginsGroup;
     }
-    return pluginsGroup.map((plugin) => ({
+    const filteredByTags = pluginsGroup.map((plugin) => ({
+      ...plugin,
+      components: tags?.length
+        ? plugin.components.filter((component) =>
+            tags?.every((tag) => component.tags?.includes(tag)),
+          )
+        : plugin.components,
+    }));
+    return filteredByTags.map((plugin) => ({
       ...plugin,
       components: plugin.components.filter(
         ({ type, name }) =>
@@ -95,7 +127,7 @@ const Plugins = ({
           name?.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
       ),
     }));
-  }, [pluginsGroup, search]);
+  }, [pluginsGroup, search, tags]);
 
   return (
     <PluginsWrapper>
@@ -120,6 +152,20 @@ const Plugins = ({
                     {component.description && (
                       <NodeDescription>{component.description}</NodeDescription>
                     )}
+                    <TagsList>
+                      {component.tags?.map((tag, tagIdx) => (
+                        <PluginTag
+                          isActive={tags?.includes(tag)}
+                          onClickCapture={(event) => {
+                            event.stopPropagation();
+                            onTagClick(tag);
+                          }}
+                          key={tagIdx}
+                        >
+                          {tag}
+                        </PluginTag>
+                      ))}
+                    </TagsList>
                   </li>
                 ))}
             </NodesList>

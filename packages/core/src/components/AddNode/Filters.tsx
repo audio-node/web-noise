@@ -1,8 +1,10 @@
 import styled from "@emotion/styled";
+import { withTheme } from "@emotion/react";
 import { useEffect, useRef } from "react";
 import useTheme from "../../hooks/useTheme";
 import useStore from "../../store";
 import { Theme } from "../../theme";
+import { PluginTag, TagsList } from "./Plugins";
 
 const InputWrapper = styled.div`
   display: flex;
@@ -65,9 +67,21 @@ const PluginName = styled.label<{ theme: Theme }>`
   }
 `;
 
+const StyledPluginTag = withTheme(styled(PluginTag)<{ theme: Theme }>`
+  font-size: 12px;
+  padding: 0.2rem 0.4rem;
+  &:hover {
+  }
+  &::after {
+    content: "×";
+    margin-left: 0.4rem;
+  }
+`);
+
 export interface FiltersState {
   search?: string;
   plugin?: string | null;
+  tags?: string[];
 }
 
 interface FiltersProps {
@@ -101,6 +115,20 @@ const Filters = ({ onChange, value }: FiltersProps) => {
           }
         />
       </InputWrapper>
+      <TagsList>
+        {value.tags?.map((tag, index) => (
+          <StyledPluginTag
+            key={index}
+            isActive
+            onClick={() => {
+              const newTags = value.tags?.filter((t) => t !== tag) || [];
+              onChange({ ...value, tags: newTags });
+            }}
+          >
+            {tag}
+          </StyledPluginTag>
+        ))}
+      </TagsList>
       {plugins.map(({ name, components }, index) => {
         if (!name) {
           return null;

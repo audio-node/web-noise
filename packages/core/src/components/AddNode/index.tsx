@@ -76,6 +76,14 @@ const AddNode = ({ isOpen, closeMenu, mousePosition }: AddNodeProps) => {
         <PluginsPanel theme={theme}>
           <Plugins
             filters={filtersState}
+            onTagClick={(tag) => {
+              setFiltersState((state) => ({
+                ...state,
+                tags: state.tags?.includes(tag)
+                  ? state.tags.filter((t) => t !== tag)
+                  : [...(state.tags || []), tag],
+              }));
+            }}
             onComponentClick={(component) => {
               onComponentClick(component);
               setFiltersState({});
