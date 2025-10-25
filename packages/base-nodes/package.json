@@ -1,6 +1,6 @@
 {
   "name": "@web-noise/base-nodes",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "source": "index.ts",
   "type": "module",
   "main": "dist/main.js",
@@ -15,6 +15,8 @@
   "webNoiseBase": "dist/base/webNoise.js",
   "scriptNodes": "dist/scriptNodes.js",
   "scriptNodesBase": "dist/base/scriptNodes.js",
+  "logicNodes": "dist/logicNodes.js",
+  "logicNodesBase": "dist/base/logicNodes.js",
   "targets": {
     "base": {
       "source": "base.ts",
@@ -77,6 +79,19 @@
       "optimize": false
     },
     "scriptNodesBase": {
+      "source": "src/logicNodes/base.ts",
+      "distDir": "dist/base",
+      "isLibrary": true,
+      "includeNodeModules": true,
+      "optimize": true
+    },
+    "logicNodes": {
+      "source": "src/logicNodes/index.ts",
+      "distDir": "dist",
+      "isLibrary": true,
+      "optimize": false
+    },
+    "logicNodesBase": {
       "source": "src/scriptNodes/base.ts",
       "distDir": "dist/base",
       "isLibrary": true,

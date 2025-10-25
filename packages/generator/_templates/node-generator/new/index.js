@@ -40,6 +40,15 @@ module.exports = {
         })
       : { hasWorklet: false };
 
+    const workletParameters = hasWorklet
+      ? await inquirer.prompt({
+          type: "input",
+          name: "workletParameters",
+          message: "worklet parameters (comma-separated)",
+          default: "",
+        })
+      : { workletParameters: "" };
+
     const { hasNode } = await inquirer.prompt({
       type: "confirm",
       name: "hasNode",
@@ -72,6 +81,7 @@ module.exports = {
       componentFolder,
       hasAudioNode,
       hasWorklet,
+      workletParameters: workletParameters.workletParameters,
       hasNode,
       hasControlPanel,
       hasConfig,
