@@ -3,6 +3,7 @@ import {
   patchNodes,
   webAudioNodes,
   scriptNodes,
+  logicNodes,
 } from "@web-noise/base-nodes";
 import { Editor, theme } from "@web-noise/core";
 import { EDITOR_DEFAULTS } from "@web-noise/core";
@@ -48,7 +49,13 @@ const EditorWrapper = () => {
       <Editor
         projectState={project}
         theme={theme}
-        plugins={[webNoiseNodes, webAudioNodes, patchNodes, scriptNodes]}
+        plugins={[
+          webNoiseNodes,
+          webAudioNodes,
+          patchNodes,
+          scriptNodes,
+          logicNodes,
+        ]}
         editorContextMenu={
           [
             /*<span onClick={() => setShowSharePatch(true)}>Share patch</span>,*/

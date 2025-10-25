@@ -1,7 +1,20 @@
 ---
 to: <%= dir %>/<%= componentFolder %>/types.ts
 ---
+<%
+  const params = workletParameters 
+    ? workletParameters.split(',').map(p => p.trim()).filter(p => p)
+    : [];
+%>
 import type { WNNodeProps, WNNodeData, WNAudioNode } from "@web-noise/core";
+<% if (params.length > 0) { -%>
+
+export enum <%= componentName %>Parameters {
+<% params.forEach((param, index) => { -%>
+  <%= param %> = "<%= param %>",
+<% }); -%>
+}
+<% } -%>
 
 export interface <%= componentName %>Values {
   value?: number;
