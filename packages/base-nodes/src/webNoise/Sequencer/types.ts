@@ -40,4 +40,12 @@ export interface SetSequenceEvent {
   data: Sequence;
 }
 
-export type PortEvent = StepStartEvent | StepEndEvent | SetSequenceEvent;
+export interface ResetEvent {
+  name: "RESET";
+}
+
+export type PortEvent =
+  | StepStartEvent
+  | StepEndEvent
+  | SetSequenceEvent
+  | ResetEvent;

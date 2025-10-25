@@ -120,6 +120,12 @@ const Sequencer = ({
             ref.current?.querySelectorAll(".sequence-cell")[data.data];
           element?.classList.remove("active");
         }
+        if (data.name === "RESET") {
+          const elements = ref.current?.querySelectorAll(".sequence-cell");
+          elements?.forEach((element) => {
+            element.classList.remove("active");
+          });
+        }
       },
     );
   }, [audioNode, channel, ref]);

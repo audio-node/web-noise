@@ -3,6 +3,7 @@ import { createUseGate } from "../../lib/useGate";
 import createUseTrigger from "../../lib/useTrigger";
 import {
   PortEvent,
+  ResetEvent,
   Sequence,
   SequencerWorkletParameters,
   StepEndEvent,
@@ -58,6 +59,9 @@ export class SequencerProcessor extends AudioWorkletProcessor {
 
   resetIndex() {
     this.index = -1;
+    this.broadcast<ResetEvent>({
+      name: "RESET",
+    });
   }
 
   process(
