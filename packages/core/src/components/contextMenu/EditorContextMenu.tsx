@@ -16,6 +16,7 @@ import AddNode from "../AddNode";
 import UploadPatch from "../UploadPatch";
 import UploadProject from "../UploadProject";
 import { ItemWrapper, MenuWrapper } from "./styles";
+import UploadAudio from "../UploadAudio";
 
 type MousePosition = {
   x: number;
@@ -46,6 +47,7 @@ const EditorContextMenu = ({
   const [showAddNode, setShowAddNode] = useState(false);
   const [showUploadPatch, setShowUploadPatch] = useState(false);
   const [showUploadProject, setShowUploadProject] = useState(false);
+  const [showUploadAudio, setShowUploadAudio] = useState(false);
 
   const addNodeHandler = useCallback(
     (x: number, y: number) => {
@@ -155,6 +157,10 @@ const EditorContextMenu = ({
         isOpen={showUploadProject}
         closeMenu={() => setShowUploadProject(false)}
       />
+      <UploadAudio
+        isOpen={showUploadAudio}
+        closeMenu={() => setShowUploadAudio(false)}
+      />
       <MenuWrapper id={MENU_ID} animation={false} colors={theme.colors}>
         <ItemWrapper
           onClick={({ triggerEvent: { clientX, clientY } }) =>
@@ -176,6 +182,10 @@ const EditorContextMenu = ({
         </ItemWrapper>
         <ItemWrapper onClick={() => setShowUploadProject(true)}>
           Upload project
+        </ItemWrapper>
+        <Separator />
+        <ItemWrapper onClick={() => setShowUploadAudio(true)}>
+          Upload Audio File
         </ItemWrapper>
         <Separator />
         <ItemWrapper disabled={historyPointer === 0} onClick={historyBack}>

@@ -49,14 +49,18 @@ export const audioTrack = async (
     try {
       const buffer = await loadTrack(url, audioContext);
 
-      const { sampleRate, length, duration } = buffer;
+      const { sampleRate, length, duration, numberOfChannels } = buffer;
+      const channelData = Array.from(
+        { length: numberOfChannels },
+        (_, i) => buffer.getChannelData(i)
+      );
       const event = {
         name: "track",
         data: {
           sampleRate,
           length,
           duration,
-          channelData: [buffer.getChannelData(0), buffer.getChannelData(1)],
+          channelData,
         },
       };
       audioTrack.port.postMessage(event);

@@ -26,13 +26,18 @@ export const convolver = async (
     try {
       const buffer = await loadAudioBuffer(url, audioContext);
       convolverNode.buffer = buffer;
+      const { sampleRate, length, duration, numberOfChannels } = buffer;
+      const channelData = Array.from(
+        { length: numberOfChannels },
+        (_, i) => buffer.getChannelData(i)
+      );
       const event = {
         name: "track",
         data: {
-          sampleRate: buffer.sampleRate,
-          length: buffer.length,
-          duration: buffer.duration,
-          channelData: [buffer.getChannelData(0), buffer.getChannelData(1)],
+          sampleRate,
+          length,
+          duration,
+          channelData,
         },
       };
       broadcast(event);
