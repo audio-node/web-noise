@@ -19,6 +19,7 @@ import type {
 import { Editor } from "./Editor";
 import EditableLabel from "./EditableLabel";
 import { isAudio, isPatch } from "../helpers/projectFile";
+import { fileToBase64 } from "../lib";
 
 // @TODO: move default state to editor
 export const EDITOR_DEFAULTS = {
@@ -40,6 +41,18 @@ export const AppWrapper = withTheme(styled.div<{ theme: Theme }>`
   flex-direction: column;
   height: 100%;
   width: 100%;
+`);
+
+export const FileUploadLayout = withTheme(styled.div<{ theme: Theme }>`
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
 `);
 
 export const EditorContainerWrapper = withTheme(styled.div<{ theme: Theme }>`
@@ -216,6 +229,73 @@ export const App = ({ ...props }: AppProps) => {
   const setEditorState = useStore((store) => store.setEditorState);
   const pullEditorChanges = useStore((store) => store.pullEditorChanges);
 
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    setIsDragging(false);
+
+    const files = Array.from(e.dataTransfer.files);
+    files.forEach(async (file) => {
+      if (file.type === "application/json") {
+        const fileData = JSON.parse(await file.text());
+        if (fileData.files && fileData.files.length) {
+          if (
+            !window.confirm(
+              "This action will replace your current project. Continue?",
+            )
+          ) {
+            return;
+          }
+          setProject(fileData);
+          setCurrentFileIndex(0);
+          syncEditorWithCurrentFile();
+          return;
+        }
+        const emptyFile = generateEmptyFile();
+        const newGraphState = {
+          ...emptyFile,
+          file: {
+            ...fileData,
+            controlPanel: {
+              ...EDITOR_DEFAULTS.controlPanel,
+              ...fileData.controlPanel,
+            },
+          },
+          name: file.name,
+        };
+        addFile(newGraphState, file.name);
+        return;
+      }
+      if (file.type.match(/^audio\//)) {
+        const base64 = await fileToBase64(file);
+        addFile({
+          type: "audio",
+          // @TODO: use nanoid here
+          id: `audio-file-${+new Date()}`,
+          name: file.name,
+          file: base64,
+        });
+        return;
+      }
+      console.error("Unsupported file type", file);
+    });
+  };
+
   useEffect(() => {
     setProject(
       projectState || {
@@ -320,7 +400,11 @@ export const App = ({ ...props }: AppProps) => {
           }
         `}
       />
-      <AppWrapper>
+      <AppWrapper
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+      >
         <TabsContainer>
           {project.files.map((file, index) => (
             <Tab
@@ -359,6 +443,11 @@ export const App = ({ ...props }: AppProps) => {
         <EditorContainerWrapper>
           <EditorContainer file={currentFile!} {...props} />
         </EditorContainerWrapper>
+        {isDragging && (
+          <FileUploadLayout>
+            Drop file(s) to upload to the project
+          </FileUploadLayout>
+        )}
       </AppWrapper>
     </ThemeProvider>
   );

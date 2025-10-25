@@ -30,3 +30,11 @@
 ## Move node
   - Drag and Drop
 
+<br/>
+
+## Upload file
+  - Drag and drop audio or patch files onto the application
+  - Uploaded file appears as a new tab in the tabs bar at the top
+  - Click on the tab to view or edit the file
+
+
