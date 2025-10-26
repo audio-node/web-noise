@@ -1,6 +1,6 @@
 {
   "name": "@web-noise/base-nodes",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "source": "index.ts",
   "type": "module",
   "main": "dist/main.js",
@@ -79,7 +79,7 @@
       "optimize": false
     },
     "scriptNodesBase": {
-      "source": "src/logicNodes/base.ts",
+      "source": "src/scriptNodes/base.ts",
       "distDir": "dist/base",
       "isLibrary": true,
       "includeNodeModules": true,
@@ -92,7 +92,7 @@
       "optimize": false
     },
     "logicNodesBase": {
-      "source": "src/scriptNodes/base.ts",
+      "source": "src/logicNodes/base.ts",
       "distDir": "dist/base",
       "isLibrary": true,
       "includeNodeModules": true,
@@ -148,9 +148,9 @@
       "import": "./dist/patch.js",
       "types": "./dist/patch.d.ts"
     },
-    "./scriptNodes": {
-      "import": "./dist/scriptNodes.js",
-      "types": "./dist/scriptNodes.d.ts"
+    "./logicNodes": {
+      "import": "./dist/logicNodes.js",
+      "types": "./dist/logicNodes.d.ts"
     }
   },
   "files": [
