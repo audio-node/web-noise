@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Theme, useTheme } from "@web-noise/core";
+import { type Theme, useTheme } from "../../../core";
 
 const CheckerBox = styled.div<{ theme: Theme }>`
   display: flex;
@@ -54,7 +54,7 @@ interface CheckerProps extends CheckerItem {
   checked?: boolean;
 }
 
-const Checker = ({
+export const Checker = ({
   label,
   subtitle,
   name,

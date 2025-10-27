@@ -57,7 +57,7 @@ interface NumberInputProps {
   placeholder?: string;
 }
 
-const NumberInput = ({
+export const NumberInput = ({
   max = Infinity,
   min = -Infinity,
   value,

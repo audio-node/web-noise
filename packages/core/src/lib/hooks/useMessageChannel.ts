@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const useMessageChannel = () => {
+export const useMessageChannel = () => {
   const [channel, setChannel] = useState<MessageChannel | null>(null);
   useEffect(() => {
     const newChannel = new MessageChannel();

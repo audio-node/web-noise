@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 //@ts-ignore
 import { CanvasSpliner } from "CanvasSpliner";
 import styled from "@emotion/styled";
-import { theme } from "@web-noise/core";
+import { theme } from "../../";
 
 export interface SplinePoint {
   x: number;
@@ -143,7 +143,7 @@ export const SplineEditor = ({
       return;
     }
 
-    spliner.setCurveThickness(4)
+    spliner.setCurveThickness(4);
 
     spliner.on("movePoint", handlePointMove);
     spliner.on("releasePoint", handlePointsChange);

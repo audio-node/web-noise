@@ -1,6 +1,6 @@
 import { withTheme } from "@emotion/react";
 import styled from "@emotion/styled";
-import { Theme, useTheme } from "@web-noise/core";
+import { Theme } from "../theme";
 
 const SelectWrapper = withTheme(styled.div<{ theme: Theme }>`
   display: flex;
@@ -57,7 +57,7 @@ interface SelectProps {
   onChange?: (value: SelectOption["value"]) => void;
 }
 
-const Select = ({
+export const Select = ({
   options,
   placeholder,
   value,

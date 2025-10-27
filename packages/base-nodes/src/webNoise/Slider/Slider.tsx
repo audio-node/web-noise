@@ -1,6 +1,5 @@
 import { useEffect, useMemo } from "react";
 import styled from "@emotion/styled";
-import "rc-slider/assets/index.css";
 import { WNAudioNode, WNNodeProps, useTheme, Theme } from "@web-noise/core";
 import { Slider as SliderControl } from "@web-noise/core/components";
 import DEFAULT_CONFIG from "./defaultConfig";

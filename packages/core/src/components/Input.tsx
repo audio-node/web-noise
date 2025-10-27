@@ -1,13 +1,14 @@
+import { withTheme } from "@emotion/react";
 import styled from "@emotion/styled";
-import { theme } from "@web-noise/core";
 import { HTMLProps } from "react";
+import { type Theme } from "../../";
 
 export const InputWrapper = styled.div`
   display: flex;
   position: relative;
 `;
 
-export const InputInner = styled.input`
+export const InputInner = withTheme(styled.input<{ theme: Theme }>`
   padding-right: 2rem;
   padding-left: 0.3rem;
   padding-top: 0;
@@ -32,14 +33,14 @@ export const InputInner = styled.input`
   &:focus,
   &:hover {
     box-shadow: 0 0 0 var(--leva-borderWidths-focus) var(--leva-colors-accent2);
-    color: ${theme.colors.whitePrimary};
+    color: ${({ theme }) => theme.colors.whitePrimary};
   }
   &::-webkit-inner-spin-button,
   &::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin-right: 1rem;
   }
-`;
+`);
 
 export interface InputProps {
   value?: string;
@@ -49,7 +50,7 @@ export interface InputProps {
   inputProps?: Omit<HTMLProps<HTMLInputElement>, "as">;
 }
 
-const Input = ({
+export const Input = ({
   type,
   value,
   placeholder,

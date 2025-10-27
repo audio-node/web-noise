@@ -1,12 +1,19 @@
-export { default as Modal } from "./Modal";
-export { default as Checker } from "./Checker";
-export { default as RadioGroup } from "./RadioGroup";
-export { default as Input } from "./Input";
-export { default as DropdownInput } from "./DropdownInput";
-export { default as ColorInput } from "./ColorInput";
-export { default as NumberInput } from "./NumberInput";
-export { default as Button } from "./Button";
-export { default as Select } from "./Select";
-export { default as Slider } from "./Slider";
-export { default as SplineEditor } from "./SplineEditor";
-export * from "./NodeConfig";
+export { Modal } from "./Modal";
+export { Checker } from "./Checker";
+export { RadioGroup } from "./RadioGroup";
+export { Input } from "./Input";
+export { DropdownInput } from "./DropdownInput";
+export { ColorInput } from "./ColorInput";
+export { NumberInput } from "./NumberInput";
+export { Button } from "./Button";
+export { Select } from "./Select";
+export { Slider } from "./Slider";
+export { SplineEditor } from "./SplineEditor";
+export {
+  ConfigRowLabel,
+  ConfigRowControl,
+  ConfigRowSeparator,
+  ConfigRow,
+  ConfigPanel,
+  ConfigRowInner,
+} from "./NodeConfig";

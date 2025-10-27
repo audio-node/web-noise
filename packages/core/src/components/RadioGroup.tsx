@@ -1,6 +1,6 @@
-import Checker, { CheckerItem } from './Checker'
+import Checker, { CheckerItem } from "./Checker";
 import styled from "@emotion/styled";
-import { Theme, useTheme } from "@web-noise/core";
+import { type Theme, useTheme } from "../../";
 
 const RadioGroupWrapper = styled.div<{ theme: Theme }>`
   display: flex;
@@ -12,7 +12,7 @@ const RadioGroupWrapper = styled.div<{ theme: Theme }>`
   padding: 0.5rem;
 `;
 
- const RadioGroup = ({
+export const RadioGroup = ({
   options,
   value,
   onChange,
@@ -39,4 +39,4 @@ const RadioGroupWrapper = styled.div<{ theme: Theme }>`
   );
 };
 
-export default RadioGroup
+export default RadioGroup;

@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Theme } from "@web-noise/core";
+import { Theme } from "../theme";
 
 export const ConfigRowLabel = styled.div``;
 
