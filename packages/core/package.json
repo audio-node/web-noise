@@ -1,6 +1,6 @@
 {
   "name": "@web-noise/core",
-  "version": "0.0.9",
+  "version": "0.0.13",
   "source": "index.ts",
   "main": "dist/main.js",
   "module": "dist/module.js",
@@ -12,19 +12,19 @@
       "types": "./dist/types.d.ts"
     },
     "./constants": {
-      "import": "./dist/constants.js",
-      "require": "./dist/constants.js",
-      "types": "./dist/constants.d.ts"
+      "import": "./dist/esm/constants.js",
+      "require": "./dist/cjs/constants.js",
+      "types": "./dist/types.d.ts"
     },
     "./components": {
-      "import": "./dist/components.js",
-      "require": "./dist/components.js",
-      "types": "./dist/components.d.ts"
+      "import": "./dist/esm/components.js",
+      "require": "./dist/cjs/components.js",
+      "types": "./dist/types.d.ts"
     },
     "./lib": {
-      "import": "./dist/lib.js",
-      "require": "./dist/lib.js",
-      "types": "./dist/lib.d.ts"
+      "import": "./dist/esm/lib.js",
+      "require": "./dist/cjs/lib.js",
+      "types": "./dist/types.d.ts"
     }
   },
   "files": [
@@ -32,50 +32,90 @@
   ],
   "targets": {
     "main": {
+      "source": "index.ts",
+      "distDir": "dist",
       "isLibrary": true,
       "includeNodeModules": [
-        "@web-noise/fetch",
-        "@web-noise/patch"
+        "reactflow/dist/style.css"
       ],
       "optimize": true,
       "outputFormat": "commonjs"
     },
     "module": {
+      "source": "index.ts",
+      "distDir": "dist",
       "isLibrary": true,
       "includeNodeModules": [
-        "@web-noise/fetch",
-        "@web-noise/patch"
+        "reactflow/dist/style.css"
       ],
       "optimize": true,
       "outputFormat": "esmodule"
     },
     "types": {
       "source": "index.ts",
+      "distDir": "dist",
       "isLibrary": true
     },
-    "constants": {
+    "constantsCjs": {
       "source": "constants.ts",
-      "distDir": "dist",
+      "distDir": "dist/cjs",
       "isLibrary": true,
       "optimize": true,
+      "includeNodeModules": false,
       "outputFormat": "commonjs"
     },
-    "components": {
+    "constantsEsm": {
+      "source": "constants.ts",
+      "distDir": "dist/esm",
+      "isLibrary": true,
+      "optimize": true,
+      "includeNodeModules": false,
+      "outputFormat": "esmodule"
+    },
+    "componentsCjs": {
       "source": "components.ts",
-      "distDir": "dist",
+      "distDir": "dist/cjs",
+      "includeNodeModules": [
+        "rc-slider/assets/index.css"
+      ],
       "isLibrary": true,
       "optimize": true,
+      "includeNodeModules": false,
       "outputFormat": "commonjs"
     },
-    "lib": {
-      "source": "lib.ts",
-      "distDir": "dist",
+    "componentsEsm": {
+      "source": "components.ts",
+      "distDir": "dist/esm",
+      "includeNodeModules": [
+        "rc-slider/assets/index.css"
+      ],
       "isLibrary": true,
       "optimize": true,
+      "includeNodeModules": false,
+      "outputFormat": "esmodule"
+    },
+    "libCjs": {
+      "source": "lib.ts",
+      "distDir": "dist/cjs",
+      "isLibrary": true,
+      "optimize": true,
+      "includeNodeModules": false,
       "outputFormat": "commonjs"
+    },
+    "libEsm": {
+      "source": "lib.ts",
+      "distDir": "dist/esm",
+      "isLibrary": true,
+      "optimize": true,
+      "includeNodeModules": false,
+      "outputFormat": "esmodule"
     }
   },
   "dependencies": {
+    "@web-noise/fetch": "*",
+    "@web-noise/patch": "*",
+    "CanvasSpliner": "github:jonathanlurie/CanvasSpliner",
+    "rc-slider": "^10.3.0",
     "hotkeys-js": "^3.13.1",
     "js-file-download": "^0.4.12",
     "jsondiffpatch": "^0.5.0",
@@ -92,7 +132,8 @@
     "zustand": "^4.4.1",
     "@emotion/css": "^11.11.2",
     "@emotion/react": "^11.11.1",
-    "@emotion/styled": "^11.11.0"
+    "@emotion/styled": "^11.11.0",
+    "use-debounce": "^8.0.4"
   },
   "scripts": {
     "test": "jest",
@@ -111,8 +152,6 @@
     "@types/react-dom": "^19.1.9"
   },
   "peerDependencies": {
-    "@web-noise/fetch": "*",
-    "@web-noise/patch": "*",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   }

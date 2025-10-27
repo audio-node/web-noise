@@ -24,7 +24,7 @@ export interface ColorInputProps {
   onChange?: (value: string) => void;
 }
 
-const ColorInput = ({
+export const ColorInput = ({
   value,
   onChange = () => {},
   ...props

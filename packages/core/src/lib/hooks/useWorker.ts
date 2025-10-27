@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const useWorker = (url: string | URL) => {
+export const useWorker = (url: string | URL) => {
   const [worker, setWorker] = useState<Worker | null>(null);
 
   useEffect(() => {

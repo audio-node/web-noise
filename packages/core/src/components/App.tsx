@@ -4,7 +4,6 @@ import { nanoid } from "nanoid";
 import { ComponentProps, ReactNode, useEffect, useMemo, useState } from "react";
 import { FaPlus as IconAdd } from "react-icons/fa6";
 import { MdClose } from "react-icons/md";
-import "reactflow/dist/style.css";
 import { registerFetcher } from "@web-noise/fetch";
 import useStore from "../store";
 import "../styles";

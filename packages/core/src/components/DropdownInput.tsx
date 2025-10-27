@@ -114,7 +114,7 @@ interface SubmitInputProps {
   options?: Array<InputOption>;
 }
 
-const DropdownInput = ({
+export const DropdownInput = ({
   value = "",
   placeholder = "",
   onSubmit = () => {},

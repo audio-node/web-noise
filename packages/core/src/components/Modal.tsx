@@ -40,7 +40,7 @@ interface ModalProps {
   children: ReactNode;
 }
 
-const Modal = ({ children, onClose, ...props }: ModalProps) => {
+export const Modal = ({ children, onClose, ...props }: ModalProps) => {
   const theme = useTheme();
 
   useEffect(() => {

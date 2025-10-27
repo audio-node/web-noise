@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
-import { Theme } from "@web-noise/core";
 import RCSlider from "rc-slider";
 import "rc-slider/assets/index.css";
+import { type Theme } from "../theme";
 
-const Slider = styled(RCSlider)<{ theme: Theme; color?: string }>`
+export const Slider = styled(RCSlider)<{ theme: Theme; color?: string }>`
   padding: 0;
   cursor: pointer;
   position: relative;

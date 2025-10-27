@@ -1,6 +1,6 @@
 {
   "name": "@web-noise/fetch",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "source": "index.ts",
   "main": "dist/main.js",
@@ -16,8 +16,23 @@
       "isLibrary": true,
       "includeNodeModules": true,
       "optimize": true
+    },
+    "types": {
+      "source": "index.ts",
+      "distDir": "dist",
+      "isLibrary": true
     }
   },
+  "exports": {
+    ".": {
+      "import": "./dist/module.js",
+      "require": "./dist/main.js",
+      "types": "./dist/types.d.ts"
+    }
+  },
+  "files": [
+    "dist/**/*"
+  ],
   "scripts": {
     "build": "parcel build --no-scope-hoist --no-cache",
     "test": "echo \"Error: no test specified\" && exit 1"

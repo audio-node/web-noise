@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
-import { Theme } from "@web-noise/core";
+import { type Theme } from "../theme";
 
-const Button = styled.button<{ theme: Theme }>`
+export const Button = styled.button<{ theme: Theme }>`
   display: flex;
   align-items: center;
   justify-content: center;
