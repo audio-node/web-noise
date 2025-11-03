@@ -47,6 +47,7 @@ const EditorWrapper = () => {
   const EditorMemoised = useMemo<ReactNode>(
     () => (
       <Editor
+        // onChange={console.log}
         projectState={project}
         theme={theme}
         plugins={[

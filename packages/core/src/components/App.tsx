@@ -19,6 +19,7 @@ import { Editor } from "./Editor";
 import EditableLabel from "./EditableLabel";
 import { isAudio, isPatch } from "../helpers/projectFile";
 import { fileToBase64 } from "../lib";
+import { ProjectState } from "../store/projectStore";
 
 // @TODO: move default state to editor
 export const EDITOR_DEFAULTS = {
@@ -96,8 +97,13 @@ type EditorContainerProps = AppProps & {
 export const EditorContainer = (props: EditorContainerProps) => {
   const pullEditorChanges = useStore((store) => store.pullEditorChanges);
   const currentFileIndex = useStore((store) => store.currentFileIndex);
+  const project = useStore((store) => store.project);
 
   const [showLoader, setShowLoader] = useState(true);
+
+  useEffect(() => {
+    props.onChange?.(project);
+  }, [project, props.onChange]);
 
   useEffect(() => {
     setShowLoader(true);
@@ -202,7 +208,7 @@ interface AppProps {
   projectState?: Project;
   plugins?: Array<PluginConfig>;
   editorContextMenu?: Array<ReactNode>;
-  onChange?: ({ nodes, edges, controlPanel }: EditorState) => void;
+  onChange?: (project: Project) => void;
   theme?: Theme;
 }
 
