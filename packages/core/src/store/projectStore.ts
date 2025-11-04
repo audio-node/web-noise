@@ -118,7 +118,8 @@ const projectStateCreator: StateCreator<ProjectState> = (set, get) => ({
     });
 
     if (fileIndex <= currentFileIndex) {
-      set({ currentFileIndex: currentFileIndex - 1 });
+      const newIndex = Math.max(0, currentFileIndex - 1);
+      set({ currentFileIndex: newIndex });
     }
   },
 });

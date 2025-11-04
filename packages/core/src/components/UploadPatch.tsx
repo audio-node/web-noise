@@ -4,7 +4,7 @@ import { FileDrop } from "react-file-drop";
 import { FaFileUpload } from "react-icons/fa";
 import useTheme from "../hooks/useTheme";
 import useStore from "../store";
-import { Theme } from "../theme";
+import { type Theme } from "../theme";
 import Modal from "./Modal";
 
 interface UploadPatchProps {

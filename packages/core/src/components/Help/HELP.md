@@ -32,9 +32,25 @@
 
 <br/>
 
+## Rename node
+  - Doubleclick the node title
+
+<br/>
+
+## Undo/Redo
+  - `CMD+Z` to Undo / `CMD+SHIFT+Z` to Redo
+  - Select **'Undo'**/**'Redo'** from the Edit menu
+
+<br/>
+
 ## Upload file
   - Drag and drop audio or patch files onto the application
   - Uploaded file appears as a new tab in the tabs bar at the top
   - Click on the tab to view or edit the file
+
+<br/>
+
+## Rename file in the project
+  - Doubleclick the tab title
 
 

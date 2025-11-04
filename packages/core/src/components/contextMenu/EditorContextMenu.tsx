@@ -1,4 +1,3 @@
-import downloadFile from "js-file-download";
 import {
   type ReactNode,
   useCallback,
@@ -13,8 +12,6 @@ import hotkeys from "hotkeys-js";
 import useTheme from "../../hooks/useTheme";
 import useStore from "../../store";
 import AddNode from "../AddNode";
-import UploadPatch from "../UploadPatch";
-import UploadProject from "../UploadProject";
 import { ItemWrapper, MenuWrapper } from "./styles";
 import UploadAudio from "../UploadAudio";
 
@@ -45,8 +42,6 @@ const EditorContextMenu = ({
     y: 0,
   });
   const [showAddNode, setShowAddNode] = useState(false);
-  const [showUploadPatch, setShowUploadPatch] = useState(false);
-  const [showUploadProject, setShowUploadProject] = useState(false);
   const [showUploadAudio, setShowUploadAudio] = useState(false);
 
   const addNodeHandler = useCallback(
@@ -69,9 +64,6 @@ const EditorContextMenu = ({
 
   const clearGraph = useStore(({ clearGraph }) => clearGraph);
 
-  const getEditorState = useStore((store) => store.getEditorState);
-  const getProject = useStore((store) => store.getProject);
-
   const deleteAllHandler = useCallback(() => {
     clearGraph();
   }, [clearGraph]);
@@ -92,24 +84,6 @@ const EditorContextMenu = ({
   const currentCopyBuffer = useStore((store) => store.copyBuffer);
 
   const reactFlowInstance = useReactFlow();
-
-  const downloadPatchHandler = useCallback(() => {
-    const fileName = "web-noise-patch.json";
-    const editorState = getEditorState();
-    const data = {
-      ...editorState,
-    };
-    downloadFile(JSON.stringify(data, null, 2), fileName);
-  }, [getEditorState, reactFlowInstance]);
-
-  const downloadProjectHandler = useCallback(() => {
-    const fileName = "web-noise-project.json";
-    const projectState = getProject();
-    const data = {
-      ...projectState,
-    };
-    downloadFile(JSON.stringify(data, null, 2), fileName);
-  }, [getEditorState, reactFlowInstance]);
 
   useEffect(() => {
     hotkeys("command+shift+a", () => {
@@ -149,14 +123,6 @@ const EditorContextMenu = ({
         closeMenu={() => setShowAddNode(false)}
         mousePosition={mousePosition}
       />
-      <UploadPatch
-        isOpen={showUploadPatch}
-        closeMenu={() => setShowUploadPatch(false)}
-      />
-      <UploadProject
-        isOpen={showUploadProject}
-        closeMenu={() => setShowUploadProject(false)}
-      />
       <UploadAudio
         isOpen={showUploadAudio}
         closeMenu={() => setShowUploadAudio(false)}
@@ -171,18 +137,6 @@ const EditorContextMenu = ({
         </ItemWrapper>
         <Separator />
         <ItemWrapper onClick={deleteAllHandler}>Delete All</ItemWrapper>
-        <Separator />
-        <ItemWrapper onClick={downloadPatchHandler}>Download patch</ItemWrapper>
-        <ItemWrapper onClick={() => setShowUploadPatch(true)}>
-          Upload patch
-        </ItemWrapper>
-        <Separator />
-        <ItemWrapper onClick={downloadProjectHandler}>
-          Download project
-        </ItemWrapper>
-        <ItemWrapper onClick={() => setShowUploadProject(true)}>
-          Upload project
-        </ItemWrapper>
         <Separator />
         <ItemWrapper onClick={() => setShowUploadAudio(true)}>
           Upload Audio File
@@ -213,9 +167,13 @@ const EditorContextMenu = ({
           Paste (⌘+v)
         </ItemWrapper>
         <Separator />
-        {editorContextMenu.map((item, index) => (
-          <ItemWrapper key={index}>{item}</ItemWrapper>
-        ))}
+        {editorContextMenu.map((item, index) =>
+          item === null ? (
+            <Separator key={index} />
+          ) : (
+            <ItemWrapper key={index}>{item}</ItemWrapper>
+          ),
+        )}
         <Separator />
         <ItemWrapper onClick={toggleHelp}>Help (⇧+?)</ItemWrapper>
       </MenuWrapper>
