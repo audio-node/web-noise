@@ -1,3 +1,5 @@
+import { withTheme } from "@emotion/react";
+import styled from "@emotion/styled";
 import {
   type ReactNode,
   useCallback,
@@ -17,6 +19,7 @@ import ReactFlow, {
 import "reactflow/dist/style.css";
 import useStore from "../../store";
 import type { EditorState, PluginConfig } from "../../types";
+import { type Theme } from "../../theme";
 import EdgeContextMenu, {
   useEdgeContextMenu,
 } from "../contextMenu/EdgeContextMenu";
@@ -31,6 +34,17 @@ import { HelpButton, HelpModal } from "../Help";
 import ResumeContext from "../ResumeContext";
 import ToggleMinimap from "../ToggleMinimap";
 import Wire from "../Wire";
+
+const StyledControls = withTheme(styled(Controls)<{ theme: Theme }>`
+  &.bottom {
+    right: 1rem;
+    bottom: 40%;
+  }
+
+  svg {
+    color: ${({ theme }) => theme.colors.elevation2};
+  }
+`);
 
 const onNodeDragStop = (_event: any, node: any) =>
   console.log("drag stop", node);
@@ -149,18 +163,10 @@ export const EditorPane = ({
       <Background variant={BackgroundVariant.Dots} gap={12} />
       {editorConfig.showMinimap ? <MiniMap /> : null}
 
-      <Controls
-        style={{
-          right: "1rem",
-          left: "initial",
-          bottom: "40%",
-          top: "initial",
-        }}
-        showInteractive={false}
-      >
+      <StyledControls showInteractive={false} position="bottom-right">
         <ToggleMinimap />
         <HelpButton />
-      </Controls>
+      </StyledControls>
 
       <ResumeContext />
       <ControlPanel />

@@ -432,6 +432,11 @@ export const App = ({ ...props }: AppProps) => {
                     return;
                   }
                   deleteFile(index);
+                  if (project.files.length === 1) {
+                    addFile(generateEmptyFile());
+                    setCurrentFileIndex(0);
+                    syncEditorWithCurrentFile();
+                  }
                 }}
               />
             </Tab>
