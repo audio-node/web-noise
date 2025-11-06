@@ -1,9 +1,7 @@
 import styled from "@emotion/styled";
-import { Theme, useNode, useTheme, WNNodeProps } from "@web-noise/core";
+import { Theme, useNode, useTheme } from "@web-noise/core";
 import { NumberInput } from "@web-noise/core/components";
-import { ParameterData } from "./Parameter";
-
-export interface ParameterProps extends WNNodeProps<ParameterData> {}
+import { ParameterProps } from "./types";
 
 const ConfigRowLabel = styled.div``;
 

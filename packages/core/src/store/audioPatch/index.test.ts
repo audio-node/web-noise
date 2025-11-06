@@ -101,7 +101,8 @@ describe("audioPatch middleware", () => {
       const newNodes = [{ id: "node1", type: "oscillator" }];
       const stateUpdate = { nodes: newNodes, edges: [] };
 
-      await wrappedSet(stateUpdate);
+      wrappedSet(stateUpdate);
+      await new Promise(resolve => setTimeout(resolve, 10));
 
       expect(mockPatch.registerAudioNodes).toHaveBeenCalledWith(newNodes);
       expect(mockSet).toHaveBeenCalledWith(stateUpdate);
@@ -111,7 +112,8 @@ describe("audioPatch middleware", () => {
       const newEdges = [{ id: "edge1", source: "node1", target: "node2" }];
       const stateUpdate = { nodes: [], edges: newEdges };
 
-      await wrappedSet(stateUpdate);
+      wrappedSet(stateUpdate);
+      await new Promise(resolve => setTimeout(resolve, 10));
 
       expect(mockPatch.registerAudioConnections).toHaveBeenCalledWith(newEdges);
       expect(mockSet).toHaveBeenCalledWith(stateUpdate);
@@ -120,14 +122,16 @@ describe("audioPatch middleware", () => {
     it("should handle removing edges", async () => {
       // First add edges to establish current state
       const initialEdges = [{ id: "edge1", source: "node1", target: "node2" }];
-      await wrappedSet({ nodes: [], edges: initialEdges });
+      wrappedSet({ nodes: [], edges: initialEdges });
+      await new Promise(resolve => setTimeout(resolve, 10));
 
       // Clear mocks after initial setup
       jest.clearAllMocks();
 
       // Now remove the edges
       const stateUpdate = { nodes: [], edges: [] };
-      await wrappedSet(stateUpdate);
+      wrappedSet(stateUpdate);
+      await new Promise(resolve => setTimeout(resolve, 10));
 
       expect(mockPatch.unregisterAudioConnections).toHaveBeenCalledWith([
         { id: "edge1", source: "node1", target: "node2" },
@@ -138,14 +142,16 @@ describe("audioPatch middleware", () => {
     it("should handle removing nodes", async () => {
       // First add nodes to establish current state
       const initialNodes = [{ id: "node1", type: "oscillator" }];
-      await wrappedSet({ nodes: initialNodes, edges: [] });
+      wrappedSet({ nodes: initialNodes, edges: [] });
+      await new Promise(resolve => setTimeout(resolve, 10));
 
       // Clear mocks after initial setup
       jest.clearAllMocks();
 
       // Now remove the nodes
       const stateUpdate = { nodes: [], edges: [] };
-      await wrappedSet(stateUpdate);
+      wrappedSet(stateUpdate);
+      await new Promise(resolve => setTimeout(resolve, 10));
 
       expect(mockPatch.unregisterAudioNodes).toHaveBeenCalledWith([
         { id: "node1", type: "oscillator" },
@@ -159,7 +165,8 @@ describe("audioPatch middleware", () => {
         nodes: [{ id: "node1", type: "oscillator" }],
       }));
 
-      await wrappedSet(stateUpdateFn);
+      wrappedSet(stateUpdateFn);
+      await new Promise(resolve => setTimeout(resolve, 10));
 
       expect(stateUpdateFn).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -173,7 +180,8 @@ describe("audioPatch middleware", () => {
     it("should skip audio operations when no changes detected", async () => {
       const stateUpdate = { nodes: [], edges: [] };
 
-      await wrappedSet(stateUpdate);
+      wrappedSet(stateUpdate);
+      await new Promise(resolve => setTimeout(resolve, 10));
 
       expect(mockPatch.registerAudioNodes).not.toHaveBeenCalled();
       expect(mockPatch.registerAudioConnections).not.toHaveBeenCalled();
@@ -182,7 +190,24 @@ describe("audioPatch middleware", () => {
       expect(mockSet).toHaveBeenCalledWith(stateUpdate);
     });
 
-    it.todo("should handle errors in promise resolution gracefully");
+    it("should handle errors in promise resolution gracefully", async () => {
+      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
+      
+      mockPatch.registerAudioNodes.mockRejectedValue(new Error("Test error"));
+
+      const newNodes = [{ id: "node1", type: "oscillator" }];
+      const stateUpdate = { nodes: newNodes, edges: [] };
+
+      wrappedSet(stateUpdate);
+      await new Promise(resolve => setTimeout(resolve, 10));
+
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        "audioPatch middleware error:",
+        expect.any(Error)
+      );
+      
+      consoleErrorSpy.mockRestore();
+    });
   });
 
   describe("promise management", () => {
@@ -225,14 +250,17 @@ describe("audioPatch middleware", () => {
       const newEdges = [{ id: "edge1", source: "node1", target: "node2" }];
       const stateUpdate = { nodes: newNodes, edges: newEdges };
 
-      const updatePromise = wrappedSet(stateUpdate);
+      wrappedSet(stateUpdate);
+
+      // Give time for the queued work to start
+      await new Promise(resolve => setTimeout(resolve, 10));
 
       // Verify that registerAudioConnections hasn't been called yet
       expect(mockPatch.registerAudioConnections).not.toHaveBeenCalled();
 
       // Resolve the node promise
       resolveNodePromise!();
-      await updatePromise;
+      await new Promise(resolve => setTimeout(resolve, 10));
 
       // Now verify that registerAudioConnections was called
       expect(mockPatch.registerAudioConnections).toHaveBeenCalledWith(newEdges);

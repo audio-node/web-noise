@@ -1,4 +1,4 @@
-import { WNAudioNode } from "@web-noise/core";
+import type { WNAudioNode, WNNodeData, WNNodeProps } from "@web-noise/core";
 
 export interface ScriptNodeValues {
   expression?: string;
@@ -11,11 +11,9 @@ export interface ScriptNodeConfig {
   };
 }
 
-export interface ScriptNodeData {
-  label: string;
-  values?: ScriptNodeValues;
-  config?: ScriptNodeConfig;
-}
+export type ScriptNodeData = WNNodeData<ScriptNodeValues, ScriptNodeConfig>;
+
+export interface GateProps extends WNNodeProps<ScriptNodeData> {}
 
 export type MessageData =
   | { name: "error"; error: Error }

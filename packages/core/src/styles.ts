@@ -25,6 +25,7 @@ injectGlobal`
     .react-flow__node {
       padding: 0;
       width: auto;
+      box-sizing: content-box;
     }
 
     .react-flow__edge-path {

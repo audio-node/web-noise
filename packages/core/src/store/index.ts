@@ -4,7 +4,7 @@ import {
   NodeTypes,
   OnConnect,
   Viewport,
-} from "reactflow";
+} from "@xyflow/react";
 import { create, StateCreator } from "zustand";
 import { setAudioNodeTypes, AudioNodeTypes } from "@web-noise/patch";
 import { CONTROL_PANEL_GRID_CONFIG } from "../constants";
@@ -143,7 +143,8 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
       } = get();
       const parentNodeIds = nodes.map(({ id }) => id);
       const children = currentNodes.filter(
-        ({ parentNode }) => parentNode && parentNodeIds.includes(parentNode),
+        // @TODO: check this properly if it's about parent-child relationship
+        ({ parentId }) => parentId && parentNodeIds.includes(parentId),
       );
       const resultingNodes = [...nodes, ...children];
       removeNodesFromControlPanel(resultingNodes);

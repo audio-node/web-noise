@@ -6,7 +6,7 @@ import {
   MdSettings as SettingsIcon,
   MdInfoOutline as InfoIcon,
 } from "react-icons/md";
-import { Handle, HandleProps, NodeProps, Position } from "reactflow";
+import { Handle, HandleProps, Node, NodeProps, Position } from "@xyflow/react";
 import { DRAG_HANDLE_CLASS, PortType } from "../../constants";
 import useAudioNode from "../../hooks/useAudioNode";
 import useNode from "../../hooks/useNode";
@@ -119,7 +119,7 @@ const StyledHandle = withTheme(styled(Handle, {
 `);
 
 const StyledInputHandle = withTheme(styled(StyledHandle)`
-  left: -3px;
+  left: 0;
 `);
 
 export const InputHandle = ({
@@ -129,16 +129,14 @@ export const InputHandle = ({
 );
 
 export const StyledOutputHandle = withTheme(styled(StyledHandle)`
-  right: -3px;
+  right: 0;
 `);
 
 export const OutputHandle = (
   props: Partial<HandleProps & ComponentProps<typeof StyledOutputHandle>>,
 ) => <StyledOutputHandle {...props} type="source" position={Position.Right} />;
 
-export type WNNodeProps<T = Record<string, unknown>> = NodeProps<
-  T & WNNodeData
->;
+export type WNNodeProps<T extends Record<string, unknown>> = NodeProps<Node<T>>;
 
 export interface TitleBarProps {
   className?: string;
@@ -271,7 +269,15 @@ export const WNNode = (props: WNNodeParameters) => {
         </OutputPorts>
       </PortsPanel>
       {ConfigNode && configMode && selected ? (
-        <ConfigNode {...props} />
+        <ConfigNode
+          {...{
+            ...props,
+            data: {
+              label: "unknown",
+              ...props.data,
+            },
+          }}
+        />
       ) : isResizeable ? (
         <Resizable
           size={size}
