@@ -1,4 +1,4 @@
-import { Edge, Node, Viewport } from "reactflow";
+import type { Edge, Node, Viewport } from "@xyflow/react";
 import { WNNodeProps } from "./components/Node";
 import { PortType } from "./constants";
 
@@ -39,7 +39,7 @@ export type NodeDefaultConfig = {
 export interface WNNodeData<
   Values = Record<string, unknown>,
   Config = Record<string, unknown>,
-> {
+> extends Record<string, unknown> {
   label: string;
   values?: Values;
   config?: Config & NodeDefaultConfig;

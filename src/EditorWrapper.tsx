@@ -1,5 +1,4 @@
 import downloadFile from "js-file-download";
-import { Separator, Item as ItemWrapper } from "react-contexify";
 import {
   webNoiseNodes,
   patchNodes,
@@ -12,11 +11,9 @@ import { EDITOR_DEFAULTS } from "@web-noise/core";
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import UploadPatch from "../packages/core/src/components/UploadPatch";
 import UploadProject from "../packages/core/src/components/UploadProject";
-// import SharePatch from "./SharePatch";
 
 const EditorWrapper = () => {
   const [project, setProject] = useState();
-  const [showSharePatch, setShowSharePatch] = useState(false);
 
   useEffect(() => {
     const loc = new URL(window.location.href);

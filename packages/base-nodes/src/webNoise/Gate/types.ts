@@ -1,4 +1,4 @@
-import type { WNNodeProps } from "@web-noise/core";
+import type { WNNodeData, WNNodeProps } from "@web-noise/core";
 
 export interface GateValues {
   isOpened?: boolean;
@@ -14,9 +14,6 @@ export interface GateConfig {
   textColorOpened?: string;
 }
 
-export interface GateData {
-  values?: GateValues;
-  config?: GateConfig;
-}
+export type GateData = WNNodeData<GateValues, GateConfig>;
 
 export interface GateProps extends WNNodeProps<GateData> {}

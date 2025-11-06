@@ -1,16 +1,7 @@
-import { type WNAudioNode } from "@web-noise/core";
 import { PortType } from "@web-noise/core/constants";
+import { ParameterAudioNode } from "./types";
 
-export interface ConstantSourceValues {
-  value?: number;
-}
-
-export interface ConstantSource extends WNAudioNode {
-  constantSource: ConstantSourceNode;
-  setValues: (values?: ConstantSourceValues) => void;
-}
-
-export const constantSource = (audioContext: AudioContext): ConstantSource => {
+export const constantSource = (audioContext: AudioContext): ParameterAudioNode => {
   const constantSource = audioContext.createConstantSource();
   constantSource.offset.value = 0;
   constantSource.start();

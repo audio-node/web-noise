@@ -1,8 +1,7 @@
 import { FaQuestion } from "react-icons/fa";
-import { ControlButton } from "reactflow";
+import { ControlButton } from "@xyflow/react";
 import useStore from "../../store";
-import HelpModal from './HelpModal';
-
+import HelpModal from "./HelpModal";
 
 const HelpButton = () => {
   const toggleHelp = useStore((store) => store.toggleHelp);
@@ -17,4 +16,3 @@ const HelpButton = () => {
 };
 
 export { HelpModal, HelpButton };
-

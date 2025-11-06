@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from "react";
-import { EdgeProps, getBezierPath, getConnectedEdges } from "reactflow";
+import { EdgeProps, getBezierPath, getConnectedEdges } from "@xyflow/react";
 import useTheme from "../hooks/useTheme";
 import useStore from "../store";
 
@@ -54,8 +54,8 @@ const Wire = ({
           stroke: selected
             ? theme.colors.accent2
             : isConnectedToSelected
-            ? theme.colors.highlight3
-            : theme.colors.highlight2,
+              ? theme.colors.highlight3
+              : theme.colors.highlight2,
         }}
         className="react-flow__edge-path Wire"
         d={edgePath}

@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import { WNAudioNode, WNNodeProps, useTheme, Theme } from "@web-noise/core";
 import Scope from "../../components/Scope";
 import { useMessageChannel } from "@web-noise/core/lib";
+import { DistortionData } from "./types";
 
 const DistortionWrapper = styled.div<{ theme: Theme }>`
   position: relative;
@@ -18,7 +19,7 @@ const DistortionWrapper = styled.div<{ theme: Theme }>`
 `;
 
 export interface DistortionProps {
-  node: WNNodeProps;
+  node: WNNodeProps<DistortionData>;
   audioNode?: WNAudioNode | null;
   updateNodeValues: (value: any) => void;
 }

@@ -213,7 +213,8 @@ interface AppProps {
 }
 
 export const App = ({ ...props }: AppProps) => {
-  const { projectState, theme } = props;
+  const { projectState, theme, plugins = [] } = props;
+  const setPlugins = useStore((store) => store.setPlugins);
   const currentFileIndex = useStore((store) => store.currentFileIndex);
   const currentFile = useStore(
     (store) => store.project.files[store.currentFileIndex],
@@ -300,6 +301,10 @@ export const App = ({ ...props }: AppProps) => {
       console.error("Unsupported file type", file);
     });
   };
+
+  useEffect(() => {
+    setPlugins(plugins);
+  }, [plugins]);
 
   useEffect(() => {
     setProject(

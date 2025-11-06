@@ -11,7 +11,7 @@ import {
 } from "@web-noise/core/components";
 import { GateProps } from "./types";
 
-const ConfigMode = ({ id, data }: GateProps) => {
+const ConfigNode = ({ id, data }: GateProps) => {
   const theme = useTheme();
   const { updateNodeConfig } = useNode(id);
 
@@ -118,4 +118,4 @@ const ConfigMode = ({ id, data }: GateProps) => {
   );
 };
 
-export default ConfigMode;
+export default ConfigNode;

@@ -7,7 +7,8 @@ import {
   useMemo,
   useState,
 } from "react";
-import ReactFlow, {
+import {
+  ReactFlow,
   Background,
   BackgroundVariant,
   Controls,
@@ -15,10 +16,11 @@ import ReactFlow, {
   ReactFlowInstance,
   ReactFlowProvider,
   useOnViewportChange,
-} from "reactflow";
-import "reactflow/dist/style.css";
+  OnInit,
+} from "@xyflow/react";
+import "@xyflow/react/dist/style.css";
 import useStore from "../../store";
-import type { EditorState, PluginConfig } from "../../types";
+import type { EditorState, PluginConfig, WNEdge, WNNode } from "../../types";
 import { type Theme } from "../../theme";
 import EdgeContextMenu, {
   useEdgeContextMenu,
@@ -83,18 +85,20 @@ export const EditorPane = ({
     onEdgesChange,
     onEdgesDelete,
     onConnect,
-    setPlugins,
     setViewport,
     viewport,
   } = useStore();
 
+  // Initialize viewport from editorState only once
+  useEffect(() => {
+    if (editorState?.viewport && !viewport) {
+      setViewport(editorState.viewport);
+    }
+  }, [editorState?.viewport, setViewport, viewport]);
+
   const editorConfig = useStore(({ config }) => config);
 
   const nodeTypes = useStore(({ nodeTypes }) => nodeTypes);
-
-  useEffect(() => {
-    setPlugins(plugins);
-  }, [plugins]);
 
   const [reactflowInstance, setReactflowInstance] =
     useState<ReactFlowInstance | null>(null);
@@ -111,9 +115,10 @@ export const EditorPane = ({
     });
   }, [nodes, edges, controlPanel, viewport]);
 
-  const onInit = useCallback(
-    (rfi: ReactFlowInstance) => {
+  const onInit = useCallback<OnInit<WNNode, WNEdge>>(
+    (rfi) => {
       if (!reactflowInstance) {
+        // @ts-ignore
         setReactflowInstance(rfi);
         console.log("flow loaded:", rfi);
       }
@@ -124,17 +129,6 @@ export const EditorPane = ({
   const { onContextMenu: onEditorContextMenu } = useEditorContextMenu();
   const { onContextMenu: onNodeContextMenu } = useNodeContextMenu();
   const { onContextMenu: onEdgeContextMenu } = useEdgeContextMenu();
-
-  useEffect(() => {
-    if (!viewport) {
-      return;
-    }
-    reactflowInstance?.setViewport(viewport);
-  }, [viewport, reactflowInstance]);
-
-  useOnViewportChange({
-    onEnd: setViewport,
-  });
 
   return (
     <ReactFlow
@@ -158,6 +152,8 @@ export const EditorPane = ({
       defaultEdgeOptions={{ type: "wire" }}
       snapToGrid
       fitView
+      onViewportChange={setViewport}
+      viewport={editorState?.viewport}
       disableKeyboardA11y
     >
       <Background variant={BackgroundVariant.Dots} gap={12} />

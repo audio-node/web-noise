@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { Theme, useTheme, WNAudioNode, WNNodeProps } from "@web-noise/core";
 import { useEffect } from "react";
 import { NumberInput } from "@web-noise/core/components";
-import { ConstantSourceValues } from "./constantSource";
+import { ParameterData } from "./types";
 
 const InputWrapper = styled.div<{ theme: Theme }>`
   background: ${({ theme }) => theme.colors.elevation2};
@@ -47,17 +47,6 @@ const InputWrapper = styled.div<{ theme: Theme }>`
     }
   }
 `;
-
-interface ParameterConfig {
-  min?: number;
-  max?: number;
-  step?: number;
-}
-
-export interface ParameterData {
-  values?: ConstantSourceValues;
-  config?: ParameterConfig;
-}
 
 export interface ParameterProps {
   node: WNNodeProps<ParameterData>;

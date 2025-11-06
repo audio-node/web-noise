@@ -46,6 +46,12 @@ const projectStateCreator: StateCreator<ProjectState> = (set, get) => ({
   syncEditorWithCurrentFile: () => {
     const { currentFileIndex, setEditorState, project } = get() as StoreState;
     const currentFile = project.files[currentFileIndex];
+
+    if (!currentFile) {
+      console.warn("No current file to sync with editor");
+      return;
+    }
+
     if (currentFile.type === "audio") {
       console.log("audio file. skipping");
       return;

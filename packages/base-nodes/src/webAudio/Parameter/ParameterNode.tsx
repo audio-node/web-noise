@@ -1,12 +1,10 @@
-import { useAudioNode, useNode, WNNode, WNNodeProps } from "@web-noise/core";
-import { ConstantSource } from "./constantSource";
-import Parameter, { ParameterData } from "./Parameter";
-
-export interface ParameterProps extends WNNodeProps<ParameterData> {}
+import { useAudioNode, useNode, WNNode } from "@web-noise/core";
+import Parameter from "./Parameter";
+import { ParameterAudioNode, ParameterProps } from "./types";
 
 const ParameterNode = (props: ParameterProps) => {
   const { id, data } = props;
-  const { node } = useAudioNode<ConstantSource>(id) || {};
+  const { node } = useAudioNode<ParameterAudioNode>(id) || {};
   const { updateNodeValues } = useNode(id);
 
   return (

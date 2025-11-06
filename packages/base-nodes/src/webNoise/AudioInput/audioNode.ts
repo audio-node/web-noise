@@ -21,7 +21,9 @@ const getAudioStream = async (deviceId: string) => {
   return navigator.mediaDevices
     .getUserMedia({
       audio: {
-        deviceId,
+        deviceId: {
+          exact: deviceId,
+        },
       },
     })
     .catch((e) => {

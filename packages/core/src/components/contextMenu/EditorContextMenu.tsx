@@ -7,12 +7,12 @@ import {
 } from "react";
 import { Separator, useContextMenu } from "react-contexify";
 import "react-contexify/dist/ReactContexify.css";
-import { useReactFlow, type XYPosition } from "reactflow";
+import { useReactFlow, type XYPosition } from "@xyflow/react";
 import hotkeys from "hotkeys-js";
 import useTheme from "../../hooks/useTheme";
 import useStore from "../../store";
 import AddNode from "../AddNode";
-import { ItemWrapper, MenuWrapper } from "./styles";
+import { ItemWrapper, DangerousItemWrapper, MenuWrapper } from "./styles";
 import UploadAudio from "../UploadAudio";
 
 type MousePosition = {
@@ -65,6 +65,13 @@ const EditorContextMenu = ({
   const clearGraph = useStore(({ clearGraph }) => clearGraph);
 
   const deleteAllHandler = useCallback(() => {
+    if (
+      !window.confirm(
+        "This action will delete all nodes in this patch. Continue?",
+      )
+    ) {
+      return;
+    }
     clearGraph();
   }, [clearGraph]);
 
@@ -136,7 +143,9 @@ const EditorContextMenu = ({
           Add Node (⌘+⇧+A)
         </ItemWrapper>
         <Separator />
-        <ItemWrapper onClick={deleteAllHandler}>Delete All</ItemWrapper>
+        <DangerousItemWrapper onClick={deleteAllHandler}>
+          Delete All
+        </DangerousItemWrapper>
         <Separator />
         <ItemWrapper onClick={() => setShowUploadAudio(true)}>
           Upload Audio File

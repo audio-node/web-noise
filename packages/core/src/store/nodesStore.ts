@@ -6,7 +6,7 @@ import {
   OnEdgesChange,
   OnNodesChange,
   NodeTypes,
-} from "reactflow";
+} from "@xyflow/react";
 import { StateCreator } from "zustand";
 import { DRAG_HANDLE_SELECTOR } from "../constants";
 import type { WNNode, WNNodeData, WNEdge, GraphState } from "../types";
@@ -38,6 +38,10 @@ const nodesStateCreator: StateCreator<NodesState> = (set, get) => ({
       nodes: applyNodeChanges(changes, nodes).map((node) => ({
         dragHandle: DRAG_HANDLE_SELECTOR,
         ...node,
+        data: {
+          label: "unknown",
+          ...node.data,
+        },
       })),
     }));
   },

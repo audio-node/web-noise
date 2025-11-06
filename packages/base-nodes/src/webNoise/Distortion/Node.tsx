@@ -1,17 +1,6 @@
-import styled from "@emotion/styled";
-import {
-  useAudioNode,
-  useNode,
-  WNNode,
-  TWNNode,
-  WNNodeProps,
-  Theme,
-  useTheme,
-} from "@web-noise/core";
+import { useAudioNode, useNode, WNNode } from "@web-noise/core";
 import Distortion from "./Distortion";
-import { Distortion as TDistortion } from "./types";
-
-export interface DistortionProps extends WNNodeProps {}
+import { DistortionProps, Distortion as TDistortion } from "./types";
 
 const DistortionNode = (props: DistortionProps) => {
   const { id, data } = props;
@@ -30,4 +19,3 @@ const DistortionNode = (props: DistortionProps) => {
 };
 
 export default DistortionNode;
-

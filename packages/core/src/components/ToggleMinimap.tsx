@@ -1,5 +1,5 @@
 import { FaMap, FaRegMap } from "react-icons/fa";
-import { ControlButton } from "reactflow";
+import { ControlButton } from "@xyflow/react";
 import useStore from "../store";
 
 const ToggleMinimap = () => {
