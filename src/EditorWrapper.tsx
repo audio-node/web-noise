@@ -38,6 +38,7 @@ const EditorWrapper = () => {
           setProject({
             // @ts-ignore
             files: [{ file: newGraphState, id: (+new Date()).toString() }],
+            currentFileIndex: 0,
           });
         })
         .catch((e) => alert(e));

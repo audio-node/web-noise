@@ -93,6 +93,7 @@ export type ProjectFile = EditorFile | AudioFile;
 
 export interface Project {
   files: Array<ProjectFile>;
+  currentFileIndex: number;
 }
 
 export interface ControlPanelNodeProps {
