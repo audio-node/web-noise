@@ -96,7 +96,7 @@ type EditorContainerProps = AppProps & {
 
 export const EditorContainer = (props: EditorContainerProps) => {
   const pullEditorChanges = useStore((store) => store.pullEditorChanges);
-  const currentFileIndex = useStore((store) => store.currentFileIndex);
+  const currentFileIndex = useStore((store) => store.project.currentFileIndex);
   const project = useStore((store) => store.project);
 
   const [showLoader, setShowLoader] = useState(true);
@@ -183,7 +183,10 @@ export const AddFileIcon = withTheme(styled(IconAdd)<{ theme: Theme }>`
   width: auto;
 `);
 
-export const CloseIcon = withTheme(styled(MdClose)<{ theme: Theme }>`
+export const CloseIcon = withTheme(styled(MdClose)<{
+  theme: Theme;
+  hide?: boolean;
+}>`
   height: 70%;
   width: auto;
   cursor: pointer;
@@ -191,6 +194,12 @@ export const CloseIcon = withTheme(styled(MdClose)<{ theme: Theme }>`
   &:hover {
     color: ${({ theme }) => theme.colors.whitePrimary};
   }
+  ${({ hide }) =>
+    hide
+      ? `
+    display: none;
+                   `
+      : ""};
 `);
 
 const generateId = (): string => {
@@ -215,9 +224,11 @@ interface AppProps {
 export const App = ({ ...props }: AppProps) => {
   const { projectState, theme, plugins = [] } = props;
   const setPlugins = useStore((store) => store.setPlugins);
-  const currentFileIndex = useStore((store) => store.currentFileIndex);
+  const currentFileIndex = useStore(
+    (store) => store.project.currentFileIndex || 0,
+  );
   const currentFile = useStore(
-    (store) => store.project.files[store.currentFileIndex],
+    (store) => store.project.files[store.project.currentFileIndex || 0],
   );
   const setCurrentFileIndex = useStore((store) => store.setCurrentFileIndex);
 
@@ -228,6 +239,7 @@ export const App = ({ ...props }: AppProps) => {
 
   const addFile = useStore((store) => store.addFile);
   const deleteFile = useStore((store) => store.deleteFile);
+  const updateFileContent = useStore((store) => store.updateFileContent);
   const syncEditorWithCurrentFile = useStore(
     (store) => store.syncEditorWithCurrentFile,
   );
@@ -310,6 +322,7 @@ export const App = ({ ...props }: AppProps) => {
     setProject(
       projectState || {
         files: [generateEmptyFile()],
+        currentFileIndex: 0,
       },
     );
     const file = projectState?.files[0];
@@ -428,28 +441,31 @@ export const App = ({ ...props }: AppProps) => {
                 onChange={(val) => updateFileName(index, val)}
                 value={file.name || "Unnamed"}
               />
-              <CloseIcon
-                onClick={(event) => {
-                  event.stopPropagation();
-                  if (
-                    !window.confirm("Do you really want to delete this file?")
-                  ) {
-                    return;
-                  }
-                  deleteFile(index);
-                  if (project.files.length === 1) {
-                    addFile(generateEmptyFile());
-                    setCurrentFileIndex(0);
-                    syncEditorWithCurrentFile();
-                  }
-                }}
-              />
+              {project.files.length > 1 && (
+                <CloseIcon
+                  onClick={(event) => {
+                    event.stopPropagation();
+
+                    if (
+                      !window.confirm("Do you really want to delete this file?")
+                    ) {
+                      return;
+                    }
+
+                    if (project.files.length === 1) {
+                      alert("You cannot delete the last file in the project");
+                      return;
+                    }
+
+                    deleteFile(index);
+                  }}
+                />
+              )}
             </Tab>
           ))}
           <TabIconWrapper
             onClick={() => {
               addFile(generateEmptyFile());
-              setCurrentFileIndex(project.files.length);
             }}
           >
             <AddFileIcon />

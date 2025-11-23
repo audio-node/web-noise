@@ -168,7 +168,7 @@ export const createChangesCollector = (set: any, get: () => StoreState) => {
   let timer: any;
 
   return (state: StoreState, prevState: StoreState) => {
-    if (state.currentFileIndex !== prevState.currentFileIndex) {
+    if (state.project.currentFileIndex !== prevState.project.currentFileIndex) {
       get().history.clear();
     }
     clearTimeout(timer);

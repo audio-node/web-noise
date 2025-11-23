@@ -11,8 +11,6 @@ export interface ProjectState {
   pullEditorChanges: () => void;
   syncEditorWithCurrentFile: () => void;
 
-  //@TODO: move inside project
-  currentFileIndex: number;
   setCurrentFileIndex: (index: number) => void;
 
   updateFileContent: (fileIndex: number, file: ProjectFile) => void;
@@ -22,17 +20,17 @@ export interface ProjectState {
 }
 
 const projectStateCreator: StateCreator<ProjectState> = (set, get) => ({
-  project: { files: [] },
+  project: { files: [], currentFileIndex: 0 },
   setProject(project) {
-    set({ project, currentFileIndex: 0 });
+    set({ project });
   },
   getProject() {
     return get().project;
   },
 
   pullEditorChanges() {
-    const { getEditorState, currentFileIndex, updateFileContent, project } =
-      get() as StoreState;
+    const { getEditorState, updateFileContent, project } = get() as StoreState;
+    const currentFileIndex = project.currentFileIndex || 0;
     const currentFile = project.files[currentFileIndex];
     if (isAudio(currentFile)) {
       return;
@@ -44,7 +42,8 @@ const projectStateCreator: StateCreator<ProjectState> = (set, get) => ({
   },
 
   syncEditorWithCurrentFile: () => {
-    const { currentFileIndex, setEditorState, project } = get() as StoreState;
+    const { setEditorState, project } = get() as StoreState;
+    const currentFileIndex = project.currentFileIndex || 0;
     const currentFile = project.files[currentFileIndex];
 
     if (!currentFile) {
@@ -59,13 +58,18 @@ const projectStateCreator: StateCreator<ProjectState> = (set, get) => ({
     setEditorState(currentFile.file);
   },
 
-  currentFileIndex: 0,
   setCurrentFileIndex(newFileIndex) {
-    const { currentFileIndex } = get();
+    const { project, getProject } = get();
+    const currentFileIndex = project.currentFileIndex ?? 0;
     if (newFileIndex === currentFileIndex) {
       return;
     }
-    set({ currentFileIndex: newFileIndex });
+    set({
+      project: {
+        ...project,
+        currentFileIndex: newFileIndex,
+      },
+    });
   },
 
   updateFileContent(index, file) {
@@ -104,29 +108,31 @@ const projectStateCreator: StateCreator<ProjectState> = (set, get) => ({
     });
   },
   addFile(file) {
-    const { project } = get();
+    const { project, setProject } = get();
     const files = [...project.files, file];
-    set({
-      project: {
-        ...project,
-        files,
-      },
+    setProject({
+      ...project,
+      files,
+      currentFileIndex: files.length - 1,
     });
   },
   deleteFile: (fileIndex) => {
-    const { project, currentFileIndex } = get();
+    const { project } = get();
+    const currentFileIndex = project.currentFileIndex ?? 0;
 
+    const newIndex =
+      currentFileIndex === project.files.length - 1
+        ? Math.max(0, currentFileIndex - 1)
+        : currentFileIndex;
+
+    const newFiles = project.files.filter((_, index) => fileIndex !== index);
     set({
       project: {
         ...project,
-        files: project.files.filter((_, index) => fileIndex !== index),
+        files: newFiles,
+        currentFileIndex: newIndex,
       },
     });
-
-    if (fileIndex <= currentFileIndex) {
-      const newIndex = Math.max(0, currentFileIndex - 1);
-      set({ currentFileIndex: newIndex });
-    }
   },
 });
 

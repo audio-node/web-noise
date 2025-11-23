@@ -1,6 +1,6 @@
 {
   "name": "@web-noise/base-nodes",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "source": "index.ts",
   "main": "dist/main.js",
   "module": "dist/module.js",

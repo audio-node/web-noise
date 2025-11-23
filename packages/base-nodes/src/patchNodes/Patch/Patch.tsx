@@ -50,7 +50,7 @@ const Patch = (props: WNNodeProps<PatchData>) => {
   const getNode = useStore((store) => store.getNode);
 
   const projectFiles = useStore((store) => store.project.files);
-  const currentFileIndex = useStore((store) => store.currentFileIndex);
+  const currentFileIndex = useStore((store) => store.project.currentFileIndex);
 
   const { updateNodeValues } = useNode(id);
 
