@@ -7,6 +7,18 @@ import passThroughWorkletUrl from "worklet:../PassThrough/worklet.ts";
 
 const passThroughWorklet = new URL(passThroughWorkletUrl, import.meta.url);
 
+// @TODO: make constraints configurable
+const DEFAULT_AUDIO_CONSTRAINTS: MediaTrackConstraints = {
+  sampleRate: { ideal: 48000, min: 44100 },
+  sampleSize: { ideal: 24, min: 16 },
+  channelCount: { ideal: 2, min: 1 },
+  // @ts-ignore
+  latency: { ideal: 0.005, max: 0.02 },
+  echoCancellation: false,
+  noiseSuppression: false,
+  autoGainControl: false,
+};
+
 const getAudioInputsList = async () => {
   return navigator.mediaDevices
     .enumerateDevices()
@@ -21,6 +33,7 @@ const getAudioStream = async (deviceId: string) => {
   return navigator.mediaDevices
     .getUserMedia({
       audio: {
+        ...DEFAULT_AUDIO_CONSTRAINTS,
         deviceId: {
           exact: deviceId,
         },
