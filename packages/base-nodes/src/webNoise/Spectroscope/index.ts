@@ -12,6 +12,7 @@ const plugin: PluginComponent = {
   configNode,
   defaultConfig,
   resizable: true,
+  minSize: { width: 280, height: 280 },
   name: "Spectroscope (Frequency Analyzer)",
   description:
     "Real-time frequency spectrum analyzer that visualizes audio frequency content using FFT analysis. Essential for understanding harmonic structure, identifying frequencies, and monitoring spectral balance in mixing and sound design.",

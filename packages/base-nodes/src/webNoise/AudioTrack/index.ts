@@ -12,6 +12,7 @@ const plugin: PluginComponent = {
   configNode,
   defaultConfig,
   resizable: true,
+  minSize: { width: 280, height: 290 },
   name: "Audio Track",
   description:
     "Plays audio from a URL. Supports looping, playback rate control, and defining playback ranges.",

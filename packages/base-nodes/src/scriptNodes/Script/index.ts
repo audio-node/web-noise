@@ -6,7 +6,8 @@ const Script: PluginComponent = {
   ...base,
   node: ScriptNode,
   name: "Script (Programmable Audio Processor)",
-  description: "Executes custom JavaScript code with access to the Web Audio API, enabling creation of custom audio routing, processing algorithms, and dynamic behaviors. Features multiple inputs/outputs, trigger events, and a sandboxed execution environment.",
+  description:
+    "Executes custom JavaScript code with access to the Web Audio API, enabling creation of custom audio routing, processing algorithms, and dynamic behaviors. Features multiple inputs/outputs, trigger events, and a sandboxed execution environment.",
   info: `# Script
 
 A programmable audio processor that executes custom JavaScript code with access to the Web Audio API and multiple audio inputs/outputs.
@@ -65,22 +66,32 @@ ScriptSandbox.onTriggered(() => {
   filter.frequency.setTargetAtTime(5000, audioContext.currentTime, 0.1);
 });
 \`\`\``,
-  tags: ["programming", "scripting", "custom", "dynamic", "routing", "experimental"],
+  tags: [
+    "programming",
+    "scripting",
+    "custom",
+    "dynamic",
+    "routing",
+    "experimental",
+  ],
   portsDescription: {
     inputs: {
-      trigger: "Audio input that triggers event callbacks when signal crosses threshold",
+      trigger:
+        "Audio input that triggers event callbacks when signal crosses threshold",
       input0: "First audio input for custom processing",
       input1: "Second audio input for custom processing",
       input2: "Third audio input for custom processing",
-      input3: "Fourth audio input for custom processing"
+      input3: "Fourth audio input for custom processing",
     },
     outputs: {
       output0: "First audio output from custom processing",
       output1: "Second audio output from custom processing",
       output2: "Third audio output from custom processing",
-      output3: "Fourth audio output from custom processing"
-    }
-  }
+      output3: "Fourth audio output from custom processing",
+    },
+  },
+  resizable: true,
+  minSize: { width: 500, height: 300 },
 };
 
 export default Script;

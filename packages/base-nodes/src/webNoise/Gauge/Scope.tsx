@@ -35,7 +35,7 @@ const Scope = ({
   }, [canvasRef, port, worker]);
 
   useEffect(() => {
-    if (!worker) {
+    if (!worker || !canvasRef.current) {
       return;
     }
     const message: SetConfigEvent = {
@@ -43,7 +43,7 @@ const Scope = ({
       config,
     };
     worker.postMessage(message);
-  }, [config, worker]);
+  }, [config, canvasRef, worker]);
 
   return <canvas ref={canvasRef} />;
 };

@@ -8,7 +8,6 @@ const config = {
   color: theme.colors.accent2,
   showScale: true,
   scaleSteps: 3,
-  size: { height: 80, width: 100 },
 };
 
 export default config;

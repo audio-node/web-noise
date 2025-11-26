@@ -12,6 +12,7 @@ const Gate: PluginComponent = {
   configNode,
   defaultConfig,
   resizable: true,
+  minSize: { width: 140, height: 100 },
   name: "Gate",
   description:
     "A manual gate control that outputs a high (1) or low (0) signal. Can be configured as a momentary button or a toggle switch.",

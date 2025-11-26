@@ -9,7 +9,6 @@ const config: Required<ADSRConfig> = {
     sustain: theme.colors.accent2,
     release: theme.colors.accent2,
   },
-  size: { width: 280, height: 150 },
 };
 
 export default config;

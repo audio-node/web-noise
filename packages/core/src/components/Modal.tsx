@@ -2,21 +2,26 @@ import styled from "@emotion/styled";
 import { type ReactNode, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { MdClose as CloseIcon } from "react-icons/md";
+import { withTheme } from "@emotion/react";
 import useTheme from "../hooks/useTheme";
 import { Theme } from "../theme";
 
-const ModalOuter = styled.div<{ theme: Theme }>`
+const ModalOuter = withTheme(styled.div<{
+  theme: Theme;
+  outerBackground?: string;
+}>`
   position: fixed;
   z-index: ${({ theme }) => theme.zIndex.modal};
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
-  background: ${({ theme }) => theme.colors.elevation3}cc;
+  background: ${({ theme, outerBackground }) =>
+    outerBackground || theme.colors.elevation3 + "cc"};
   display: flex;
   align-items: center;
   justify-content: center;
-`;
+`);
 
 const ModalInner = styled.div<{ theme: Theme }>`
   background: ${({ theme }) => theme.colors.elevation2};
@@ -35,12 +40,18 @@ const ModalCloser = styled(CloseIcon)<{ theme: Theme }>`
   cursor: pointer;
 `;
 
-interface ModalProps {
+export interface ModalProps {
   onClose?: () => void;
   children: ReactNode;
+  outerBackground?: string;
 }
 
-export const Modal = ({ children, onClose, ...props }: ModalProps) => {
+export const Modal = ({
+  children,
+  onClose,
+  outerBackground,
+  ...props
+}: ModalProps) => {
   const theme = useTheme();
 
   useEffect(() => {
@@ -56,7 +67,7 @@ export const Modal = ({ children, onClose, ...props }: ModalProps) => {
   }, [onClose]);
 
   return createPortal(
-    <ModalOuter theme={theme} onClick={onClose}>
+    <ModalOuter outerBackground={outerBackground} onClick={onClose}>
       <ModalInner
         {...props}
         onClick={(e) => {

@@ -11,8 +11,8 @@ const plugin: PluginComponent = {
   configNode,
   defaultConfig: {
     color: "#007bff",
-    size: { height: 80, width: 100 },
   },
+  minSize: { height: 160, width: 140 },
   resizable: true,
   name: "Step Sequencer",
   description:

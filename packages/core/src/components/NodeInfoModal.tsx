@@ -11,7 +11,7 @@ interface NodeInfoModalProps {
   isOpen: boolean;
   onClose: () => void;
   type: string;
-  node: WNAudioNode;
+  node: WNAudioNode | null;
 }
 
 const NodeInfoWrapper = withTheme(styled.div<{ theme: Theme }>`
@@ -111,7 +111,7 @@ const NodeInfoModal = ({
   const portsInfo = useMemo(() => {
     const parts: string[] = [];
 
-    const inputPorts = node.inputs;
+    const inputPorts = node?.inputs;
     if (inputPorts) {
       parts.push(`## Inputs`);
       for (const portName in inputPorts) {
@@ -140,7 +140,7 @@ const NodeInfoModal = ({
       }
     }
 
-    const outputPorts = node.outputs;
+    const outputPorts = node?.outputs;
     if (outputPorts) {
       parts.push(`## Outputs`);
       for (const portName in outputPorts) {

@@ -8,6 +8,8 @@ const TitleBarWrapper = styled(TitleBar)`
   width: 100%;
   box-sizing: border-box;
   padding: 0.5rem;
+  max-width: unset;
+  max-height: unset;
 `;
 
 const SpeakerIcon = styled(MdSpeaker)<{ theme: Theme }>`

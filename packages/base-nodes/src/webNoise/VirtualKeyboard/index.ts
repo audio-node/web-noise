@@ -12,6 +12,7 @@ const plugin: PluginComponent = {
   configNode,
   defaultConfig,
   resizable: true,
+  minSize: { width: 400, height: 250 },
   name: "Virtual Keyboard (MIDI Controller)",
   description:
     "Interactive MIDI controller interface that generates note-on and note-off commands through a keyboard display. Outputs MIDI command, note, and velocity signals for triggering synthesizers, samplers, and virtual instruments.",

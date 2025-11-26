@@ -1,25 +1,36 @@
 import styled from "@emotion/styled";
 import { withTheme } from "@emotion/react";
-import { Resizable } from "re-resizable";
 import { ComponentProps, useMemo, useState } from "react";
 import {
   MdSettings as SettingsIcon,
   MdInfoOutline as InfoIcon,
 } from "react-icons/md";
-import { Handle, HandleProps, Node, NodeProps, Position } from "@xyflow/react";
-import { DRAG_HANDLE_CLASS, PortType } from "../../constants";
+import {
+  Handle,
+  HandleProps,
+  Node,
+  NodeProps,
+  NodeResizeControl,
+  Position,
+} from "@xyflow/react";
+import { DRAG_HANDLE_CLASS, portColors } from "../../constants";
 import useAudioNode from "../../hooks/useAudioNode";
 import useNode from "../../hooks/useNode";
 import useTheme from "../../hooks/useTheme";
 import useStore from "../../store";
 import { Theme } from "../../theme";
-import { AudioPort, WNNodeData } from "../../types";
+import { AudioPort } from "../../types";
 import EditableLabel from "../EditableLabel";
 import NodeInfoModal from "../NodeInfoModal";
+import Modal, { ModalProps } from "../Modal";
 
-const NodeWrapper = styled.div`
-  background-color: var(--leva-colors-elevation1);
-`;
+const NodeWrapper = withTheme(styled.div<{ theme: Theme }>`
+  background-color: ${({ theme }) => theme.colors.elevation1};
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+`);
 
 const NodeLoaderWrapper = styled(NodeWrapper)`
   padding: 2rem 5rem;
@@ -58,7 +69,9 @@ const Section = styled.div`
 
 export const TitleBarInner = styled(Section)`
   display: flex;
-  height: var(--leva-sizes-titleBarHeight);
+  height: 2rem;
+  max-height: 2rem;
+  min-height: 2rem;
   touch-action: none;
   align-items: center;
   justify-content: center;
@@ -94,12 +107,19 @@ export const Port = styled.div`
   padding: 5px 10px;
 `;
 
-const portColors = {
-  [PortType.Audio]: "#4ade80", // vibrant green
-  [PortType.Gate]: "#c084fc", // rich purple
-  [PortType.Number]: "#38bdf8", // bright blue
-  [PortType.Any]: "#ffffff", // white
-};
+export const NodeInner = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+
+export const ConfigModal = styled(Modal)<ModalProps>`
+  padding: 1rem;
+  max-width: 20rem;
+  height: auto;
+  max-height: 90%;
+`;
 
 const StyledHandle = withTheme(styled(Handle, {
   shouldForwardProp: (prop) => prop !== "portType",
@@ -176,7 +196,7 @@ export const WNNode = (props: WNNodeParameters) => {
 
   const [isInfoModalShown, setIsInfoModalShown] = useState(false);
 
-  const { info } = useNodeManifest(props.type);
+  const { info, minSize } = useNodeManifest(props.type);
 
   const isResizeable = useMemo(
     () => nodesConfiguration[props.type].resizable ?? false,
@@ -222,10 +242,6 @@ export const WNNode = (props: WNNodeParameters) => {
     );
   }
 
-  const size = data?.config?.size as
-    | { width: number; height: number }
-    | undefined;
-
   const {
     node: { inputs, outputs },
   } = audioNode;
@@ -268,43 +284,18 @@ export const WNNode = (props: WNNodeParameters) => {
             : null}
         </OutputPorts>
       </PortsPanel>
-      {ConfigNode && configMode && selected ? (
-        <ConfigNode
-          {...{
-            ...props,
-            data: {
-              label: "unknown",
-              ...props.data,
-            },
+
+      <NodeInner>{children}</NodeInner>
+
+      {isResizeable && (
+        <NodeResizeControl
+          style={{
+            background: "transparent",
+            border: "none",
           }}
+          minWidth={minSize?.width || 180}
+          minHeight={minSize?.height || 100}
         />
-      ) : isResizeable ? (
-        <Resizable
-          size={size}
-          minWidth={180}
-          minHeight={30}
-          enable={{
-            bottom: true,
-            bottomRight: true,
-            right: true,
-          }}
-          onResizeStop={(e, direction, ref, d) => {
-            const newSize = size
-              ? {
-                  width: size.width + d.width,
-                  height: size.height + d.height,
-                }
-              : ref.getBoundingClientRect();
-            updateNodeConfig({
-              ...data?.config,
-              size: newSize,
-            });
-          }}
-        >
-          {children}
-        </Resizable>
-      ) : (
-        children
       )}
       <NodeInfoModal
         isOpen={isInfoModalShown}
@@ -312,6 +303,22 @@ export const WNNode = (props: WNNodeParameters) => {
         onClose={() => setIsInfoModalShown(false)}
         node={audioNode.node}
       />
+      {ConfigNode && configMode && (
+        <ConfigModal
+          onClose={() => setShowConfigMode(false)}
+          outerBackground={theme.colors.elevation3 + "ee"}
+        >
+          <ConfigNode
+            {...{
+              ...props,
+              data: {
+                label: "unknown",
+                ...props.data,
+              },
+            }}
+          />
+        </ConfigModal>
+      )}
     </NodeWrapper>
   );
 };

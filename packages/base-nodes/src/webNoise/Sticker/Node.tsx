@@ -1,25 +1,20 @@
 import styled from "@emotion/styled";
-import { Resizable } from "re-resizable";
-import { useEffect, useRef, useState } from "react";
-import { MdSettings as SettingsIcon } from "react-icons/md";
 import {
-  Theme,
+  BaseWNNode,
   TitleBar,
   useNode,
   useTheme,
   WNNodeProps,
 } from "@web-noise/core";
-import ConfigNode from "./Config";
+import { useEffect, useRef, useState } from "react";
 import Sticker from "./Sticker";
 import { StickerData } from "./types";
 
-const StickerNodeWrapper = styled.div`
-  position: relative;
-`;
-
 const TitleBarWrapper = styled(TitleBar)`
-  width: auto;
+  width: 100%;
+  min-width: 100%;
   height: 100%;
+  min-height: 100%;
   padding: 0;
   background-color: transparent;
 
@@ -65,34 +60,15 @@ const StickerWrapper = styled.div`
   height: 100%;
 `;
 
-const SettingsIconWrapper = styled(SettingsIcon)<{ theme: Theme }>`
-  font-size: 1.2rem;
-  opacity: 0.4;
-  width: 1rem;
-  color: ${({ theme }) => theme.colors.highlight2};
-  &:hover {
-    opacity: 1;
-    cursor: pointer;
-  }
-`;
-
-const Toolbar = styled.div<{ theme: Theme }>`
-  position: absolute;
-  top: -1.5rem;
-`;
-
 export interface StickerProps extends WNNodeProps<StickerData> {}
 
 const StickerNode = (props: StickerProps) => {
   const { id, data, selected } = props;
-  const { updateNodeValues, updateNodeConfig } = useNode(id);
-
-  const theme = useTheme();
+  const { updateNodeValues } = useNode(id);
 
   const editorRef = useRef<HTMLTextAreaElement | null>(null);
 
   const [editMode, setEditMode] = useState(false);
-  const [configMode, setConfigMode] = useState(false);
 
   useEffect(() => {
     if (!editMode || !editorRef.current) {
@@ -101,87 +77,33 @@ const StickerNode = (props: StickerProps) => {
     editorRef.current.focus();
   }, [editorRef, editMode]);
 
-  useEffect(() => {
-    if (configMode && !selected) {
-      setConfigMode(false);
-    }
-  }, [selected, configMode]);
-
   const { text = `*Double click to edit*` } = data.values || {};
-
-  const { size } = data.config || {};
-  const { width = 200, height = 100 } = size || {};
 
   const [currentValue, setCurrentValue] = useState(text);
 
   return (
-    <StickerNodeWrapper>
-      {selected && (
-        <Toolbar theme={theme}>
-          <SettingsIconWrapper
-            theme={theme}
-            onClickCapture={() => setConfigMode((isShown) => !isShown)}
-          />
-        </Toolbar>
-      )}
-      {configMode ? (
-        <TitleBarWrapper>
-          <ConfigNode {...props} />
-        </TitleBarWrapper>
-      ) : (
-        <Resizable
-          enable={{
-            top: false,
-            right: true,
-            bottom: true,
-            left: false,
-            topRight: false,
-            bottomRight: true,
-            bottomLeft: false,
-            topLeft: false,
-          }}
-          minWidth={100}
-          minHeight={50}
-          size={{ width, height }}
-          onResizeStop={(e, direction, ref, d) => {
-            updateNodeConfig({
-              ...data.config,
-              size: {
-                width: width + d.width,
-                height: height + d.height,
-              },
+    <BaseWNNode {...props} hideToolbar={!selected}>
+      {editMode ? (
+        <MdEditor
+          ref={editorRef}
+          value={currentValue}
+          onChange={(event) => setCurrentValue(event.target.value)}
+          onBlur={() => {
+            updateNodeValues({
+              text: currentValue,
             });
+            setEditMode(false);
           }}
-        >
-          {editMode && (
-            <MdEditor
-              ref={editorRef}
-              value={currentValue}
-              onChange={(event) => setCurrentValue(event.target.value)}
-              onBlur={() => {
-                updateNodeValues({
-                  text: currentValue,
-                  width,
-                  height,
-                });
-                setEditMode(false);
-              }}
-              onWheelCapture={(event) => event.stopPropagation()}
-            />
-          )}
-          {!editMode && (
-            <TitleBarWrapper>
-              <StickerWrapper
-                onDoubleClick={() => setEditMode(true)}
-                style={editMode ? { display: "none" } : {}}
-              >
-                <Sticker node={props} />
-              </StickerWrapper>
-            </TitleBarWrapper>
-          )}
-        </Resizable>
+          onWheelCapture={(event) => event.stopPropagation()}
+        />
+      ) : (
+        <TitleBarWrapper>
+          <StickerWrapper onDoubleClick={() => setEditMode(true)}>
+            <Sticker node={props} />
+          </StickerWrapper>
+        </TitleBarWrapper>
       )}
-    </StickerNodeWrapper>
+    </BaseWNNode>
   );
 };
 

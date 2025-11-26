@@ -6,7 +6,8 @@ const WorkletScript: PluginComponent = {
   ...base,
   node: ScriptNode,
   name: "Worklet Script (Audio-Rate Processor)",
-  description: "Executes custom JavaScript code directly in the audio rendering thread using AudioWorklet API. Processes audio at sample rate with access to audio inputs, outputs, and both audio-rate and control-rate parameters. Ideal for implementing custom DSP algorithms and high-performance audio effects.",
+  description:
+    "Executes custom JavaScript code directly in the audio rendering thread using AudioWorklet API. Processes audio at sample rate with access to audio inputs, outputs, and both audio-rate and control-rate parameters. Ideal for implementing custom DSP algorithms and high-performance audio effects.",
   info: `# Worklet Script
 
 A high-performance audio processor that executes custom JavaScript code in the audio rendering thread, processing audio at sample rate using the AudioWorklet API.
@@ -78,7 +79,15 @@ outputs[1][1].set(outputR);
 - Use k-rate parameters for control signals to reduce CPU usage
 - Use a-rate parameters only when sample-accurate automation is needed
 - Leverage typed array operations for best performance`,
-  tags: ["worklet", "dsp", "sample-rate", "audio-thread", "performance", "synthesis", "effects"],
+  tags: [
+    "worklet",
+    "dsp",
+    "sample-rate",
+    "audio-thread",
+    "performance",
+    "synthesis",
+    "effects",
+  ],
   portsDescription: {
     inputs: {
       input0: "First audio input (stereo)",
@@ -88,15 +97,17 @@ outputs[1][1].set(outputR);
       C: "Audio-rate parameter (a-rate) - 128 values per block for sample-accurate modulation",
       X: "Control-rate parameter (k-rate) - 1 value per block for efficient control signals",
       Y: "Control-rate parameter (k-rate) - 1 value per block for efficient control signals",
-      Z: "Control-rate parameter (k-rate) - 1 value per block for efficient control signals"
+      Z: "Control-rate parameter (k-rate) - 1 value per block for efficient control signals",
     },
     outputs: {
       output0: "First audio output (stereo)",
       output1: "Second audio output (stereo)",
       output2: "Third audio output (stereo)",
-      output3: "Fourth audio output (stereo)"
-    }
-  }
+      output3: "Fourth audio output (stereo)",
+    },
+  },
+  resizable: true,
+  minSize: { width: 500, height: 300 },
 };
 
 export default WorkletScript;

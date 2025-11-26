@@ -44,7 +44,7 @@ const AddNode = ({ isOpen, closeMenu, mousePosition }: AddNodeProps) => {
   const [filtersState, setFiltersState] = useState<FiltersState>({});
 
   const onComponentClick = useCallback(
-    ({ type }: PluginComponent) => {
+    ({ type, minSize }: PluginComponent) => {
       const { x, y } = screenToFlowPosition(mousePosition);
       const newNode = {
         //@TODO: generate node id in `createNode` function
@@ -57,6 +57,7 @@ const AddNode = ({ isOpen, closeMenu, mousePosition }: AddNodeProps) => {
         },
         targetPosition: Position.Left,
         sourcePosition: Position.Right,
+        ...minSize,
       };
       createNode(newNode);
       closeMenu();

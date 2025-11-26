@@ -1,6 +1,6 @@
-import { useAudioNode, useNode, WNNode, WNNodeProps } from "@web-noise/core";
-import { Resizable } from "re-resizable";
 import { useEffect, useState } from "react";
+import styled from "@emotion/styled";
+import { useAudioNode, useNode, WNNode, WNNodeProps } from "@web-noise/core";
 import Editor from "./Editor";
 import {
   MessageData,
@@ -16,6 +16,8 @@ import {
   defaultValue as workletScriptDefaultValue,
 } from "./WorkletScript/editorConfig";
 
+const NodeWrapper = styled(WNNode)``;
+
 const ScriptNode = (props: WNNodeProps<ScriptNodeData>) => {
   const { data, id, type } = props;
 
@@ -23,7 +25,6 @@ const ScriptNode = (props: WNNodeProps<ScriptNodeData>) => {
   const { updateNodeValues, updateNodeConfig } = useNode(id);
 
   const { expression = "" } = data.values || {};
-  const { size = { width: 16 * 35, height: 16 * 20 } } = data.config || {};
 
   const saveExpression = (expression: string) => {
     updateNodeValues({ expression });
@@ -56,51 +57,25 @@ const ScriptNode = (props: WNNodeProps<ScriptNodeData>) => {
     };
   }, [node]);
 
-  const { width, height } = size;
-
   return (
-    <WNNode {...props}>
-      <Resizable
-        size={{ width, height }}
-        minWidth={200}
-        enable={{
-          top: false,
-          right: true,
-          bottom: true,
-          left: false,
-          topRight: false,
-          bottomRight: true,
-          bottomLeft: false,
-          topLeft: false,
+    <NodeWrapper {...props}>
+      <Editor
+        value={expression}
+        defaultValue={
+          type === "workletScript"
+            ? workletScriptDefaultValue
+            : scriptDefaultValue
+        }
+        onExecute={(expression) => {
+          saveExpression(expression);
+          runExpression(expression);
         }}
-        onResizeStop={(e, direction, ref, d) => {
-          console.log(5555);
-          updateNodeConfig({
-            size: {
-              width: width + d.width,
-              height: height + d.height,
-            },
-          });
-        }}
-      >
-        <Editor
-          value={expression}
-          defaultValue={
-            type === "workletScript"
-              ? workletScriptDefaultValue
-              : scriptDefaultValue
-          }
-          onExecute={(expression) => {
-            saveExpression(expression);
-            runExpression(expression);
-          }}
-          editorTypes={
-            type === "workletScript" ? workletScriptTypes : scriptTypes
-          }
-          error={error}
-        />
-      </Resizable>
-    </WNNode>
+        editorTypes={
+          type === "workletScript" ? workletScriptTypes : scriptTypes
+        }
+        error={error}
+      />
+    </NodeWrapper>
   );
 };
 

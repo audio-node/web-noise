@@ -11,6 +11,7 @@ export {
   InputHandle,
   Port,
 } from "./src/components/Node";
+export { BaseWNNode } from "./src/components/BaseNode";
 export { default as Modal } from "./src/components/Modal";
 export { default as EditableLabel } from "./src/components/EditableLabel";
 export { default as useAudioNode } from "./src/hooks/useAudioNode";

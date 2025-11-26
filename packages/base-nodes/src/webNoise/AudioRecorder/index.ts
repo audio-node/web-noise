@@ -12,6 +12,8 @@ const plugin: PluginComponent = {
   configNode,
   defaultConfig,
   name: "Audio Recorder",
+  resizable: true,
+  minSize: { width: 280, height: 340 },
   description:
     "Records audio from an input stream into a buffer, which can then be played back or downloaded.",
   info: `# Audio Recorder
