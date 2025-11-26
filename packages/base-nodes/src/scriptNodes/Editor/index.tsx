@@ -15,6 +15,8 @@ const EditorWrapper = styled.div`
 const EditorContainer = styled.div`
   height: 100%;
   width: 100%;
+  min-height: 5rem;
+  min-width: 30rem;
 `;
 
 const Section = styled.div`

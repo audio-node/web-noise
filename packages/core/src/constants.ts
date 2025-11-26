@@ -12,3 +12,10 @@ export enum PortType {
   Audio = "audio",
   Any = "any",
 }
+
+export const portColors = {
+  [PortType.Audio]: "#4ade80", // vibrant green
+  [PortType.Gate]: "#c084fc", // rich purple
+  [PortType.Number]: "#38bdf8", // bright blue
+  [PortType.Any]: "#ffffff", // white
+};

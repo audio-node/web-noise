@@ -18,7 +18,6 @@ export interface AudioTrackConfig {
   waveColor?: string;
   progressColor?: string;
   rangeColor?: string;
-  size?: { width: number; height: number };
 }
 
 export type AudioTrackData = WNNodeData<AudioTrackValues, AudioTrackConfig>;

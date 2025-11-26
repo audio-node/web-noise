@@ -1,5 +1,5 @@
 import { theme } from "@web-noise/core";
-import { OscilloscopeConfig } from './types'
+import { OscilloscopeConfig } from "./types";
 
 const config: Required<OscilloscopeConfig> = {
   minValue: -1,
@@ -11,7 +11,6 @@ const config: Required<OscilloscopeConfig> = {
   gridColor: theme.colors.whitePrimary,
   gridRows: 4,
   gridColumns: 8,
-  size: { width: 280, height: 150 },
 };
 
 export default config;

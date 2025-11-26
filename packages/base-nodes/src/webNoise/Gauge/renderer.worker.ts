@@ -24,14 +24,15 @@ const DEFAULT_CONFIG = {
   ticksColor: "#333",
   labelsColor: "#333",
   labels: [],
-  size: {
-    width: 300,
-    height: 150,
-  },
 };
 
 let config: Required<Omit<GaugeConfig, "backgroundColor">> = {
   ...DEFAULT_CONFIG,
+};
+
+let size: { width: number; height: number } = {
+  width: 300,
+  height: 150,
 };
 
 let labels: Record<number, NonNullable<GaugeConfig["labels"]>[number]> = {};
@@ -215,11 +216,6 @@ onmessage = function ({ data }: WorkerEvent) {
   if (data.name === WorkerEventNames.INIT) {
     canvas = data.canvas;
 
-    if (config.size) {
-      canvas.width = config.size?.width * 2;
-      canvas.height = config.size?.height * 2;
-    }
-
     canvasContext = canvas.getContext("2d");
 
     data.port.onmessage = ({ data }: { data: GaugeEventData }) => {
@@ -231,6 +227,11 @@ onmessage = function ({ data }: WorkerEvent) {
   }
   if (data.name === WorkerEventNames.SET_CONFIG) {
     config = { ...config, ...data.config };
+    if (data.size) {
+      size = data.size;
+      canvas.width = size.width * 2;
+      canvas.height = size.height * 2;
+    }
     labels = config.labels.reduce(
       (acc, item) => {
         if (typeof item.value === "undefined") {
