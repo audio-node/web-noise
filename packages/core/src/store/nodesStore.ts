@@ -26,6 +26,7 @@ export interface NodesState {
   clearElements: () => void;
   getNode: (id: string) => WNNode | null;
   updateNodeData: (id: string, data: Partial<WNNodeData>) => void;
+  updateNode: (id: string, updates: Partial<WNNode>) => void;
   nodeTypes: NodeTypes;
   setNodeTypes: (nodeTypes: NodeTypes) => void;
 }
@@ -105,6 +106,21 @@ const nodesStateCreator: StateCreator<NodesState> = (set, get) => ({
             };
           }
 
+          return node;
+        }),
+      };
+    });
+  },
+  updateNode: (id, updates) => {
+    set(({ nodes }) => {
+      return {
+        nodes: nodes.map((node) => {
+          if (node.id === id) {
+            return {
+              ...node,
+              ...updates,
+            };
+          }
           return node;
         }),
       };

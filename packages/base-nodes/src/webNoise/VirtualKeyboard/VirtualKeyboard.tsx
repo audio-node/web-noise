@@ -46,13 +46,13 @@ const VirtualKeyboard = ({
   updateNodeValues,
 }: VirtualKeyboardProps) => {
   const { id, data } = props;
-  const { values, config } = data || {};
+  const { config } = data || {};
   const { node } = useAudioNode<TVirtualKeyboard>(id) || {};
 
   const firstNote = config?.firstNote;
   const lastNote = useMemo(
     () => (config?.firstNote || 0) + (config?.keyboardSize || 0),
-    [values],
+    [config],
   );
 
   const keyboardShortcuts = useMemo(

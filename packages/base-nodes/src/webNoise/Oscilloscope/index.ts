@@ -11,6 +11,7 @@ const plugin: PluginComponent = {
   node,
   configNode,
   defaultConfig,
+  minSize: { width: 280, height: 280 },
   resizable: true,
   name: "Oscilloscope (Visualizer)",
   description:

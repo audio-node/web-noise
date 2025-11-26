@@ -18,7 +18,6 @@ export interface OscilloscopeConfig {
   gridColor?: string;
   gridRows?: number;
   gridColumns?: number;
-  size?: { width: number; height: number };
 }
 
 export type OscilloscopeData = WNNodeData<

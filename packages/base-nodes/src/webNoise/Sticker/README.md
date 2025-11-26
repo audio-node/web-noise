@@ -28,7 +28,6 @@ This is a **bass synthesizer** with the following features:
     transparentBackground: false,
     backgroundColor: "#1a1a1a",
     textColor: "#ffffff",
-    size: { width: 280, height: 150 }
   }
 };
 

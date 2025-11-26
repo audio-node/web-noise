@@ -1,6 +1,6 @@
 {
   "name": "@web-noise/base-nodes",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "source": "index.ts",
   "main": "dist/main.js",
   "module": "dist/module.js",
@@ -254,7 +254,6 @@
     "monaco-editor": "^0.38.0",
     "phaze-vocoder": "github:olvb/phaze",
     "prismjs": "^1.29.0",
-    "re-resizable": "^6.9.9",
     "react-envelope-graph": "^0.1.4",
     "react-grid-layout": "^1.3.4",
     "react-icons": "^4.10.1",
@@ -272,14 +271,14 @@
     "ts-jest": "^29.1.0"
   },
   "peerDependencies": {
-    "@web-noise/core": "*",
-    "@web-noise/fetch": "*",
-    "@web-noise/patch": "*",
     "@emotion/css": "^11.11.2",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@types/react": "^19.1.12",
     "@types/react-dom": "^19.1.9",
+    "@web-noise/core": "*",
+    "@web-noise/fetch": "*",
+    "@web-noise/patch": "*",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "typescript": "^5.6.3"

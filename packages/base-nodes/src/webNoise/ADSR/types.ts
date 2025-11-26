@@ -54,7 +54,6 @@ export interface ADSRValues {}
 export interface ADSRConfig {
   backgroundColor?: string;
   colors?: ADSRColors;
-  size?: { width: number; height: number };
 }
 
 export type ADSRData = WNNodeData<ADSRValues, ADSRConfig>;

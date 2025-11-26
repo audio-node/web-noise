@@ -14,6 +14,7 @@ export interface InitEvent {
 export interface SetConfigEvent {
   name: WorkerEventNames.SET_CONFIG;
   config: GaugeConfig;
+  size?: { width: number; height: number };
 }
 
 export type GaugeEventData = Float32Array;
@@ -43,7 +44,6 @@ export interface GaugeConfig {
     label?: string;
     color?: string;
   }>;
-  size?: { width: number; height: number };
 }
 
 export type GaugeData = WNNodeData<GaugeValues, GaugeConfig>;

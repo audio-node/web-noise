@@ -2,13 +2,18 @@ import { PluginComponent } from "@web-noise/core";
 import base from "./base";
 import Sticker from "./Sticker";
 import node from "./Node";
+import configNode from "./Config";
 import defaultConfig from "./defaultConfig";
 
 const plugin: PluginComponent = {
   ...base,
   controlPanelNode: Sticker,
   node,
+  // @ts-ignore
+  configNode,
   defaultConfig,
+  resizable: true,
+  minSize: { width: 240, height: 140 },
   name: "Sticker (Text Annotation)",
   description:
     "Visual annotation component for displaying Markdown-formatted text notes. Used for documenting patches, labeling signal flows, explaining parameters, and adding instructional content without any audio processing functionality.",
@@ -40,4 +45,3 @@ The sticker is a visual-only component with no audio inputs or outputs. It exist
 };
 
 export default plugin;
-

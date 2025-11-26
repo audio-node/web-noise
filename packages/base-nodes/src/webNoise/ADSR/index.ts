@@ -13,7 +13,8 @@ const plugin: PluginComponent = {
   resizable: true,
   defaultConfig,
   name: "ADSR (Envelope Generator)",
-  description: "Generates Attack-Decay-Sustain-Release envelope signals for shaping audio parameters over time. Essential for creating dynamic volume, filter, and modulation effects in synthesizers.",
+  description:
+    "Generates Attack-Decay-Sustain-Release envelope signals for shaping audio parameters over time. Essential for creating dynamic volume, filter, and modulation effects in synthesizers.",
   info: `# ADSR Envelope Generator
 
 An envelope generator that produces control signals for shaping audio parameters over time. ADSR envelopes are fundamental building blocks in sound synthesis and audio processing.
@@ -36,17 +37,20 @@ An envelope generator that produces control signals for shaping audio parameters
   tags: ["envelope", "modulation", "synthesis", "control", "adsr"],
   portsDescription: {
     inputs: {
-      trigger: "Gate signal that starts the envelope when > 0 and releases it when 0",
+      trigger:
+        "Gate signal that starts the envelope when > 0 and releases it when 0",
       A: "Attack time in seconds (0-60s)",
-      attackCurve: "Shape of the attack curve (0-1), where 0 is linear and 1 is exponential",
+      attackCurve:
+        "Shape of the attack curve (0-1), where 0 is linear and 1 is exponential",
       D: "Decay time in seconds (0-60s)",
       S: "Sustain level (0-1)",
-      R: "Release time in seconds (0-60s)"
+      R: "Release time in seconds (0-60s)",
     },
     outputs: {
-      gain: "Envelope output signal (0-1) for controlling audio parameters"
-    }
-  }
+      gain: "Envelope output signal (0-1) for controlling audio parameters",
+    },
+  },
+  minSize: { width: 200, height: 200 },
 };
 
 export default plugin;
