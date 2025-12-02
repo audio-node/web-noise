@@ -370,10 +370,10 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
       })),
     addNodeToControlPanel: (node) => {
       const { nodesConfiguration } = get();
-      const defaultConfig = node.type
-        ? nodesConfiguration[node.type]?.defaultConfig
-        : {};
-      const { height } = defaultConfig?.size || {};
+      const sizeConfig = node.type
+        ? nodesConfiguration[node.type]?.minSize
+        : { height: undefined };
+      const height = sizeConfig?.height;
       const newNode = {
         id: node.id,
         ...(height
@@ -383,7 +383,7 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
       set(({ controlPanel }) => ({
         controlPanel: {
           ...controlPanel,
-          nodes: [...controlPanel.nodes, newNode],
+          nodes: [...(controlPanel?.nodes || []), newNode],
         },
       }));
     },

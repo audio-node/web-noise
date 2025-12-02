@@ -9,6 +9,7 @@ const plugin: PluginComponent = {
   controlPanelNode: Sticker,
   node,
   defaultConfig,
+  minSize: { width: 240, height: 140 },
   name: "Sticker (Text Annotation)",
   description:
     "Visual annotation component for displaying Markdown-formatted text notes. Used for documenting patches, labeling signal flows, explaining parameters, and adding instructional content without any audio processing functionality.",
@@ -40,4 +41,3 @@ The sticker is a visual-only component with no audio inputs or outputs. It exist
 };
 
 export default plugin;
-

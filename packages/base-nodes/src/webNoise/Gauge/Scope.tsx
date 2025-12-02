@@ -17,9 +17,11 @@ const rendererWorker = new URL(rendererWorkerUrl, import.meta.url);
 const Scope = ({
   port,
   config = defaultConfig,
+  size,
 }: {
   port: MessagePort;
   config?: GaugeConfig;
+  size?: { width: number; height: number };
 }) => {
   const worker = useWorker(rendererWorker);
 
@@ -35,15 +37,17 @@ const Scope = ({
   }, [canvasRef, port, worker]);
 
   useEffect(() => {
-    if (!worker) {
+    if (!worker || !canvasRef.current) {
       return;
     }
+    const { width, height } = canvasRef.current.getBoundingClientRect();
     const message: SetConfigEvent = {
       name: WorkerEventNames.SET_CONFIG,
       config,
+      size: { width, height },
     };
     worker.postMessage(message);
-  }, [config, worker]);
+  }, [config, size, canvasRef, worker]);
 
   return <canvas ref={canvasRef} />;
 };

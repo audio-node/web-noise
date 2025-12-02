@@ -12,6 +12,7 @@ const plugin: PluginComponent = {
   configNode,
   defaultConfig,
   resizable: true,
+  minSize: { width: 280, height: 160 },
   name: "Gauge (Radial Meter)",
   description:
     "Visualizes a numerical signal as a radial gauge meter. Provides a clear, analog-style display for various values.",
@@ -38,4 +39,3 @@ The appearance of the gauge, including its range (min/max), ticks, colors, and c
 };
 
 export default plugin;
-

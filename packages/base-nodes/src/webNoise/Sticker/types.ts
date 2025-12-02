@@ -8,7 +8,6 @@ export interface StickerConfig {
   transparentBackground: boolean;
   backgroundColor: string;
   textColor: string;
-  size?: { width: number; height: number };
 }
 
 export type StickerData = WNNodeData<StickerValues, StickerConfig>;

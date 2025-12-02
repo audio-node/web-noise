@@ -10,8 +10,8 @@ const plugin: PluginComponent = {
   controlPanelNode: WaveShaper,
   configNode,
   resizable: true,
+  minSize: { width: 240, height: 300 },
   defaultConfig: {
-    size: { width: 300, height: 340 },
     curveColor: theme.colors.accent2,
     gridColor: theme.colors.elevation2,
     controlPointColor: theme.colors.vivid1,

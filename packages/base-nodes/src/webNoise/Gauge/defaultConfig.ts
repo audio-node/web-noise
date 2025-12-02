@@ -13,7 +13,6 @@ const config: Required<GaugeConfig> = {
   ticksColor: theme.colors.elevation2,
   labelsColor: theme.colors.elevation2,
   labels: [],
-  size: { width: 280, height: 120 },
 };
 
 export default config;

@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Resizable } from "re-resizable";
+import { NodeResizeControl } from "@xyflow/react";
 import { useEffect, useRef, useState } from "react";
 import { MdSettings as SettingsIcon } from "react-icons/md";
 import {
@@ -9,17 +9,29 @@ import {
   useTheme,
   WNNodeProps,
 } from "@web-noise/core";
+import { Modal } from "@web-noise/core/components";
 import ConfigNode from "./Config";
 import Sticker from "./Sticker";
 import { StickerData } from "./types";
 
 const StickerNodeWrapper = styled.div`
   position: relative;
+  height: 100%;
+  width: 100%;
+`;
+
+export const ConfigModal = styled(Modal)`
+  padding: 1rem;
+  max-width: 20rem;
+  height: auto;
+  max-height: 90%;
 `;
 
 const TitleBarWrapper = styled(TitleBar)`
-  width: auto;
+  width: 100%;
+  min-width: 100%;
   height: 100%;
+  min-height: 100%;
   padding: 0;
   background-color: transparent;
 
@@ -109,9 +121,6 @@ const StickerNode = (props: StickerProps) => {
 
   const { text = `*Double click to edit*` } = data.values || {};
 
-  const { size } = data.config || {};
-  const { width = 200, height = 100 } = size || {};
-
   const [currentValue, setCurrentValue] = useState(text);
 
   return (
@@ -124,62 +133,41 @@ const StickerNode = (props: StickerProps) => {
           />
         </Toolbar>
       )}
-      {configMode ? (
-        <TitleBarWrapper>
-          <ConfigNode {...props} />
-        </TitleBarWrapper>
-      ) : (
-        <Resizable
-          enable={{
-            top: false,
-            right: true,
-            bottom: true,
-            left: false,
-            topRight: false,
-            bottomRight: true,
-            bottomLeft: false,
-            topLeft: false,
-          }}
-          minWidth={100}
-          minHeight={50}
-          size={{ width, height }}
-          onResizeStop={(e, direction, ref, d) => {
-            updateNodeConfig({
-              ...data.config,
-              size: {
-                width: width + d.width,
-                height: height + d.height,
-              },
+      <NodeResizeControl
+        style={{
+          background: "transparent",
+          border: "none",
+        }}
+        minWidth={100}
+        minHeight={100}
+      />
+      {editMode ? (
+        <MdEditor
+          ref={editorRef}
+          value={currentValue}
+          onChange={(event) => setCurrentValue(event.target.value)}
+          onBlur={() => {
+            updateNodeValues({
+              text: currentValue,
             });
+            setEditMode(false);
           }}
-        >
-          {editMode && (
-            <MdEditor
-              ref={editorRef}
-              value={currentValue}
-              onChange={(event) => setCurrentValue(event.target.value)}
-              onBlur={() => {
-                updateNodeValues({
-                  text: currentValue,
-                  width,
-                  height,
-                });
-                setEditMode(false);
-              }}
-              onWheelCapture={(event) => event.stopPropagation()}
-            />
-          )}
-          {!editMode && (
-            <TitleBarWrapper>
-              <StickerWrapper
-                onDoubleClick={() => setEditMode(true)}
-                style={editMode ? { display: "none" } : {}}
-              >
-                <Sticker node={props} />
-              </StickerWrapper>
-            </TitleBarWrapper>
-          )}
-        </Resizable>
+          onWheelCapture={(event) => event.stopPropagation()}
+        />
+      ) : (
+        <TitleBarWrapper>
+          <StickerWrapper
+            onDoubleClick={() => setEditMode(true)}
+            style={editMode ? { display: "none" } : {}}
+          >
+            <Sticker node={props} />
+          </StickerWrapper>
+        </TitleBarWrapper>
+      )}
+      {configMode && (
+        <ConfigModal onClose={() => setConfigMode(false)}>
+          <ConfigNode {...props} />
+        </ConfigModal>
       )}
     </StickerNodeWrapper>
   );

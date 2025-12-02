@@ -10,9 +10,7 @@ const plugin: PluginComponent = {
   node,
   configNode,
   resizable: true,
-  defaultConfig: {
-    size: { width: 220, height: 65 },
-  },
+  minSize: { width: 200, height: 90 },
   name: "Convolver (Reverb/Space)",
   description: `
   An effect that applies the acoustic characteristics of a space to audio signals.

@@ -14,7 +14,6 @@ export interface RecorderConfig {
   waveColor?: string;
   progressColor?: string;
   rangeColor?: string;
-  size?: { width: number; height: number };
 }
 
 export type RecorderData = WNNodeData<RecorderValues, RecorderConfig>;

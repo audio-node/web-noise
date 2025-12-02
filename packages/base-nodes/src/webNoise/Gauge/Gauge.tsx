@@ -30,7 +30,7 @@ export interface GaugeProps {
 }
 
 const Gauge = ({ node: props, audioNode }: GaugeProps) => {
-  const { data } = props;
+  const { data, width = 300, height = 150 } = props;
   const theme = useTheme();
 
   const channel = useMessageChannel();

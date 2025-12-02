@@ -8,9 +8,7 @@ const plugin: PluginComponent = {
   controlPanelNode: Distortion,
   node,
   resizable: true,
-  defaultConfig: {
-    size: { width: 100, height: 100 },
-  },
+  minSize: { width: 120, height: 200 },
   name: "Distortion",
   description:
     "Alters the waveform of an input signal to create effects from subtle warmth to heavy fuzz. Uses a waveshaper with dynamically generated curves.",

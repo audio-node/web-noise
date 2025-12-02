@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-import styled from "@emotion/styled";
 import {
   useAudioNode,
   useNode,
@@ -14,13 +12,6 @@ import {
   VirtualKeyboardData,
   VirtualKeyboard as TVirtualKeyboard,
 } from "./types";
-import { withTheme } from "@emotion/react";
-
-const VirtualKeyboardWrapper = withTheme(styled.div<{ theme: Theme }>`
-  height: 100%;
-  position: absolute;
-  width: 100%;
-`);
 
 export interface VirtualKeyboardProps
   extends WNNodeProps<VirtualKeyboardData> {}
@@ -32,13 +23,11 @@ const VirtualKeyboardNode = (props: VirtualKeyboardProps) => {
 
   return (
     <WNNode {...props}>
-      <VirtualKeyboardWrapper>
-        <VirtualKeyboard
-          node={props}
-          audioNode={node}
-          updateNodeValues={updateNodeValues}
-        />
-      </VirtualKeyboardWrapper>
+      <VirtualKeyboard
+        node={props}
+        audioNode={node}
+        updateNodeValues={updateNodeValues}
+      />
     </WNNode>
   );
 };

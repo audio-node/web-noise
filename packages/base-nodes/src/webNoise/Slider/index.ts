@@ -11,6 +11,7 @@ const plugin: PluginComponent = {
   node,
   configNode,
   defaultConfig,
+  minSize: { height: 120, width: 120 },
   resizable: true,
   name: "Slider (Control Value)",
   description:
