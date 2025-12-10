@@ -1,6 +1,6 @@
 {
   "name": "@web-noise/core",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "source": "index.ts",
   "main": "dist/main.js",
   "module": "dist/module.js",
