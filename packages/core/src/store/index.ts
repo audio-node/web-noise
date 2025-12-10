@@ -392,7 +392,7 @@ export const stateCreator: StateCreator<StoreState> = (...args) => {
     removeNodesFromControlPanel: (nodes) => {
       const nodeIds = nodes.map(({ id }) => id);
       set(({ controlPanel }) => {
-        const nodes = controlPanel.nodes.filter(
+        const nodes = controlPanel?.nodes?.filter(
           ({ id }) => !nodeIds.includes(id),
         );
         return {
